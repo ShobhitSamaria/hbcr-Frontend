@@ -1,0 +1,75 @@
+/**
+ * Step 3 — Clinical Treatment validation rules.
+ *
+ * Field labels MUST match the strings used as keys in the form-state
+ * context (i.e. the `label` prop on every <Field> / <SelectField>).
+ */
+import {
+  defineRules,
+  isDate,
+  maxLen,
+  notFutureDate,
+  pattern,
+  required,
+  validateRecord,
+  type RuleSet,
+} from "@/lib/validation";
+
+const MOBILE_RE = /^[6-9][0-9]{9}$/;
+
+export type Step3Values = {
+  "Clinical Extent of Disease Before Cancer Directed Treatment"?: string;
+  "28(a). Staging system"?: string;
+  T?: string;
+  N?: string;
+  M?: string;
+  "28(c). Composite stage"?: string;
+  "29. Treatment Given Prior to Registration at RI / Outside RI"?: string;
+  // Both treatment blocks (29 + 30) capture "30(a). Type of treatment given"
+  // under the same label string because the original UI uses the title
+  // as the `name` attribute prefix. We validate the label once.
+  "30(a). Type of treatment given"?: string;
+  "30(b). Types of targeted therapy"?: string;
+  "Specify targeted therapy"?: string;
+  "29(c). Performance Status (ECOG)"?: string;
+  "If known"?: string;
+  "31. Name of person completing form (IN CAPITALS)"?: string;
+  "32. Date of completion of form"?: string;
+};
+
+const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
+  "Clinical Extent of Disease Before Cancer Directed Treatment": [
+    required("Please select a clinical extent"),
+  ],
+  "28(a). Staging system": [required("Please select a staging system")],
+  T: [maxLen(8)],
+  N: [maxLen(8)],
+  M: [maxLen(8)],
+  "28(c). Composite stage": [maxLen(16)],
+  "31. Name of person completing form (IN CAPITALS)": [
+    required("Name of person completing the form is required"),
+    maxLen(255),
+  ],
+  "32. Date of completion of form": [
+    required("Date of completion is required"),
+    isDate(),
+    notFutureDate(),
+  ],
+});
+
+/**
+ * Validates Step 3 including conditional rules.
+ */
+export function validateStep3(values: Record<string, unknown>): Record<string, string> {
+  const out = validateRecord(step3Rules, values);
+
+  // 30(b). Targeted therapy "Others (Specify)" requires the text input.
+  if (values["30(b). Types of targeted therapy"] === "Others (Specify)") {
+    const v = values["Specify targeted therapy"];
+    if (!v || String(v).trim() === "") {
+      out["Specify targeted therapy"] = "Please specify the targeted therapy";
+    }
+  }
+
+  return out;
+}

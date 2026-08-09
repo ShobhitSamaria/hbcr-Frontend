@@ -1,0 +1,67 @@
+import {
+  CaseThrough,
+  Education,
+  MaritalStatus,
+  ReferralType,
+  RegistrationStatus,
+} from "../../generated/prisma/enums.ts";
+import { inEnum, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim } from "./common.ts";
+
+// HBCR-2024-0185 style: HBCR-YYYY-NNNNN or HBCR-YYYY-NNNN
+const HBCR_RE = /^HBCR-\d{4}-\d{4,5}$/;
+
+export const HBCR_REGISTRATION_NO_REGEX = HBCR_RE;
+
+/**
+ * Validator for the full HBCR registration record (Step 1 fields 1-8 +
+ * form-completion fields 31-32 + marital/education/anthropometric).
+ *
+ * `patientId` is taken from the URL (`/patients/:patientId/registrations`).
+ * `hospitalId` MUST come from the body.
+ */
+export const createRegistrationValidator = makeValidator({
+  hbcrRegistrationNo: [required(), isString(), trim(), maxLen(20), matches(HBCR_RE, "must look like HBCR-2024-0185")],
+  hospitalId: [required(), isInt("hospitalId is required and must be a positive integer")],
+  departmentName: [isString(), trim(), maxLen(128)],
+  unitNumber: [isString(), trim(), maxLen(32)],
+  hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
+  dateOfReporting: [isDate()],
+  caseRegisteredThrough: [inEnum(CaseThrough)],
+  referralType: [inEnum(ReferralType)],
+  referralFacilityName: [isString(), trim(), maxLen(255)],
+  referralFacilityCity: [isString(), trim(), maxLen(64)],
+  referralFacilityDistrict: [isString(), trim(), maxLen(64)],
+  referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
+  referralFacilityRegDate: [isDate()],
+  dateOfFirstDiagnosis: [isDate()],
+  anthropometricHeightCm: [isNumber("must be a number")],
+  anthropometricWeightKg: [isNumber("must be a number")],
+  maritalStatus: [inEnum(MaritalStatus)],
+  education: [inEnum(Education)],
+  status: [inEnum(RegistrationStatus)],
+  formCompletedBy: [isString(), trim(), maxLen(255)],
+  formCompletionDate: [isDate()],
+  createdByUserId: [isInt()],
+});
+
+export const updateRegistrationValidator = makeValidator({
+  departmentName: [isString(), trim(), maxLen(128)],
+  unitNumber: [isString(), trim(), maxLen(32)],
+  hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
+  dateOfReporting: [isDate()],
+  caseRegisteredThrough: [inEnum(CaseThrough)],
+  referralType: [inEnum(ReferralType)],
+  referralFacilityName: [isString(), trim(), maxLen(255)],
+  referralFacilityCity: [isString(), trim(), maxLen(64)],
+  referralFacilityDistrict: [isString(), trim(), maxLen(64)],
+  referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
+  referralFacilityRegDate: [isDate()],
+  dateOfFirstDiagnosis: [isDate()],
+  anthropometricHeightCm: [isNumber("must be a number")],
+  anthropometricWeightKg: [isNumber("must be a number")],
+  maritalStatus: [inEnum(MaritalStatus)],
+  education: [inEnum(Education)],
+  status: [inEnum(RegistrationStatus)],
+  formCompletedBy: [isString(), trim(), maxLen(255)],
+  formCompletionDate: [isDate()],
+});

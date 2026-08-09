@@ -1,0 +1,898 @@
+================================================================================
+HBCR Cancer Registry - PostgreSQL Database Design Report
+================================================================================
+Project: National HBCR Cancer Registry Portal
+Database: hbcr_registry
+Schema: hbcr
+Designed for: /Users/shobhitsamaria/Desktop/DOITC Code/HBCR/Code/Draft 1/hbcr/Frontend
+Mapping source: client/lib/index/components/* (forms of Step 1, Step 2, Step 3)
+
+--------------------------------------------------------------------------------
+1. DATABASE NAME
+--------------------------------------------------------------------------------
+hbcr_registry
+
+Rationale: Project is the National HBCR Cancer Registry Portal. Lowercase +
+underscore is the PostgreSQL convention. Use a single dedicated database so
+backups, restores and connection pooling are simple.
+
+--------------------------------------------------------------------------------
+2. SCHEMA STRUCTURE
+--------------------------------------------------------------------------------
+Single schema: hbcr
+
+  hbcr/
+    reference tables  -> centres, hospitals, users
+    patients          -> patients + side tables (ids, relatives, addresses,
+                        habits, comorbidities)
+    registrations     -> top-level HBCR registration record
+    medical           -> pathological_diagnoses, diagnostic_methods,
+                        diagnostic_procedures, treatments,
+                        treatment_modality_details, familial_cancer_history
+    enums             -> all dropdown values modelled as PG enums inside hbcr
+
+If the project grows (auth, audit, file storage), promote those into separate
+schemas (hbcr_auth, hbcr_audit) without touching the registry tables.
+
+--------------------------------------------------------------------------------
+3. ALL REQUIRED TABLES (16 total)
+--------------------------------------------------------------------------------
+ 1) hbcr.centres
+ 2) hbcr.hospitals
+ 3) hbcr.users
+ 4) hbcr.patients
+ 5) hbcr.patient_identifications
+ 6) hbcr.patient_relatives
+ 7) hbcr.patient_addresses
+ 8) hbcr.patient_habits
+ 9) hbcr.patient_comorbidities
+10) hbcr.registrations
+11) hbcr.diagnostic_methods
+12) hbcr.diagnostic_procedures
+13) hbcr.pathological_diagnoses
+14) hbcr.treatments
+15) hbcr.treatment_modality_details
+16) hbcr.familial_cancer_history
+
+--------------------------------------------------------------------------------
+4. EVERY TABLE'S COLUMNS WITH DATA TYPES
+--------------------------------------------------------------------------------
+Notation: PK = primary key, FK = foreign key, NN = NOT NULL, NULL = nullable,
+UQ = unique constraint.
+
+------------------------------------------------------------------
+4.1 hbcr.centres   - master list of registry centres
+------------------------------------------------------------------
+column        | type           | constraint | notes
+--------------|----------------|------------|-----------------------------
+id            | SERIAL         | PK         |
+code          | VARCHAR(32)    | NN, UQ     | e.g. "DL001"
+created_at    | TIMESTAMPTZ    | NN, DEFAULT now()
+
+------------------------------------------------------------------
+4.2 hbcr.hospitals   - Reporting Institutions (RI). Step 1, field 1.
+------------------------------------------------------------------
+column        | type           | constraint | notes
+--------------|----------------|------------|-----------------------------
+id            | SERIAL         | PK         |
+name          | VARCHAR(255)   | NN         | e.g. "AIIMS New Delhi"
+centre_id     | INTEGER        | NN, FK     | -> centres.id
+created_at    | TIMESTAMPTZ    | NN, DEFAULT now()
+
+------------------------------------------------------------------
+4.3 hbcr.users   - registry coordinators / staff. Sidebar shows one.
+------------------------------------------------------------------
+column        | type           | constraint | notes
+--------------|----------------|------------|-----------------------------
+id            | SERIAL         | PK         |
+full_name     | VARCHAR(255)   | NN         | e.g. "Dr. A. Srinivasan"
+role          | VARCHAR(64)    | NN         | e.g. "Registry coordinator"
+initials      | VARCHAR(4)     | NN         | "AS" - used in avatar bubble
+hospital_id   | INTEGER        | NULL, FK   | -> hospitals.id
+is_active     | BOOLEAN        | NN, DEFAULT true
+created_at    | TIMESTAMPTZ    | NN, DEFAULT now()
+
+------------------------------------------------------------------
+4.4 hbcr.patients   - core patient record. Step 1 fields 9-12.
+------------------------------------------------------------------
+column        | type                  | constraint | notes
+--------------|-----------------------|------------|----------------------
+id            | SERIAL                | PK         |
+full_name     | VARCHAR(255)          | NN         | Field 9
+age           | SMALLINT              | NULL       | Field 10
+date_of_birth | DATE                  | NULL       | Field 11
+gender        | hbcr.gender_enum      | NN         | Field 12
+created_at    | TIMESTAMPTZ           | NN, DEFAULT now()
+
+------------------------------------------------------------------
+4.5 hbcr.patient_identifications   - Step 1, Field 13
+------------------------------------------------------------------
+column        | type                  | constraint | notes
+--------------|-----------------------|------------|----------------------
+id            | SERIAL                | PK         |
+patient_id    | INTEGER               | NN, FK     | -> patients.id
+id_type       | hbcr.id_type_enum     | NN         | aadhaar/abha/voter/...
+number        | VARCHAR(64)           | NN         | the typed value
+(UNIQUE)      | (patient_id, id_type) |            | one row per kind
+
+The UI offers Yes/No radios; insert a row only when "Yes" is picked.
+
+------------------------------------------------------------------
+4.6 hbcr.patient_relatives   - Step 1, Field 14
+------------------------------------------------------------------
+column        | type                    | constraint | notes
+--------------|-------------------------|------------|----------------------
+id            | SERIAL                  | PK         |
+patient_id    | INTEGER                 | NN, FK     | -> patients.id
+relationship  | hbcr.relationship_enum  | NN         | father/mother/spouse
+name          | VARCHAR(255)            | NULL       |
+mobile_number | VARCHAR(15)             | NULL       |
+(UNIQUE)      | (patient_id, relationship)
+
+------------------------------------------------------------------
+4.7 hbcr.patient_addresses   - Step 1, Field 15
+------------------------------------------------------------------
+column        | type                     | constraint | notes
+--------------|--------------------------|------------|----------------------
+id            | SERIAL                   | PK         |
+patient_id    | INTEGER                  | NN, FK     | -> patients.id
+address_type  | hbcr.address_type_enum   | NN         | residential / permanent
+flat_house_no | VARCHAR(64)              | NULL       |
+street_road   | VARCHAR(255)             | NULL       |
+city          | VARCHAR(64)              | NULL       |
+district      | VARCHAR(64)              | NULL       |
+state         | VARCHAR(64)              | NULL       |
+pin_code      | VARCHAR(6)               | NULL       | 6-digit Indian PIN
+mobile_number | VARCHAR(15)              | NULL       |
+email         | VARCHAR(255)             | NULL       |
+(UNIQUE)      | (patient_id, address_type)
+
+------------------------------------------------------------------
+4.8 hbcr.patient_habits   - Step 1, Field 18(a)
+------------------------------------------------------------------
+column          | type                   | constraint | notes
+----------------|------------------------|------------|----------------------
+id              | SERIAL                 | PK         |
+patient_id      | INTEGER                | NN, FK     | -> patients.id
+habit           | hbcr.habit_enum        | NN         | smoking/...
+answer          | hbcr.yes_no_unknown_enum| NN, DEFAULT 'no'
+duration_months | SMALLINT               | NULL       | only when answer='Yes'
+(UNIQUE)        | (patient_id, habit)
+
+------------------------------------------------------------------
+4.9 hbcr.patient_comorbidities   - Step 1, Field 18(b)
+------------------------------------------------------------------
+column          | type                     | constraint | notes
+----------------|--------------------------|------------|----------------------
+id              | SERIAL                   | PK         |
+patient_id      | INTEGER                  | NN, FK     | -> patients.id
+comorbidity     | hbcr.comorbidity_enum    | NN         | tb/hypertension/...
+answer          | hbcr.yes_no_unknown_enum | NN, DEFAULT 'no'
+duration_months | SMALLINT                 | NULL       |
+(UNIQUE)        | (patient_id, comorbidity)
+
+------------------------------------------------------------------
+4.10 hbcr.registrations   - top-level HBCR registration. Step 1 fields 1-8,
+                              16-17 plus form footer fields 31-32.
+------------------------------------------------------------------
+column                              | type                       | constraint | notes
+------------------------------------|----------------------------|------------|--------
+id                                  | SERIAL                     | PK         |
+patient_id                          | INTEGER                    | NN, FK     | -> patients.id
+hbcr_registration_no                | VARCHAR(20)                | NN, UQ     | "HBCR-2024-0185"
+hospital_id                         | INTEGER                    | NN, FK     | -> hospitals.id
+department_name                     | VARCHAR(128)               | NULL       | Field 3(a)
+unit_number                         | VARCHAR(32)                | NULL       | Field 3(b)
+hospital_registration_no            | VARCHAR(64)                | NULL       | Field 4
+date_of_reporting                   | DATE                       | NULL       | Field 5
+case_registered_through             | hbcr.case_through_enum     | NULL       | Field 6
+referral_type                       | hbcr.referral_type_enum    | NULL       | Field 7 (default 'self')
+referral_facility_name              | VARCHAR(255)               | NULL       | Field 7(a)
+referral_facility_city              | VARCHAR(64)                | NULL       | Field 7(b)
+referral_facility_district          | VARCHAR(64)                | NULL       | Field 7(c)
+referral_facility_hospital_lab_nh   | VARCHAR(255)               | NULL       | Field 7(d)
+referral_facility_reg_date          | DATE                       | NULL       | Field 7(e)
+date_of_first_diagnosis             | DATE                       | NULL       | Field 8
+anthropometric_height_cm            | NUMERIC(5,2)               | NULL       | 18(c)
+anthropometric_weight_kg            | NUMERIC(5,2)               | NULL       | 18(c)
+marital_status                      | hbcr.marital_status_enum   | NULL       | Field 16
+education                           | hbcr.education_enum        | NULL       | Field 17
+status                              | hbcr.registration_status_enum| NN, DEFAULT 'active'
+form_completed_by                   | VARCHAR(255)               | NULL       | Field 31
+form_completion_date                | DATE                       | NULL       | Field 32
+created_by_user_id                  | INTEGER                    | NULL, FK   | -> users.id
+created_at                          | TIMESTAMPTZ                | NN, DEFAULT now()
+
+------------------------------------------------------------------
+4.11 hbcr.diagnostic_methods   - Step 2 Field 20 top-level checkboxes
+------------------------------------------------------------------
+column            | type                        | constraint | notes
+------------------|-----------------------------|------------|--------
+id                | SERIAL                      | PK         |
+registration_id   | INTEGER                     | NN, FK     | -> registrations.id
+method            | hbcr.diagnostic_method_enum | NN         |
+clinical_only_date| DATE                        | NULL       | only when method=clinical_only
+(UNIQUE)          | (registration_id, method)
+
+------------------------------------------------------------------
+4.12 hbcr.diagnostic_procedures   - sub-rows for Microscopic/Imaging/Other
+------------------------------------------------------------------
+column               | type          | constraint | notes
+---------------------|---------------|------------|--------
+id                   | SERIAL        | PK         |
+diagnostic_method_id | INTEGER       | NN, FK     | -> diagnostic_methods.id
+procedure_name       | VARCHAR(128)  | NN         |
+is_others            | BOOLEAN       | NN, DEFAULT false | mirrors "Others" UI
+others_specify       | VARCHAR(255)  | NULL       |
+procedure_date       | DATE          | NULL       |
+(UNIQUE)             | (diagnostic_method_id, procedure_name)
+
+------------------------------------------------------------------
+4.13 hbcr.pathological_diagnoses   - Step 2 Fields 21-26
+------------------------------------------------------------------
+column                              | type                          | constraint | notes
+------------------------------------|-------------------------------|------------|--------
+id                                  | SERIAL                        | PK         |
+registration_id                     | INTEGER                       | NN, UQ, FK | -> registrations.id (1:1)
+longest_symptom_duration_months     | SMALLINT                      | NULL       | Field 21
+anatomical_site                     | VARCHAR(128)                  | NULL       | 22(a)
+pathology_slide_no                  | VARCHAR(64)                   | NULL       | 22(b)
+primary_tumor_site                  | VARCHAR(128)                  | NULL       | 22(c)
+morphology                          | VARCHAR(128)                  | NULL       | 22(d)
+icdo_topography                     | VARCHAR(64)                   | NULL       | 23(a)
+icdo_morphology                     | VARCHAR(64)                   | NULL       | 23(b)
+secondary_site                      | VARCHAR(128)                  | NULL       | 23(c)
+metastasis_morphology               | VARCHAR(128)                  | NULL       | 23(d)
+icd10_site                          | VARCHAR(64)                   | NULL       | Field 24
+laterality                          | hbcr.laterality_enum          | NULL, DEFAULT 'not_paired_site' | 25
+paired_laterality                   | hbcr.paired_laterality_enum   | NULL       | 25 sub-options
+sequence                            | hbcr.sequence_enum            | NULL       | 26
+
+------------------------------------------------------------------
+4.14 hbcr.treatments   - Step 3 Fields 27-32
+------------------------------------------------------------------
+column                              | type                          | constraint | notes
+------------------------------------|-------------------------------|------------|--------
+id                                  | SERIAL                        | PK         |
+registration_id                     | INTEGER                       | NN, FK     | -> registrations.id
+treatment_stage                    | hbcr.treatment_stage_enum     | NN         | prior_registration / at_ri
+treatment_given_choice              | hbcr.yes_no_unknown_enum      | NULL       | when requiredChoice=true
+treatment_type                      | hbcr.treatment_type_enum      | NULL       | Allopathic/...
+clinical_extent_of_disease          | hbcr.clinical_extent_enum     | NULL       | 27
+staging_system                      | hbcr.staging_system_enum      | NULL       | 28(a)
+tnm_t                               | VARCHAR(8)                    | NULL       | 28(b)
+tnm_n                               | VARCHAR(8)                    | NULL       | 28(b)
+tnm_m                               | VARCHAR(8)                    | NULL       | 28(b)
+composite_stage                     | VARCHAR(16)                   | NULL       | 28(c)
+ecog_status                         | hbcr.ecog_status_enum         | NULL       | 29(c)
+ecog_grade                          | hbcr.ecog_grade_enum          | NULL       | 29(c)
+targeted_therapy_type               | hbcr.targeted_therapy_enum    | NULL       | 30(b)
+targeted_therapy_other_specify      | VARCHAR(255)                  | NULL       |
+(UNIQUE)                            | (registration_id, treatment_stage)
+
+------------------------------------------------------------------
+4.15 hbcr.treatment_modality_details   - the 8-row modalities grid
+------------------------------------------------------------------
+column          | type                          | constraint | notes
+----------------|-------------------------------|------------|--------
+id              | SERIAL                        | PK         |
+treatment_id    | INTEGER                       | NN, FK     | -> treatments.id
+modality        | hbcr.treatment_modality_enum  | NN         | surgery/...
+is_selected     | BOOLEAN                       | NN, DEFAULT false
+intention_to_treat | hbcr.intention_enum        | NULL       |
+role            | hbcr.role_enum                | NULL       | null for surgery (UI shows span)
+details         | hbcr.treatment_detail_enum    | NULL       |
+start_date      | DATE                          | NULL       |
+end_date        | DATE                          | NULL       | null for surgery (UI shows span)
+others_specify  | VARCHAR(255)                  | NULL       |
+(UNIQUE)        | (treatment_id, modality)
+
+------------------------------------------------------------------
+4.16 hbcr.familial_cancer_history   - Step 1 Field 19
+------------------------------------------------------------------
+column                          | type                          | constraint | notes
+--------------------------------|-------------------------------|------------|--------
+id                              | SERIAL                        | PK         |
+registration_id                 | INTEGER                       | NN, UQ, FK | -> registrations.id (1:1)
+family_history                  | hbcr.yes_no_unknown_enum      | NN, DEFAULT 'no'
+relationship_with_cancer        | hbcr.fam_relationship_enum    | NULL       | same/other_cancer
+degree_of_relationship          | hbcr.fam_degree_enum          | NULL       | first/second_degree
+primary_site                    | hbcr.fam_primary_site_enum     | NULL       |
+age_at_diagnosis                | SMALLINT                      | NULL       |
+date_of_diagnosis               | DATE                          | NULL       |
+
+--------------------------------------------------------------------------------
+5. PRIMARY KEYS AND FOREIGN KEYS
+--------------------------------------------------------------------------------
+
+Primary keys:
+  All tables: SERIAL `id`. The only natural candidate (hbcr_registration_no)
+  also gets a UNIQUE constraint in addition.
+
+Foreign keys (with ON DELETE action):
+
+  hospitals.centre_id             -> centres.id                  ON DELETE RESTRICT
+  users.hospital_id               -> hospitals.id                ON DELETE SET NULL
+  patients.-- (no parent)                                           
+  patient_identifications.patient_id -> patients.id              ON DELETE CASCADE
+  patient_relatives.patient_id       -> patients.id              ON DELETE CASCADE
+  patient_addresses.patient_id       -> patients.id              ON DELETE CASCADE
+  patient_habits.patient_id          -> patients.id              ON DELETE CASCADE
+  patient_comorbidities.patient_id   -> patients.id              ON DELETE CASCADE
+  registrations.patient_id           -> patients.id              ON DELETE CASCADE
+  registrations.hospital_id          -> hospitals.id             ON DELETE RESTRICT
+  registrations.created_by_user_id   -> users.id                 ON DELETE SET NULL
+  diagnostic_methods.registration_id   -> registrations.id       ON DELETE CASCADE
+  diagnostic_procedures.diagnostic_method_id -> diagnostic_methods.id ON DELETE CASCADE
+  pathological_diagnoses.registration_id    -> registrations.id       ON DELETE CASCADE
+  treatments.registration_id                -> registrations.id       ON DELETE CASCADE
+  treatment_modality_details.treatment_id   -> treatments.id          ON DELETE CASCADE
+  familial_cancer_history.registration_id   -> registrations.id       ON DELETE CASCADE
+
+--------------------------------------------------------------------------------
+6. RELATIONSHIPS BETWEEN TABLES
+--------------------------------------------------------------------------------
+
+centres  1 ---< hospitals
+hospitals 1 ---< users                    (a hospital has many staff)
+hospitals 1 ---< registrations
+patients  1 ---< patient_identifications (Aadhaar, ABHA, etc.)
+patients  1 ---< patient_relatives
+patients  1 ---< patient_addresses        (residential + permanent)
+patients  1 ---< patient_habits
+patients  1 ---< patient_comorbidities
+patients  1 ---< registrations           (a patient can be re-registered)
+users     1 ---< registrations           (who created it)
+registrations 1 --- 1  pathological_diagnoses
+registrations 1 --- 1  familial_cancer_history
+registrations 1 --- < diagnostic_methods 1 --- < diagnostic_procedures
+registrations 1 --- < treatments 1 --- < treatment_modality_details
+
+ER-style:
+
+  [centres]---<[hospitals]>---[registrations]---<[diagnostic_methods]---<[diagnostic_procedures]
+                       |              |  |
+                       |              |  +--- 1:1 [familial_cancer_history]
+                       |              |  +--- 1:1 [pathological_diagnoses]
+                       |              +--- 1:N [treatments]---<[treatment_modality_details]
+                       |              |
+                       |              v
+                       |        [patients]<---[patient_identifications]
+                       |              |  <---[patient_relatives]
+                       |              |  <---[patient_addresses]
+                       |              |  <---[patient_habits]
+                       |              |  <---[patient_comorbidities]
+                       v
+                    [users]
+
+--------------------------------------------------------------------------------
+7. REQUIRED INDEXES
+--------------------------------------------------------------------------------
+
+Implicit (created by PK/UQ constraints):
+  All *_id columns (btree PK)
+  hbcr_registration_no (UQ btree)
+  (patient_id, id_type) on patient_identifications
+  (patient_id, relationship) on patient_relatives
+  (patient_id, address_type) on patient_addresses
+  (patient_id, habit) on patient_habits
+  (patient_id, comorbidity) on patient_comorbidities
+  (registration_id, method) on diagnostic_methods
+  (diagnostic_method_id, procedure_name) on diagnostic_procedures
+  (registration_id, treatment_stage) on treatments
+  (treatment_id, modality) on treatment_modality_details
+
+Explicit (search and reporting):
+  idx_hospitals_centre          ON hbcr.hospitals(centre_id)
+  idx_patients_name             ON hbcr.patients(full_name)
+  idx_patients_name_trgm        ON hbcr.patients USING gin (full_name gin_trgm_ops)
+  idx_patids_value              ON hbcr.patient_identifications(number)
+  idx_registrations_status      ON hbcr.registrations(status)
+  idx_registrations_hospital    ON hbcr.registrations(hospital_id)
+  idx_registrations_patient     ON hbcr.registrations(patient_id)
+  idx_pathdx_icdo_topo          ON hbcr.pathological_diagnoses(icdo_topography)
+  idx_pathdx_icdo_morph         ON hbcr.pathological_diagnoses(icdo_morphology)
+  idx_pathdx_icd10              ON hbcr.pathological_diagnoses(icd10_site)
+  idx_treatment_modality_sel    ON hbcr.treatment_modality_details(treatment_id)
+                                  WHERE is_selected = true   (partial)
+
+--------------------------------------------------------------------------------
+8. NULLABILITY GUIDE
+--------------------------------------------------------------------------------
+
+NN (required):
+  patients.full_name, patients.gender
+  registrations.hbcr_registration_no, registrations.hospital_id, registrations.status
+  diagnostic_methods.method
+  diagnostic_procedures.procedure_name
+  treatments.treatment_stage
+  treatment_modality_details.modality
+  centres.code, hospitals.name
+  users.full_name, users.role, users.initials
+
+NULL (optional, app may collect later):
+  patients.age / date_of_birth  (one of them is usually required by UI)
+  registration referral sub-fields (only if referral_type='other_hospital')
+  anthropometric_* (UI marks required - enforce on app)
+  diagnostic_procedures date (only ticked rows get a date)
+  treatment modality date columns (UI spans for surgery)
+  familial_cancer_history detail fields  (only meaningful when family_history='yes')
+
+Indexed notes:
+  - The patient row is created when "name" is provided; everything else can
+    arrive in any order across side tables.
+
+--------------------------------------------------------------------------------
+9. RECOMMENDED CONSTRAINTS / ENUMS
+--------------------------------------------------------------------------------
+
+PostgreSQL ENUMs (use CREATE TYPE ... AS ENUM):
+
+  gender_enum             ('male','female','other')
+  id_type_enum            ('aadhaar','abha','voter_id','passport','ab_pmjay','other')
+  relationship_enum       ('father','mother','spouse')
+  address_type_enum       ('residential','permanent')
+  yes_no_unknown_enum     ('yes','no','unknown')
+  habit_enum              ('smoking','smokeless_tobacco','betel_nut','alcohol')
+  comorbidity_enum        ('tuberculosis','hypertension','diabetes',
+                           'ischemic_heart_disease','copd_asthma','stroke',
+                           'depression','hepatitis_b','hepatitis_c','nafld',
+                           'chronic_kidney_disease','hiv_aids','hypothyroidism',
+                           'others')
+  case_through_enum       ('out_patient','in_patient_elective',
+                           'in_patient_emergency','other')
+  referral_type_enum      ('self','other_hospital','screen_detected','unknown')
+  marital_status_enum     ('married','single','widowed','divorced')
+  education_enum          ('not_applicable','illiterate','literate','primary',
+                           'middle','secondary_higher_secondary',
+                           'technical_after_matric','graduate_and_above',
+                           'others','unknown')
+  registration_status_enum('active','pending','completed')
+  diagnostic_method_enum  ('clinical_only','microscopic','imaging','dco','other')
+  laterality_enum         ('not_paired_site','paired_site','unknown')
+  paired_laterality_enum  ('right','left','only_one_side','bilateral_unknown',
+                           'paired_midline','paired_unknown')
+  sequence_enum           ('one_primary','first_of_multiple','second_of_multiple',
+                           'third_of_multiple','unspecified_unknown')
+  clinical_extent_enum    ('in_situ_benign_pre_invasive','localized',
+                           'direct_extension','regional_nodes',
+                           'direct_extension_with_regional_nodes',
+                           'distant_metastasis','not_applicable','recurrence',
+                           'unknown_primary','others_specify','unknown')
+  staging_system_enum     ('tnm','figo','ann_arbor','toronto_childhood',
+                           'not_applicable','lugano','cog','others_specify',
+                           'unknown')
+  ecog_status_enum        ('known','unknown')
+  ecog_grade_enum         ('grade_0','grade_1','grade_2','grade_3','grade_4',
+                           'grade_5')
+  treatment_stage_enum    ('prior_registration','at_ri')
+  treatment_type_enum     ('allopathic','non_allopathic','both')
+  targeted_therapy_enum   ('tki','immunotherapy','monoclonal_antibodies',
+                           'antibody_drug_conjugate','cdk46_inhibitor',
+                           'mtor_inhibitor','parp_inhibitor','not_given',
+                           'others_specify','unknown')
+  treatment_modality_enum ('surgery','radiotherapy_1','radiotherapy_2',
+                           'chemotherapy_1','chemotherapy_2','hormone_therapy',
+                           'targeted_therapy','others')
+  intention_enum          ('curative','palliative','symptomatic','unknown')
+  role_enum               ('neo_adjuvant','definitive','concurrent','unknown')
+  treatment_detail_enum   ('completed_treatment','incomplete_treatment')
+  fam_relationship_enum   ('same_cancer','other_cancer')
+  fam_degree_enum         ('first_degree','second_degree')
+  fam_primary_site_enum    ('breast','ovary','colon','prostate','endometrial',
+                           'melanoma','thyroid','pancreas')
+
+CHECK constraints worth adding:
+
+  hbcr_registration_no   ~ '^HBCR-[0-9]{4}-[0-9]{4,5}$'
+  patient_addresses.pin_code
+                          ~ '^[1-9][0-9]{5}$'   (when NOT NULL)
+  patient_addresses.mobile_number
+                          ~ '^[6-9][0-9]{9}$'   (when NOT NULL)
+  patient_addresses.email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+  patient_habits.duration_months required when answer='yes'
+  patient_comorbidities.duration_months required when answer='yes'
+  familial_cancer_history sub-fields required when family_history='yes'
+
+--------------------------------------------------------------------------------
+10. ER / DATABASE RELATIONSHIP OVERVIEW
+--------------------------------------------------------------------------------
+
+  +----------------+        +----------------+
+  |    centres     |1-----<|    hospitals    |
+  +----------------+        +--------+-------+
+                                     |
+                                     |1
+                                     v
+                                 +---+-----+        +------------------+
+                                 | patients|<---1---| registrations    |--1:1-- pathological_diagnoses
+                                 +---+-----+        +---------+--------+
+                                     |                       |1
+                                     |                       v
+                                     |                +------+--------+
+                                     |     +----------|diagnostic_   |
+                                     |     |          |  methods      |
+                                     |     |          +------+--------+
+                                     |     |                 |1
+                                     |     |                 v N
+                                     |     |          +------+--------+
+                                     |     +----------|diagnostic_   |
+                                     |                |  procedures  |
+                                     |                +---------------+
+                                     |                       |1
+                                     v                       v N
+        +-------------+         +----+----+       +--------+--------+
+        |patient_ids  |1-----<--| relatives|       |  treatments    |
+        +-------------+         +----+----+       +--------+--------+
+        +-------------+              |                   |1
+        |addresses    |1-----<-------+                   v N
+        +-------------+                                  +----+-------+
+        +-------------+                                  | treatment_ |
+        |habits       |1-----<---------------------------+modality   |
+        +-------------+                                  |details    |
+        +-------------+                                  +-----------+
+        |comorbidities|1-----<---------------------------+
+        +-------------+
+        +-------------+                                  +----+-------+
+        |familial_    |<-----1:1----- registrations -----+           |
+        |cancer_      |                                  +-----------+
+        |history      |
+        +-------------+
+
+Key concepts:
+- patients is the personal-data anchor; many 1:N child tables hang off it.
+- registrations is the clinical-data anchor (1:N with patients; 1:N with
+  diagnostic_methods, treatments; 1:1 with pathological_diagnoses and
+  familial_cancer_history).
+- treatments is also 1:N with treatment_modality_details (8 modalities x 2
+  stages: prior_registration vs at_ri).
+- hospitals connects to users, registrations, centres - multi-tenant.
+
+--------------------------------------------------------------------------------
+11. FINAL POSTGRESQL CREATE TABLE SQL
+--------------------------------------------------------------------------------
+
+-- Extensions
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+CREATE SCHEMA  IF NOT EXISTS hbcr;
+SET search_path TO hbcr, public;
+
+-- 11.1 ENUM types --------------------------------------------------
+DO $$ BEGIN
+  CREATE TYPE hbcr.gender_enum              AS ENUM ('male','female','other');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.id_type_enum             AS ENUM ('aadhaar','abha','voter_id','passport','ab_pmjay','other');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.relationship_enum        AS ENUM ('father','mother','spouse');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.address_type_enum        AS ENUM ('residential','permanent');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.yes_no_unknown_enum      AS ENUM ('yes','no','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.habit_enum               AS ENUM ('smoking','smokeless_tobacco','betel_nut','alcohol');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.comorbidity_enum         AS ENUM ('tuberculosis','hypertension','diabetes','ischemic_heart_disease','copd_asthma','stroke','depression','hepatitis_b','hepatitis_c','nafld','chronic_kidney_disease','hiv_aids','hypothyroidism','others');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.case_through_enum        AS ENUM ('out_patient','in_patient_elective','in_patient_emergency','other');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.referral_type_enum       AS ENUM ('self','other_hospital','screen_detected','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.marital_status_enum      AS ENUM ('married','single','widowed','divorced');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.education_enum           AS ENUM ('not_applicable','illiterate','literate','primary','middle','secondary_higher_secondary','technical_after_matric','graduate_and_above','others','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.registration_status_enum AS ENUM ('active','pending','completed');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.diagnostic_method_enum   AS ENUM ('clinical_only','microscopic','imaging','dco','other');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.laterality_enum          AS ENUM ('not_paired_site','paired_site','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.paired_laterality_enum   AS ENUM ('right','left','only_one_side','bilateral_unknown','paired_midline','paired_unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.sequence_enum            AS ENUM ('one_primary','first_of_multiple','second_of_multiple','third_of_multiple','unspecified_unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.clinical_extent_enum     AS ENUM ('in_situ_benign_pre_invasive','localized','direct_extension','regional_nodes','direct_extension_with_regional_nodes','distant_metastasis','not_applicable','recurrence','unknown_primary','others_specify','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.staging_system_enum      AS ENUM ('tnm','figo','ann_arbor','toronto_childhood','not_applicable','lugano','cog','others_specify','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.ecog_status_enum         AS ENUM ('known','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.ecog_grade_enum          AS ENUM ('grade_0','grade_1','grade_2','grade_3','grade_4','grade_5');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.treatment_stage_enum     AS ENUM ('prior_registration','at_ri');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.treatment_type_enum      AS ENUM ('allopathic','non_allopathic','both');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.targeted_therapy_enum    AS ENUM ('tki','immunotherapy','monoclonal_antibodies','antibody_drug_conjugate','cdk46_inhibitor','mtor_inhibitor','parp_inhibitor','not_given','others_specify','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.treatment_modality_enum  AS ENUM ('surgery','radiotherapy_1','radiotherapy_2','chemotherapy_1','chemotherapy_2','hormone_therapy','targeted_therapy','others');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.intention_enum           AS ENUM ('curative','palliative','symptomatic','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.role_enum                AS ENUM ('neo_adjuvant','definitive','concurrent','unknown');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.treatment_detail_enum    AS ENUM ('completed_treatment','incomplete_treatment');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.fam_relationship_enum    AS ENUM ('same_cancer','other_cancer');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.fam_degree_enum          AS ENUM ('first_degree','second_degree');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN
+  CREATE TYPE hbcr.fam_primary_site_enum     AS ENUM ('breast','ovary','colon','prostate','endometrial','melanoma','thyroid','pancreas');
+  EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- 11.2 TABLES ------------------------------------------------------
+
+-- centres
+CREATE TABLE IF NOT EXISTS hbcr.centres (
+  id          SERIAL PRIMARY KEY,
+  code        VARCHAR(32)  NOT NULL UNIQUE,
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+
+-- hospitals
+CREATE TABLE IF NOT EXISTS hbcr.hospitals (
+  id          SERIAL PRIMARY KEY,
+  name        VARCHAR(255) NOT NULL,
+  centre_id   INTEGER      NOT NULL REFERENCES hbcr.centres(id) ON DELETE RESTRICT,
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_hospitals_centre ON hbcr.hospitals(centre_id);
+
+-- users
+CREATE TABLE IF NOT EXISTS hbcr.users (
+  id          SERIAL PRIMARY KEY,
+  full_name   VARCHAR(255) NOT NULL,
+  role        VARCHAR(64)  NOT NULL,
+  initials    VARCHAR(4)   NOT NULL,
+  hospital_id INTEGER      REFERENCES hbcr.hospitals(id) ON DELETE SET NULL,
+  is_active   BOOLEAN      NOT NULL DEFAULT true,
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+
+-- patients
+CREATE TABLE IF NOT EXISTS hbcr.patients (
+  id            SERIAL PRIMARY KEY,
+  full_name     VARCHAR(255) NOT NULL,
+  age           SMALLINT,
+  date_of_birth DATE,
+  gender        hbcr.gender_enum NOT NULL,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_patients_name       ON hbcr.patients(full_name);
+CREATE INDEX IF NOT EXISTS idx_patients_name_trgm  ON hbcr.patients USING gin (full_name gin_trgm_ops);
+
+-- patient_identifications
+CREATE TABLE IF NOT EXISTS hbcr.patient_identifications (
+  id          SERIAL PRIMARY KEY,
+  patient_id  INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  id_type     hbcr.id_type_enum NOT NULL,
+  number      VARCHAR(64) NOT NULL,
+  UNIQUE (patient_id, id_type)
+);
+CREATE INDEX IF NOT EXISTS idx_patids_value ON hbcr.patient_identifications(number);
+
+-- patient_relatives
+CREATE TABLE IF NOT EXISTS hbcr.patient_relatives (
+  id             SERIAL PRIMARY KEY,
+  patient_id     INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  relationship   hbcr.relationship_enum NOT NULL,
+  name           VARCHAR(255),
+  mobile_number  VARCHAR(15),
+  UNIQUE (patient_id, relationship)
+);
+
+-- patient_addresses
+CREATE TABLE IF NOT EXISTS hbcr.patient_addresses (
+  id            SERIAL PRIMARY KEY,
+  patient_id    INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  address_type  hbcr.address_type_enum NOT NULL,
+  flat_house_no VARCHAR(64),
+  street_road   VARCHAR(255),
+  city          VARCHAR(64),
+  district      VARCHAR(64),
+  state         VARCHAR(64),
+  pin_code      VARCHAR(6),
+  mobile_number VARCHAR(15),
+  email         VARCHAR(255),
+  UNIQUE (patient_id, address_type),
+  CONSTRAINT pin_format     CHECK (pin_code IS NULL OR pin_code     ~ '^[1-9][0-9]{5}$'),
+  CONSTRAINT mobile_format  CHECK (mobile_number IS NULL OR mobile_number ~ '^[6-9][0-9]{9}$'),
+  CONSTRAINT email_format   CHECK (email IS NULL OR email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+);
+
+-- patient_habits
+CREATE TABLE IF NOT EXISTS hbcr.patient_habits (
+  id              SERIAL PRIMARY KEY,
+  patient_id      INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  habit           hbcr.habit_enum NOT NULL,
+  answer          hbcr.yes_no_unknown_enum NOT NULL DEFAULT 'no',
+  duration_months SMALLINT,
+  UNIQUE (patient_id, habit),
+  CONSTRAINT habit_duration CHECK (answer <> 'yes' OR duration_months IS NOT NULL)
+);
+
+-- patient_comorbidities
+CREATE TABLE IF NOT EXISTS hbcr.patient_comorbidities (
+  id              SERIAL PRIMARY KEY,
+  patient_id      INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  comorbidity     hbcr.comorbidity_enum NOT NULL,
+  answer          hbcr.yes_no_unknown_enum NOT NULL DEFAULT 'no',
+  duration_months SMALLINT,
+  UNIQUE (patient_id, comorbidity),
+  CONSTRAINT comorb_duration CHECK (answer <> 'yes' OR duration_months IS NOT NULL)
+);
+
+-- registrations
+CREATE TABLE IF NOT EXISTS hbcr.registrations (
+  id                                SERIAL PRIMARY KEY,
+  patient_id                        INTEGER NOT NULL REFERENCES hbcr.patients(id) ON DELETE CASCADE,
+  hbcr_registration_no              VARCHAR(20) NOT NULL UNIQUE,
+  hospital_id                       INTEGER NOT NULL REFERENCES hbcr.hospitals(id) ON DELETE RESTRICT,
+  department_name                   VARCHAR(128),
+  unit_number                       VARCHAR(32),
+  hospital_registration_no          VARCHAR(64),
+  date_of_reporting                 DATE,
+  case_registered_through           hbcr.case_through_enum,
+  referral_type                     hbcr.referral_type_enum,
+  referral_facility_name            VARCHAR(255),
+  referral_facility_city            VARCHAR(64),
+  referral_facility_district        VARCHAR(64),
+  referral_facility_hospital_lab_nh VARCHAR(255),
+  referral_facility_reg_date        DATE,
+  date_of_first_diagnosis           DATE,
+  anthropometric_height_cm          NUMERIC(5,2),
+  anthropometric_weight_kg          NUMERIC(5,2),
+  marital_status                    hbcr.marital_status_enum,
+  education                         hbcr.education_enum,
+  status                            hbcr.registration_status_enum NOT NULL DEFAULT 'active',
+  form_completed_by                 VARCHAR(255),
+  form_completion_date              DATE,
+  created_by_user_id                INTEGER REFERENCES hbcr.users(id) ON DELETE SET NULL,
+  created_at                        TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT hbcr_reg_no_format CHECK (hbcr_registration_no ~ '^HBCR-[0-9]{4}-[0-9]{4,5}$'),
+  CONSTRAINT referral_subfields CHECK (
+    referral_type <> 'other_hospital'
+    OR (referral_facility_name IS NOT NULL AND referral_facility_city IS NOT NULL)
+  )
+);
+CREATE INDEX IF NOT EXISTS idx_registrations_status   ON hbcr.registrations(status);
+CREATE INDEX IF NOT EXISTS idx_registrations_hospital ON hbcr.registrations(hospital_id);
+CREATE INDEX IF NOT EXISTS idx_registrations_patient  ON hbcr.registrations(patient_id);
+
+-- diagnostic_methods
+CREATE TABLE IF NOT EXISTS hbcr.diagnostic_methods (
+  id                  SERIAL PRIMARY KEY,
+  registration_id     INTEGER NOT NULL REFERENCES hbcr.registrations(id) ON DELETE CASCADE,
+  method              hbcr.diagnostic_method_enum NOT NULL,
+  clinical_only_date  DATE,
+  UNIQUE (registration_id, method)
+);
+
+-- diagnostic_procedures
+CREATE TABLE IF NOT EXISTS hbcr.diagnostic_procedures (
+  id                   SERIAL PRIMARY KEY,
+  diagnostic_method_id INTEGER NOT NULL REFERENCES hbcr.diagnostic_methods(id) ON DELETE CASCADE,
+  procedure_name       VARCHAR(128) NOT NULL,
+  is_others            BOOLEAN NOT NULL DEFAULT false,
+  others_specify       VARCHAR(255),
+  procedure_date       DATE,
+  UNIQUE (diagnostic_method_id, procedure_name)
+);
+
+-- pathological_diagnoses
+CREATE TABLE IF NOT EXISTS hbcr.pathological_diagnoses (
+  id                                SERIAL PRIMARY KEY,
+  registration_id                   INTEGER NOT NULL UNIQUE REFERENCES hbcr.registrations(id) ON DELETE CASCADE,
+  longest_symptom_duration_months   SMALLINT,
+  anatomical_site                   VARCHAR(128),
+  pathology_slide_no                VARCHAR(64),
+  primary_tumor_site                VARCHAR(128),
+  morphology                        VARCHAR(128),
+  icdo_topography                   VARCHAR(64),
+  icdo_morphology                   VARCHAR(64),
+  secondary_site                    VARCHAR(128),
+  metastasis_morphology             VARCHAR(128),
+  icd10_site                        VARCHAR(64),
+  laterality                        hbcr.laterality_enum DEFAULT 'not_paired_site',
+  paired_laterality                 hbcr.paired_laterality_enum,
+  sequence                          hbcr.sequence_enum
+);
+CREATE INDEX IF NOT EXISTS idx_pathdx_icdo_topo   ON hbcr.pathological_diagnoses(icdo_topography);
+CREATE INDEX IF NOT EXISTS idx_pathdx_icdo_morph  ON hbcr.pathological_diagnoses(icdo_morphology);
+CREATE INDEX IF NOT EXISTS idx_pathdx_icd10       ON hbcr.pathological_diagnoses(icd10_site);
+
+-- treatments
+CREATE TABLE IF NOT EXISTS hbcr.treatments (
+  id                              SERIAL PRIMARY KEY,
+  registration_id                 INTEGER NOT NULL REFERENCES hbcr.registrations(id) ON DELETE CASCADE,
+  treatment_stage                 hbcr.treatment_stage_enum NOT NULL,
+  treatment_given_choice          hbcr.yes_no_unknown_enum,
+  treatment_type                  hbcr.treatment_type_enum,
+  clinical_extent_of_disease      hbcr.clinical_extent_enum,
+  staging_system                  hbcr.staging_system_enum,
+  tnm_t                           VARCHAR(8),
+  tnm_n                           VARCHAR(8),
+  tnm_m                           VARCHAR(8),
+  composite_stage                 VARCHAR(16),
+  ecog_status                     hbcr.ecog_status_enum,
+  ecog_grade                      hbcr.ecog_grade_enum,
+  targeted_therapy_type           hbcr.targeted_therapy_enum,
+  targeted_therapy_other_specify  VARCHAR(255),
+  UNIQUE (registration_id, treatment_stage)
+);
+
+-- treatment_modality_details
+CREATE TABLE IF NOT EXISTS hbcr.treatment_modality_details (
+  id                 SERIAL PRIMARY KEY,
+  treatment_id       INTEGER NOT NULL REFERENCES hbcr.treatments(id) ON DELETE CASCADE,
+  modality           hbcr.treatment_modality_enum NOT NULL,
+  is_selected        BOOLEAN NOT NULL DEFAULT false,
+  intention_to_treat hbcr.intention_enum,
+  role               hbcr.role_enum,
+  details            hbcr.treatment_detail_enum,
+  start_date         DATE,
+  end_date           DATE,
+  others_specify     VARCHAR(255),
+  UNIQUE (treatment_id, modality)
+);
+CREATE INDEX IF NOT EXISTS idx_treatment_modality_sel
+  ON hbcr.treatment_modality_details(treatment_id) WHERE is_selected = true;
+
+-- familial_cancer_history
+CREATE TABLE IF NOT EXISTS hbcr.familial_cancer_history (
+  id                          SERIAL PRIMARY KEY,
+  registration_id             INTEGER NOT NULL UNIQUE REFERENCES hbcr.registrations(id) ON DELETE CASCADE,
+  family_history              hbcr.yes_no_unknown_enum NOT NULL DEFAULT 'no',
+  relationship_with_cancer    hbcr.fam_relationship_enum,
+  degree_of_relationship      hbcr.fam_degree_enum,
+  primary_site                hbcr.fam_primary_site_enum,
+  age_at_diagnosis            SMALLINT,
+  date_of_diagnosis           DATE,
+  CONSTRAINT fam_history_subfields CHECK (
+    family_history <> 'yes'
+    OR (relationship_with_cancer IS NOT NULL AND degree_of_relationship IS NOT NULL)
+  )
+);
+
+-- Optional updated_at trigger (apply to tables that need it)
+CREATE OR REPLACE FUNCTION hbcr.touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END $$ LANGUAGE plpgsql;
+-- Example:
+--   ALTER TABLE hbcr.registrations
+--     ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+--   CREATE TRIGGER trg_registrations_u
+--     BEFORE UPDATE ON hbcr.registrations
+--     FOR EACH ROW EXECUTE FUNCTION hbcr.touch_updated_at();
+
+--------------------------------------------------------------------------------
+END OF REPORT
+--------------------------------------------------------------------------------

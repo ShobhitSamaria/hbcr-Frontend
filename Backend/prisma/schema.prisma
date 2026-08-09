@@ -1,0 +1,655 @@
+// =============================================================================
+// HBCR Cancer Registry - Prisma schema
+// =============================================================================
+// Database : PostgreSQL
+// Schema   : hbcr
+// Maps to  : db.txt (1:1 with the existing HBCR frontend forms)
+//
+// Conventions:
+//   * PostgreSQL enums are declared as Prisma `enum` blocks; each enum is
+//     created under the `hbcr` schema via `@@map("hbcr.<enum_name>")`.
+//   * Models live under `hbcr` schema via `@@map("hbcr.<table>")`.
+//   * Field names use snake_case via `@map("snake_case")` so the generated SQL
+//     matches `db.txt` exactly.
+//   * `SERIAL` PKs become `Int @id @default(autoincrement())`.
+//   * `TIMESTAMPTZ` becomes `DateTime @db.Timestamptz(6)`.
+//   * `SMALLINT` becomes `Int @db.SmallInt`.
+//   * `NUMERIC(p,s)` becomes `Decimal @db.Decimal(p, s)`.
+//   * Composite unique keys use `@@unique([...])`.
+//   * Plain indexes use `@@index([...])`.
+//   * PostgreSQL CHECK constraints cannot be expressed in Prisma 7 syntax, so
+//     they are added manually via prisma/raw_constraints.sql at migration time.
+//   * The `pg_trgm` GIN index for fuzzy name search on `patients.full_name`
+//     is also added manually in raw_constraints.sql (the generation of the
+//     extension plus the index).
+//   * Note: Prisma disallows naming an enum identically to a model. The DB
+//     enum is still `hbcr.diagnostic_method_enum`; in the Prisma source we
+//     name the enum `DiagnosticMethodKind` so it doesn't collide with the
+//     `DiagnosticMethod` model.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================================================
+// ENUMS  (PostgreSQL enums under hbcr.*)
+// =============================================================================
+
+enum Gender {
+  MALE   @map("male")
+  FEMALE @map("female")
+  OTHER  @map("other")
+
+  @@map("hbcr.gender_enum")
+}
+
+enum IdType {
+  AADHAAR  @map("aadhaar")
+  ABHA     @map("abha")
+  VOTER_ID @map("voter_id")
+  PASSPORT @map("passport")
+  AB_PMJAY @map("ab_pmjay")
+  OTHER    @map("other")
+
+  @@map("hbcr.id_type_enum")
+}
+
+enum Relationship {
+  FATHER @map("father")
+  MOTHER @map("mother")
+  SPOUSE @map("spouse")
+
+  @@map("hbcr.relationship_enum")
+}
+
+enum AddressType {
+  RESIDENTIAL @map("residential")
+  PERMANENT   @map("permanent")
+
+  @@map("hbcr.address_type_enum")
+}
+
+enum YesNoUnknown {
+  YES     @map("yes")
+  NO      @map("no")
+  UNKNOWN @map("unknown")
+
+  @@map("hbcr.yes_no_unknown_enum")
+}
+
+enum Habit {
+  SMOKING           @map("smoking")
+  SMOKELESS_TOBACCO @map("smokeless_tobacco")
+  BETEL_NUT         @map("betel_nut")
+  ALCOHOL           @map("alcohol")
+
+  @@map("hbcr.habit_enum")
+}
+
+enum Comorbidity {
+  TUBERCULOSIS           @map("tuberculosis")
+  HYPERTENSION           @map("hypertension")
+  DIABETES               @map("diabetes")
+  ISCHEMIC_HEART_DISEASE @map("ischemic_heart_disease")
+  COPD_ASTHMA            @map("copd_asthma")
+  STROKE                 @map("stroke")
+  DEPRESSION             @map("depression")
+  HEPATITIS_B            @map("hepatitis_b")
+  HEPATITIS_C            @map("hepatitis_c")
+  NAFLD                  @map("nafld")
+  CHRONIC_KIDNEY_DISEASE @map("chronic_kidney_disease")
+  HIV_AIDS               @map("hiv_aids")
+  HYPOTHYROIDISM         @map("hypothyroidism")
+  OTHERS                 @map("others")
+
+  @@map("hbcr.comorbidity_enum")
+}
+
+enum CaseThrough {
+  OUT_PATIENT          @map("out_patient")
+  IN_PATIENT_ELECTIVE  @map("in_patient_elective")
+  IN_PATIENT_EMERGENCY @map("in_patient_emergency")
+  OTHER                @map("other")
+
+  @@map("hbcr.case_through_enum")
+}
+
+enum ReferralType {
+  SELF            @map("self")
+  OTHER_HOSPITAL  @map("other_hospital")
+  SCREEN_DETECTED @map("screen_detected")
+  UNKNOWN         @map("unknown")
+
+  @@map("hbcr.referral_type_enum")
+}
+
+enum MaritalStatus {
+  MARRIED  @map("married")
+  SINGLE   @map("single")
+  WIDOWED  @map("widowed")
+  DIVORCED @map("divorced")
+
+  @@map("hbcr.marital_status_enum")
+}
+
+enum Education {
+  NOT_APPLICABLE             @map("not_applicable")
+  ILLITERATE                 @map("illiterate")
+  LITERATE                   @map("literate")
+  PRIMARY                    @map("primary")
+  MIDDLE                     @map("middle")
+  SECONDARY_HIGHER_SECONDARY @map("secondary_higher_secondary")
+  TECHNICAL_AFTER_MATRIC     @map("technical_after_matric")
+  GRADUATE_AND_ABOVE         @map("graduate_and_above")
+  OTHERS                     @map("others")
+  UNKNOWN                    @map("unknown")
+
+  @@map("hbcr.education_enum")
+}
+
+enum RegistrationStatus {
+  ACTIVE    @map("active")
+  PENDING   @map("pending")
+  COMPLETED @map("completed")
+
+  @@map("hbcr.registration_status_enum")
+}
+
+// Renamed from `DiagnosticMethod` to avoid collision with the model below.
+// DB enum name stays `hbcr.diagnostic_method_enum`.
+enum DiagnosticMethodKind {
+  CLINICAL_ONLY @map("clinical_only")
+  MICROSCOPIC   @map("microscopic")
+  IMAGING       @map("imaging")
+  DCO           @map("dco")
+  OTHER         @map("other")
+
+  @@map("hbcr.diagnostic_method_enum")
+}
+
+enum Laterality {
+  NOT_PAIRED_SITE @map("not_paired_site")
+  PAIRED_SITE     @map("paired_site")
+  UNKNOWN         @map("unknown")
+
+  @@map("hbcr.laterality_enum")
+}
+
+enum PairedLaterality {
+  RIGHT             @map("right")
+  LEFT              @map("left")
+  ONLY_ONE_SIDE     @map("only_one_side")
+  BILATERAL_UNKNOWN @map("bilateral_unknown")
+  PAIRED_MIDLINE    @map("paired_midline")
+  PAIRED_UNKNOWN    @map("paired_unknown")
+
+  @@map("hbcr.paired_laterality_enum")
+}
+
+enum Sequence {
+  ONE_PRIMARY         @map("one_primary")
+  FIRST_OF_MULTIPLE   @map("first_of_multiple")
+  SECOND_OF_MULTIPLE  @map("second_of_multiple")
+  THIRD_OF_MULTIPLE   @map("third_of_multiple")
+  UNSPECIFIED_UNKNOWN @map("unspecified_unknown")
+
+  @@map("hbcr.sequence_enum")
+}
+
+enum ClinicalExtent {
+  IN_SITU_BENIGN_PRE_INVASIVE          @map("in_situ_benign_pre_invasive")
+  LOCALIZED                            @map("localized")
+  DIRECT_EXTENSION                     @map("direct_extension")
+  REGIONAL_NODES                       @map("regional_nodes")
+  DIRECT_EXTENSION_WITH_REGIONAL_NODES @map("direct_extension_with_regional_nodes")
+  DISTANT_METASTASIS                   @map("distant_metastasis")
+  NOT_APPLICABLE                       @map("not_applicable")
+  RECURRENCE                           @map("recurrence")
+  UNKNOWN_PRIMARY                      @map("unknown_primary")
+  OTHERS_SPECIFY                       @map("others_specify")
+  UNKNOWN                              @map("unknown")
+
+  @@map("hbcr.clinical_extent_enum")
+}
+
+enum StagingSystem {
+  TNM               @map("tnm")
+  FIGO              @map("figo")
+  ANN_ARBOR         @map("ann_arbor")
+  TORONTO_CHILDHOOD @map("toronto_childhood")
+  NOT_APPLICABLE    @map("not_applicable")
+  LUGANO            @map("lugano")
+  COG               @map("cog")
+  OTHERS_SPECIFY    @map("others_specify")
+  UNKNOWN           @map("unknown")
+
+  @@map("hbcr.staging_system_enum")
+}
+
+enum EcogStatus {
+  KNOWN   @map("known")
+  UNKNOWN @map("unknown")
+
+  @@map("hbcr.ecog_status_enum")
+}
+
+enum EcogGrade {
+  GRADE_0 @map("grade_0")
+  GRADE_1 @map("grade_1")
+  GRADE_2 @map("grade_2")
+  GRADE_3 @map("grade_3")
+  GRADE_4 @map("grade_4")
+  GRADE_5 @map("grade_5")
+
+  @@map("hbcr.ecog_grade_enum")
+}
+
+enum TreatmentStage {
+  PRIOR_REGISTRATION @map("prior_registration")
+  AT_RI              @map("at_ri")
+
+  @@map("hbcr.treatment_stage_enum")
+}
+
+enum TreatmentType {
+  ALLOPATHIC     @map("allopathic")
+  NON_ALLOPATHIC @map("non_allopathic")
+  BOTH           @map("both")
+
+  @@map("hbcr.treatment_type_enum")
+}
+
+enum TargetedTherapy {
+  TKI                     @map("tki")
+  IMMUNOTHERAPY           @map("immunotherapy")
+  MONOCLONAL_ANTIBODIES   @map("monoclonal_antibodies")
+  ANTIBODY_DRUG_CONJUGATE @map("antibody_drug_conjugate")
+  CDK46_INHIBITOR         @map("cdk46_inhibitor")
+  MTOR_INHIBITOR          @map("mtor_inhibitor")
+  PARP_INHIBITOR          @map("parp_inhibitor")
+  NOT_GIVEN               @map("not_given")
+  OTHERS_SPECIFY          @map("others_specify")
+  UNKNOWN                 @map("unknown")
+
+  @@map("hbcr.targeted_therapy_enum")
+}
+
+enum TreatmentModality {
+  SURGERY          @map("surgery")
+  RADIOTHERAPY_1   @map("radiotherapy_1")
+  RADIOTHERAPY_2   @map("radiotherapy_2")
+  CHEMOTHERAPY_1   @map("chemotherapy_1")
+  CHEMOTHERAPY_2   @map("chemotherapy_2")
+  HORMONE_THERAPY  @map("hormone_therapy")
+  TARGETED_THERAPY @map("targeted_therapy")
+  OTHERS           @map("others")
+
+  @@map("hbcr.treatment_modality_enum")
+}
+
+enum Intention {
+  CURATIVE    @map("curative")
+  PALLIATIVE  @map("palliative")
+  SYMPTOMATIC @map("symptomatic")
+  UNKNOWN     @map("unknown")
+
+  @@map("hbcr.intention_enum")
+}
+
+enum Role {
+  NEO_ADJUVANT @map("neo_adjuvant")
+  DEFINITIVE   @map("definitive")
+  CONCURRENT   @map("concurrent")
+  UNKNOWN      @map("unknown")
+
+  @@map("hbcr.role_enum")
+}
+
+enum TreatmentDetail {
+  COMPLETED_TREATMENT  @map("completed_treatment")
+  INCOMPLETE_TREATMENT @map("incomplete_treatment")
+
+  @@map("hbcr.treatment_detail_enum")
+}
+
+enum FamRelationship {
+  SAME_CANCER  @map("same_cancer")
+  OTHER_CANCER @map("other_cancer")
+
+  @@map("hbcr.fam_relationship_enum")
+}
+
+enum FamDegree {
+  FIRST_DEGREE  @map("first_degree")
+  SECOND_DEGREE @map("second_degree")
+
+  @@map("hbcr.fam_degree_enum")
+}
+
+enum FamPrimarySite {
+  BREAST      @map("breast")
+  OVARY       @map("ovary")
+  COLON       @map("colon")
+  PROSTATE    @map("prostate")
+  ENDOMETRIAL @map("endometrial")
+  MELANOMA    @map("melanoma")
+  THYROID     @map("thyroid")
+  PANCREAS    @map("pancreas")
+
+  @@map("hbcr.fam_primary_site_enum")
+}
+
+// =============================================================================
+// MODELS
+// =============================================================================
+
+/// Registry centres master list (e.g. "DL001").
+model Centre {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique @db.VarChar(32)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  hospitals Hospital[]
+
+  @@map("hbcr.centres")
+}
+
+/// Reporting Institutions (Step 1, Field 1).
+model Hospital {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  centreId  Int      @map("centre_id")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  centre        Centre         @relation(fields: [centreId], references: [id], onDelete: Restrict)
+  users         User[]
+  registrations Registration[]
+
+  @@index([centreId], name: "idx_hospitals_centre")
+  @@map("hbcr.hospitals")
+}
+
+/// Registry coordinators / staff (sidebar avatar, "Dr. A. Srinivasan").
+model User {
+  id         Int      @id @default(autoincrement())
+  fullName   String   @map("full_name") @db.VarChar(255)
+  role       String   @db.VarChar(64)
+  initials   String   @db.VarChar(4)
+  hospitalId Int?     @map("hospital_id")
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  hospital      Hospital?      @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
+  registrations Registration[]
+
+  @@map("hbcr.users")
+}
+
+/// Core patient record (Step 1, Fields 9-12).
+model Patient {
+  id          Int       @id @default(autoincrement())
+  fullName    String    @map("full_name") @db.VarChar(255)
+  age         Int?      @db.SmallInt
+  dateOfBirth DateTime? @map("date_of_birth") @db.Date
+  gender      Gender
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  identifications PatientIdentification[]
+  relatives       PatientRelative[]
+  addresses       PatientAddress[]
+  habits          PatientHabit[]
+  comorbidities   PatientComorbidity[]
+  registrations   Registration[]
+
+  @@index([fullName], name: "idx_patients_name")
+  // GIN trgm index on fullName added manually via raw_constraints.sql.
+  @@map("hbcr.patients")
+}
+
+/// Step 1, Field 13 - unique IDs (Aadhaar / ABHA / Voter / Passport / PMJAY / Other).
+model PatientIdentification {
+  id        Int    @id @default(autoincrement())
+  patientId Int    @map("patient_id")
+  idType    IdType @map("id_type")
+  number    String @db.VarChar(64)
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, idType], name: "patient_identifications_patient_id_id_type_key")
+  @@index([number], name: "idx_patids_value")
+  @@map("hbcr.patient_identifications")
+}
+
+/// Step 1, Field 14 - Father / Mother / Spouse.
+model PatientRelative {
+  id           Int          @id @default(autoincrement())
+  patientId    Int          @map("patient_id")
+  relationship Relationship
+  name         String?      @db.VarChar(255)
+  mobileNumber String?      @map("mobile_number") @db.VarChar(15)
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, relationship], name: "patient_relatives_patient_id_relationship_key")
+  @@map("hbcr.patient_relatives")
+}
+
+/// Step 1, Field 15 - residential & permanent addresses (2 rows per patient).
+model PatientAddress {
+  id           Int         @id @default(autoincrement())
+  patientId    Int         @map("patient_id")
+  addressType  AddressType @map("address_type")
+  flatHouseNo  String?     @map("flat_house_no") @db.VarChar(64)
+  streetRoad   String?     @map("street_road") @db.VarChar(255)
+  city         String?     @db.VarChar(64)
+  district     String?     @db.VarChar(64)
+  state        String?     @db.VarChar(64)
+  pinCode      String?     @map("pin_code") @db.VarChar(6)
+  mobileNumber String?     @map("mobile_number") @db.VarChar(15)
+  email        String?     @db.VarChar(255)
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, addressType], name: "patient_addresses_patient_id_address_type_key")
+  @@map("hbcr.patient_addresses")
+}
+
+/// Step 1, Field 18(a) - Habits.
+model PatientHabit {
+  id             Int          @id @default(autoincrement())
+  patientId      Int          @map("patient_id")
+  habit          Habit
+  answer         YesNoUnknown @default(NO)
+  durationMonths Int?         @map("duration_months") @db.SmallInt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, habit], name: "patient_habits_patient_id_habit_key")
+  @@map("hbcr.patient_habits")
+}
+
+/// Step 1, Field 18(b) - Co-morbidities.
+model PatientComorbidity {
+  id             Int          @id @default(autoincrement())
+  patientId      Int          @map("patient_id")
+  comorbidity    Comorbidity
+  answer         YesNoUnknown @default(NO)
+  durationMonths Int?         @map("duration_months") @db.SmallInt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([patientId, comorbidity], name: "patient_comorbidities_patient_id_comorbidity_key")
+  @@map("hbcr.patient_comorbidities")
+}
+
+/// Top-level HBCR registration record. Step 1 Fields 1-8, 16-17 plus form
+/// completion fields 31-32. Dashboard Active/Pending/Completed comes from
+/// the `status` column.
+model Registration {
+  id                            Int                @id @default(autoincrement())
+  patientId                     Int                @map("patient_id")
+  hbcrRegistrationNo            String             @unique @map("hbcr_registration_no") @db.VarChar(20)
+  hospitalId                    Int                @map("hospital_id")
+  departmentName                String?            @map("department_name") @db.VarChar(128)
+  unitNumber                    String?            @map("unit_number") @db.VarChar(32)
+  hospitalRegistrationNo        String?            @map("hospital_registration_no") @db.VarChar(64)
+  dateOfReporting               DateTime?          @map("date_of_reporting") @db.Date
+  caseRegisteredThrough         CaseThrough?       @map("case_registered_through")
+  referralType                  ReferralType?      @map("referral_type")
+  referralFacilityName          String?            @map("referral_facility_name") @db.VarChar(255)
+  referralFacilityCity          String?            @map("referral_facility_city") @db.VarChar(64)
+  referralFacilityDistrict      String?            @map("referral_facility_district") @db.VarChar(64)
+  referralFacilityHospitalLabNh String?            @map("referral_facility_hospital_lab_nh") @db.VarChar(255)
+  referralFacilityRegDate       DateTime?          @map("referral_facility_reg_date") @db.Date
+  dateOfFirstDiagnosis          DateTime?          @map("date_of_first_diagnosis") @db.Date
+  anthropometricHeightCm        Decimal?           @map("anthropometric_height_cm") @db.Decimal(5, 2)
+  anthropometricWeightKg        Decimal?           @map("anthropometric_weight_kg") @db.Decimal(5, 2)
+  maritalStatus                 MaritalStatus?     @map("marital_status")
+  education                     Education?         @map("education")
+  status                        RegistrationStatus @default(ACTIVE)
+  formCompletedBy               String?            @map("form_completed_by") @db.VarChar(255)
+  formCompletionDate            DateTime?          @map("form_completion_date") @db.Date
+  createdByUserId               Int?               @map("created_by_user_id")
+  createdAt                     DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  hospital      Hospital @relation(fields: [hospitalId], references: [id], onDelete: Restrict)
+  createdByUser User?    @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  diagnosticMethods     DiagnosticMethod[]
+  pathologicalDiagnosis PathologicalDiagnosis?
+  treatments            Treatment[]
+  familialCancerHistory FamilialCancerHistory?
+
+  @@index([status], name: "idx_registrations_status")
+  @@index([hospitalId], name: "idx_registrations_hospital")
+  @@index([patientId], name: "idx_registrations_patient")
+  @@map("hbcr.registrations")
+}
+
+/// Step 2, Field 20 - top-level diagnostic-method checkboxes.
+model DiagnosticMethod {
+  id               Int                  @id @default(autoincrement())
+  registrationId   Int                  @map("registration_id")
+  method           DiagnosticMethodKind
+  clinicalOnlyDate DateTime?            @map("clinical_only_date") @db.Date
+
+  registration Registration          @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  procedures   DiagnosticProcedure[]
+
+  @@unique([registrationId, method], name: "diagnostic_methods_registration_id_method_key")
+  @@map("hbcr.diagnostic_methods")
+}
+
+/// Step 2 sub-rows for Microscopic / Imaging / Other procedures.
+model DiagnosticProcedure {
+  id                 Int       @id @default(autoincrement())
+  diagnosticMethodId Int       @map("diagnostic_method_id")
+  procedureName      String    @map("procedure_name") @db.VarChar(128)
+  isOthers           Boolean   @default(false) @map("is_others")
+  othersSpecify      String?   @map("others_specify") @db.VarChar(255)
+  procedureDate      DateTime? @map("procedure_date") @db.Date
+
+  diagnosticMethod DiagnosticMethod @relation(fields: [diagnosticMethodId], references: [id], onDelete: Cascade)
+
+  @@unique([diagnosticMethodId, procedureName], name: "diagnostic_procedures_diagnostic_method_id_procedure_name_key")
+  @@map("hbcr.diagnostic_procedures")
+}
+
+/// Step 2 Fields 21-26 - pathological diagnosis, ICD-O-3, ICD-10, laterality, sequence.
+model PathologicalDiagnosis {
+  id                           Int               @id @default(autoincrement())
+  registrationId               Int               @unique @map("registration_id")
+  longestSymptomDurationMonths Int?              @map("longest_symptom_duration_months") @db.SmallInt
+  anatomicalSite               String?           @map("anatomical_site") @db.VarChar(128)
+  pathologySlideNo             String?           @map("pathology_slide_no") @db.VarChar(64)
+  primaryTumorSite             String?           @map("primary_tumor_site") @db.VarChar(128)
+  morphology                   String?           @map("morphology") @db.VarChar(128)
+  icdoTopography               String?           @map("icdo_topography") @db.VarChar(64)
+  icdoMorphology               String?           @map("icdo_morphology") @db.VarChar(64)
+  secondarySite                String?           @map("secondary_site") @db.VarChar(128)
+  metastasisMorphology         String?           @map("metastasis_morphology") @db.VarChar(128)
+  icd10Site                    String?           @map("icd10_site") @db.VarChar(64)
+  laterality                   Laterality?       @default(NOT_PAIRED_SITE)
+  pairedLaterality             PairedLaterality? @map("paired_laterality")
+  sequence                     Sequence?
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([icdoTopography], name: "idx_pathdx_icdo_topo")
+  @@index([icdoMorphology], name: "idx_pathdx_icdo_morph")
+  @@index([icd10Site], name: "idx_pathdx_icd10")
+  @@map("hbcr.pathological_diagnoses")
+}
+
+/// Step 3 Fields 27-32 - treatment block (Prior / At RI). Two rows per registration
+/// (one per `treatment_stage`) joined to 8 modality rows via TreatmentModalityDetail.
+model Treatment {
+  id                          Int              @id @default(autoincrement())
+  registrationId              Int              @map("registration_id")
+  treatmentStage              TreatmentStage   @map("treatment_stage")
+  treatmentGivenChoice        YesNoUnknown?    @map("treatment_given_choice")
+  treatmentType               TreatmentType?   @map("treatment_type")
+  clinicalExtentOfDisease     ClinicalExtent?  @map("clinical_extent_of_disease")
+  stagingSystem               StagingSystem?   @map("staging_system")
+  tnmT                        String?          @map("tnm_t") @db.VarChar(8)
+  tnmN                        String?          @map("tnm_n") @db.VarChar(8)
+  tnmM                        String?          @map("tnm_m") @db.VarChar(8)
+  compositeStage              String?          @map("composite_stage") @db.VarChar(16)
+  ecogStatus                  EcogStatus?      @map("ecog_status")
+  ecogGrade                   EcogGrade?       @map("ecog_grade")
+  targetedTherapyType         TargetedTherapy? @map("targeted_therapy_type")
+  targetedTherapyOtherSpecify String?          @map("targeted_therapy_other_specify") @db.VarChar(255)
+
+  registration Registration              @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  modalities   TreatmentModalityDetail[]
+
+  @@unique([registrationId, treatmentStage], name: "treatments_registration_id_treatment_stage_key")
+  @@map("hbcr.treatments")
+}
+
+/// The 8-row Treatment modalities grid (Surgery / Chemo 1 / Radiotherapy 1, ...).
+model TreatmentModalityDetail {
+  id               Int               @id @default(autoincrement())
+  treatmentId      Int               @map("treatment_id")
+  modality         TreatmentModality
+  isSelected       Boolean           @default(false) @map("is_selected")
+  intentionToTreat Intention?        @map("intention_to_treat")
+  role             Role?
+  details          TreatmentDetail?
+  startDate        DateTime?         @map("start_date") @db.Date
+  endDate          DateTime?         @map("end_date") @db.Date
+  othersSpecify    String?           @map("others_specify") @db.VarChar(255)
+
+  treatment Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+
+  @@unique([treatmentId, modality], name: "treatment_modality_details_treatment_id_modality_key")
+  // Approximates the partial index from db.txt (WHERE is_selected = true) -
+  // Prisma 7 cannot express partial indexes, but a plain BTree on treatmentId
+  // already covers the natural lookup hot path. The exact partial index can
+  // be added in raw_constraints.sql when running the migration.
+  @@index([treatmentId], name: "idx_treatment_modality_sel", type: BTree)
+  @@map("hbcr.treatment_modality_details")
+}
+
+/// Step 1 Field 19 - family history of cancer.
+model FamilialCancerHistory {
+  id                     Int              @id @default(autoincrement())
+  registrationId         Int              @unique @map("registration_id")
+  familyHistory          YesNoUnknown     @default(NO) @map("family_history")
+  relationshipWithCancer FamRelationship? @map("relationship_with_cancer")
+  degreeOfRelationship   FamDegree?       @map("degree_of_relationship")
+  primarySite            FamPrimarySite?  @map("primary_site")
+  ageAtDiagnosis         Int?             @map("age_at_diagnosis") @db.SmallInt
+  dateOfDiagnosis        DateTime?        @map("date_of_diagnosis") @db.Date
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("hbcr.familial_cancer_history")
+}
