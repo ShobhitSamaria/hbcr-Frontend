@@ -15,7 +15,7 @@ export const config = {
   corsOrigin: process.env.CORS_ORIGIN || "*",
   // Secret used to sign login tokens (HMAC-SHA256). MUST be overridden via
   // AUTH_SECRET in any non-local environment.
-  authSecret: process.env.AUTH_SECRET || "hbcr-dev-secret-change-me",
+  authSecret: process.env.AUTH_SECRET || "5da5b990fdb98a138dd233d1e9bc04ec3ff2f56b8dbb6405d619dd08a973811d",
   // Login token lifetime in hours.
   authTokenTtlHours: Number(process.env.AUTH_TOKEN_TTL_HOURS) || 12,
 };
