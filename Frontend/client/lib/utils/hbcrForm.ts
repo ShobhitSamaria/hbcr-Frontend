@@ -41,25 +41,41 @@ function todayIso(): string {
 export type Gender = "MALE" | "FEMALE" | "OTHER";
 export function extractPatient(v: Values): {
   fullName: string;
+  firstName: string | null;
+  middleName: string | null;
+  lastName: string | null;
   age: number | null;
   dateOfBirth: string | null;
   gender: Gender;
+  healthSchemeBeneficiary: boolean;
+  healthSchemeDetails: string | null;
 } {
   const gender = (val(v, "12. Gender") ?? "Male").toLowerCase().startsWith("f")
     ? "FEMALE"
     : (val(v, "12. Gender") ?? "Male").toLowerCase().startsWith("m")
       ? "MALE"
       : "OTHER";
+  const firstName = val(v, "First Name");
+  const middleName = val(v, "Middle Name");
+  const lastName = val(v, "Last Name");
   return {
-    fullName: val(v, "9. Full name") ?? "",
-    age: valInt(v, "10. Age"),
-    dateOfBirth: val(v, "11. Date of Birth"),
+    fullName: [firstName, middleName, lastName].filter(Boolean).join(" "),
+    firstName,
+    middleName,
+    lastName,
+    age: valInt(v, "11. Age"),
+    dateOfBirth: val(v, "10. Date of Birth"),
     gender,
+    healthSchemeBeneficiary:
+      val(v, "13. Beneficiary of Health Scheme (RGHS / MAAYOGNA / CGHS)") === "Yes",
+    healthSchemeDetails: val(v, "13. Beneficiary of Health Scheme details"),
   };
 }
 
 export function extractAddresses(v: Values): Array<{
   addressType: "RESIDENTIAL" | "PERMANENT";
+  urbanRural?: "URBAN" | "RURAL";
+  wardNo?: string;
   flatHouseNo?: string;
   streetRoad?: string;
   city?: string;
@@ -69,8 +85,14 @@ export function extractAddresses(v: Values): Array<{
   mobileNumber?: string;
   email?: string;
 }> {
+  const urbanRural = val(v, "Urban / Rural");
   const res = {
     addressType: "RESIDENTIAL" as const,
+    urbanRural:
+      urbanRural === "Urban" || urbanRural === "Rural"
+        ? (urbanRural.toUpperCase() as "URBAN" | "RURAL")
+        : undefined,
+    wardNo: val(v, "Ward No.") ?? undefined,
     flatHouseNo: val(v, "Flat / House No.") ?? undefined,
     streetRoad: val(v, "Street / Road") ?? undefined,
     city: val(v, "City") ?? undefined,
@@ -84,12 +106,12 @@ export function extractAddresses(v: Values): Array<{
 }
 
 export function extractRelatives(v: Values): Array<{
-  relationship: "FATHER" | "MOTHER" | "SPOUSE";
+  relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER";
   name?: string;
   mobileNumber?: string;
 }> {
   const out: Array<{
-    relationship: "FATHER" | "MOTHER" | "SPOUSE";
+    relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER";
     name?: string;
     mobileNumber?: string;
   }> = [];
@@ -99,6 +121,8 @@ export function extractRelatives(v: Values): Array<{
   if (m) out.push({ relationship: "MOTHER", name: m, mobileNumber: val(v, "Mother mobile number") ?? undefined });
   const s = val(v, "Spouse name");
   if (s) out.push({ relationship: "SPOUSE", name: s, mobileNumber: val(v, "Spouse mobile number") ?? undefined });
+  const o = val(v, "Other name");
+  if (o) out.push({ relationship: "OTHER", name: o, mobileNumber: val(v, "Other mobile number") ?? undefined });
   return out;
 }
 
@@ -192,22 +216,39 @@ export function extractRegistration(
   departmentName?: string;
   unitNumber?: string;
   hospitalRegistrationNo?: string;
+  hospitalRegistrationNoType?: string;
   dateOfReporting?: string;
   caseRegisteredThrough?: string;
   referralType?: string;
   referralFacilityName?: string;
   referralFacilityCity?: string;
   referralFacilityDistrict?: string;
+  referralFacilityPincode?: string;
   referralFacilityHospitalLabNh?: string;
   referralFacilityRegDate?: string;
   dateOfFirstDiagnosis?: string;
+  microscopicConfirmationLater?: boolean;
   maritalStatus?: string;
   education?: string;
+  occupation?: string;
+  remarks?: string;
 } {
-  const referralType = (val(v, "7. Type of referral") ?? "Self").replace(/ /g, "_").toUpperCase();
+  // Explicit map: the naive replace(/ /g, "_") would turn
+  // "Other Hospital/Health Facility" into "OTHER_HOSPITAL/HEALTH_FACILITY",
+  // which is not a ReferralType enum member. Map option text → enum name.
+  const REFERRAL_TYPE_MAP: Record<string, string> = {
+    Self: "SELF",
+    "Other Hospital/Health Facility": "OTHER_HOSPITAL",
+    "Screen Detected": "SCREEN_DETECTED",
+    Unknown: "UNKNOWN",
+  };
+  const referralType =
+    REFERRAL_TYPE_MAP[val(v, "7. Type of referral") ?? "Self"] ?? "UNKNOWN";
   const caseThrough = val(v, "6. Case Registered Through (Patient’s first reporting at RI)");
   const marital = val(v, "16. Marital status") ?? "";
   const education = val(v, "17. Education") ?? "";
+  const hrNo = val(v, "4. Hospital registration number");
+  const hrType = val(v, "4. Hospital Registration Number (MRD / CR / Unique ID)");
   return {
     hbcrRegistrationNo:
       val(
@@ -217,20 +258,31 @@ export function extractRegistration(
     hospitalId: fallbackHospitalId,
     departmentName: val(v, "3(a). Department name") ?? undefined,
     unitNumber: val(v, "3(b). Unit number") ?? undefined,
-    hospitalRegistrationNo: undefined,
+    hospitalRegistrationNo: hrNo ?? undefined,
+    hospitalRegistrationNoType:
+      hrType && hrType !== "Select type" ? hrType : undefined,
     dateOfReporting: val(v, "5. Date of reporting") ?? undefined,
     caseRegisteredThrough: caseThrough
       ? caseThrough.replace(/ /g, "_").toUpperCase()
       : undefined,
     referralType,
     referralFacilityName: val(v, "7(a). Name of Facility.") ?? undefined,
-    referralFacilityCity: val(v, "7(b). City") ?? undefined,
-    referralFacilityDistrict: val(v, "7(c). District") ?? undefined,
-    referralFacilityHospitalLabNh: val(v, "7(d). Hospital / LAB / N.H.") ?? undefined,
-    referralFacilityRegDate: val(v, "7(e). Date of Registration") ?? undefined,
+    referralFacilityHospitalLabNh: val(v, "7(b). Hospital / LAB / N.H.") ?? undefined,
+    referralFacilityCity: val(v, "7(c). City") ?? undefined,
+    referralFacilityDistrict: val(v, "7(d). District") ?? undefined,
+    referralFacilityPincode: val(v, "7(e). Pincode") ?? undefined,
+    referralFacilityRegDate: val(v, "7(f). Date of Registration") ?? undefined,
     dateOfFirstDiagnosis: val(v, "8. Date of first diagnosis") ?? undefined,
+    microscopicConfirmationLater:
+      val(v, "_diagnostic.microscopicLater") === "Yes"
+        ? true
+        : val(v, "_diagnostic.microscopicLater") === "No"
+          ? false
+          : undefined,
     maritalStatus: marital ? marital.replace(/ /g, "_").toUpperCase() : undefined,
     education: education ? education.replace(/ /g, "_").toUpperCase() : undefined,
+    occupation: val(v, "Occupation") ?? undefined,
+    remarks: val(v, "Remarks") ?? undefined,
   };
 }
 
@@ -238,25 +290,47 @@ export function extractRegistration(
 // Pathology (Step 2 fields 21-26)
 // =============================================================================
 
+const GRADE_ENUM: Record<string, string> = {
+  "Grade I - Well Differentiated": "GRADE_I",
+  "Grade II - Moderately Differentiated": "GRADE_II",
+  "Grade III - Poorly Differentiated": "GRADE_III",
+  "Grade IV - Undifferentiated": "GRADE_IV",
+};
+
 export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
   const map: Partial<ApiPathologicalDiagnosis> = {};
   const num = (k: string): number | undefined => {
     const n = Number(v[k]);
     return Number.isFinite(n) ? n : undefined;
   };
+  const grade = (
+    k: string,
+  ): "GRADE_I" | "GRADE_II" | "GRADE_III" | "GRADE_IV" | undefined => {
+    const g = val(v, k);
+    const mapped = g ? GRADE_ENUM[g] : undefined;
+    return (mapped as "GRADE_I" | "GRADE_II" | "GRADE_III" | "GRADE_IV") ?? undefined;
+  };
   const longest = num("21. Longest duration of symptom for cancer (in months)");
   if (longest !== undefined) map.longestSymptomDurationMonths = longest;
 
   const text = (k: string) => val(v, k) ?? undefined;
-  map.anatomicalSite = text("22(a). Anatomical site");
-  map.pathologySlideNo = text("22(b). Pathology slide number");
-  map.primaryTumorSite = text("22(c). Primary tumor site");
-  map.morphology = text("22(d). Morphology");
-  map.icdoTopography = text("23(a). Primary Site of Tumour - Topography");
-  map.icdoMorphology = text("23(b). Primary Histology - Morphology");
-  map.secondarySite = text("23(c). Secondary Site of Tumour");
-  map.metastasisMorphology = text("23(d). Morphology of Metastasis");
+  map.anatomicalSite = text("22.1 Anatomical Site of Specimen / Biopsy / SMEAR");
+  map.pathologySlideNo = text("22.2 Pathology Slide No");
+  map.primaryTumorSite = text("22.4 Primary Site of Tumour - Topography");
+  map.morphology = text("22.5 Primary Histology - Morphology");
+  // 23. ICD-O-3 coding (sub-sections 23.1 - 23.4)
+  map.icdoTopography = text("23.1 Code");
+  map.topographySite = text("23.1 Site");
+  map.icdoMorphology = text("23.2 Code");
+  map.histologyMorphology = text("23.2 Morphology");
+  map.morphologyGrade = grade("23.2 Grade");
+  map.secondarySite = text("23.3 Site");
+  map.secondarySiteCode = text("23.3 Code");
+  map.metastasisMorphology = text("23.4 Morphology");
+  map.metastasisMorphologyCode = text("23.4 Code");
+  map.metastasisMorphologyGrade = grade("23.4 Grade");
   map.icd10Site = text("24. Site of Tumour (ICD-10)");
+  map.pathologyDateOfReporting = text("22.3 Date of Reporting");
   const lat = val(v, "25. Laterality");
   if (lat) map.laterality = lat.toUpperCase().replace(/ /g, "_") as any;
   // Paired-laterality radios captured via the same "25. Laterality" key.
@@ -272,7 +346,7 @@ export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
 // =============================================================================
 
 export function extractFamilyHistory(v: Values): Partial<ApiFamilialCancerHistory> {
-  const yesNo = (val(v, "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)") ?? "No") as string;
+  const yesNo = (val(v, "19. Relationship to Cancer / Degree of Relationship") ?? "No") as string;
   return {
     familyHistory: (yesNo === "Yes" ? "YES" : yesNo === "Unknown" ? "UNKNOWN" : "NO") as any,
   };

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Field, SelectField } from "../FormFields";
+import { Field, SelectField, TextAreaField } from "../FormFields";
 import { TargetedTherapy } from "./TargetedTherapy";
 import { TreatmentBlock } from "./TreatmentBlock";
 
@@ -43,10 +43,120 @@ export function ClinicalTreatment() {
         28(b). TNM (Tumour, Node, Metastasis)
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Field label="T" placeholder="e.g. T2" />
-        <Field label="N" placeholder="e.g. N2" />
-        <Field label="M" placeholder="e.g. M2" />
-        <Field label="28(c). Composite stage" placeholder="e.g. Stage IIA" />
+        <SelectField
+          label="T"
+          options={[
+            "Select T",
+            "Tx",
+            "Tis",
+            "Tis(DCIS)",
+            "Tis(paget)",
+            "T1mi",
+            "T1b3",
+            "T0",
+            "T1",
+            "T1a",
+            "T1a1",
+            "T1a2",
+            "T1b",
+            "T1b1",
+            "T1b2",
+            "T1c",
+            "T1c1",
+            "T1c2",
+            "T1c3",
+            "T2",
+            "T2a",
+            "T2a1",
+            "T2a2",
+            "T2b",
+            "T2c",
+            "T3",
+            "T3a",
+            "T3b",
+            "T3c",
+            "T3d",
+            "T3e",
+            "T4",
+            "T4a",
+            "T4b",
+            "T4c",
+            "T4d",
+          ]}
+        />
+        <SelectField
+          label="N"
+          options={[
+            "Select N",
+            "Nx",
+            "N0",
+            "N1",
+            "N1a",
+            "N1b",
+            "N1c",
+            "N1mi",
+            "N2",
+            "N2a",
+            "N2b",
+            "N2c",
+            "N3",
+            "N3a",
+            "N3b",
+            "N3c",
+          ]}
+        />
+        <SelectField
+          label="M"
+          options={[
+            "Select M",
+            "Mx",
+            "M0",
+            "M1",
+            "M1a",
+            "M1b",
+            "M1c",
+            "M1d",
+          ]}
+        />
+        <SelectField
+          label="28(c). Composite stage"
+          options={[
+            "Select stage",
+            "IA",
+            "IA1",
+            "IA2",
+            "IB",
+            "IB1",
+            "IB2",
+            "IB3",
+            "IC",
+            "IS",
+            "II",
+            "IIA",
+            "IIA1",
+            "IIA2",
+            "IIB",
+            "IIC",
+            "III",
+            "IIIA",
+            "IIIA1",
+            "IIIA2",
+            "IIIB",
+            "IIIC",
+            "IIIC1",
+            "IIIC2",
+            "IV",
+            "IVA",
+            "IVB",
+            "IVC",
+            "A",
+            "B",
+            "C",
+            "D",
+            "8888",
+            "Unknown",
+          ]}
+        />
       </div>
       <TreatmentBlock
         title="29. Treatment Given Prior to Registration at RI / Outside RI"
@@ -109,6 +219,14 @@ export function ClinicalTreatment() {
           type="date"
           required
         />
+        <div className="sm:col-span-2">
+          <TextAreaField
+            label="Remarks"
+            placeholder="Enter any remarks (max 1000 characters)"
+            maxLength={1000}
+            rows={3}
+          />
+        </div>
       </div>
     </div>
   );

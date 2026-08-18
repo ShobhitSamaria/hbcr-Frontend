@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Field, SelectField } from "../FormFields";
 import { useFormStateOptional } from "@/lib/formState";
+import { icd10Api } from "@/lib/api";
+import { IcdoAutocomplete } from "./IcdoAutocomplete";
+import { Icdo10Autocomplete } from "./Icdo10Autocomplete";
 
 export function CodingDetails() {  
   const ctx = useFormStateOptional();
@@ -10,51 +13,170 @@ const [laterality, setLaterality] = useState(
   const [pairedSite, setPairedSite] = useState(
   (ctx?.values.current["25(a). pairedLaterality"] as string) || ""
 );
+  // Code values are lifted here so a picked autocomplete suggestion can
+  // update the visible Code field (Field only reads its initial value on
+  // mount; it does not subscribe to form-state changes).
+  const [code1, setCode1] = useState(
+    (ctx?.values.current["23.1 Code"] as string) || "",
+  );
+  const [code2, setCode2] = useState(
+    (ctx?.values.current["23.2 Code"] as string) || "",
+  );
+  const [code3, setCode3] = useState(
+    (ctx?.values.current["23.3 Code"] as string) || "",
+  );
+  const [code4, setCode4] = useState(
+    (ctx?.values.current["23.4 Code"] as string) || "",
+  );
+  // ICD-10 site suggestion for field 24, derived from the 23.1 Topography
+  // selection. Only 23.1 (primary site) triggers the mapping — never
+  // morphology (23.2/23.4) or the secondary site (23.3).
+  const [icd10Suggestion, setIcd10Suggestion] = useState<{
+    code: string;
+    name: string;
+  } | null>(null);
+  // Guards against stale responses when the user quickly picks two codes.
+  const mapReqRef = useRef(0);
+
+  const handleTopographySelect = (h: { code: string; term: string }) => {
+    setCode1(h.code);
+    const id = ++mapReqRef.current;
+    icd10Api
+      .mapTopography(h.code)
+      .then((m) => {
+        if (mapReqRef.current !== id) return;
+        setIcd10Suggestion(
+          m ? { code: m.icd10Code, name: m.icdo3Term } : null,
+        );
+      })
+      .catch(() => {
+        if (mapReqRef.current !== id) return;
+        setIcd10Suggestion(null); // lookup failed → no suggestion
+      });
+  };
   return ( 
     <div className="space-y-6 border-t border-[#edf3f4] pt-6">
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
           23. Coding According to ICD-O-3
         </label>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Field
-            label="23(a). Primary Site of Tumour - Topography"
-            placeholder="Enter topography"
-            required
-          />
-          <Field
-            label="23(b). Primary Histology - Morphology"
-            placeholder="Enter morphology"
-            required
-          />
-          <Field
-            label="23(c). Secondary Site of Tumour"
-            placeholder="Enter secondary site"
-          />
-          <Field
-            label="23(d). Morphology of Metastasis"
-            placeholder="Enter metastatic morphology"
-          />
+
+        {/* 23.1 Primary Site of Tumour - Topography */}
+        <div className="mt-4 space-y-3">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <IcdoAutocomplete
+              label="23.1 Primary Site of Tumour - Topography"
+              placeholder="Search by code or site name"
+              termKey="23.1 Site"
+              codeKey="23.1 Code"
+              section="topography"
+              onSelect={handleTopographySelect}
+            />
+            <Field
+              label="Code"
+              stateKey="23.1 Code"
+              value={code1}
+              onChange={setCode1}
+              placeholder="Enter ICD-O-3 topography code"
+            />
+          </div>
+        </div>
+
+        {/* 23.2 Primary Histology - Morphology */}
+        <div className="mt-4 space-y-3">
+          <div className="grid gap-4 md:grid-cols-3">
+            <IcdoAutocomplete
+              label="23.2 Primary Histology - Morphology"
+              placeholder="Search by code or morphology name"
+              termKey="23.2 Morphology"
+              codeKey="23.2 Code"
+              section="morphology"
+              onSelect={(h) => setCode2(h.code)}
+            />
+            <Field
+              label="Code"
+              stateKey="23.2 Code"
+              value={code2}
+              onChange={setCode2}
+              placeholder="Enter ICD-O-3 morphology code"
+            />
+            <SelectField
+              label="23.2 Grade"
+              options={[
+                "Select Grade",
+                "Grade I - Well Differentiated",
+                "Grade II - Moderately Differentiated",
+                "Grade III - Poorly Differentiated",
+                "Grade IV - Undifferentiated",
+              ]}
+            />
+          </div>
+        </div>
+
+        {/* 23.3 Secondary Site of Tumour */}
+        <div className="mt-4 space-y-3">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <IcdoAutocomplete
+              label="23.3 Secondary Site of Tumour"
+              placeholder="Search by code or site name"
+              termKey="23.3 Site"
+              codeKey="23.3 Code"
+              section="topography"
+              onSelect={(h) => setCode3(h.code)}
+            />
+            <Field
+              label="Code"
+              stateKey="23.3 Code"
+              value={code3}
+              onChange={setCode3}
+              placeholder="Enter secondary site code"
+            />
+          </div>
+        </div>
+
+        {/* 23.4 Morphology of Metastasis */}
+        <div className="mt-4 space-y-3">
+          <div className="grid gap-4 md:grid-cols-3">
+            <IcdoAutocomplete
+              label="23.4 Morphology of Metastasis"
+              placeholder="Search by code or morphology name"
+              termKey="23.4 Morphology"
+              codeKey="23.4 Code"
+              section="morphology"
+              onSelect={(h) => setCode4(h.code)}
+            />
+            <Field
+              label="Code"
+              stateKey="23.4 Code"
+              value={code4}
+              onChange={setCode4}
+              placeholder="Enter metastasis morphology code"
+            />
+            <SelectField
+              label="23.4 Grade"
+              options={[
+                "Select Grade",
+                "Grade I - Well Differentiated",
+                "Grade II - Moderately Differentiated",
+                "Grade III - Poorly Differentiated",
+                "Grade IV - Undifferentiated",
+              ]}
+            />
+          </div>
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-1">
-        <label className="block">
-          <span className="mb-1.5 block text-[11px] font-bold text-[#5d7a84]">
-            24. Site of Tumour (ICD-10)
-          </span>
-          <Field
-            label="Enter ICD-10 site"
-            placeholder="Enter metastatic morphology"
+        <div className="block">
+          <Icdo10Autocomplete
+            label="24. Site of Tumour (ICD-10)"
+            placeholder="Search by ICD-10 code or site name"
+            stateKey="24. Site of Tumour (ICD-10)"
+            suggestion={icd10Suggestion}
           />
-          {/* <input
-            required
-            placeholder="Enter ICD-10 site"
-            className="h-10 w-full rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-3 text-xs text-[#244c5b] outline-none transition placeholder:text-[#afc0c4] focus:border-[#36a99c] focus:ring-2 focus:ring-[#36a99c]/10"
-          /> */}
           <span className="mt-1 block text-[10px] text-[#96aab0]">
             Include sub-site if any.
           </span>
-        </label>
+        </div>
         <div>
           <label className="mb-3 block text-xs font-bold text-[#486b77]">
             25. Laterality
@@ -107,7 +229,6 @@ const [laterality, setLaterality] = useState(
       </div>
       <SelectField
         label="26. Sequence"
-        required
         options={[
           "Select sequence",
           "One Primary Only",

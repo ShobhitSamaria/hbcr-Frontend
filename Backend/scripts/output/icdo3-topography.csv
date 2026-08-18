@@ -1,0 +1,331 @@
+code,term,group_code,group_name,group_note,synonyms,sub_site_lead_in,sub_sites,sort_order
+C00.0,External upper lip,C00,LIP (excludes skin of lip C44.0),,"Vermilion border of upper lip | Upper lip, NOS (excludes skin of upper lip C44.0)",,,0
+C00.1,External lower lip,C00,LIP (excludes skin of lip C44.0),,"Vermilion border of lower lip | Lower lip, NOS (excludes skin of lower lip C44.0)",,,1
+C00.2,"External lip, NOS",C00,LIP (excludes skin of lip C44.0),,"Vermilion border of lip, NOS",,,2
+C00.3,Mucosa of upper lip,C00,LIP (excludes skin of lip C44.0),,Frenulum of upper lip | Inner aspect of upper lip,,,3
+C00.4,Mucosa of lower lip,C00,LIP (excludes skin of lip C44.0),,Inner aspect of lower lip | Frenulum of lower lip,,,4
+C00.5,"Mucosa of lip, NOS",C00,LIP (excludes skin of lip C44.0),,"Inner aspect of lip, NOS | Internal lip, NOS | Frenulum of lip, NOS | Frenulum labii, NOS",,,5
+C00.6,Commissure of lip,C00,LIP (excludes skin of lip C44.0),,Labial commissure,,,6
+C00.8,Overlapping lesion of lip (see section 4.2.6),C00,LIP (excludes skin of lip C44.0),,,,,7
+C00.9,"Lip, NOS (excludes skin of lip C44.0)",C00,LIP (excludes skin of lip C44.0),,,,,8
+C01.9,"Base of tongue, NOS",C01,BASE OF TONGUE,,"Dorsal surface of base of tongue | Posterior third of tongue | Posterior tongue, NOS | Root of tongue",,,9
+C02.0,"Dorsal surface of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior 2/3 of tongue, dorsal surface | Midline of tongue | Dorsal surface of anterior tongue",,,10
+C02.1,Border of tongue,C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,Tip of tongue,,,11
+C02.2,"Ventral surface of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior 2/3 of tongue, ventral surface | Frenulum linguae | Ventral surface of anterior tongue, NOS",,,12
+C02.3,"Anterior 2/3 of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior tongue, NOS",,,13
+C02.4,Lingual tonsil,C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,,,,14
+C02.8,Overlapping lesion of tongue (see section 4.2.6),C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,Junctional zone of tongue,,,15
+C02.9,"Tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Lingual, NOS",,,16
+C03.0,Upper gum,C03,GUM,,Maxillary gingiva | Upper alveolar mucosa | Upper alveolar ridge mucosa | Upper alveolus | Upper gingiva,,,17
+C03.1,Lower gum,C03,GUM,,Mandibular gingiva | Lower alveolar mucosa | Lower alveolar ridge mucosa | Lower alveolus | Lower gingiva,,,18
+C03.9,"Gum, NOS",C03,GUM,,"Gingiva, NOS | Alveolar mucosa, NOS | Alveolar ridge mucosa, NOS | Alveolus, NOS | Periodontal tissue | Tooth socket",,,19
+C04.0,Anterior floor of mouth,C04,FLOOR OF MOUTH,,,,,20
+C04.1,Lateral floor of mouth,C04,FLOOR OF MOUTH,,,,,21
+C04.8,Overlapping lesion of floor of mouth (see section 4.2.6),C04,FLOOR OF MOUTH,,,,,22
+C04.9,"Floor of mouth, NOS",C04,FLOOR OF MOUTH,,,,,23
+C05.0,Hard palate,C05,PALATE,,,,,24
+C05.1,"Soft palate, NOS (excludes nasopharyngeal surface of soft palate C11.3)",C05,PALATE,,,,,25
+C05.2,Uvula,C05,PALATE,,,,,26
+C05.8,Overlapping lesion of palate (see section 4.2.6),C05,PALATE,,Junction of hard and soft palate,,,27
+C05.9,"Palate, NOS",C05,PALATE,,Roof of mouth,,,28
+C06.0,Cheek mucosa,C06,OTHER AND UNSPECIFIED PARTS OF MOUTH,,Buccal mucosa | Internal cheek,,,29
+C06.1,Vestibule of mouth,C06,OTHER AND UNSPECIFIED PARTS OF MOUTH,,Alveolar sulcus | Buccal sulcus | Labial sulcus,,,30
+C06.2,Retromolar area,C06,OTHER AND UNSPECIFIED PARTS OF MOUTH,,Retromolar triangle | Retromolar trigone,,,31
+C06.8,Overlapping lesion of other and unspecified parts of mouth (see section 4.2.6),C06,OTHER AND UNSPECIFIED PARTS OF MOUTH,,,,,32
+C06.9,"Mouth, NOS",C06,OTHER AND UNSPECIFIED PARTS OF MOUTH,,"Buccal cavity | Oral cavity | Oral mucosa | Minor salivary gland, NOS (see section 4.3.5)",,,33
+C07.9,Parotid gland,C07,PAROTID GLAND,,"Parotid, NOS | Stensen duct | Parotid gland duct",,,34
+C08.0,Submandibular gland,C08,OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS,"Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",Submaxillary gland | Wharton duct | Submaxillary gland duct,,,35
+C08.1,Sublingual gland,C08,OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS,"Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",Sublingual gland duct,,,36
+C08.8,Overlapping lesion of major salivary glands (see section 4.2.6),C08,OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS,"Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",,,,37
+C08.9,"Major salivary gland, NOS",C08,OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS,"Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9","Salivary gland, NOS (see section 4.3.5) (excludes minor salivary gland, NOS C06.9)",,,38
+C09.0,Tonsillar fossa,C09,TONSIL,,,,,39
+C09.1,Tonsillar pillar,C09,TONSIL,,Faucial pillar | Glossopalatine fold,,,40
+C09.8,Overlapping lesion of tonsil (see section 4.2.6),C09,TONSIL,,,,,41
+C09.9,"Tonsil, NOS (excludes lingual tonsil C02.4 and pharyngeal tonsil C11.1)",C09,TONSIL,,Faucial tonsil | Palatine tonsil,,,42
+C10.0,Vallecula,C10,OROPHARYNX,,,,,43
+C10.1,Anterior surface of epiglottis,C10,OROPHARYNX,,,,,44
+C10.2,Lateral wall of oropharynx,C10,OROPHARYNX,,Lateral wall of mesopharynx,,,45
+C10.3,Posterior wall of oropharynx,C10,OROPHARYNX,,Posterior wall of mesopharynx,,,46
+C10.4,Branchial cleft (site of neoplasm),C10,OROPHARYNX,,,,,47
+C10.8,Overlapping lesion of oropharynx (see section 4.2.6),C10,OROPHARYNX,,Junctional region of oropharynx,,,48
+C10.9,"Oropharynx, NOS",C10,OROPHARYNX,,"Mesopharynx, NOS | Fauces, NOS",,,49
+C11.0,Superior wall of nasopharynx,C11,NASOPHARYNX,,Roof of nasopharynx,,,50
+C11.1,Posterior wall of nasopharynx,C11,NASOPHARYNX,,Adenoid | Pharyngeal tonsil,,,51
+C11.2,Lateral wall of nasopharynx,C11,NASOPHARYNX,,Fossa of Rosenmuller,,,52
+C11.3,Anterior wall of nasopharynx,C11,NASOPHARYNX,,Nasopharyngeal surface of soft palate | Pharyngeal fornix | Choana | Posterior margin of nasal septum,,,53
+C11.8,Overlapping lesion of nasopharynx (see section 4.2.6),C11,NASOPHARYNX,,,,,54
+C11.9,"Nasopharynx, NOS",C11,NASOPHARYNX,,Nasopharyngeal wall,,,55
+C12.9,Pyriform sinus,C12,PYRIFORM SINUS,,Piriform sinus | Pyriform fossa | Piriform fossa,,,56
+C13.0,Postcricoid region,C13,HYPOPHARYNX,,"Cricopharynx | Cricoid, NOS",,,57
+C13.1,Hypopharyngeal aspect of aryepiglottic fold,C13,HYPOPHARYNX,,"Aryepiglottic fold, NOS (excludes laryngeal aspect of aryepiglottic fold C32.1) | Arytenoid fold",,,58
+C13.2,Posterior wall of hypopharynx,C13,HYPOPHARYNX,,,,,59
+C13.8,Overlapping lesion of hypopharynx (see section 4.2.6),C13,HYPOPHARYNX,,,,,60
+C13.9,"Hypopharynx, NOS",C13,HYPOPHARYNX,,Hypopharyngeal wall | Laryngopharynx,,,61
+C14.0,"Pharynx, NOS",C14,"OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",,"Pharyngeal wall, NOS | Wall of pharynx, NOS | Lateral wall of pharynx, NOS | Posterior wall of pharynx, NOS | Retropharynx | Throat",,,62
+C14.2,Waldeyer ring,C14,"OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",,,,,63
+C14.8,"Overlapping lesion of lip, oral cavity and pharynx (see section 4.2.6)",C14,"OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",,,,,64
+C15.0,Cervical esophagus,C15,ESOPHAGUS,,,,,65
+C15.1,Thoracic esophagus,C15,ESOPHAGUS,,,,,66
+C15.2,Abdominal esophagus,C15,ESOPHAGUS,,,,,67
+C15.3,Upper third of esophagus,C15,ESOPHAGUS,,Proximal third of esophagus,,,68
+C15.4,Middle third of esophagus,C15,ESOPHAGUS,,,,,69
+C15.5,Lower third of esophagus,C15,ESOPHAGUS,,Distal third of esophagus,,,70
+C15.8,Overlapping lesion of esophagus (see section 4.2.6),C15,ESOPHAGUS,,,,,71
+C15.9,"Esophagus, NOS",C15,ESOPHAGUS,,,,,72
+C16.0,"Cardia, NOS",C16,STOMACH,,Gastric cardia | Cardioesophageal junction | Esophagogastric junction | Gastroesophageal junction,,,73
+C16.1,Fundus of stomach,C16,STOMACH,,Gastric fundus,,,74
+C16.2,Body of stomach,C16,STOMACH,,Corpus of stomach | Gastric corpus,,,75
+C16.3,Gastric antrum,C16,STOMACH,,Antrum of stomach | Pyloric antrum,,,76
+C16.4,Pylorus,C16,STOMACH,,Pyloric canal | Prepylorus,,,77
+C16.5,"Lesser curvature of stomach, NOS (not classifiable to C16.1 to C16.4)",C16,STOMACH,,,,,78
+C16.6,"Greater curvature of stomach, NOS (not classifiable to C16.0 to C16.4)",C16,STOMACH,,,,,79
+C16.8,Overlapping lesion of stomach (see section 4.2.6),C16,STOMACH,,"Anterior wall of stomach, NOS (not classifiable to C16.0 to C16.4) | Posterior wall of stomach, NOS (not classifiable to C16.0 to C16.4)",,,80
+C16.9,"Stomach, NOS",C16,STOMACH,,"Gastric, NOS",,,81
+C17.0,Duodenum,C17,SMALL INTESTINE,,,,,82
+C17.1,Jejunum,C17,SMALL INTESTINE,,,,,83
+C17.2,Ileum (excludes ileocecal valve C18.0),C17,SMALL INTESTINE,,,,,84
+C17.3,Meckel diverticulum (site of neoplasm),C17,SMALL INTESTINE,,,,,85
+C17.8,Overlapping lesion of small intestine (see section 4.2.6),C17,SMALL INTESTINE,,,,,86
+C17.9,"Small intestine, NOS",C17,SMALL INTESTINE,,"Small bowel, NOS",,,87
+C18.0,Cecum,C18,COLON,,Ileocecal valve | Ileocecal junction,,,88
+C18.1,Appendix,C18,COLON,,,,,89
+C18.2,Ascending colon,C18,COLON,,Right colon,,,90
+C18.3,Hepatic flexure of colon,C18,COLON,,,,,91
+C18.4,Transverse colon,C18,COLON,,,,,92
+C18.5,Splenic flexure of colon,C18,COLON,,,,,93
+C18.6,Descending colon,C18,COLON,,Left colon,,,94
+C18.7,Sigmoid colon,C18,COLON,,"Sigmoid, NOS | Sigmoid flexure of colon | Pelvic colon",,,95
+C18.8,Overlapping lesion of colon (see section 4.2.6),C18,COLON,,,,,96
+C18.9,"Colon, NOS",C18,COLON,,"Large intestine (excludes rectum, NOS C20.9 and recrectosigmoid junction C19.9) | Large bowel, NOS",,,97
+C19.9,Rectosigmoid junction,C19,RECTOSIGMOID JUNCTION,,"Rectosigmoid, NOS | Rectosigmoid colon | Colon and rectum | Pelvirectal junction",,,98
+C20.9,"Rectum, NOS",C20,RECTUM,,Rectal ampulla,,,99
+C21.0,"Anus, NOS (excludes skin of anus and perianal skin C44.5)",C21,ANUS AND ANAL CANAL,,,,,100
+C21.1,Anal canal,C21,ANUS AND ANAL CANAL,,Anal sphincter,,,101
+C21.2,Cloacogenic zone,C21,ANUS AND ANAL CANAL,,,,,102
+C21.8,"Overlapping lesion of rectum, anus and anal canal (see section 4.2.6)",C21,ANUS AND ANAL CANAL,,Anorectal junction | Anorectum,,,103
+C22.0,Liver,C22,LIVER AND INTRAHEPATIC BILE DUCTS,,"Hepatic, NOS",,,104
+C22.1,Intrahepatic bile duct,C22,LIVER AND INTRAHEPATIC BILE DUCTS,,Biliary canaliculus | Cholangiole,,,105
+C23.9,Gallbladder,C23,GALLBLADDER,,,,,106
+C24.0,Extrahepatic bile duct,C24,OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT,,"Bile duct, NOS | Biliary duct, NOS | Choledochal duct | Common bile duct | Common duct | Cystic bile duct | Cystic duct | Hepatic bile duct | Hepatic duct | Sphincter of Oddi",,,107
+C24.1,Ampulla of Vater,C24,OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT,,Periampullary,,,108
+C24.8,Overlapping lesion of biliary tract (see section 4.2.6),C24,OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT,,,,,109
+C24.9,"Biliary tract, NOS",C24,OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT,Note: Neoplams involving both intrahepatic and extrahepatic bile ducts,,,,110
+C25.0,Head of pancreas,C25,PANCREAS,,,,,111
+C25.1,Body of pancreas,C25,PANCREAS,,,,,112
+C25.2,Tail of pancreas,C25,PANCREAS,,,,,113
+C25.3,Pancreatic duct,C25,PANCREAS,,Duct of Santorini | Duct of Wirsung,,,114
+C25.4,Islets of Langerhans,C25,PANCREAS,,Islands of Langerhans | Endocrine pancreas,,,115
+C25.7,Other specified parts of pancreas,C25,PANCREAS,,Neck of pancreas,,,116
+C25.8,Overlapping lesion of pancreas (see section 4.2.6),C25,PANCREAS,,,,,117
+C25.9,"Pancreas, NOS",C25,PANCREAS,,,,,118
+C26.0,"Intestinal tract, NOS",C26,OTHER AND ILL-DEFINED DIGESTIVE ORGANS,,"Bowel, NOS | Intestine, NOS",,,119
+C26.8,Overlapping lesion of digestive system (see section 4.2.6),C26,OTHER AND ILL-DEFINED DIGESTIVE ORGANS,,,,,120
+C26.9,"Gastrointestinal tract, NOS",C26,OTHER AND ILL-DEFINED DIGESTIVE ORGANS,Note: Neoplasms of digestive organs whose point of origin cannot be assigned to any one of the categories C15 to C26.0,"Alimentary tract, NOS | Digestive organs, NOS",,,121
+C30.0,"Nasal cavity (excludes nose, NOS C76.0)",C30,NASAL CAVITY AND MIDDLE EAR,,"Internal nose | Naris | Nasal cartilage | Nasal mucosa | Nasal septum, NOS (excludes posterior margin of nasal septum C11.3) | Nasal turbinate | Nostril | Vestibule of nose",,,122
+C30.1,Middle ear,C30,NASAL CAVITY AND MIDDLE EAR,,Inner ear | Auditory tube | Eustachian tube | Mastoid antrum | Tympanic cavity,,,123
+C31.0,Maxillary sinus,C31,ACCESSORY SINUSES,,"Maxillary antrum | Antrum, NOS",,,124
+C31.1,Ethmoid sinus,C31,ACCESSORY SINUSES,,,,,125
+C31.2,Frontal sinus,C31,ACCESSORY SINUSES,,,,,126
+C31.3,Sphenoid sinus,C31,ACCESSORY SINUSES,,,,,127
+C31.8,Overlapping lesion of accessory sinuses (see section 4.2.6),C31,ACCESSORY SINUSES,,,,,128
+C31.9,"Accessory sinus, NOS",C31,ACCESSORY SINUSES,,Accessory nasal sinus | Paranasal sinus,,,129
+C32.0,Glottis,C32,LARYNX,,"Intrinsic larynx | Laryngeal commissure | Vocal cord, NOS | True vocal cord | True cord",,,130
+C32.1,Supraglottis,C32,LARYNX,,"Epiglottis, NOS (excludes anterior surface of epiglottis C10.1) | Extrinsic larynx | Laryngeal aspect of aryepiglottic fold | Posterior surface of epiglottis | Ventricular band of larynx | False vocal cord | False cord",,,131
+C32.2,Subglottis,C32,LARYNX,,,,,132
+C32.3,Laryngeal cartilage,C32,LARYNX,,Arytenoid cartilage | Cricoid cartilage | Cuneiform cartilage | Thyroid cartilage,,,133
+C32.8,Overlapping lesion of larynx (see section 4.2.6),C32,LARYNX,,,,,134
+C32.9,"Larynx, NOS",C32,LARYNX,,,,,135
+C33.9,Trachea,C33,TRACHEA,,,,,136
+C34.0,Main bronchus,C34,BRONCHUS AND LUNG,,Carina | Hilus of lung,,,137
+C34.1,"Upper lobe, lung",C34,BRONCHUS AND LUNG,,"Lingula of lung | Upper lobe, bronchus",,,138
+C34.2,"Middle lobe, lung",C34,BRONCHUS AND LUNG,,"Middle lobe, bronchus",,,139
+C34.3,"Lower lobe, lung",C34,BRONCHUS AND LUNG,,"Lower lobe, bronchus",,,140
+C34.8,Overlapping lesion of lung (see section 4.2.6),C34,BRONCHUS AND LUNG,,,,,141
+C34.9,"Lung, NOS",C34,BRONCHUS AND LUNG,,"Bronchus, NOS | Bronchiole | Bronchogenic | Pulmonary, NOS",,,142
+C37.9,Thymus,C37,THYMUS,,,,,143
+C38.0,Heart,C38,"HEART, MEDIASTINUM, AND PLEURA",,Endocardium | Epicardium | Myocardium | Pericardium | Cardiac ventricle | Cardiac atrium,,,144
+C38.1,Anterior mediastinum,C38,"HEART, MEDIASTINUM, AND PLEURA",,,,,145
+C38.2,Posterior mediastinum,C38,"HEART, MEDIASTINUM, AND PLEURA",,,,,146
+C38.3,"Mediastinum, NOS",C38,"HEART, MEDIASTINUM, AND PLEURA",,,,,147
+C38.4,"Pleura, NOS",C38,"HEART, MEDIASTINUM, AND PLEURA",,Parietal pleura | Visceral pleura,,,148
+C38.8,"Overlapping lesion of heart, mediastinum and pleura (see section 4.2.6)",C38,"HEART, MEDIASTINUM, AND PLEURA",,,,,149
+C39.0,"Upper respiratory tract, NOS",C39,OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS,,,,,150
+C39.8,Overlapping lesion of respiratory system and intrathoracic organs (see section 4.2.6),C39,OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS,,,,,151
+C39.9,Ill-defined sites within respiratory system,C39,OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS,Note: Neoplasm of respiratory and intrathoracic organs whose point of origin cannot be assigned to any one of the categories C30 to C39.0,"Respiratory tract, NOS",,,152
+C40.0,"Long bones of upper limb, scapula and associated joints",C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,Acromioclavicular joint | Bone of arm | Bone of forearm | Bone of shoulder | Elbow joint | Humerus | Radius | Scapula | Shoulder girdle | Shoulder joint | Ulna,,,153
+C40.1,Short bones of upper limb and associated joints,C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,Bone of finger | Bone of hand | Bone of thumb | Bone of wrist | Carpal bone | Hand joint | Metacarpal bone | Phalanx of hand | Wrist joint,,,154
+C40.2,Long bones of lower limb and associated joints,C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,"Bone of leg | Femur | Fibula | Knee joint, NOS | Semilunar cartilage | Lateral meniscus of knee joint | Medial meniscus of knee joint | Tibia",,,155
+C40.3,Short bones of lower limb and associated joints,C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,Ankle joint | Bone of ankle | Bone of foot | Bone of heel | Bone of toe | Foot joint | Metatarsal bone | Patella | Phalanx of foot | Tarsal bone,,,156
+C40.8,"Overlapping lesion of bones, joints and articular cartilage of limbs (see section 4.2.6)",C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,,,,157
+C40.9,"Bone of limb, NOS",C40,"BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",,"Cartilage of limb, NOS | Joint of limb, NOS | Articular cartilage of limb, NOS",,,158
+C41.0,Bones of skull and face and associated joints (excludes mandible C41.1),C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,"Calvarium | Cranial bone | Ethmoid bone | Facial bone | Frontal bone | Hyoid bone | Maxilla | Upper jaw bone | Nasal bone | Occipital bone | Orbital bone | Parietal bone | Skull, NOS | Sphenoid bone | Temporal bone | Zygomatic bone",,,159
+C41.1,Mandible,C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,"Jaw bone, NOS | Lower jaw bone | Temporomandibular joint",,,160
+C41.2,Vertebral column (excludes sacrum and coccyx C41.4),C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,Atlas | Axis | Bone of back | Intervertebral disc | Nucleus pulposus | Spinal column | Spine | Vertebra,,,161
+C41.3,"Rib, sternum, clavicle and associated joints",C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,Costal cartilage | Costovertebral joint | Sternocostal joint,,,162
+C41.4,"Pelvic bones, sacrum, coccyx and associated joints",C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,Acetabulum | Bone of hip | Coccyx | Hip joint | Ilium | Innominate bone | Ischium | Pelvic bone | Pubic bone | Sacrum | Symphysis pubis,,,163
+C41.8,"Overlapping lesion of bones, joints and articular cartilage (see section 4.2.6)",C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",,,,,164
+C41.9,"Bone, NOS",C41,"BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES","Note: Neoplasms of bones, joints and articular cartilage whose point of origin cannot be assigned to any one of the categories C40 to C41","Joint, NOS | Cartilage, NOS | Skeletal bone | Articular cartilage, NOS",,,165
+C42.0,Blood,C42,HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS,,,,,166
+C42.1,Bone marrow,C42,HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS,,,,,167
+C42.2,Spleen,C42,HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS,,,,,168
+C42.3,"Reticuloendothelial system, NOS",C42,HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS,,,,,169
+C42.4,"Hematopoietic system, NOS",C42,HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS,,,,,170
+C44.0,"Skin of lip, NOS",C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,Skin of lower lip | Skin of upper lip,,,171
+C44.1,Eyelid,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,"Lid, NOS | Palpebra | Canthus, NOS | Inner canthus | Lower lid | Meibomian gland | Outer canthus | Upper lid",,,172
+C44.2,External ear,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,"Auricle, NOS | Pinna | Ceruminal gland | Concha | Ear, NOS | Ear lobule | Earlobe | External auditory canal | Auditory canal, NOS | Auricular canal, NOS | External auricular canal | Ear canal | External auditory meatus | Helix | Skin of auricle | Skin of ear, NOS | Tragus",,,173
+C44.3,Skin of other and unspecified parts of face,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,"Ala nasi | Chin, NOS | Columnella | Eyebrow | Brow | External cheek | External nose | Forehead, NOS | Temple, NOS | Skin of head, NOS",Skin of:,cheek | chin | face | forehead | jaw | nose | temple,174
+C44.4,Skin of scalp and neck,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,"Skin of neck | Skin of scalp | Scalp, NOS | Skin of cervical region | Skin of supraclavicular region",,,175
+C44.5,Skin of trunk,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,"Perianal skin | Umbilicus, NOS",Skin of:,abdomen | abdominal wall | anus | axilla | back | breast | buttock | chest | chest wall | flank | groin | perineum | thoracic wall | thorax | trunk | umbilicus | gluteal region | infraclavicular region | inguinal region | sacrococcygeal region | scapular region,176
+C44.6,Skin of upper limb and shoulder,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,Finger nail | Palmar skin,Skin of:,antecubital space | arm | elbow | finger | forearm | hand | palm | shoulder | thumb | upper limb | wrist,177
+C44.7,Skin of lower limb and hip,C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,Plantar skin | Sole of foot | Toe nail,Skin of:,ankle | calf | foot | heel | hip | knee | leg | lower limb | popliteal space | thigh | toe,178
+C44.8,Overlapping lesion of skin (see section 4.2.6),C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,,,,179
+C44.9,"Skin, NOS (excludes skin of labia majora C51.0, skin of vulva C51.9, skin of penis C60.9, and skin of scrotum C63.2)",C44,"SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",,,,,180
+C47.0,"Peripheral nerves and autonomic nervous system of head, face, and neck (excludes peripheral nerves and autonomic nervous system of orbit C69.6)",C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Cervical plexus,Peripheral nerves and autonomic nervous system of: (see list under C47),cheek | chin | face | forehead | head | neck | scalp | temple | cervical region | pterygoid fossa | supraclavicular region,181
+C47.1,Peripheral nerves and autonomic nervous system of upper limb and shoulder,C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Brachial nerve | Brachial plexus | Median nerve | Radial nerve | Ulnar nerve,Peripheral nerves and autonomic nervous system of: (see list under C47),antecubital space | arm | elbow | finger | forearm | hand | shoulder | thumb | wrist,182
+C47.2,Peripheral nerves and autonomic nervous system of lower limband hip,C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Femoral nerve | Obturator nerve | Sciatic nerve,Peripheral nerves and autonomic nervous system of: (see list under C47),ankle | calf | foot | heel | hip | knee | leg | popliteal space | thigh | toe,183
+C47.3,Peripheral nerves and autonomic nervous system of thorax,C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Intercostal nerve,Peripheral nerves and autonomic nervous system of: (see list under C47),axilla | chest | chest wall | thoracic wall | infraclavicular region | scapular region,184
+C47.4,Peripheral nerves and autonomic nervous system of abdomen,C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,,Peripheral nerves and autonomic nervous system of: (see list under C47),abdominal wall | umbilicus,185
+C47.5,Peripheral nerves and autonomic nervous system of pelvis,C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Lumbosacral plexus | Sacral nerve | Sacral plexus,Peripheral nerves and autonomic nervous system of: (see list under C47),buttock | groin | perineum | gluteal region | inguinal region | sacrococcygeal region,186
+C47.6,"Peripheral nerves and autonomic nervous system of trunk, NOS",C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,Lumbar nerve,Peripheral nerves and autonomic nervous system of: (see list under C47),back | flank | trunk,187
+C47.8,Overlapping lesion of peripheral nerves and autonomic nervous system (see section 4.2.6),C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,,,,188
+C47.9,"Autonomic nervous system, NOS",C47,"PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",,"Ganglia, NOS | Nerve, NOS | Parasympathetic nervous system, NOS | Peripheral nerve, NOS | Spinal nerve, NOS | Sympathetic nervous system, NOS",,,189
+C48.0,Retroperitoneum,C48,RETROPERITONEUM AND PERITONEUM,,Periadrenal tissue | Perinephric tissue | Peripancreatic tissue | Perirenal tissue | Retrocecal tissue | Retroperitoneal tissue,,,190
+C48.1,Specified parts of peritoneum,C48,RETROPERITONEUM AND PERITONEUM,,Mesentery | Mesoappendix | Mesocolon | Omentum | Pelvic peritoneum | Rectouterine pouch | Cul de sac | Pouch of Douglas (see section 4.2.6),,,191
+C48.2,"Peritoneum, NOS",C48,RETROPERITONEUM AND PERITONEUM,,Peritoneal cavity,,,192
+C48.8,Overlapping lesion of retroperitoneum and peritoneum (see section 4.2.6),C48,RETROPERITONEUM AND PERITONEUM,,,,,193
+C49.0,"Connective, subcutaneous and other soft tissues of head, face, and neck (excludes connective tissue of orbit C69.6 and nasal cartilage C30.0)",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,Auricular cartilage | Cartilage of ear | Carotid artery | Masseter muscle | Sternocleidomastoid muscle,"Connective, subcutaneous and other soft tissues of: (see list under C49)",cheek | chin | face | forehead | head | neck | scalp | temple | cervical region | pterygoid fossa | supraclavicular region,194
+C49.1,"Connective, subcutaneous and other soft tissues of upper limb and shoulder",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,Biceps brachii muscle | Brachialis muscle | Coracobrachialis muscle | Deltoideus muscle | Palmar aponeurosis | Palmar fascia | Radial artery | Triceps brachii muscle | Ulnar artery,"Connective, subcutaneous and other soft tissues of: (see list under C49)",antecubital space | arm | elbow | finger | forearm | hand | shoulder | thumb | wrist,195
+C49.2,"Connective, subcutaneous and other soft tissues of lower limb and hip",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,Biceps femoris muscle | Femoral artery | Gastrocnemius muscle | Plantar aponeurosis | Plantar fascia | Quadriceps femoris muscle,"Connective, subcutaneous and other soft tissues of: (see list under C49)",ankle | calf | foot | heel | hip | knee | leg | popliteal space | thigh | toe,196
+C49.3,"Connective, subcutaneous and other soft tissues of thorax (excludes thymus C37.9, heart and mediastinum C38._)",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,"Aorta, NOS | Axillary artery | Diaphragm | Intercostal muscle | Internal mammary artery | Latissimus dorsi muscle | Pectoralis major muscle | Subclavian artery | Superior vena cava | Thoracic duct | Trapezius muscle","Connective, subcutaneous and other soft tissues of: (see list under C49)",axilla | chest | chest wall | thorax | thoracic wall | infraclavicular region | scapular region,197
+C49.4,"Connective, subcutaneous and other soft tissues of abdomen",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,"Abdominal aorta | Abdominal vena cava | Abdominal wall muscle | Celiac artery | Iliopsoas muscle | Inferior vena cava | Mesenteric artery | Psoas muscle | Rectus abdominis muscle | Renal artery | Vena cava, NOS","Connective, subcutaneous and other soft tissues of: (see list under C49)",abdomen | abdominal wall | umbilicus,198
+C49.5,"Connective, subcutaneous and other soft tissues of pelvis",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,Gluteus maximus muscle | Iliac artery | Iliac vein,"Connective, subcutaneous and other soft tissues of: (see list under C49)",buttock | groin | perineum | gluteal region | inguinal region | sacrococcygeal region,199
+C49.6,"Connective, subcutaneous and other soft tissues of trunk NOS",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,,"Connective, subcutaneous and other soft tissues of: (see list under C49)",back | flank | trunk,200
+C49.8,"Overlapping lesion of connective, subcutaneous and other soft tissues (see section 4.2.6)",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,,,,201
+C49.9,"Connective, subcutaneous and other soft tissues, NOS",C49,"CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",,"Adipose tissue, NOS | Aponeurosis, NOS | Artery, NOS | Blood vessel, NOS | Bursa, NOS | Connective tissue, NOS | Fascia, NOS | Fatty tissue, NOS | Fibrous tissue, NOS | Ligament, NOS | Lymphatic, NOS | Muscle, NOS | Skeletal muscle, NOS | Subcutaneous tissue, NOS | Synovia, NOS | Tendon, NOS | Tendon sheath, NOS | Vein, NOS | Vessel, NOS",,,202
+C50.0,Nipple,C50,BREAST (excludes skin of breast C44.5),,Areola,,,203
+C50.1,Central portion of breast,C50,BREAST (excludes skin of breast C44.5),,,,,204
+C50.2,Upper-inner quadrant of breast,C50,BREAST (excludes skin of breast C44.5),,,,,205
+C50.3,Lower-inner quadrant of breast,C50,BREAST (excludes skin of breast C44.5),,,,,206
+C50.4,Upper-outer quadrant of breast,C50,BREAST (excludes skin of breast C44.5),,,,,207
+C50.5,Lower-outer quadrant of breast,C50,BREAST (excludes skin of breast C44.5),,,,,208
+C50.6,Axillary tail of breast,C50,BREAST (excludes skin of breast C44.5),,"Tail of breast, NOS",,,209
+C50.8,Overlapping lesion of breast (see section 4.2.6),C50,BREAST (excludes skin of breast C44.5),,Inner breast | Lower breast | Midline of breast | Outer breast | Upper breast,,,210
+C50.9,"Breast, NOS",C50,BREAST (excludes skin of breast C44.5),,Mammary gland,,,211
+C51.0,Labium majus,C51,VULVA,,"Labia majora, NOS | Bartholin gland | Skin of labia majora",,,212
+C51.1,Labium minus,C51,VULVA,,Labia minora,,,213
+C51.2,Clitoris,C51,VULVA,,,,,214
+C51.8,Overlapping lesion of vulva (see section 4.2.6),C51,VULVA,,,,,215
+C51.9,"Vulva, NOS",C51,VULVA,,"External female genitalia | Fourchette | Labia, NOS | Labium, NOS | Mons pubis | Mons veneris | Pudendum | Skin of vulva",,,216
+C52.9,"Vagina, NOS",C52,VAGINA,,Vaginal vault | Fornix of vagina | Gartner duct | Hymen,,,217
+C53.0,Endocervix,C53,CERVIX UTERI,,Internal os | Cervical canal | Endocervical canal | Endocervical gland | Nabothian gland,,,218
+C53.1,Exocervix,C53,CERVIX UTERI,,External os,,,219
+C53.8,Overlapping lesion of cervix uteri (see section 4.2.6),C53,CERVIX UTERI,,Cervical stump | Squamocolumnar junction of cervix,,,220
+C53.9,Cervix uteri,C53,CERVIX UTERI,,"Cervix, NOS | Uterine cervix",,,221
+C54.0,Isthmus uteri,C54,CORPUS UTERI,,Lower uterine segment,,,222
+C54.1,Endometrium,C54,CORPUS UTERI,,Endometrial gland | Endometrial stroma,,,223
+C54.2,Myometrium,C54,CORPUS UTERI,,,,,224
+C54.3,Fundus uteri,C54,CORPUS UTERI,,,,,225
+C54.8,Overlapping lesion of corpus uteri (see section 4.2.6),C54,CORPUS UTERI,,,,,226
+C54.9,Corpus uteri,C54,CORPUS UTERI,,Body of uterus,,,227
+C55.9,"Uterus, NOS",C55,"UTERUS, NOS",,"Uterine, NOS",,,228
+C56.9,Ovary,C56,OVARY,,,,,229
+C57.0,Fallopian tube,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,Uterine tube,,,230
+C57.1,Broad ligament,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,Mesovarium | Parovarian region,,,231
+C57.2,Round ligament,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,,,,232
+C57.3,Parametrium,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,"Uterine ligament | Uterosacral ligament | Uterine adnexa | Adnexa, NOS",,,233
+C57.4,Uterine adnexa,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,"Adnexa, NOS",,,234
+C57.7,Other specified parts of female genital organs,C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,Wolffian body | Wolffian duct,,,235
+C57.8,Overlapping lesion of female genital organs (see section 4.2.6),C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,,,,,236
+C57.9,"Female genital tract, NOS",C57,OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS,"Note: Neoplasms of female genital organs whose point of origin cannot be assigned to any one of the categories C51 to C57.7, C58 Tubo-ovarian Utero-ovarian","Female genital organs, NOS | Female genitourinary tract, NOS | Urethrovaginal septum | Vesicocervical tissue | Vesicovaginal septum",,,237
+C58.9,Placenta,C58,PLACENTA,,Fetal membranes,,,238
+C60.0,Prepuce,C60,PENIS,,Foreskin,,,239
+C60.1,Glans penis,C60,PENIS,,,,,240
+C60.2,Body of penis,C60,PENIS,,Corpus cavernosum | Corpus of penis,,,241
+C60.8,Overlapping lesion of penis (see section 4.2.6),C60,PENIS,,,,,242
+C60.9,"Penis, NOS",C60,PENIS,,Skin of penis,,,243
+C61.9,Prostate gland,C61,PROSTATE GLAND,,"Prostate, NOS",,,244
+C62.0,Undescended testis (site of neoplasm),C62,TESTIS,,Retained testis (site of neoplasm) | Ectopic testis (site of neoplasm),,,245
+C62.1,Descended testis,C62,TESTIS,,Scrotal testis,,,246
+C62.9,"Testis, NOS",C62,TESTIS,,"Testicle, NOS",,,247
+C63.0,Epididymis,C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,,,,,248
+C63.1,Spermatic cord,C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,,Vas deferens,,,249
+C63.2,"Scrotum, NOS",C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,,Skin of scrotum,,,250
+C63.7,Other specified parts of male genital organs,C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,,Seminal vesicle | Tunica vaginalis,,,251
+C63.8,Overlapping lesion of male genital organs (see section 4.2.6),C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,,,,,252
+C63.9,"Male genital organs, NOS",C63,OTHER AND UNSPECIFIED MALE GENITAL ORGANS,Note: Neoplasms of male genital organs whose point of origin cannot be assigned to any one of the categories C60 to C63.7,"Male genital tract, NOS | Male genitourinary tract, NOS",,,253
+C64.9,"Kidney, NOS",C64,KIDNEY,,"Renal, NOS | Kidney parenchyma",,,254
+C65.9,Renal pelvis,C65,RENAL PELVIS,,Pelvis of kidney | Renal calyces | Renal calyx | Pelviureteric junction,,,255
+C66.9,Ureter,C66,URETER,,,,,256
+C67.0,Trigone of bladder,C67,BLADDER,,,,,257
+C67.1,Dome of bladder,C67,BLADDER,,,,,258
+C67.2,Lateral wall of bladder,C67,BLADDER,,,,,259
+C67.3,Anterior wall of bladder,C67,BLADDER,,,,,260
+C67.4,Posterior wall of bladder,C67,BLADDER,,,,,261
+C67.5,Bladder neck,C67,BLADDER,,Internal urethral orifice,,,262
+C67.6,Ureteric orifice,C67,BLADDER,,,,,263
+C67.7,Urachus,C67,BLADDER,,,,,264
+C67.8,Overlapping lesion of bladder (see section 4.2.6),C67,BLADDER,,,,,265
+C67.9,"Bladder, NOS",C67,BLADDER,,"Bladder wall, NOS | Urinary bladder, NOS",,,266
+C68.0,Urethra,C68,OTHER AND UNSPECIFIED URINARY ORGANS,,Urethral gland | Cowper gland | Prostatic utricle,,,267
+C68.1,Paraurethral gland,C68,OTHER AND UNSPECIFIED URINARY ORGANS,,,,,268
+C68.8,Overlapping lesion of urinary organs (see section 4.2.6),C68,OTHER AND UNSPECIFIED URINARY ORGANS,,,,,269
+C68.9,"Urinary system, NOS",C68,OTHER AND UNSPECIFIED URINARY ORGANS,Note: Neoplasms of urinary organs whose point of origin cannot be assigned to any one of the categories C64 to C68.1,,,,270
+C69.0,Conjunctiva,C69,EYE AND ADNEXA,,,,,271
+C69.1,"Cornea, NOS",C69,EYE AND ADNEXA,,Limbus of cornea,,,272
+C69.2,Retina,C69,EYE AND ADNEXA,,,,,273
+C69.3,Choroid,C69,EYE AND ADNEXA,,Crystalline lens,,,274
+C69.4,Ciliary body,C69,EYE AND ADNEXA,,Iris | Sclera | Uveal tract | Intraocular | Eyeball,,,275
+C69.5,Lacrimal gland,C69,EYE AND ADNEXA,,"Lacrimal duct, NOS | Nasal lacrimal duct | Nasolacrimal duct | Lacrimal sac",,,276
+C69.6,"Orbit, NOS",C69,EYE AND ADNEXA,,Autonomic nervous system of orbit | Connective tissue of orbit | Extraocular muscle | Peripheral nerves of orbit | Retrobulbar tissue | Soft tissue of orbit,,,277
+C69.8,Overlapping lesion of eye and adnexa (see section 4.2.6),C69,EYE AND ADNEXA,,,,,278
+C69.9,"Eye, NOS",C69,EYE AND ADNEXA,,,,,279
+C70.0,Cerebral meninges,C70,MENINGES,,"Cranial dura mater | Cranial meninges | Cranial pia mater | Falx cerebelli | Falx cerebri | Falx, NOS | Intracranial meninges | Intracranial arachnoid | Tentorium cerebelli | Tentorium, NOS",,,280
+C70.1,Spinal meninges,C70,MENINGES,,Spinal arachnoid | Spinal dura mater | Spinal pia mater,,,281
+C70.9,"Meninges, NOS",C70,MENINGES,,"Arachnoid, NOS | Dura, NOS | Dura mater, NOS | Pia mater, NOS",,,282
+C71.0,Cerebrum,C71,BRAIN,,"Basal ganglia | Central white matter | Cerebral cortex | Cerebral hemisphere | Cerebral white matter | Corpus striatum | Globus pallidus | Hypothalamus | Insula | Internal capsule | Island of Reil | Operculum | Pallium | Putamen | Rhinencephalon | Supratentorial brain, NOS | Thalamus",,,283
+C71.1,Frontal lobe,C71,BRAIN,,Frontal pole,,,284
+C71.2,Temporal lobe,C71,BRAIN,,Hippocampus | Uncus,,,285
+C71.3,Parietal lobe,C71,BRAIN,,,,,286
+C71.4,Occipital lobe,C71,BRAIN,,Occipital pole,,,287
+C71.5,"Ventricle, NOS",C71,BRAIN,,"Cerebral ventricle | Choroid plexus, NOS | Choroid plexus of lateral ventricle | Choroid plexus of third ventricle | Ependyma | Lateral ventricle, NOS | Third ventricle, NOS",,,288
+C71.6,"Cerebellum, NOS",C71,BRAIN,,Cerebellopontine angle | Vermis of cerebellum,,,289
+C71.7,Brain stem,C71,BRAIN,,"Cerebral peduncle | Basis pedunculi | Choroid plexus of fourth ventricle | Fourth ventricle, NOS | Infratentorial brain, NOS | Medulla oblongata | Midbrain | Olive | Pons | Pyramid",,,290
+C71.8,Overlapping lesion of brain (see section 4.2.6),C71,BRAIN,,Corpus callosum | Tapetum,,,291
+C71.9,"Brain, NOS",C71,BRAIN,,"Intracranial site | Cranial fossa, NOS | Anterior cranial fossa | Middle cranial fossa | Posterior cranial fossa | Suprasellar",,,292
+C72.0,Spinal cord,C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,Cervical cord | Conus medullaris | Filum terminale | Lumbar cord | Sacral cord | Thoracic cord,,,293
+C72.1,Cauda equina,C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,,,,294
+C72.2,Olfactory nerve,C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,,,,295
+C72.3,Optic nerve,C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,Optic chiasm | Optic tract,,,296
+C72.4,Acoustic nerve,C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,,,,297
+C72.5,"Cranial nerve, NOS",C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,"Abducens nerve | Accessory nerve, NOS | Spinal accessory nerve | Facial nerve | Glossopharyngeal nerve | Hypoglossal nerve | Oculomotor nerve | Trigeminal nerve | Trochlear nerve | Vagus nerve",,,298
+C72.8,Overlapping lesion of brain and central nervous system (see section 4.2.6),C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",,,,,299
+C72.9,"Nervous system, NOS",C72,"SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",Note: Neoplasms of brain and central nervous system whose point of origin cannot be assigned to any one of the categories C70 to C72.5,Central nervous system | Epidural | Extradural | Parasellar,,,300
+C73.9,Thyroid gland,C73,THYROID GLAND,,"Thyroid, NOS | Thyroglossal duct",,,301
+C74.0,Cortex of adrenal gland,C74,ADRENAL GLAND,,,,,302
+C74.1,Medulla of adrenal gland,C74,ADRENAL GLAND,,,,,303
+C74.9,"Adrenal gland, NOS",C74,ADRENAL GLAND,,"Suprarenal gland | Adrenal, NOS",,,304
+C75.0,Parathyroid gland,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,,,,305
+C75.1,Pituitary gland,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,"Pituitary, NOS | Hypophysis | Rathke pouch | Sella turcica | Pituitary fossa",,,306
+C75.2,Craniopharyngeal duct,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,,,,307
+C75.3,Pineal gland,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,,,,308
+C75.4,Carotid body,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,,,,309
+C75.5,Aortic body and other paraganglia,C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,Coccygeal body | Coccygeal glomus | Glomus jugulare | Para-aortic body | Organ of Zuckerkandl | Paraganglion,,,310
+C75.8,Overlapping lesion of endocrine glands and related structures (see section 4.2.6),C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,Multiple endocrine glands | Pluriglandular,,,311
+C75.9,"Endocrine gland, NOS",C75,OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES,,,,,312
+C76.0,"Head, face or neck, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Cheek, NOS | Jaw, NOS | Nose, NOS | Cervical region, NOS | Supraclavicular region, NOS",,,313
+C76.1,"Thorax, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Axilla, NOS | Chest, NOS | Chest wall, NOS | Intrathoracic site, NOS | Thoracic wall, NOS | Infraclavicular region, NOS | Scapular region, NOS",,,314
+C76.2,"Abdomen, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Abdominal wall, NOS | Intra-abdominal site, NOS",,,315
+C76.3,"Pelvis, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Buttock, NOS | Groin, NOS | Ischiorectal fossa | Pelvic wall, NOS | Perineum, NOS | Rectovaginal septum | Rectovesical septum | Gluteal region, NOS | Inguinal region, NOS | Perirectal region, NOS | Presacral region, NOS | Sacrococcygeal region, NOS",,,316
+C76.4,"Upper limb, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Antecubital space, NOS | Arm, NOS | Elbow, NOS | Finger, NOS | Forearm, NOS | Hand, NOS | Shoulder, NOS | Thumb, NOS | Wrist, NOS",,,317
+C76.5,"Lower limb, NOS",C76,OTHER AND ILL-DEFINED SITES,,"Ankle, NOS | Calf, NOS | Foot, NOS | Heel, NOS | Hip, NOS | Knee, NOS | Leg, NOS | Popliteal space, NOS | Thigh, NOS | Toe, NOS",,,318
+C76.7,Other ill-defined sites,C76,OTHER AND ILL-DEFINED SITES,,"Back, NOS | Flank, NOS | Trunk, NOS",,,319
+C76.8,Overlapping lesion of ill-defined sites (see section 4.2.6),C76,OTHER AND ILL-DEFINED SITES,,,,,320
+C77.0,"Lymph nodes of head, face and neck",C77,LYMPH NODES,,Auricular lymph node | Cervical lymph node | Facial lymph node | Jugular lymph node | Mandibular lymph node | Occipital lymph node | Parotid lymph node | Preauricular lymph node | Prelaryngeal lymph node | Pretracheal lymph node | Retropharyngeal lymph node | Scalene lymph node | Sublingual lymph node | Submandibular lymph node | Submaxillary lymph node | Submental lymph node | Supraclavicular lymph node,,,321
+C77.1,Intrathoracic lymph nodes,C77,LYMPH NODES,,"Bronchial lymph node | Bronchopulmonary lymph node | Diaphragmatic lymph node | Esophageal lymph node | Hilar lymph node, NOS | Innominate lymph node | Intercostal lymph node | Mediastinal lymph node | Parasternal lymph node | Pulmonary hilar lymph node | Pulmonary lymph node, NOS | Thoracic lymph node | Tracheal lymph node | Tracheobronchial lymph node",,,322
+C77.2,Intra-abdominal lymph nodes,C77,LYMPH NODES,,"Abdominal lymph node | Aortic lymph node | Celiac lymph node | Colic lymph node | Common duct lymph node | Gastric lymph node | Hepatic lymph node | Ileocolic lymph node | Inferior mesenteric lymph node | Intestinal lymph node | Lumbar lymph node | Mesenteric lymph node, NOS | Midcolic lymph node | Pancreatic lymph node, NOS | Para-aortic lymph node | Periaortic lymph node | Peripancreatic lymph node | Porta hepatis lymph node | Portal lymph node | Pyloric lymph node | Retroperitoneal lymph node | Splenic hilar lymph node | Splenic lymph node, NOS | Superior mesenteric lymph node",,,323
+C77.3,Lymph nodes of axilla or arm,C77,LYMPH NODES,,Axillary lymph node | Brachial lymph node | Cubital lymph node | Epitrochlear lymph node | Infraclavicular lymph node | Lymph node of upper limb | Pectoral lymph node | Subclavicular lymph node | Subscapular lymph node,,,324
+C77.4,Lymph nodes of inguinal region or leg,C77,LYMPH NODES,,Femoral lymph node | Inguinal lymph node | Lymph node of Cloquet | Lymph node of groin | Lymph node of lower limb | Lymph node of Rosenmuller | Popliteal lymph node | Subinguinal lymph node | Tibial lymph node,,,325
+C77.5,Pelvic lymph nodes,C77,LYMPH NODES,,Hypogastric lymph node | Iliac lymph node | Inferior epigastric lymph node | Intrapelvic lymph node | Obturator lymph node | Paracervical lymph node | Parametrial lymph node | Presymphysial lymph node | Sacral lymph node,,,326
+C77.8,Lymph nodes of multiple regions,C77,LYMPH NODES,,,,,327
+C77.9,"Lymph node, NOS",C77,LYMPH NODES,,,,,328
+C80.9,Unknown primary site,C80,UNKNOWN PRIMARY SITE,,,,,329

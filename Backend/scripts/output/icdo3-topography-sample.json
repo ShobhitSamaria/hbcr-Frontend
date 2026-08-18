@@ -1,0 +1,349 @@
+{
+  "source": "ICD-O-3, Third Edition, First Revision (WHO)",
+  "pdf": "/Users/shobhitsamaria/Desktop/DOITC Code/HBCR/Docs/icd o3.pdf",
+  "section": "topography",
+  "generatedAt": "2026-08-13T05:57:57.700Z",
+  "count": 25,
+  "warnings": [],
+  "sectionNotes": [
+    "Note: In categories C00 to C80.9, neoplasms should be assigned to the category that includes the point of origin of the tumor. A tumor that overlaps the boundaries of two or more subcategories and whose point of origin cannot be determined should be classified to subcategory “.8”. For example, a neoplasm of cervicothoracic esophagus should be assigned to C15.8."
+  ],
+  "entries": [
+    {
+      "code": "C00.0",
+      "term": "External upper lip",
+      "synonyms": [
+        "Vermilion border of upper lip",
+        "Upper lip, NOS (excludes skin of upper lip C44.0)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 0
+    },
+    {
+      "code": "C00.1",
+      "term": "External lower lip",
+      "synonyms": [
+        "Vermilion border of lower lip",
+        "Lower lip, NOS (excludes skin of lower lip C44.0)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 1
+    },
+    {
+      "code": "C00.2",
+      "term": "External lip, NOS",
+      "synonyms": [
+        "Vermilion border of lip, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 2
+    },
+    {
+      "code": "C00.3",
+      "term": "Mucosa of upper lip",
+      "synonyms": [
+        "Frenulum of upper lip",
+        "Inner aspect of upper lip"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 3
+    },
+    {
+      "code": "C00.4",
+      "term": "Mucosa of lower lip",
+      "synonyms": [
+        "Inner aspect of lower lip",
+        "Frenulum of lower lip"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 4
+    },
+    {
+      "code": "C00.5",
+      "term": "Mucosa of lip, NOS",
+      "synonyms": [
+        "Inner aspect of lip, NOS",
+        "Internal lip, NOS",
+        "Frenulum of lip, NOS",
+        "Frenulum labii, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 5
+    },
+    {
+      "code": "C00.6",
+      "term": "Commissure of lip",
+      "synonyms": [
+        "Labial commissure"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 6
+    },
+    {
+      "code": "C00.8",
+      "term": "Overlapping lesion of lip (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 7
+    },
+    {
+      "code": "C00.9",
+      "term": "Lip, NOS (excludes skin of lip C44.0)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 8
+    },
+    {
+      "code": "C01.9",
+      "term": "Base of tongue, NOS",
+      "synonyms": [
+        "Dorsal surface of base of tongue",
+        "Posterior third of tongue",
+        "Posterior tongue, NOS",
+        "Root of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C01",
+      "groupName": "BASE OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 9
+    },
+    {
+      "code": "C02.0",
+      "term": "Dorsal surface of tongue, NOS",
+      "synonyms": [
+        "Anterior 2/3 of tongue, dorsal surface",
+        "Midline of tongue",
+        "Dorsal surface of anterior tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 10
+    },
+    {
+      "code": "C02.1",
+      "term": "Border of tongue",
+      "synonyms": [
+        "Tip of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 11
+    },
+    {
+      "code": "C02.2",
+      "term": "Ventral surface of tongue, NOS",
+      "synonyms": [
+        "Anterior 2/3 of tongue, ventral surface",
+        "Frenulum linguae",
+        "Ventral surface of anterior tongue, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 12
+    },
+    {
+      "code": "C02.3",
+      "term": "Anterior 2/3 of tongue, NOS",
+      "synonyms": [
+        "Anterior tongue, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 13
+    },
+    {
+      "code": "C02.4",
+      "term": "Lingual tonsil",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 14
+    },
+    {
+      "code": "C02.8",
+      "term": "Overlapping lesion of tongue (see section 4.2.6)",
+      "synonyms": [
+        "Junctional zone of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 15
+    },
+    {
+      "code": "C02.9",
+      "term": "Tongue, NOS",
+      "synonyms": [
+        "Lingual, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 16
+    },
+    {
+      "code": "C03.0",
+      "term": "Upper gum",
+      "synonyms": [
+        "Maxillary gingiva",
+        "Upper alveolar mucosa",
+        "Upper alveolar ridge mucosa",
+        "Upper alveolus",
+        "Upper gingiva"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 17
+    },
+    {
+      "code": "C03.1",
+      "term": "Lower gum",
+      "synonyms": [
+        "Mandibular gingiva",
+        "Lower alveolar mucosa",
+        "Lower alveolar ridge mucosa",
+        "Lower alveolus",
+        "Lower gingiva"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 18
+    },
+    {
+      "code": "C03.9",
+      "term": "Gum, NOS",
+      "synonyms": [
+        "Gingiva, NOS",
+        "Alveolar mucosa, NOS",
+        "Alveolar ridge mucosa, NOS",
+        "Alveolus, NOS",
+        "Periodontal tissue",
+        "Tooth socket"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 19
+    },
+    {
+      "code": "C04.0",
+      "term": "Anterior floor of mouth",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 20
+    },
+    {
+      "code": "C04.1",
+      "term": "Lateral floor of mouth",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 21
+    },
+    {
+      "code": "C04.8",
+      "term": "Overlapping lesion of floor of mouth (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 22
+    },
+    {
+      "code": "C04.9",
+      "term": "Floor of mouth, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 23
+    },
+    {
+      "code": "C05.0",
+      "term": "Hard palate",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 24
+    }
+  ]
+}

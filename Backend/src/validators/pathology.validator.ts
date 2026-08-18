@@ -1,10 +1,12 @@
 import {
+  HistologicalGrade,
   Laterality,
   PairedLaterality,
   Sequence,
 } from "../../generated/prisma/enums.ts";
 import {
   inEnum,
+  isDate,
   isSmallInt,
   isString,
   makeValidator,
@@ -19,13 +21,20 @@ export const createPathologyValidator = makeValidator({
   primaryTumorSite: [isString(), trim(), maxLen(128)],
   morphology: [isString(), trim(), maxLen(128)],
   icdoTopography: [isString(), trim(), maxLen(64)],
+  topographySite: [isString(), trim(), maxLen(128)],
   icdoMorphology: [isString(), trim(), maxLen(64)],
+  histologyMorphology: [isString(), trim(), maxLen(128)],
+  morphologyGrade: [inEnum(HistologicalGrade)],
   secondarySite: [isString(), trim(), maxLen(128)],
+  secondarySiteCode: [isString(), trim(), maxLen(64)],
   metastasisMorphology: [isString(), trim(), maxLen(128)],
+  metastasisMorphologyCode: [isString(), trim(), maxLen(64)],
+  metastasisMorphologyGrade: [inEnum(HistologicalGrade)],
   icd10Site: [isString(), trim(), maxLen(64)],
   laterality: [inEnum(Laterality)],
   pairedLaterality: [inEnum(PairedLaterality)],
   sequence: [inEnum(Sequence)],
+  pathologyDateOfReporting: [isDate()],
 });
 
 export const updatePathologyValidator = makeValidator({
@@ -35,11 +44,18 @@ export const updatePathologyValidator = makeValidator({
   primaryTumorSite: [isString(), trim(), maxLen(128)],
   morphology: [isString(), trim(), maxLen(128)],
   icdoTopography: [isString(), trim(), maxLen(64)],
+  topographySite: [isString(), trim(), maxLen(128)],
   icdoMorphology: [isString(), trim(), maxLen(64)],
+  histologyMorphology: [isString(), trim(), maxLen(128)],
+  morphologyGrade: [inEnum(HistologicalGrade)],
   secondarySite: [isString(), trim(), maxLen(128)],
+  secondarySiteCode: [isString(), trim(), maxLen(64)],
   metastasisMorphology: [isString(), trim(), maxLen(128)],
+  metastasisMorphologyCode: [isString(), trim(), maxLen(64)],
+  metastasisMorphologyGrade: [inEnum(HistologicalGrade)],
   icd10Site: [isString(), trim(), maxLen(64)],
   laterality: [inEnum(Laterality)],
   pairedLaterality: [inEnum(PairedLaterality)],
   sequence: [inEnum(Sequence)],
+  pathologyDateOfReporting: [isDate()],
 });

@@ -10,7 +10,16 @@ type FieldProps = {
   value?: string;
   onChange?: (v: string) => void;
   required?: boolean;
+  readOnly?: boolean;
+  disabled?: boolean;
   name?: string;
+  /**
+   * Form-state/validation key override. Defaults to `label`, which keeps the
+   * existing behaviour; components that want a prettier visible label than
+   * the pipeline's state key (e.g. several fields labelled "Code" that must
+   * persist under "23.1 Code") pass an explicit `stateKey`.
+   */
+  stateKey?: string;
 };
 
 export function Field({
@@ -20,31 +29,35 @@ export function Field({
   value,
   onChange,
   required = false,
+  readOnly = false,
+  disabled = false,
   name,
+  stateKey,
 }: FieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
+  const key = stateKey ?? label;
   // If context is available, derive an initial value to keep things in sync
   // for the very first render (subsequent renders use the controlled `value`).
   const initial = ctx
-    ? ((ctx.values.current[label] as string | undefined) ?? "")
+    ? ((ctx.values.current[key] as string | undefined) ?? "")
     : undefined;
   const [innerValue, setInnerValue] = useState<string>(initial ?? "");
   const isControlled = value !== undefined;
   const displayValue = isControlled ? (value ?? "") : innerValue;
-  const errorMsg = validation?.errors[label];
-  const shouldShow = errorMsg && (validation.forceShow.has(label) || validation.touched.has(label));
+  const errorMsg = validation?.errors[key];
+  const shouldShow = errorMsg && (validation.forceShow.has(key) || validation.touched.has(key));
   const handle = (v: string) => {
-    if (ctx) ctx.set(label, v);
+    if (ctx) ctx.set(key, v);
     if (!isControlled) setInnerValue(v);
     onChange?.(v);
     if (validation && errorMsg && v.trim() !== "") {
       // Clear stale error the moment the user starts fixing it.
-      validation.clearErrors([label]);
+      validation.clearErrors([key]);
     }
   };
   const onBlur = () => {
-    validation?.markTouched(label);
+    validation?.markTouched(key);
   };
   return (
     <label className="block">
@@ -55,6 +68,8 @@ export function Field({
         required={required}
         type={type}
         value={displayValue}
+        readOnly={readOnly}
+        disabled={disabled}
         onChange={(e) => handle(e.target.value)}
         onBlur={onBlur}
         placeholder={placeholder}
@@ -65,7 +80,8 @@ export function Field({
           "h-10 w-full rounded-lg border bg-[#fbfdfd] px-3 text-xs text-[#244c5b] outline-none transition placeholder:text-[#afc0c4] focus:ring-2 " +
           (shouldShow
             ? "border-[#d04a4a] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
-            : "border-[#dce9eb] focus:border-[#36a99c] focus:ring-[#36a99c]/10")
+            : "border-[#dce9eb] focus:border-[#36a99c] focus:ring-[#36a99c]/10") +
+          (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "")
         }
       />
       {shouldShow && (
@@ -77,13 +93,94 @@ export function Field({
   );
 }
 
+type TextAreaFieldProps = {
+  label: string;
+  placeholder?: string;
+  maxLength?: number;
+  rows?: number;
+  value?: string;
+  onChange?: (v: string) => void;
+  name?: string;
+};
+
+export function TextAreaField({
+  label,
+  placeholder,
+  maxLength = 1000,
+  rows = 3,
+  value,
+  onChange,
+  name,
+}: TextAreaFieldProps) {
+  const ctx = useFormStateOptional();
+  const validation = useValidationOptional();
+  const initial = ctx
+    ? ((ctx.values.current[label] as string | undefined) ?? "")
+    : undefined;
+  const [innerValue, setInnerValue] = useState<string>(initial ?? "");
+  const isControlled = value !== undefined;
+  const displayValue = isControlled ? (value ?? "") : innerValue;
+  const errorMsg = validation?.errors[label];
+  const shouldShow = errorMsg && (validation.forceShow.has(label) || validation.touched.has(label));
+  const handle = (v: string) => {
+    if (v.length > maxLength) return;
+    if (ctx) ctx.set(label, v);
+    if (!isControlled) setInnerValue(v);
+    onChange?.(v);
+    if (validation && errorMsg && v.trim() !== "") {
+      validation.clearErrors([label]);
+    }
+  };
+  const onBlur = () => {
+    validation?.markTouched(label);
+  };
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-[11px] font-bold text-[#5d7a84]">
+        {label}
+      </span>
+      <textarea
+        value={displayValue}
+        rows={rows}
+        maxLength={maxLength}
+        onChange={(e) => handle(e.target.value)}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        name={name ?? label}
+        aria-invalid={shouldShow ? true : undefined}
+        data-error={shouldShow ? "true" : undefined}
+        className={
+          "w-full resize-y rounded-lg border bg-[#fbfdfd] px-3 py-2 text-xs text-[#244c5b] outline-none transition placeholder:text-[#afc0c4] focus:ring-2 " +
+          (shouldShow
+            ? "border-[#d04a4a] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
+            : "border-[#dce9eb] focus:border-[#36a99c] focus:ring-[#36a99c]/10")
+        }
+      />
+      <span className="mt-1 block text-right text-[10px] text-[#96aab0]">
+        {displayValue.length}/{maxLength}
+      </span>
+      {shouldShow && (
+        <span className="mt-1 block text-[10px] font-medium text-[#d04a4a]">
+          {errorMsg}
+        </span>
+      )}
+    </label>
+  );
+}
+
+type SelectOption = string | { value: string; label: string };
+
 type SelectFieldProps = {
   label: string;
-  options: string[];
+  /** Plain strings (value = label) or { value, label } pairs. */
+  options: SelectOption[];
   value?: string;
   onChange?: (v: string) => void;
   required?: boolean;
   name?: string;
+  /** When true the select is not editable (used to keep fields visible but
+   *  disabled when their parent condition is not currently applicable). */
+  disabled?: boolean;
 };
 
 export function SelectField({
@@ -93,6 +190,7 @@ export function SelectField({
   onChange,
   required = false,
   name,
+  disabled = false,
 }: SelectFieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
@@ -124,6 +222,7 @@ export function SelectField({
         <select
           required={required}
           value={displayValue}
+          disabled={disabled}
           onChange={(e) => handle(e.target.value)}
           onBlur={onBlur}
           name={name ?? label}
@@ -133,18 +232,25 @@ export function SelectField({
             "h-10 w-full appearance-none rounded-lg border bg-[#fbfdfd] px-3 text-xs outline-none " +
             (shouldShow
               ? "border-[#d04a4a] text-[#d04a4a] focus:border-[#d04a4a]"
-              : "border-[#dce9eb] text-[#6e8790] focus:border-[#36a99c]")
+              : "border-[#dce9eb] text-[#6e8790] focus:border-[#36a99c]") +
+            (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "")
           }
         >
-          {options.map((x) => (
-            <option key={x}>{x}</option>
-          ))}
+          {options.map((x) => {
+            const opt =
+              typeof x === "string" ? { value: x, label: x } : x;
+            return (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            );
+          })}
         </select>
         <ChevronDown
           size={14}
           className={
             "pointer-events-none absolute right-3 top-3 " +
-            (shouldShow ? "text-[#d04a4a]" : "text-[#9aafb5]")
+            (shouldShow ? "text-[#d04a4a]" : disabled ? "text-[#c6d3d7]" : "text-[#9aafb5]")
           }
         />
       </div>

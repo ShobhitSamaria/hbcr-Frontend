@@ -30,12 +30,34 @@ const { validateStep1, validateStep2, validateStep3 } = await import(blob);
 
 const BASE = process.env.BASE_URL || "http://localhost:5050/api";
 
+// Data routes are protected now, so sign in first and attach the token.
+const AUTH = {
+  username: process.env.AUTH_USERNAME || "hospital1",
+  password: process.env.AUTH_PASSWORD || "HBCR@2024",
+};
+
+async function login() {
+  const res = await fetch(`${BASE}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(AUTH),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || !body?.data?.token) {
+    throw new Error(`Login failed: ${res.status} ${body?.error?.message ?? "(no body)"}`);
+  }
+  return body.data.token;
+}
+
+const TOKEN = await login();
+
 async function call(path, init = {}) {
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Authorization: `Bearer ${TOKEN}`,
       ...(init.headers ?? {}),
     },
   });
@@ -80,7 +102,7 @@ await test("validateStep1 on empty form returns errors", () => {
     "1. Name of the Reporting Institution (RI)",
     "5. Date of reporting",
     "8. Date of first diagnosis",
-    "9. Full name",
+    "First Name",
     "12. Gender",
     "16. Marital status",
     "17. Education",
@@ -95,7 +117,7 @@ await test("validateStep1 on empty form returns errors", () => {
 await test("'Other Hospital' referral without sub-fields errors", () => {
   const errs = validateStep1({ "7. Type of referral": "Other Hospital/Health Facility" });
   if (!errs["7(a). Name of Facility."]) throw new Error("expected facility name error");
-  if (!errs["7(b). City"]) throw new Error("expected facility city error");
+  if (!errs["7(c). City"]) throw new Error("expected facility city error");
 });
 
 await test("'Self' referral with no other fields passes the referral branch", () => {
@@ -113,9 +135,9 @@ await test("DX before reporting date errors", () => {
 
 // ---------------------------------------------------------------------------
 section("Step 2 — diagnostic + coding rules");
-await test("no diagnostic method => error", () => {
+await test("no diagnostic method => no error (optional for now)", () => {
   const errs = validateStep2({});
-  if (!errs["_diagnostic.methods"]) throw new Error("expected methods error");
+  if (errs["_diagnostic.methods"]) throw new Error("methods should be optional: " + errs["_diagnostic.methods"]);
 });
 
 await test("Clinical Only without date => error", () => {
@@ -123,16 +145,16 @@ await test("Clinical Only without date => error", () => {
   if (!errs["_diagnostic.clinicalDate"]) throw new Error("expected clinical date error");
 });
 
-await test("laterality missing => error", () => {
+await test("laterality missing => no error (optional for now)", () => {
   const errs = validateStep2({});
-  if (!errs["25. Laterality"]) throw new Error("expected laterality error");
+  if (errs["25. Laterality"]) throw new Error("laterality should be optional: " + errs["25. Laterality"]);
 });
 
-await test("ICD-O-3 + ICD-10 missing => errors", () => {
+await test("ICD-O-3 codes missing => no errors (optional for now)", () => {
   const errs = validateStep2({});
-  if (!errs["23(a). Primary Site of Tumour - Topography"]) throw new Error("expected topo error");
-  if (!errs["23(b). Primary Histology - Morphology"]) throw new Error("expected morph error");
-  if (!errs["24. Site of Tumour (ICD-10)"]) throw new Error("expected ICD-10 error");
+  if (errs["23.1 Code"]) throw new Error("topography code should be optional: " + errs["23.1 Code"]);
+  if (errs["23.2 Code"]) throw new Error("morphology code should be optional: " + errs["23.2 Code"]);
+  if (errs["26. Sequence"]) throw new Error("sequence should be optional: " + errs["26. Sequence"]);
 });
 
 // ---------------------------------------------------------------------------
@@ -300,7 +322,7 @@ await test("apiErrorMap translates known backend fields to UI labels", async () 
     throw new Error("hbcrRegistrationNo not mapped");
   }
   if (keys.includes("PIN Code") === false) throw new Error("pinCode not mapped");
-  if (keys.includes("23(a). Primary Site of Tumour - Topography") === false) {
+  if (keys.includes("23.1 Code") === false) {
     throw new Error("icdoTopography not mapped");
   }
 });

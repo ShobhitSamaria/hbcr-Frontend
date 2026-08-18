@@ -9,7 +9,7 @@ export function Brand() {
       </div>
       <div>
         <p className="text-[15px] font-extrabold leading-none tracking-tight text-[#103e54]">
-          NATIONAL HBCR
+          RAJASTHAN HBCR
         </p>
         <p className="mt-1 text-[10px] font-semibold uppercase tracking-[.18em] text-[#6b8792]">
           Cancer Registry Portal

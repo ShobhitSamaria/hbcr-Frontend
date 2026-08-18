@@ -3,9 +3,10 @@ import { treatmentRows } from "../../data";
 
 type TreatmentTableProps = {
   title: string;
+  disabled?: boolean;
 };
 
-export function TreatmentTable({ title }: TreatmentTableProps) {
+export function TreatmentTable({ title, disabled = false }: TreatmentTableProps) {
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <div>
@@ -32,6 +33,7 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
               <label className="flex items-center gap-2 text-xs text-[#718991]">
                 <input
                   type="checkbox"
+                  disabled={disabled}
                   checked={active}
                   onChange={(e) =>
                     setSelected((items) =>
@@ -47,7 +49,7 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
               {surgery ? (
                 <>
                   <select
-                    disabled={!active}
+                    disabled={disabled || !active}
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] disabled:bg-[#f1f5f5]"
                   >
                     <option>Curative</option>
@@ -57,14 +59,14 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
                   </select>
                   <span />
                   <select
-                    disabled={!active}
+                    disabled={disabled || !active}
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] disabled:bg-[#f1f5f5]"
                   >
                     <option>Completed Treatment</option>
                     <option>Incomplete Treatment</option>
                   </select>
                   <input
-                    disabled={!active}
+                    disabled={disabled || !active}
                     type="date"
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] disabled:bg-[#f1f5f5]"
                   />
@@ -73,7 +75,7 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
               ) : (
                 <>
                   <select
-                    disabled={!active}
+                    disabled={disabled || !active}
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] disabled:bg-[#f1f5f5]"
                   >
                     <option>Curative</option>
@@ -82,7 +84,7 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
                     <option>Unknown</option>
                   </select>
                   <select
-                    disabled={!active}
+                    disabled={disabled || !active}
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] disabled:bg-[#f1f5f5]"
                   >
                     <option>Neo Adjuvant</option>
@@ -91,19 +93,19 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
                     <option>Unknown</option>
                   </select>
                   <select
-                    disabled={!active}
+                    disabled={disabled || !active}
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] disabled:bg-[#f1f5f5]"
                   >
                     <option>Completed Treatment</option>
                     <option>Incomplete Treatment</option>
                   </select>
                   <input
-                    disabled={!active}
+                    disabled={disabled || !active}
                     type="date"
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] disabled:bg-[#f1f5f5]"
                   />
                   <input
-                    disabled={!active}
+                    disabled={disabled || !active}
                     type="date"
                     className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] disabled:bg-[#f1f5f5]"
                   />
@@ -111,6 +113,7 @@ export function TreatmentTable({ title }: TreatmentTableProps) {
               )}
               {row === "Others" && active && (
                 <input
+                  disabled={disabled}
                   placeholder="Specify treatment"
                   className="h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] outline-none focus:border-[#36a99c]"
                 />

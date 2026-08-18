@@ -52,10 +52,30 @@ class ApiError extends Error {
   }
 }
 
+/**
+ * Storage key for the persisted auth session (see client/lib/auth.tsx). The
+ * API client reads the bearer token straight from here so every request is
+ * authenticated without threading state through the UI.
+ */
+export const AUTH_STORAGE_KEY = "hbcr.auth";
+
+export function readStoredToken(): string | null {
+  try {
+    if (typeof localStorage === "undefined") return null;
+    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return typeof parsed?.token === "string" ? parsed.token : null;
+  } catch {
+    return null;
+  }
+}
+
 async function call<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<Result<T>> {
+  const token = readStoredToken();
   let res: Response;
   try {
     res = await fetch(`${API_BASE}${path}`, {
@@ -63,6 +83,7 @@ async function call<T>(
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(init.headers ?? {}),
       },
     });
@@ -72,6 +93,18 @@ async function call<T>(
       error: err instanceof Error ? err.message : "Network error",
       status: 0,
     };
+  }
+  // A 401 while a token was attached means the session is dead (expired or
+  // revoked). Notify the auth provider so it can clear the session and send
+  // the user back to the login screen.
+  if (res.status === 401 && token) {
+    try {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("hbcr:unauthorized"));
+      }
+    } catch {
+      // non-browser environment — ignore
+    }
   }
   let body: any = {};
   try {
@@ -98,10 +131,121 @@ async function send<T>(path: string, init: RequestInit = {}): Promise<T> {
   return r.data;
 }
 
+// ---------- Auth ----------
+export type AuthUser = {
+  id: number;
+  username: string;
+  fullName: string;
+  role: string;
+  initials: string;
+  hospitalId: number | null;
+};
+
+export type AuthHospital = {
+  id: number;
+  name: string;
+  centreId?: number | null;
+  centre?: { id: number; code: string } | null;
+};
+
+export type AuthSession = {
+  token: string;
+  user: AuthUser;
+  hospital: AuthHospital | null;
+};
+
+export const authApi = {
+  login: (username: string, password: string) =>
+    send<AuthSession>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+    }),
+  me: () => send<AuthSession>("/auth/me"),
+};
+
 // ---------- Health ----------
 export const healthApi = {
   ping: () => send<{ name: string; env: string; time: string }>("/health"),
   ready: () => send<{ status: string; db: string }>("/health/ready"),
+};
+
+// ---------- ICD-O-3 reference lookups (form autocomplete) ----------
+export type IcdoTopographyHit = {
+  code: string;
+  term: string;
+  synonyms: string[];
+  groupCode: string | null;
+  groupName: string | null;
+};
+
+export type IcdoMorphologyHit = {
+  code: string;
+  term: string;
+  synonyms: string[];
+  behavior: number | null;
+  siteRestriction: string | null;
+  groupName: string | null;
+};
+
+export const icdoApi = {
+  topography: (q: string, limit = 8) =>
+    send<IcdoTopographyHit[]>(
+      `/icdo/topography?q=${encodeURIComponent(q)}&limit=${limit}`,
+    ),
+  morphology: (q: string, limit = 8) =>
+    send<IcdoMorphologyHit[]>(
+      `/icdo/morphology?q=${encodeURIComponent(q)}&limit=${limit}`,
+    ),
+};
+
+// ---------- ICD-10 reference lookups (form autocomplete) ----------
+// Backed by the ICD-10 workbook (code ranges + category names, worked
+// examples and the individual codes those examples mention). The workbook has
+// no per-code descriptions, so each result is just the code plus the
+// workbook's own description text for it — no internal kind/example/rule
+// metadata is exposed.
+export type Icdo10Hit = {
+  /** The ICD-10 code the form stores; null for entries with no single code. */
+  code: string | null;
+  /** The workbook's description (range category name / example scenario). */
+  description: string;
+};
+
+export type Icdo10TopographyMapping = {
+  /** The ICD-O-3 topography code that was looked up (e.g. "C30.0"). */
+  icdo3Code: string;
+  /** The ICD-O-3 preferred term for that code (site description). */
+  icdo3Term: string;
+  /** The suggested ICD-10 site code (e.g. "C30.0"). */
+  icd10Code: string;
+  note: string | null;
+};
+
+export const icd10Api = {
+  /**
+   * Search the ICD-10 workbook reference. `type` is a comma-separated kind
+   * list (range, code, example, rule); the site autocomplete passes
+   * "range,code,example" so rules never crowd the dropdown.
+   */
+  search: (
+    q: string,
+    opts: { type?: string; limit?: number } = {},
+  ): Promise<Icdo10Hit[]> => {
+    const params = new URLSearchParams({ q });
+    if (opts.type) params.set("type", opts.type);
+    params.set("limit", String(opts.limit ?? 8));
+    return send<Icdo10Hit[]>(`/icd10/search?${params.toString()}`);
+  },
+  /**
+   * ICD-O-3 Topography → ICD-10 site suggestion for field 24: given the
+   * ICD-O-3 topography code picked in 23.1, return the matching ICD-10 site
+   * or `null` when no reliable mapping exists (e.g. C42.x) — the UI then
+   * shows no suggestion rather than an invented one.
+   */
+  mapTopography: (code: string): Promise<Icdo10TopographyMapping | null> =>
+    send<Icdo10TopographyMapping | null>(
+      `/icd10/map-topography?code=${encodeURIComponent(code)}`,
+    ),
 };
 
 // ---------- Reference ----------
@@ -139,9 +283,14 @@ export const dashboardApi = {
 export type ApiPatient = {
   id: number;
   fullName: string;
+  firstName: string | null;
+  middleName: string | null;
+  lastName: string | null;
   age: number | null;
   dateOfBirth: string | null;
   gender: "MALE" | "FEMALE" | "OTHER";
+  healthSchemeBeneficiary: boolean;
+  healthSchemeDetails: string | null;
   createdAt: string;
   identifications?: ApiPatientIdentification[];
   relatives?: ApiPatientRelative[];
@@ -168,7 +317,7 @@ export type ApiPatientIdentification = {
 export type ApiPatientRelative = {
   id: number;
   patientId: number;
-  relationship: "FATHER" | "MOTHER" | "SPOUSE";
+  relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER";
   name: string | null;
   mobileNumber: string | null;
 };
@@ -177,6 +326,8 @@ export type ApiPatientAddress = {
   id: number;
   patientId: number;
   addressType: "RESIDENTIAL" | "PERMANENT";
+  urbanRural: "URBAN" | "RURAL" | null;
+  wardNo: string | null;
   flatHouseNo: string | null;
   streetRoad: string | null;
   city: string | null;
@@ -215,20 +366,45 @@ export type PaginatedPatients = {
   };
 };
 
+export type PatientListQuery = {
+  page?: number;
+  limit?: number;
+  /** Legacy full-name text search (kept for compatibility). */
+  search?: string;
+  name?: string;
+  referenceNo?: string;
+  hospitalRegNo?: string;
+  aadhaar?: string;
+  mobile?: string;
+  icd10?: string;
+  /** Date of entry (registration createdAt), inclusive; YYYY-MM-DD. */
+  dateFrom?: string;
+  dateTo?: string;
+  gender?: string;
+};
+
 export const patientApi = {
-  list: (q?: { page?: number; limit?: number; search?: string; gender?: string }) => {
+  list: (q?: PatientListQuery) => {
     const sp = new URLSearchParams();
     if (q?.page) sp.set("page", String(q.page));
     if (q?.limit) sp.set("limit", String(q.limit));
     if (q?.search) sp.set("search", q.search);
+    if (q?.name) sp.set("name", q.name);
+    if (q?.referenceNo) sp.set("referenceNo", q.referenceNo);
+    if (q?.hospitalRegNo) sp.set("hospitalRegNo", q.hospitalRegNo);
+    if (q?.aadhaar) sp.set("aadhaar", q.aadhaar);
+    if (q?.mobile) sp.set("mobile", q.mobile);
+    if (q?.icd10) sp.set("icd10", q.icd10);
+    if (q?.dateFrom) sp.set("dateFrom", q.dateFrom);
+    if (q?.dateTo) sp.set("dateTo", q.dateTo);
     if (q?.gender) sp.set("gender", q.gender);
     const qs = sp.toString();
     return send<PaginatedPatients>(`/patients${qs ? `?${qs}` : ""}`);
   },
   get: (id: number) => send<ApiPatient>(`/patients/${id}`),
-  create: (data: { fullName: string; age?: number; dateOfBirth?: string; gender: "MALE" | "FEMALE" | "OTHER" }) =>
+  create: (data: { fullName: string; firstName?: string; middleName?: string; lastName?: string; age?: number; dateOfBirth?: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary?: boolean; healthSchemeDetails?: string }) =>
     send<ApiPatient>(`/patients`, { method: "POST", body: JSON.stringify(data) }),
-  update: (id: number, data: Partial<{ fullName: string; age: number; dateOfBirth: string; gender: "MALE" | "FEMALE" | "OTHER" }>) =>
+  update: (id: number, data: Partial<{ fullName: string; firstName: string; middleName: string; lastName: string; age: number; dateOfBirth: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary: boolean; healthSchemeDetails: string }>) =>
     send<ApiPatient>(`/patients/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   remove: (id: number) => send<void>(`/patients/${id}`, { method: "DELETE" }),
 };
@@ -249,7 +425,7 @@ export const sideApi = {
   relatives: {
     list: (patientId: number) =>
       send<ApiPatientRelative[]>(`/patients/${patientId}/side/relatives`),
-    create: (patientId: number, data: { relationship: "FATHER" | "MOTHER" | "SPOUSE"; name?: string; mobileNumber?: string }) =>
+    create: (patientId: number, data: { relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER"; name?: string; mobileNumber?: string }) =>
       send<ApiPatientRelative>(`/patients/${patientId}/side/relatives`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -294,25 +470,31 @@ export type ApiRegistration = {
   patientId: number;
   hbcrRegistrationNo: string;
   hospitalId: number;
+  referenceNo?: string | null;
   departmentName?: string | null;
   unitNumber?: string | null;
   hospitalRegistrationNo?: string | null;
+  hospitalRegistrationNoType?: string | null;
   dateOfReporting?: string | null;
   caseRegisteredThrough?: string | null;
   referralType?: string | null;
   referralFacilityName?: string | null;
   referralFacilityCity?: string | null;
   referralFacilityDistrict?: string | null;
+  referralFacilityPincode?: string | null;
   referralFacilityHospitalLabNh?: string | null;
   referralFacilityRegDate?: string | null;
   dateOfFirstDiagnosis?: string | null;
+  microscopicConfirmationLater?: boolean | null;
   anthropometricHeightCm?: string | null;
   anthropometricWeightKg?: string | null;
   maritalStatus?: string | null;
   education?: string | null;
+  occupation?: string | null;
   status: "ACTIVE" | "PENDING" | "COMPLETED";
   formCompletedBy?: string | null;
   formCompletionDate?: string | null;
+  remarks?: string | null;
   createdByUserId?: number | null;
   createdAt: string;
   hospital?: { id: number; name: string };
@@ -345,22 +527,27 @@ export const registrationApi = {
       departmentName?: string;
       unitNumber?: string;
       hospitalRegistrationNo?: string;
+      hospitalRegistrationNoType?: string;
       dateOfReporting?: string;
       caseRegisteredThrough?: string;
       referralType?: string;
       referralFacilityName?: string;
       referralFacilityCity?: string;
       referralFacilityDistrict?: string;
+      referralFacilityPincode?: string;
       referralFacilityHospitalLabNh?: string;
       referralFacilityRegDate?: string;
       dateOfFirstDiagnosis?: string;
+      microscopicConfirmationLater?: boolean;
       anthropometricHeightCm?: number;
       anthropometricWeightKg?: number;
       maritalStatus?: string;
       education?: string;
+      occupation?: string;
       status?: "ACTIVE" | "PENDING" | "COMPLETED";
       formCompletedBy?: string;
       formCompletionDate?: string;
+      remarks?: string;
       createdByUserId?: number;
     },
   ) =>
@@ -381,13 +568,20 @@ export type ApiPathologicalDiagnosis = {
   primaryTumorSite?: string | null;
   morphology?: string | null;
   icdoTopography?: string | null;
+  topographySite?: string | null;
   icdoMorphology?: string | null;
+  histologyMorphology?: string | null;
+  morphologyGrade?: "GRADE_I" | "GRADE_II" | "GRADE_III" | "GRADE_IV" | null;
   secondarySite?: string | null;
+  secondarySiteCode?: string | null;
   metastasisMorphology?: string | null;
+  metastasisMorphologyCode?: string | null;
+  metastasisMorphologyGrade?: "GRADE_I" | "GRADE_II" | "GRADE_III" | "GRADE_IV" | null;
   icd10Site?: string | null;
   laterality?: string | null;
   pairedLaterality?: string | null;
   sequence?: string | null;
+  pathologyDateOfReporting?: string | null;
 };
 
 export const pathologyApi = {
@@ -492,7 +686,7 @@ export type ApiTreatmentModality = {
   othersSpecify?: string | null;
 };
 
-const treatmentApi = {
+export const treatmentApi = {
   upsert: (
     registrationId: number,
     data: Partial<ApiTreatment> & { treatmentStage: "PRIOR_REGISTRATION" | "AT_RI" },
@@ -506,6 +700,165 @@ const treatmentApi = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+};
+
+// ---------- Follow-up ----------
+export type FollowUpMethod =
+  | "HOSPITAL_VISIT"
+  | "POST_EMAIL"
+  | "TELEPHONE"
+  | "HOUSE_VISIT"
+  | "PUBLIC_DATABASE"
+  | "SPECIAL_SURVEY_STUDY"
+  | "OTHERS";
+export type VitalStatus = "ALIVE" | "DEAD" | "UNKNOWN";
+export type DiseaseStatus =
+  | "NO_EVIDENCE_OF_DISEASE"
+  | "NED_SECOND_PRIMARY_PRESENT"
+  | "NED_OTHER_ILLNESS"
+  | "CANCER_REGRESSION_RESIDUAL"
+  | "CANCER_PROGRESSION_RECURRENCE"
+  | "TOO_ADVANCED_CACHEXIA"
+  | "NED_ON_CHEMO_HORMONAL"
+  | "OTHERS"
+  | "UNKNOWN";
+export type PlaceOfDeath =
+  | "RI"
+  | "OTHER_HOSPITAL"
+  | "RESIDENCE"
+  | "OTHERS"
+  | "UNKNOWN";
+export type DeathInfoSource =
+  | "CIVIL_REGISTRATION"
+  | "BURIAL_CREMATION"
+  | "VOTER_LIST"
+  | "AADHAAR"
+  | "CENSUS"
+  | "ABDM"
+  | "OTHERS"
+  | "UNKNOWN";
+export type FollowUpModality =
+  | "SURGERY"
+  | "RADIOTHERAPY"
+  | "CHEMOTHERAPY"
+  | "HORMONE_THERAPY"
+  | "TARGETED_THERAPY"
+  | "OTHERS";
+
+export type FollowUpSearchHit = {
+  registrationId: number;
+  hbcrRegistrationNo: string;
+  referenceNo: string | null;
+  hospitalRegistrationNo: string | null;
+  patientId: number;
+  patientName: string;
+  patientAge: number | null;
+  patientGender: string;
+  icd10Code: string | null;
+  visitCount: number;
+};
+
+export type ApiFollowUpTreatment = {
+  id: number;
+  followUpId: number;
+  modality: FollowUpModality;
+  startDate: string | null;
+  endDate: string | null;
+};
+
+export type ApiFollowUp = {
+  id: number;
+  registrationId: number;
+  visitNo: number;
+  dateOfFollowUp: string;
+  methodOfFollowUp: FollowUpMethod;
+  vitalStatus: VitalStatus;
+  diseaseStatus: DiseaseStatus | null;
+  dateOfFirstRecurrence: string | null;
+  treatmentGiven: boolean | null;
+  treatmentType: string | null;
+  dateOfDeath: string | null;
+  placeOfDeath: PlaceOfDeath | null;
+  sourceOfDeathInfo: DeathInfoSource | null;
+  causeIa: string | null;
+  causeIb: string | null;
+  causeIc: string | null;
+  causeIi: string | null;
+  icd10Ucod: string | null;
+  majorCauseGroupUcod: string | null;
+  formCompletedBy: string | null;
+  dateOfCompletion: string | null;
+  createdAt: string;
+  treatments: ApiFollowUpTreatment[];
+};
+
+export type FollowUpRegistrationDetail = {
+  registrationId: number;
+  hbcrRegistrationNo: string;
+  referenceNo: string | null;
+  hospitalRegistrationNo: string | null;
+  patient: { id: number; fullName: string; age: number | null; gender: string };
+  icd10Code: string | null;
+  visits: ApiFollowUp[];
+  /** Next visit number (backend-computed from existing records, max + 1). */
+  nextVisitNo: number;
+};
+
+export type FollowUpCreateInput = {
+  registrationId: number;
+  dateOfFollowUp: string;
+  methodOfFollowUp: FollowUpMethod;
+  vitalStatus: VitalStatus;
+  diseaseStatus?: DiseaseStatus;
+  dateOfFirstRecurrence?: string;
+  treatmentGiven?: boolean;
+  treatmentType?: string;
+  dateOfDeath?: string;
+  placeOfDeath?: PlaceOfDeath;
+  sourceOfDeathInfo?: DeathInfoSource;
+  causeIa?: string;
+  causeIb?: string;
+  causeIc?: string;
+  causeIi?: string;
+  icd10Ucod?: string;
+  majorCauseGroupUcod?: string;
+  formCompletedBy?: string;
+  dateOfCompletion?: string;
+  treatments?: {
+    modality: FollowUpModality;
+    startDate?: string;
+    endDate?: string;
+  }[];
+};
+
+export const followUpApi = {
+  /** Search registrations by Reference / HBCR / Hospital registration number,
+   *  Aadhaar or Phone number (any combination). */
+  search: (q: {
+    referenceNo?: string;
+    hbcrRegNo?: string;
+    hospitalRegNo?: string;
+    aadhaar?: string;
+    phone?: string;
+  }): Promise<FollowUpSearchHit[]> => {
+    const sp = new URLSearchParams();
+    if (q.referenceNo) sp.set("referenceNo", q.referenceNo);
+    if (q.hbcrRegNo) sp.set("hbcrRegNo", q.hbcrRegNo);
+    if (q.hospitalRegNo) sp.set("hospitalRegNo", q.hospitalRegNo);
+    if (q.aadhaar) sp.set("aadhaar", q.aadhaar);
+    if (q.phone) sp.set("phone", q.phone);
+    return send<FollowUpSearchHit[]>(`/followups/search?${sp.toString()}`);
+  },
+  /** Read-only header + every existing visit for a registration. */
+  registrationDetail: (registrationId: number): Promise<FollowUpRegistrationDetail> =>
+    send<FollowUpRegistrationDetail>(`/followups/registrations/${registrationId}`),
+  /** Create a new follow-up visit (never modifies previous visits). */
+  create: (data: FollowUpCreateInput): Promise<ApiFollowUp> =>
+    send<ApiFollowUp>("/followups", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  get: (id: number): Promise<ApiFollowUp> => send<ApiFollowUp>(`/followups/${id}`),
 };
 
 // ---------- Re-exports ----------

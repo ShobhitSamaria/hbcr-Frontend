@@ -78,7 +78,7 @@ check("empty form yields required errors on all mandatory fields", () => {
   assert(hasError(errs, "1. Name of the Reporting Institution (RI)"), "RI required");
   assert(hasError(errs, "5. Date of reporting"), "Date of reporting required");
   assert(hasError(errs, "8. Date of first diagnosis"), "Date of first diagnosis required");
-  assert(hasError(errs, "9. Full name"), "Full name required");
+  assert(hasError(errs, "First Name"), "First name required");
   assert(hasError(errs, "12. Gender"), "Gender required");
   assert(hasError(errs, "16. Marital status"), "Marital status required");
   assert(hasError(errs, "17. Education"), "Education required");
@@ -87,7 +87,7 @@ check("empty form yields required errors on all mandatory fields", () => {
   assert(
     hasError(
       errs,
-      "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)",
+      "19. Relationship to Cancer / Degree of Relationship",
     ),
     "Family history required",
   );
@@ -96,10 +96,10 @@ check("empty form yields required errors on all mandatory fields", () => {
 check("blank string treated as missing for required fields", () => {
   const errs = validateStep1({
     "1. Name of the Reporting Institution (RI)": "   ",
-    "9. Full name": "",
+    "First Name": "",
   });
   assert(hasError(errs, "1. Name of the Reporting Institution (RI)"), "RI blank must error");
-  assert(hasError(errs, "9. Full name"), "Full name blank must error");
+  assert(hasError(errs, "First Name"), "First name blank must error");
 });
 
 check("HBCR registration number pattern enforced", () => {
@@ -128,13 +128,13 @@ check("HBCR registration number accepts HBCR-2024-0185", () => {
 });
 
 check("future date-of-birth rejected", () => {
-  const errs = validateStep1({ "11. Date of Birth": "2999-01-01" });
-  assert(hasError(errs, "11. Date of Birth"), "Future DOB must error");
+  const errs = validateStep1({ "10. Date of Birth": "2999-01-01" });
+  assert(hasError(errs, "10. Date of Birth"), "Future DOB must error");
 });
 
 check("age out of range rejected", () => {
-  const errs = validateStep1({ "10. Age": "999" });
-  assert(hasError(errs, "10. Age"), "Age out of range must error");
+  const errs = validateStep1({ "11. Age": "999" });
+  assert(hasError(errs, "11. Age"), "Age out of range must error");
 });
 
 check("invalid PIN code rejected", () => {
@@ -157,19 +157,19 @@ check("invalid email rejected", () => {
 check("referral conditional sub-fields required when 'Other Hospital'", () => {
   const errs = validateStep1({ "7. Type of referral": "Other Hospital/Health Facility" });
   assert(hasError(errs, "7(a). Name of Facility."), "Facility name required");
-  assert(hasError(errs, "7(b). City"), "Facility city required");
-  assert(hasError(errs, "7(c). District"), "Facility district required");
-  assert(hasError(errs, "7(d). Hospital / LAB / N.H."), "Facility hospital required");
-  assert(hasError(errs, "7(e). Date of Registration"), "Facility date required");
+  assert(hasError(errs, "7(b). Hospital / LAB / N.H."), "Facility hospital required");
+  assert(hasError(errs, "7(c). City"), "Facility city required");
+  assert(hasError(errs, "7(d). District"), "Facility district required");
+  assert(hasError(errs, "7(f). Date of Registration"), "Facility date required");
 });
 
 check("referral conditional sub-fields NOT required when 'Self'", () => {
   const errs = validateStep1({ "7. Type of referral": "Self" });
   noError(errs, "7(a). Name of Facility.");
-  noError(errs, "7(b). City");
-  noError(errs, "7(c). District");
-  noError(errs, "7(d). Hospital / LAB / N.H.");
-  noError(errs, "7(e). Date of Registration");
+  noError(errs, "7(b). Hospital / LAB / N.H.");
+  noError(errs, "7(c). City");
+  noError(errs, "7(d). District");
+  noError(errs, "7(f). Date of Registration");
 });
 
 check("date of first diagnosis cannot precede date of reporting", () => {
@@ -192,9 +192,9 @@ check("referral registration date before reporting date rejected", () => {
   const errs = validateStep1({
     "5. Date of reporting": "2024-07-10",
     "7. Type of referral": "Other Hospital/Health Facility",
-    "7(e). Date of Registration": "2024-07-01",
+    "7(f). Date of Registration": "2024-07-01",
   });
-  assert(hasError(errs, "7(e). Date of Registration"), "Earlier reg date must error");
+  assert(hasError(errs, "7(f). Date of Registration"), "Earlier reg date must error");
 });
 
 check("fully populated step 1 produces no errors", () => {
@@ -209,9 +209,10 @@ check("fully populated step 1 produces no errors", () => {
     "6. Case Registered Through (Patient’s first reporting at RI)": "In Patient Elective",
     "7. Type of referral": "Self",
     "8. Date of first diagnosis": "2024-07-02",
-    "9. Full name": "Jane Doe",
-    "10. Age": "42",
-    "11. Date of Birth": "1982-01-15",
+    "First Name": "Jane",
+    "Middle Name": "Doe",
+    "10. Date of Birth": "1982-01-15",
+    "11. Age": "42",
     "12. Gender": "Female",
     "16. Marital status": "Married",
     "17. Education": "Graduate and above",
@@ -225,7 +226,7 @@ check("fully populated step 1 produces no errors", () => {
     "PIN Code": "110001",
     "Mobile number": "9876543210",
     "Email address": "jane@example.com",
-    "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)":
+    "19. Relationship to Cancer / Degree of Relationship":
       "No",
   });
   const unexpected = Object.keys(errs);
@@ -239,9 +240,9 @@ check("fully populated step 1 produces no errors", () => {
 // ---------------------------------------------------------------------------
 console.log("Step 2");
 
-check("no diagnostic method selected => error", () => {
+check("no diagnostic method selected => no error (optional for now)", () => {
   const errs = validateStep2({});
-  assert(hasError(errs, "_diagnostic.methods"), "Methods required");
+  noError(errs, "_diagnostic.methods");
 });
 
 check("clinical only without date => error", () => {
@@ -258,31 +259,37 @@ check("clinical only with date => no error", () => {
   noError(errs, "_diagnostic.methods");
 });
 
-check("laterality required", () => {
+check("laterality optional (no longer required)", () => {
   const errs = validateStep2({});
-  assert(hasError(errs, "25. Laterality"), "Laterality required");
+  noError(errs, "25. Laterality");
 });
 
-check("ICD-O-3 and ICD-10 required", () => {
+check("ICD-O-3 codes and sequence optional (no longer required)", () => {
   const errs = validateStep2({});
-  assert(hasError(errs, "23(a). Primary Site of Tumour - Topography"), "Topo required");
-  assert(hasError(errs, "23(b). Primary Histology - Morphology"), "Morph required");
-  assert(hasError(errs, "24. Site of Tumour (ICD-10)"), "ICD10 required");
-  assert(hasError(errs, "26. Sequence"), "Sequence required");
+  noError(errs, "23.1 Code");
+  noError(errs, "23.2 Code");
+  noError(errs, "24. Site of Tumour (ICD-10)");
+  noError(errs, "26. Sequence");
 });
 
 check("fully populated step 2 produces no errors", () => {
   const errs = validateStep2({
     "_diagnostic.methods": ["Microscopic"],
     "21. Longest duration of symptom for cancer (in months)": "3",
-    "22(a). Anatomical site": "Upper outer quadrant",
-    "22(b). Pathology slide number": "S-1",
-    "22(c). Primary tumor site": "Breast",
-    "22(d). Morphology": "Ductal",
-    "23(a). Primary Site of Tumour - Topography": "C50.4",
-    "23(b). Primary Histology - Morphology": "8500/3",
-    "23(c). Secondary Site of Tumour": "",
-    "23(d). Morphology of Metastasis": "",
+    "22.1 Anatomical Site of Specimen / Biopsy / SMEAR": "Upper outer quadrant",
+    "22.2 Pathology Slide No": "S-1",
+    "22.4 Primary Site of Tumour - Topography": "Breast",
+    "22.5 Primary Histology - Morphology": "Ductal",
+    "23.1 Site": "Breast - upper outer quadrant",
+    "23.1 Code": "C50.4",
+    "23.2 Morphology": "Infiltrating ductal carcinoma",
+    "23.2 Code": "8500/3",
+    "23.2 Grade": "Grade II - Moderately Differentiated",
+    "23.3 Site": "",
+    "23.3 Code": "",
+    "23.4 Morphology": "",
+    "23.4 Code": "",
+    "23.4 Grade": "Select Grade",
     "24. Site of Tumour (ICD-10)": "C50",
     "25. Laterality": "Paired Site",
     "26. Sequence": "One Primary Only",

@@ -13,4 +13,9 @@ export const config = {
   // CORS allow-list. Comma-separated env var override; default accepts all
   // origins so the existing Frontend (any port) can connect during dev.
   corsOrigin: process.env.CORS_ORIGIN || "*",
+  // Secret used to sign login tokens (HMAC-SHA256). MUST be overridden via
+  // AUTH_SECRET in any non-local environment.
+  authSecret: process.env.AUTH_SECRET || "hbcr-dev-secret-change-me",
+  // Login token lifetime in hours.
+  authTokenTtlHours: Number(process.env.AUTH_TOKEN_TTL_HOURS) || 12,
 };

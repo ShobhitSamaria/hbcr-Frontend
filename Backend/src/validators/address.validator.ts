@@ -1,5 +1,6 @@
 import {
   AddressType,
+  UrbanRural,
 } from "../../generated/prisma/enums.ts";
 import {
   inEnum,
@@ -17,6 +18,8 @@ const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 export const createAddressValidator = makeValidator({
   addressType: [required(), inEnum(AddressType)],
+  urbanRural: [inEnum(UrbanRural)],
+  wardNo: [isString(), trim(), maxLen(32)],
   flatHouseNo: [isString(), trim(), maxLen(64)],
   streetRoad: [isString(), trim(), maxLen(255)],
   city: [isString(), trim(), maxLen(64)],
@@ -32,6 +35,8 @@ export const createAddressValidator = makeValidator({
 });
 
 export const updateAddressValidator = makeValidator({
+  urbanRural: [inEnum(UrbanRural)],
+  wardNo: [isString(), trim(), maxLen(32)],
   flatHouseNo: [isString(), trim(), maxLen(64)],
   streetRoad: [isString(), trim(), maxLen(255)],
   city: [isString(), trim(), maxLen(64)],

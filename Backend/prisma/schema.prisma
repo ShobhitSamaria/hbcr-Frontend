@@ -64,6 +64,7 @@ enum Relationship {
   FATHER @map("father")
   MOTHER @map("mother")
   SPOUSE @map("spouse")
+  OTHER  @map("other")
 
   @@map("hbcr.relationship_enum")
 }
@@ -73,6 +74,13 @@ enum AddressType {
   PERMANENT   @map("permanent")
 
   @@map("hbcr.address_type_enum")
+}
+
+enum UrbanRural {
+  URBAN @map("urban")
+  RURAL @map("rural")
+
+  @@map("hbcr.urban_rural_enum")
 }
 
 enum YesNoUnknown {
@@ -115,6 +123,7 @@ enum CaseThrough {
   OUT_PATIENT          @map("out_patient")
   IN_PATIENT_ELECTIVE  @map("in_patient_elective")
   IN_PATIENT_EMERGENCY @map("in_patient_emergency")
+  UNKNOWN_PERSON       @map("unknown_person")
   OTHER                @map("other")
 
   @@map("hbcr.case_through_enum")
@@ -200,6 +209,16 @@ enum Sequence {
   UNSPECIFIED_UNKNOWN @map("unspecified_unknown")
 
   @@map("hbcr.sequence_enum")
+}
+
+/// Step 2 Field 23 - histological grade (ICD-O-3 sub-sections 23.2 / 23.4).
+enum HistologicalGrade {
+  GRADE_I   @map("grade_i")
+  GRADE_II  @map("grade_ii")
+  GRADE_III @map("grade_iii")
+  GRADE_IV  @map("grade_iv")
+
+  @@map("hbcr.histological_grade_enum")
 }
 
 enum ClinicalExtent {
@@ -346,6 +365,86 @@ enum FamPrimarySite {
 }
 
 // =============================================================================
+// FOLLOW-UP (active follow-up module) enums
+//
+// Each enum stores the semantic member name in the DB (project convention:
+// every other enum does the same). The numbered code shown on the printed
+// form (e.g. "2 Post/email") is a display concern handled by the frontend
+// option labels, not stored data.
+// =============================================================================
+
+enum FollowUpMethod {
+  HOSPITAL_VISIT       @map("hospital_visit") // 1
+  POST_EMAIL           @map("post_email") // 2
+  TELEPHONE            @map("telephone") // 3
+  HOUSE_VISIT          @map("house_visit") // 4
+  PUBLIC_DATABASE      @map("public_database") // 5
+  SPECIAL_SURVEY_STUDY @map("special_survey_study") // 6
+  OTHERS               @map("others") // 8
+
+  @@map("hbcr.follow_up_method_enum")
+}
+
+enum VitalStatus {
+  ALIVE   @map("alive") // 1
+  DEAD    @map("dead") // 2
+  UNKNOWN @map("unknown") // 9
+
+  @@map("hbcr.vital_status_enum")
+}
+
+enum DiseaseStatus {
+  NO_EVIDENCE_OF_DISEASE         @map("no_evidence_of_disease") // 1
+  NED_SECOND_PRIMARY_PRESENT     @map("ned_second_primary_present") // 2
+  NED_OTHER_ILLNESS              @map("ned_other_illness") // 3
+  CANCER_REGRESSION_RESIDUAL     @map("cancer_regression_residual") // 4
+  CANCER_PROGRESSION_RECURRENCE  @map("cancer_progression_recurrence") // 5
+  TOO_ADVANCED_CACHEXIA          @map("too_advanced_cachexia") // 6
+  NED_ON_CHEMO_HORMONAL          @map("ned_on_chemo_hormonal") // 7
+  OTHERS                         @map("others") // 8
+  UNKNOWN                        @map("unknown") // 9
+
+  @@map("hbcr.disease_status_enum")
+}
+
+enum PlaceOfDeath {
+  RI             @map("ri") // 1 At Reporting Institution
+  OTHER_HOSPITAL @map("other_hospital") // 2
+  RESIDENCE      @map("residence") // 3
+  OTHERS         @map("others") // 8
+  UNKNOWN        @map("unknown") // 9
+
+  @@map("hbcr.place_of_death_enum")
+}
+
+enum DeathInfoSource {
+  CIVIL_REGISTRATION @map("civil_registration") // 1
+  BURIAL_CREMATION   @map("burial_cremation") // 2
+  VOTER_LIST         @map("voter_list") // 3
+  AADHAAR            @map("aadhaar") // 4
+  CENSUS             @map("census") // 5
+  ABDM               @map("abdm") // 6
+  OTHERS             @map("others") // 8
+  UNKNOWN            @map("unknown") // 9
+
+  @@map("hbcr.death_info_source_enum")
+}
+
+/// Follow-up treatment modalities (simpler than the registration TreatmentModality:
+/// no Radio 1/2 split). Rows exist only for modalities the patient actually
+/// received (Yes on the radio), so nothing irrelevant is stored.
+enum FollowUpModality {
+  SURGERY          @map("surgery")
+  RADIOTHERAPY     @map("radiotherapy")
+  CHEMOTHERAPY     @map("chemotherapy")
+  HORMONE_THERAPY  @map("hormone_therapy")
+  TARGETED_THERAPY @map("targeted_therapy")
+  OTHERS           @map("others")
+
+  @@map("hbcr.follow_up_modality_enum")
+}
+
+// =============================================================================
 // MODELS
 // =============================================================================
 
@@ -377,28 +476,36 @@ model Hospital {
 
 /// Registry coordinators / staff (sidebar avatar, "Dr. A. Srinivasan").
 model User {
-  id         Int      @id @default(autoincrement())
-  fullName   String   @map("full_name") @db.VarChar(255)
-  role       String   @db.VarChar(64)
-  initials   String   @db.VarChar(4)
-  hospitalId Int?     @map("hospital_id")
-  isActive   Boolean  @default(true) @map("is_active")
-  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @db.VarChar(64)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  fullName     String   @map("full_name") @db.VarChar(255)
+  role         String   @db.VarChar(64)
+  initials     String   @db.VarChar(4)
+  hospitalId   Int?     @map("hospital_id")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   hospital      Hospital?      @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
   registrations Registration[]
 
+  @@index([hospitalId], name: "idx_users_hospital")
   @@map("hbcr.users")
 }
 
 /// Core patient record (Step 1, Fields 9-12).
 model Patient {
-  id          Int       @id @default(autoincrement())
-  fullName    String    @map("full_name") @db.VarChar(255)
-  age         Int?      @db.SmallInt
-  dateOfBirth DateTime? @map("date_of_birth") @db.Date
-  gender      Gender
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  id                       Int       @id @default(autoincrement())
+  fullName                 String    @map("full_name") @db.VarChar(255)
+  firstName                String?   @map("first_name") @db.VarChar(100)
+  middleName               String?   @map("middle_name") @db.VarChar(100)
+  lastName                 String?   @map("last_name") @db.VarChar(100)
+  age                      Int?      @db.SmallInt
+  dateOfBirth              DateTime? @map("date_of_birth") @db.Date
+  gender                   Gender
+  healthSchemeBeneficiary  Boolean   @default(false) @map("health_scheme_beneficiary")
+  healthSchemeDetails      String?   @map("health_scheme_details") @db.VarChar(255)
+  createdAt                DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
   identifications PatientIdentification[]
   relatives       PatientRelative[]
@@ -445,6 +552,8 @@ model PatientAddress {
   id           Int         @id @default(autoincrement())
   patientId    Int         @map("patient_id")
   addressType  AddressType @map("address_type")
+  urbanRural   UrbanRural? @map("urban_rural")
+  wardNo       String?     @map("ward_no") @db.VarChar(32)
   flatHouseNo  String?     @map("flat_house_no") @db.VarChar(64)
   streetRoad   String?     @map("street_road") @db.VarChar(255)
   city         String?     @db.VarChar(64)
@@ -496,25 +605,33 @@ model Registration {
   patientId                     Int                @map("patient_id")
   hbcrRegistrationNo            String             @unique @map("hbcr_registration_no") @db.VarChar(20)
   hospitalId                    Int                @map("hospital_id")
+  referenceNo                   String?            @map("reference_no") @db.VarChar(64)
   departmentName                String?            @map("department_name") @db.VarChar(128)
   unitNumber                    String?            @map("unit_number") @db.VarChar(32)
   hospitalRegistrationNo        String?            @map("hospital_registration_no") @db.VarChar(64)
+  hospitalRegistrationNoType    String?            @map("hospital_registration_no_type") @db.VarChar(64)
   dateOfReporting               DateTime?          @map("date_of_reporting") @db.Date
   caseRegisteredThrough         CaseThrough?       @map("case_registered_through")
   referralType                  ReferralType?      @map("referral_type")
   referralFacilityName          String?            @map("referral_facility_name") @db.VarChar(255)
   referralFacilityCity          String?            @map("referral_facility_city") @db.VarChar(64)
   referralFacilityDistrict      String?            @map("referral_facility_district") @db.VarChar(64)
+  referralFacilityPincode       String?            @map("referral_facility_pincode") @db.VarChar(6)
   referralFacilityHospitalLabNh String?            @map("referral_facility_hospital_lab_nh") @db.VarChar(255)
   referralFacilityRegDate       DateTime?          @map("referral_facility_reg_date") @db.Date
   dateOfFirstDiagnosis          DateTime?          @map("date_of_first_diagnosis") @db.Date
+  // Step 2, Field 20 sub-question: was microscopic confirmation done at a
+  // later date when a non-microscopic method (e.g. Other) was selected.
+  microscopicConfirmationLater  Boolean?           @map("microscopic_confirmation_later")
   anthropometricHeightCm        Decimal?           @map("anthropometric_height_cm") @db.Decimal(5, 2)
   anthropometricWeightKg        Decimal?           @map("anthropometric_weight_kg") @db.Decimal(5, 2)
   maritalStatus                 MaritalStatus?     @map("marital_status")
   education                     Education?         @map("education")
+  occupation                    String?            @db.VarChar(128)
   status                        RegistrationStatus @default(ACTIVE)
   formCompletedBy               String?            @map("form_completed_by") @db.VarChar(255)
   formCompletionDate            DateTime?          @map("form_completion_date") @db.Date
+  remarks                       String?            @map("remarks") @db.VarChar(1000)
   createdByUserId               Int?               @map("created_by_user_id")
   createdAt                     DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
 
@@ -526,6 +643,7 @@ model Registration {
   pathologicalDiagnosis PathologicalDiagnosis?
   treatments            Treatment[]
   familialCancerHistory FamilialCancerHistory?
+  followUps             FollowUp[]
 
   @@index([status], name: "idx_registrations_status")
   @@index([hospitalId], name: "idx_registrations_hospital")
@@ -571,14 +689,21 @@ model PathologicalDiagnosis {
   pathologySlideNo             String?           @map("pathology_slide_no") @db.VarChar(64)
   primaryTumorSite             String?           @map("primary_tumor_site") @db.VarChar(128)
   morphology                   String?           @map("morphology") @db.VarChar(128)
-  icdoTopography               String?           @map("icdo_topography") @db.VarChar(64)
-  icdoMorphology               String?           @map("icdo_morphology") @db.VarChar(64)
-  secondarySite                String?           @map("secondary_site") @db.VarChar(128)
-  metastasisMorphology         String?           @map("metastasis_morphology") @db.VarChar(128)
-  icd10Site                    String?           @map("icd10_site") @db.VarChar(64)
+  icdoTopography               String?            @map("icdo_topography") @db.VarChar(64)
+  topographySite               String?            @map("topography_site") @db.VarChar(128)
+  icdoMorphology               String?            @map("icdo_morphology") @db.VarChar(64)
+  histologyMorphology          String?            @map("histology_morphology") @db.VarChar(128)
+  morphologyGrade              HistologicalGrade? @map("morphology_grade")
+  secondarySite                String?            @map("secondary_site") @db.VarChar(128)
+  secondarySiteCode            String?            @map("secondary_site_code") @db.VarChar(64)
+  metastasisMorphology         String?            @map("metastasis_morphology") @db.VarChar(128)
+  metastasisMorphologyCode     String?            @map("metastasis_morphology_code") @db.VarChar(64)
+  metastasisMorphologyGrade    HistologicalGrade? @map("metastasis_morphology_grade")
+  icd10Site                    String?            @map("icd10_site") @db.VarChar(64)
   laterality                   Laterality?       @default(NOT_PAIRED_SITE)
   pairedLaterality             PairedLaterality? @map("paired_laterality")
   sequence                     Sequence?
+  pathologyDateOfReporting     DateTime?         @map("pathology_date_of_reporting") @db.Date
 
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
@@ -598,9 +723,9 @@ model Treatment {
   treatmentType               TreatmentType?   @map("treatment_type")
   clinicalExtentOfDisease     ClinicalExtent?  @map("clinical_extent_of_disease")
   stagingSystem               StagingSystem?   @map("staging_system")
-  tnmT                        String?          @map("tnm_t") @db.VarChar(8)
-  tnmN                        String?          @map("tnm_n") @db.VarChar(8)
-  tnmM                        String?          @map("tnm_m") @db.VarChar(8)
+  tnmT                        String?          @map("tnm_t") @db.VarChar(16)
+  tnmN                        String?          @map("tnm_n") @db.VarChar(16)
+  tnmM                        String?          @map("tnm_m") @db.VarChar(16)
   compositeStage              String?          @map("composite_stage") @db.VarChar(16)
   ecogStatus                  EcogStatus?      @map("ecog_status")
   ecogGrade                   EcogGrade?       @map("ecog_grade")
@@ -638,6 +763,64 @@ model TreatmentModalityDetail {
   @@map("hbcr.treatment_modality_details")
 }
 
+/// Active follow-up visit. One row per visit; `visitNo` increments per
+/// registration (1, 2, 3, ...) so a patient can have multiple follow-ups.
+/// Conditional sections (hospital-visit disease status / treatment, death
+/// details) are stored only when their parent condition applies — the
+/// validator strips inapplicable fields before they reach this model.
+model FollowUp {
+  id                    Int               @id @default(autoincrement())
+  registrationId        Int               @map("registration_id")
+  visitNo               Int               @map("visit_no") @db.SmallInt
+  // Section 1-3 - always present.
+  dateOfFollowUp        DateTime          @map("date_of_follow_up") @db.Date
+  methodOfFollowUp      FollowUpMethod    @map("method_of_follow_up")
+  vitalStatus           VitalStatus       @map("vital_status")
+  // Section 4-5 - hospital visit only.
+  diseaseStatus         DiseaseStatus?    @map("disease_status")
+  dateOfFirstRecurrence DateTime?         @map("date_of_first_recurrence") @db.Date
+  treatmentGiven        Boolean?          @map("treatment_given")
+  treatmentType         TreatmentType?    @map("treatment_type") // Allopathic / Non-Allopathic / Both
+  // Section 6-11 - dead only.
+  dateOfDeath           DateTime?         @map("date_of_death") @db.Date
+  placeOfDeath          PlaceOfDeath?     @map("place_of_death")
+  sourceOfDeathInfo     DeathInfoSource?  @map("source_of_death_info")
+  causeIa               String?           @map("cause_ia") @db.VarChar(255)
+  causeIb               String?           @map("cause_ib") @db.VarChar(255)
+  causeIc               String?           @map("cause_ic") @db.VarChar(255)
+  causeIi               String?           @map("cause_ii") @db.VarChar(255)
+  icd10Ucod             String?           @map("icd10_ucod") @db.VarChar(16)
+  majorCauseGroupUcod   String?           @map("major_cause_group_ucod") @db.VarChar(128)
+  // Section 12-13 - form completion.
+  formCompletedBy       String?           @map("form_completed_by") @db.VarChar(255)
+  dateOfCompletion      DateTime?         @map("date_of_completion") @db.Date
+  createdAt             DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  registration Registration        @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  treatments   FollowUpTreatment[]
+
+  @@unique([registrationId, visitNo], name: "follow_ups_registration_id_visit_no_key")
+  @@index([registrationId], name: "idx_follow_ups_registration")
+  @@map("hbcr.follow_ups")
+}
+
+/// One row per treatment modality given during a follow-up (created only for
+/// modalities marked Yes). Surgery deliberately has no end date — the
+/// validator drops `endDate` for the SURGERY modality.
+model FollowUpTreatment {
+  id        Int              @id @default(autoincrement())
+  followUpId Int             @map("follow_up_id")
+  modality  FollowUpModality
+  startDate DateTime?        @map("start_date") @db.Date
+  endDate   DateTime?        @map("end_date") @db.Date
+
+  followUp FollowUp @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@unique([followUpId, modality], name: "follow_up_treatments_follow_up_id_modality_key")
+  @@index([followUpId], name: "idx_follow_up_treatments_follow_up")
+  @@map("hbcr.follow_up_treatments")
+}
+
 /// Step 1 Field 19 - family history of cancer.
 model FamilialCancerHistory {
   id                     Int              @id @default(autoincrement())
@@ -652,4 +835,170 @@ model FamilialCancerHistory {
   registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 
   @@map("hbcr.familial_cancer_history")
+}
+
+// =============================================================================
+// ICD-O-3 REFERENCE DATA  (populated from Docs/icd o3.pdf via
+// Backend/scripts/parse-icdo3.mjs - one-time extraction, no FK to forms)
+// =============================================================================
+
+enum IcdoEntryKind {
+  TOPOGRAPHY @map("topography")
+  MORPHOLOGY @map("morphology")
+
+  @@map("hbcr.icdo_entry_kind_enum")
+}
+
+/// ICD-O-3 Topography Numerical List (C-codes). One row per main entry: the
+/// preferred term (printed bold on the code line) plus its synonyms and the
+/// group (Cxx / Cxx-Cxx) it belongs to. `term` keeps any inline parenthetical
+/// exactly as printed (e.g. "Tonsil, NOS (excludes lingual tonsil C02.4 ...)").
+model IcdoTopography {
+  id            Int      @id @default(autoincrement())
+  code          String   @unique @db.VarChar(8) // e.g. "C09.9"
+  term          String   @db.VarChar(255)
+  synonyms      String[]
+  subSiteLeadIn String?  @map("sub_site_lead_in") @db.VarChar(255) // e.g. "Skin of:" before the sub-site bullets
+  subSites      String[] @map("sub_sites") // bullet lists under C44.3/C44.7 etc.
+  groupCode     String?  @map("group_code") @db.VarChar(16) // e.g. "C14", "C00-C14"
+  // Longest printed group name is 285 chars (C49 CONNECTIVE, SUBCUTANEOUS...).
+  groupName     String?  @map("group_name") @db.VarChar(500)
+  groupNote     String?  @map("group_note") @db.VarChar(255) // "Note: ..." paragraph of the group
+  sortOrder     Int      @map("sort_order") @db.SmallInt // position within the book's list
+
+  @@index([term], name: "idx_icdo_topo_term")
+  @@map("hbcr.icdo_topography")
+}
+
+/// ICD-O-3 Morphology Numerical List (xxxx/x codes). `behavior` is the digit
+/// after the slash (0 benign, 1 uncertain, 2 in situ, 3 malignant, 6/9).
+/// `siteRestriction` holds the site-restriction code attached to the term
+/// (e.g. "C53._", "C21.1") and `isObsolete` mirrors the book's [obs] marker.
+model IcdoMorphology {
+  id              Int      @id @default(autoincrement())
+  code            String   @unique @db.VarChar(8) // e.g. "8077/2"
+  term            String   @db.VarChar(255)
+  synonyms        String[]
+  behavior        Int?     @db.SmallInt
+  siteRestriction String?  @map("site_restriction") @db.VarChar(255)
+  isObsolete      Boolean  @default(false) @map("is_obsolete")
+  groupCode       String?  @map("group_code") @db.VarChar(16) // range header e.g. "809-811"
+  groupName       String?  @map("group_name") @db.VarChar(255)
+  sortOrder       Int      @map("sort_order") @db.SmallInt
+
+  @@index([term], name: "idx_icdo_morph_term")
+  @@map("hbcr.icdo_morphology")
+}
+
+/// ICD-O-3 Alphabetic Index. One row per (headword, sub-term) entry; the
+/// sub-term text keeps inline parentheticals (site restrictions, [obs], ...).
+/// `code`/`kind` are null for the book's "(see SNOMED)" lines that carry no
+/// code. `kind` is derived from the code prefix (C -> topography, digits ->
+/// morphology). `seeAlso` holds "see also <code>" cross-references, `page`/
+/// `letter`/`subHeadword`/`isHeadwordEntry` mirror the printed layout.
+model IcdoIndexEntry {
+  id              Int           @id @default(autoincrement())
+  headword        String        @db.VarChar(255) // e.g. "Acute" ("Adenocarcinoma, continued" merged by parser)
+  term            String        @db.VarChar(255) // e.g. "erythremia (C42.1) [obs]"
+  code            String?       @db.VarChar(16) // "9840/3" or "C76.2" (null for see-SNOMED lines)
+  kind            IcdoEntryKind?
+  siteRestriction String?       @map("site_restriction") @db.VarChar(255)
+  seeAlso         String[]      @map("see_also") // e.g. "9687/3" from "see also 9687/3"
+  isObsolete      Boolean       @default(false) @map("is_obsolete") // [obs] marker
+  page            Int           @db.SmallInt // pdf page the entry appears on
+  letter          String        @db.VarChar(1) // alphabetic section, e.g. "A"
+  subHeadword     String?       @map("sub_headword") @db.VarChar(255) // e.g. "Combined"
+  seeSnomed       Boolean       @default(false) @map("see_snomed") // "(see SNOMED)" line
+  isHeadwordEntry Boolean       @default(false) @map("is_headword_entry") // headword itself carries the code
+  sortOrder       Int           @map("sort_order") @db.SmallInt
+
+  @@index([headword], name: "idx_icdo_index_headword")
+  @@index([code], name: "idx_icdo_index_code")
+  @@map("hbcr.icdo_index_entries")
+}
+
+// =============================================================================
+// ICD-10 REFERENCE DATA (from Docs/ICD10_Cancer_Topography_Morphology.xlsx via
+// Backend/scripts/extract-icd10-workbook.py -> scripts/output/icd10-reference.json)
+//
+// The workbook is ICD-10 Volume 2 instruction-manual content: code RANGES +
+// category names, rules and worked examples. It contains NO code-to-description
+// mappings, so individual codes are stored only via the examples that mention
+// them. Read-only reference data, kept separate from patient/registration
+// tables (same pattern as the ICD-O-3 reference tables above).
+// =============================================================================
+
+/// ICD-10 code ranges + category names from the "Code Ranges Reference" sheet
+/// (plus the C00-C96 malignant behaviour block from Rule A). Range-level only:
+/// e.g. "C71 -> Malignant neoplasms of brain".
+model Icdo10Range {
+  id        Int    @id @default(autoincrement())
+  code      String @unique @db.VarChar(32) // e.g. "C00–C75", "C71"
+  title     String @db.VarChar(300)
+  source    String @db.VarChar(64)
+  sortOrder Int    @map("sort_order") @db.SmallInt
+
+  @@index([title], name: "idx_icd10_range_title")
+  @@map("hbcr.icd10_ranges")
+}
+
+/// One row per (example, code) mention in the workbook's "All Examples" sheet.
+/// The workbook has no code descriptions, so each individual code is searchable
+/// only through the example it came from (scenario text + rule illustrated).
+model Icdo10CodeMention {
+  id        Int    @id @default(autoincrement())
+  code      String @db.VarChar(16) // e.g. "C18.9"
+  exampleNo String @map("example_no") @db.VarChar(16) // e.g. "1a"
+  rule      String @db.VarChar(8) // rule illustrated, e.g. "B"
+  scenario  String @db.VarChar(500) // the worked example's scenario text
+  sortOrder Int    @map("sort_order") @db.SmallInt // position of the example in the sheet
+
+  @@index([code], name: "idx_icd10_code_mention_code")
+  @@index([scenario], name: "idx_icd10_code_mention_scenario")
+  @@map("hbcr.icd10_code_mentions")
+}
+
+/// One row per rule block (A, B, C-F, G) with the verbatim rule text.
+model Icdo10Rule {
+  id     Int    @id @default(autoincrement())
+  ruleId String @unique @map("rule_id") @db.VarChar(8) // "A", "B", "C-F", "G"
+  title  String @db.VarChar(255)
+  text   String @db.Text
+  source String @db.VarChar(64)
+
+  @@map("hbcr.icd10_rules")
+}
+
+/// The workbook's worked examples. `codes` holds the codes printed in the
+/// "Resulting Code(s)" cell (some examples print none — e.g. examples 7, 20).
+model Icdo10Example {
+  id         Int    @id @default(autoincrement())
+  exampleNo  String @unique @map("example_no") @db.VarChar(16) // e.g. "1a", "16a/16b"
+  rule       String @db.VarChar(8) // rule illustrated, e.g. "B"
+  scenario   String @db.VarChar(500)
+  resultText String @map("result_text") @db.VarChar(500) // the printed "Resulting Code(s)" cell
+  codes      String[] // extracted codes, e.g. ["C18.9", "C78.7"]
+
+  @@index([scenario], name: "idx_icd10_example_scenario")
+  @@map("hbcr.icd10_examples")
+}
+
+/// Maintainable ICD-O-3 Topography → ICD-10 site mapping (generated by
+/// `scripts/generate-icdo3-icd10-mapping.mjs`, imported by
+/// `npm run seed:icdo3:icd10`). The ICD-O-3 topography axis is derived from
+/// ICD-10 Chapter II, so C00.0–C80.9 map to the identical ICD-10 code;
+/// C42.x (haematopoietic/reticuloendothelial) has no ICD-10 topography
+/// equivalent and is deliberately absent — the UI shows no suggestion for it.
+/// Rows are editable reference data so the mapping can be adjusted without
+/// touching code.
+model Icdo3Icd10Mapping {
+  id        Int     @id @default(autoincrement())
+  icdo3Code String  @unique @map("icdo3_code") @db.VarChar(8) // e.g. "C30.0"
+  icdo3Term String  @map("icdo3_term") @db.VarChar(255) // ICD-O-3 preferred term
+  icd10Code String  @map("icd10_code") @db.VarChar(16) // mapped ICD-10 code, e.g. "C30.0"
+  note      String? @db.VarChar(255) // optional per-row note (e.g. known caveats)
+  sortOrder Int     @map("sort_order") @db.SmallInt
+
+  @@index([icd10Code], name: "idx_icdo3_icd10_mapping_icd10_code")
+  @@map("hbcr.icdo3_icd10_mapping")
 }

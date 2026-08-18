@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/auth";
 import { auxApi, healthApi } from "@/lib/api";
 import { FormStateProvider, useFormStateOptional } from "@/lib/formState";
 import { ValidationProvider, useValidation } from "@/lib/validationContext";
@@ -35,6 +36,7 @@ export function Registration({ setView }: RegistrationProps) {
 }
 
 function RegistrationInner({ setView }: RegistrationProps) {
+  const { session } = useAuth();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -42,9 +44,8 @@ function RegistrationInner({ setView }: RegistrationProps) {
 
   // Step1's local-state items that ARE already controlled in the UI - we
   // keep them here AND write into the form-capture context as a sibling
-  // effect. These five pieces are exactly the ones that the original
+  // effect. These four pieces are exactly the ones that the original
   // Registration.tsx orchestrator already lifted up out of Step1.
-  const [name, setName] = useState("");
   const [referral, setReferral] = useState("Self");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [sameAddress, setSameAddress] = useState(false);
@@ -53,8 +54,7 @@ function RegistrationInner({ setView }: RegistrationProps) {
   const ctx = useFormStateOptional();
   const validation = useValidation();
 
-  // Sync the five orchestrator-owned fields into the form-state context.
-  useEffect(() => { ctx?.set("9. Full name", name); }, [name]);
+  // Sync the four orchestrator-owned fields into the form-state context.
   useEffect(() => { ctx?.set("7. Type of referral", referral); }, [referral]);
   useEffect(() => {
     // Persist which unique IDs are selected so we can persist later.
@@ -63,7 +63,7 @@ function RegistrationInner({ setView }: RegistrationProps) {
   useEffect(() => { ctx?.set("_sameAddress", sameAddress); }, [sameAddress]);
   useEffect(() => {
     ctx?.set(
-      "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)",
+      "19. Relationship to Cancer / Degree of Relationship",
       familyHistory,
     );
   }, [familyHistory]);
@@ -78,14 +78,13 @@ function RegistrationInner({ setView }: RegistrationProps) {
     const snap = { ...(ctx?.values.current ?? {}) };
     // Belt-and-braces: lifted fields are also written via the effect above,
     // but reading from the ref directly avoids races on the first render.
-    snap["9. Full name"] = name || snap["9. Full name"];
     snap["7. Type of referral"] = referral || snap["7. Type of referral"];
     snap["_selectedIds"] = selectedIds;
     snap["_sameAddress"] = sameAddress;
     snap[
-      "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)"
+      "19. Relationship to Cancer / Degree of Relationship"
     ] = familyHistory || snap[
-      "19. History of Familial Cancer (for cancers of breast, ovary, colon, prostate, endometrial, melanoma, thyroid, pancreas)"
+      "19. Relationship to Cancer / Degree of Relationship"
     ];
     return snap;
   };
@@ -172,8 +171,10 @@ function RegistrationInner({ setView }: RegistrationProps) {
 
     try {
       await healthApi.ready();
+      // Save against the logged-in hospital so a multi-hospital backend
+      // records the institution whose name/code were auto-populated above.
       const hospitals = await auxApi.hospitals();
-      const hospitalId = hospitals[0]?.id;
+      const hospitalId = session?.hospital?.id ?? hospitals[0]?.id;
       if (!hospitalId) {
         throw new Error("No hospital is registered on the backend.");
       }
@@ -257,8 +258,6 @@ console.log("error keys:", Object.keys(validation.errors));
             </div>
             {step === 1 && (
               <Step1Identifying
-                name={name}
-                setName={setName}
                 referral={referral}
                 setReferral={setReferral}
                 selectedIds={selectedIds}

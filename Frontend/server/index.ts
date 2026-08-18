@@ -6,10 +6,11 @@ import { handleDemo } from "./routes/demo";
 export function createServer() {
   const app = express();
 
-  // Middleware
+  // Middleware (cors only). Deliberately NO body parsers: this express app is
+  // mounted in front of the Vite dev proxy, and `express.json()` would consume
+  // POST request bodies before the proxy forwards them, hanging API calls
+  // (e.g. /api/auth/login) that need a JSON body. The routes below are GET-only.
   app.use(cors());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

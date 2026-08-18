@@ -35,6 +35,7 @@ export type Step3Values = {
   "If known"?: string;
   "31. Name of person completing form (IN CAPITALS)"?: string;
   "32. Date of completion of form"?: string;
+  Remarks?: string;
 };
 
 const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
@@ -55,6 +56,7 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
     isDate(),
     notFutureDate(),
   ],
+  Remarks: [maxLen(1000)],
 });
 
 /**

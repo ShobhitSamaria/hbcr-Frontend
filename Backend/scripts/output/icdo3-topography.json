@@ -1,0 +1,4781 @@
+{
+  "source": "ICD-O-3, Third Edition, First Revision (WHO)",
+  "pdf": "/Users/shobhitsamaria/Desktop/DOITC Code/HBCR/Docs/icd o3.pdf",
+  "section": "topography",
+  "generatedAt": "2026-08-13T05:57:56.697Z",
+  "count": 330,
+  "warnings": [],
+  "sectionNotes": [
+    "Note: In categories C00 to C80.9, neoplasms should be assigned to the category that includes the point of origin of the tumor. A tumor that overlaps the boundaries of two or more subcategories and whose point of origin cannot be determined should be classified to subcategory “.8”. For example, a neoplasm of cervicothoracic esophagus should be assigned to C15.8."
+  ],
+  "entries": [
+    {
+      "code": "C00.0",
+      "term": "External upper lip",
+      "synonyms": [
+        "Vermilion border of upper lip",
+        "Upper lip, NOS (excludes skin of upper lip C44.0)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 0
+    },
+    {
+      "code": "C00.1",
+      "term": "External lower lip",
+      "synonyms": [
+        "Vermilion border of lower lip",
+        "Lower lip, NOS (excludes skin of lower lip C44.0)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 1
+    },
+    {
+      "code": "C00.2",
+      "term": "External lip, NOS",
+      "synonyms": [
+        "Vermilion border of lip, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 2
+    },
+    {
+      "code": "C00.3",
+      "term": "Mucosa of upper lip",
+      "synonyms": [
+        "Frenulum of upper lip",
+        "Inner aspect of upper lip"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 3
+    },
+    {
+      "code": "C00.4",
+      "term": "Mucosa of lower lip",
+      "synonyms": [
+        "Inner aspect of lower lip",
+        "Frenulum of lower lip"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 4
+    },
+    {
+      "code": "C00.5",
+      "term": "Mucosa of lip, NOS",
+      "synonyms": [
+        "Inner aspect of lip, NOS",
+        "Internal lip, NOS",
+        "Frenulum of lip, NOS",
+        "Frenulum labii, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 5
+    },
+    {
+      "code": "C00.6",
+      "term": "Commissure of lip",
+      "synonyms": [
+        "Labial commissure"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 6
+    },
+    {
+      "code": "C00.8",
+      "term": "Overlapping lesion of lip (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 7
+    },
+    {
+      "code": "C00.9",
+      "term": "Lip, NOS (excludes skin of lip C44.0)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C00",
+      "groupName": "LIP (excludes skin of lip C44.0)",
+      "groupNote": null,
+      "sortOrder": 8
+    },
+    {
+      "code": "C01.9",
+      "term": "Base of tongue, NOS",
+      "synonyms": [
+        "Dorsal surface of base of tongue",
+        "Posterior third of tongue",
+        "Posterior tongue, NOS",
+        "Root of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C01",
+      "groupName": "BASE OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 9
+    },
+    {
+      "code": "C02.0",
+      "term": "Dorsal surface of tongue, NOS",
+      "synonyms": [
+        "Anterior 2/3 of tongue, dorsal surface",
+        "Midline of tongue",
+        "Dorsal surface of anterior tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 10
+    },
+    {
+      "code": "C02.1",
+      "term": "Border of tongue",
+      "synonyms": [
+        "Tip of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 11
+    },
+    {
+      "code": "C02.2",
+      "term": "Ventral surface of tongue, NOS",
+      "synonyms": [
+        "Anterior 2/3 of tongue, ventral surface",
+        "Frenulum linguae",
+        "Ventral surface of anterior tongue, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 12
+    },
+    {
+      "code": "C02.3",
+      "term": "Anterior 2/3 of tongue, NOS",
+      "synonyms": [
+        "Anterior tongue, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 13
+    },
+    {
+      "code": "C02.4",
+      "term": "Lingual tonsil",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 14
+    },
+    {
+      "code": "C02.8",
+      "term": "Overlapping lesion of tongue (see section 4.2.6)",
+      "synonyms": [
+        "Junctional zone of tongue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 15
+    },
+    {
+      "code": "C02.9",
+      "term": "Tongue, NOS",
+      "synonyms": [
+        "Lingual, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C02",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF TONGUE",
+      "groupNote": null,
+      "sortOrder": 16
+    },
+    {
+      "code": "C03.0",
+      "term": "Upper gum",
+      "synonyms": [
+        "Maxillary gingiva",
+        "Upper alveolar mucosa",
+        "Upper alveolar ridge mucosa",
+        "Upper alveolus",
+        "Upper gingiva"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 17
+    },
+    {
+      "code": "C03.1",
+      "term": "Lower gum",
+      "synonyms": [
+        "Mandibular gingiva",
+        "Lower alveolar mucosa",
+        "Lower alveolar ridge mucosa",
+        "Lower alveolus",
+        "Lower gingiva"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 18
+    },
+    {
+      "code": "C03.9",
+      "term": "Gum, NOS",
+      "synonyms": [
+        "Gingiva, NOS",
+        "Alveolar mucosa, NOS",
+        "Alveolar ridge mucosa, NOS",
+        "Alveolus, NOS",
+        "Periodontal tissue",
+        "Tooth socket"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C03",
+      "groupName": "GUM",
+      "groupNote": null,
+      "sortOrder": 19
+    },
+    {
+      "code": "C04.0",
+      "term": "Anterior floor of mouth",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 20
+    },
+    {
+      "code": "C04.1",
+      "term": "Lateral floor of mouth",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 21
+    },
+    {
+      "code": "C04.8",
+      "term": "Overlapping lesion of floor of mouth (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 22
+    },
+    {
+      "code": "C04.9",
+      "term": "Floor of mouth, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C04",
+      "groupName": "FLOOR OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 23
+    },
+    {
+      "code": "C05.0",
+      "term": "Hard palate",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 24
+    },
+    {
+      "code": "C05.1",
+      "term": "Soft palate, NOS (excludes nasopharyngeal surface of soft palate C11.3)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 25
+    },
+    {
+      "code": "C05.2",
+      "term": "Uvula",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 26
+    },
+    {
+      "code": "C05.8",
+      "term": "Overlapping lesion of palate (see section 4.2.6)",
+      "synonyms": [
+        "Junction of hard and soft palate"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 27
+    },
+    {
+      "code": "C05.9",
+      "term": "Palate, NOS",
+      "synonyms": [
+        "Roof of mouth"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C05",
+      "groupName": "PALATE",
+      "groupNote": null,
+      "sortOrder": 28
+    },
+    {
+      "code": "C06.0",
+      "term": "Cheek mucosa",
+      "synonyms": [
+        "Buccal mucosa",
+        "Internal cheek"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C06",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 29
+    },
+    {
+      "code": "C06.1",
+      "term": "Vestibule of mouth",
+      "synonyms": [
+        "Alveolar sulcus",
+        "Buccal sulcus",
+        "Labial sulcus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C06",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 30
+    },
+    {
+      "code": "C06.2",
+      "term": "Retromolar area",
+      "synonyms": [
+        "Retromolar triangle",
+        "Retromolar trigone"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C06",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 31
+    },
+    {
+      "code": "C06.8",
+      "term": "Overlapping lesion of other and unspecified parts of mouth (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C06",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 32
+    },
+    {
+      "code": "C06.9",
+      "term": "Mouth, NOS",
+      "synonyms": [
+        "Buccal cavity",
+        "Oral cavity",
+        "Oral mucosa",
+        "Minor salivary gland, NOS (see section 4.3.5)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C06",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF MOUTH",
+      "groupNote": null,
+      "sortOrder": 33
+    },
+    {
+      "code": "C07.9",
+      "term": "Parotid gland",
+      "synonyms": [
+        "Parotid, NOS",
+        "Stensen duct",
+        "Parotid gland duct"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C07",
+      "groupName": "PAROTID GLAND",
+      "groupNote": null,
+      "sortOrder": 34
+    },
+    {
+      "code": "C08.0",
+      "term": "Submandibular gland",
+      "synonyms": [
+        "Submaxillary gland",
+        "Wharton duct",
+        "Submaxillary gland duct"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C08",
+      "groupName": "OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS",
+      "groupNote": "Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",
+      "sortOrder": 35
+    },
+    {
+      "code": "C08.1",
+      "term": "Sublingual gland",
+      "synonyms": [
+        "Sublingual gland duct"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C08",
+      "groupName": "OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS",
+      "groupNote": "Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",
+      "sortOrder": 36
+    },
+    {
+      "code": "C08.8",
+      "term": "Overlapping lesion of major salivary glands (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C08",
+      "groupName": "OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS",
+      "groupNote": "Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",
+      "sortOrder": 37
+    },
+    {
+      "code": "C08.9",
+      "term": "Major salivary gland, NOS",
+      "synonyms": [
+        "Salivary gland, NOS (see section 4.3.5) (excludes minor salivary gland, NOS C06.9)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C08",
+      "groupName": "OTHER AND UNSPECIFIED MAJOR SALIVARY GLANDS",
+      "groupNote": "Note: Neoplasms of minor salivary glands should be classified according to their anatomical site; if location is not specified, classify to C06.9",
+      "sortOrder": 38
+    },
+    {
+      "code": "C09.0",
+      "term": "Tonsillar fossa",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C09",
+      "groupName": "TONSIL",
+      "groupNote": null,
+      "sortOrder": 39
+    },
+    {
+      "code": "C09.1",
+      "term": "Tonsillar pillar",
+      "synonyms": [
+        "Faucial pillar",
+        "Glossopalatine fold"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C09",
+      "groupName": "TONSIL",
+      "groupNote": null,
+      "sortOrder": 40
+    },
+    {
+      "code": "C09.8",
+      "term": "Overlapping lesion of tonsil (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C09",
+      "groupName": "TONSIL",
+      "groupNote": null,
+      "sortOrder": 41
+    },
+    {
+      "code": "C09.9",
+      "term": "Tonsil, NOS (excludes lingual tonsil C02.4 and pharyngeal tonsil C11.1)",
+      "synonyms": [
+        "Faucial tonsil",
+        "Palatine tonsil"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C09",
+      "groupName": "TONSIL",
+      "groupNote": null,
+      "sortOrder": 42
+    },
+    {
+      "code": "C10.0",
+      "term": "Vallecula",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 43
+    },
+    {
+      "code": "C10.1",
+      "term": "Anterior surface of epiglottis",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 44
+    },
+    {
+      "code": "C10.2",
+      "term": "Lateral wall of oropharynx",
+      "synonyms": [
+        "Lateral wall of mesopharynx"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 45
+    },
+    {
+      "code": "C10.3",
+      "term": "Posterior wall of oropharynx",
+      "synonyms": [
+        "Posterior wall of mesopharynx"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 46
+    },
+    {
+      "code": "C10.4",
+      "term": "Branchial cleft (site of neoplasm)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 47
+    },
+    {
+      "code": "C10.8",
+      "term": "Overlapping lesion of oropharynx (see section 4.2.6)",
+      "synonyms": [
+        "Junctional region of oropharynx"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 48
+    },
+    {
+      "code": "C10.9",
+      "term": "Oropharynx, NOS",
+      "synonyms": [
+        "Mesopharynx, NOS",
+        "Fauces, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C10",
+      "groupName": "OROPHARYNX",
+      "groupNote": null,
+      "sortOrder": 49
+    },
+    {
+      "code": "C11.0",
+      "term": "Superior wall of nasopharynx",
+      "synonyms": [
+        "Roof of nasopharynx"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 50
+    },
+    {
+      "code": "C11.1",
+      "term": "Posterior wall of nasopharynx",
+      "synonyms": [
+        "Adenoid",
+        "Pharyngeal tonsil"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 51
+    },
+    {
+      "code": "C11.2",
+      "term": "Lateral wall of nasopharynx",
+      "synonyms": [
+        "Fossa of Rosenmuller"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 52
+    },
+    {
+      "code": "C11.3",
+      "term": "Anterior wall of nasopharynx",
+      "synonyms": [
+        "Nasopharyngeal surface of soft palate",
+        "Pharyngeal fornix",
+        "Choana",
+        "Posterior margin of nasal septum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 53
+    },
+    {
+      "code": "C11.8",
+      "term": "Overlapping lesion of nasopharynx (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 54
+    },
+    {
+      "code": "C11.9",
+      "term": "Nasopharynx, NOS",
+      "synonyms": [
+        "Nasopharyngeal wall"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C11",
+      "groupName": "NASOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 55
+    },
+    {
+      "code": "C12.9",
+      "term": "Pyriform sinus",
+      "synonyms": [
+        "Piriform sinus",
+        "Pyriform fossa",
+        "Piriform fossa"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C12",
+      "groupName": "PYRIFORM SINUS",
+      "groupNote": null,
+      "sortOrder": 56
+    },
+    {
+      "code": "C13.0",
+      "term": "Postcricoid region",
+      "synonyms": [
+        "Cricopharynx",
+        "Cricoid, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C13",
+      "groupName": "HYPOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 57
+    },
+    {
+      "code": "C13.1",
+      "term": "Hypopharyngeal aspect of aryepiglottic fold",
+      "synonyms": [
+        "Aryepiglottic fold, NOS (excludes laryngeal aspect of aryepiglottic fold C32.1)",
+        "Arytenoid fold"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C13",
+      "groupName": "HYPOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 58
+    },
+    {
+      "code": "C13.2",
+      "term": "Posterior wall of hypopharynx",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C13",
+      "groupName": "HYPOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 59
+    },
+    {
+      "code": "C13.8",
+      "term": "Overlapping lesion of hypopharynx (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C13",
+      "groupName": "HYPOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 60
+    },
+    {
+      "code": "C13.9",
+      "term": "Hypopharynx, NOS",
+      "synonyms": [
+        "Hypopharyngeal wall",
+        "Laryngopharynx"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C13",
+      "groupName": "HYPOPHARYNX",
+      "groupNote": null,
+      "sortOrder": 61
+    },
+    {
+      "code": "C14.0",
+      "term": "Pharynx, NOS",
+      "synonyms": [
+        "Pharyngeal wall, NOS",
+        "Wall of pharynx, NOS",
+        "Lateral wall of pharynx, NOS",
+        "Posterior wall of pharynx, NOS",
+        "Retropharynx",
+        "Throat"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C14",
+      "groupName": "OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",
+      "groupNote": null,
+      "sortOrder": 62
+    },
+    {
+      "code": "C14.2",
+      "term": "Waldeyer ring",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C14",
+      "groupName": "OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",
+      "groupNote": null,
+      "sortOrder": 63
+    },
+    {
+      "code": "C14.8",
+      "term": "Overlapping lesion of lip, oral cavity and pharynx (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C14",
+      "groupName": "OTHER AND ILL-DEFINED SITES IN LIP, ORAL CAVITY AND PHARYNX",
+      "groupNote": null,
+      "sortOrder": 64
+    },
+    {
+      "code": "C15.0",
+      "term": "Cervical esophagus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 65
+    },
+    {
+      "code": "C15.1",
+      "term": "Thoracic esophagus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 66
+    },
+    {
+      "code": "C15.2",
+      "term": "Abdominal esophagus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 67
+    },
+    {
+      "code": "C15.3",
+      "term": "Upper third of esophagus",
+      "synonyms": [
+        "Proximal third of esophagus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 68
+    },
+    {
+      "code": "C15.4",
+      "term": "Middle third of esophagus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 69
+    },
+    {
+      "code": "C15.5",
+      "term": "Lower third of esophagus",
+      "synonyms": [
+        "Distal third of esophagus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 70
+    },
+    {
+      "code": "C15.8",
+      "term": "Overlapping lesion of esophagus (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 71
+    },
+    {
+      "code": "C15.9",
+      "term": "Esophagus, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C15",
+      "groupName": "ESOPHAGUS",
+      "groupNote": null,
+      "sortOrder": 72
+    },
+    {
+      "code": "C16.0",
+      "term": "Cardia, NOS",
+      "synonyms": [
+        "Gastric cardia",
+        "Cardioesophageal junction",
+        "Esophagogastric junction",
+        "Gastroesophageal junction"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 73
+    },
+    {
+      "code": "C16.1",
+      "term": "Fundus of stomach",
+      "synonyms": [
+        "Gastric fundus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 74
+    },
+    {
+      "code": "C16.2",
+      "term": "Body of stomach",
+      "synonyms": [
+        "Corpus of stomach",
+        "Gastric corpus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 75
+    },
+    {
+      "code": "C16.3",
+      "term": "Gastric antrum",
+      "synonyms": [
+        "Antrum of stomach",
+        "Pyloric antrum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 76
+    },
+    {
+      "code": "C16.4",
+      "term": "Pylorus",
+      "synonyms": [
+        "Pyloric canal",
+        "Prepylorus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 77
+    },
+    {
+      "code": "C16.5",
+      "term": "Lesser curvature of stomach, NOS (not classifiable to C16.1 to C16.4)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 78
+    },
+    {
+      "code": "C16.6",
+      "term": "Greater curvature of stomach, NOS (not classifiable to C16.0 to C16.4)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 79
+    },
+    {
+      "code": "C16.8",
+      "term": "Overlapping lesion of stomach (see section 4.2.6)",
+      "synonyms": [
+        "Anterior wall of stomach, NOS (not classifiable to C16.0 to C16.4)",
+        "Posterior wall of stomach, NOS (not classifiable to C16.0 to C16.4)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 80
+    },
+    {
+      "code": "C16.9",
+      "term": "Stomach, NOS",
+      "synonyms": [
+        "Gastric, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C16",
+      "groupName": "STOMACH",
+      "groupNote": null,
+      "sortOrder": 81
+    },
+    {
+      "code": "C17.0",
+      "term": "Duodenum",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 82
+    },
+    {
+      "code": "C17.1",
+      "term": "Jejunum",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 83
+    },
+    {
+      "code": "C17.2",
+      "term": "Ileum (excludes ileocecal valve C18.0)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 84
+    },
+    {
+      "code": "C17.3",
+      "term": "Meckel diverticulum (site of neoplasm)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 85
+    },
+    {
+      "code": "C17.8",
+      "term": "Overlapping lesion of small intestine (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 86
+    },
+    {
+      "code": "C17.9",
+      "term": "Small intestine, NOS",
+      "synonyms": [
+        "Small bowel, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C17",
+      "groupName": "SMALL INTESTINE",
+      "groupNote": null,
+      "sortOrder": 87
+    },
+    {
+      "code": "C18.0",
+      "term": "Cecum",
+      "synonyms": [
+        "Ileocecal valve",
+        "Ileocecal junction"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 88
+    },
+    {
+      "code": "C18.1",
+      "term": "Appendix",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 89
+    },
+    {
+      "code": "C18.2",
+      "term": "Ascending colon",
+      "synonyms": [
+        "Right colon"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 90
+    },
+    {
+      "code": "C18.3",
+      "term": "Hepatic flexure of colon",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 91
+    },
+    {
+      "code": "C18.4",
+      "term": "Transverse colon",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 92
+    },
+    {
+      "code": "C18.5",
+      "term": "Splenic flexure of colon",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 93
+    },
+    {
+      "code": "C18.6",
+      "term": "Descending colon",
+      "synonyms": [
+        "Left colon"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 94
+    },
+    {
+      "code": "C18.7",
+      "term": "Sigmoid colon",
+      "synonyms": [
+        "Sigmoid, NOS",
+        "Sigmoid flexure of colon",
+        "Pelvic colon"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 95
+    },
+    {
+      "code": "C18.8",
+      "term": "Overlapping lesion of colon (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 96
+    },
+    {
+      "code": "C18.9",
+      "term": "Colon, NOS",
+      "synonyms": [
+        "Large intestine (excludes rectum, NOS C20.9 and recrectosigmoid junction C19.9)",
+        "Large bowel, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C18",
+      "groupName": "COLON",
+      "groupNote": null,
+      "sortOrder": 97
+    },
+    {
+      "code": "C19.9",
+      "term": "Rectosigmoid junction",
+      "synonyms": [
+        "Rectosigmoid, NOS",
+        "Rectosigmoid colon",
+        "Colon and rectum",
+        "Pelvirectal junction"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C19",
+      "groupName": "RECTOSIGMOID JUNCTION",
+      "groupNote": null,
+      "sortOrder": 98
+    },
+    {
+      "code": "C20.9",
+      "term": "Rectum, NOS",
+      "synonyms": [
+        "Rectal ampulla"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C20",
+      "groupName": "RECTUM",
+      "groupNote": null,
+      "sortOrder": 99
+    },
+    {
+      "code": "C21.0",
+      "term": "Anus, NOS (excludes skin of anus and perianal skin C44.5)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C21",
+      "groupName": "ANUS AND ANAL CANAL",
+      "groupNote": null,
+      "sortOrder": 100
+    },
+    {
+      "code": "C21.1",
+      "term": "Anal canal",
+      "synonyms": [
+        "Anal sphincter"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C21",
+      "groupName": "ANUS AND ANAL CANAL",
+      "groupNote": null,
+      "sortOrder": 101
+    },
+    {
+      "code": "C21.2",
+      "term": "Cloacogenic zone",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C21",
+      "groupName": "ANUS AND ANAL CANAL",
+      "groupNote": null,
+      "sortOrder": 102
+    },
+    {
+      "code": "C21.8",
+      "term": "Overlapping lesion of rectum, anus and anal canal (see section 4.2.6)",
+      "synonyms": [
+        "Anorectal junction",
+        "Anorectum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C21",
+      "groupName": "ANUS AND ANAL CANAL",
+      "groupNote": null,
+      "sortOrder": 103
+    },
+    {
+      "code": "C22.0",
+      "term": "Liver",
+      "synonyms": [
+        "Hepatic, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C22",
+      "groupName": "LIVER AND INTRAHEPATIC BILE DUCTS",
+      "groupNote": null,
+      "sortOrder": 104
+    },
+    {
+      "code": "C22.1",
+      "term": "Intrahepatic bile duct",
+      "synonyms": [
+        "Biliary canaliculus",
+        "Cholangiole"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C22",
+      "groupName": "LIVER AND INTRAHEPATIC BILE DUCTS",
+      "groupNote": null,
+      "sortOrder": 105
+    },
+    {
+      "code": "C23.9",
+      "term": "Gallbladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C23",
+      "groupName": "GALLBLADDER",
+      "groupNote": null,
+      "sortOrder": 106
+    },
+    {
+      "code": "C24.0",
+      "term": "Extrahepatic bile duct",
+      "synonyms": [
+        "Bile duct, NOS",
+        "Biliary duct, NOS",
+        "Choledochal duct",
+        "Common bile duct",
+        "Common duct",
+        "Cystic bile duct",
+        "Cystic duct",
+        "Hepatic bile duct",
+        "Hepatic duct",
+        "Sphincter of Oddi"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C24",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT",
+      "groupNote": null,
+      "sortOrder": 107
+    },
+    {
+      "code": "C24.1",
+      "term": "Ampulla of Vater",
+      "synonyms": [
+        "Periampullary"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C24",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT",
+      "groupNote": null,
+      "sortOrder": 108
+    },
+    {
+      "code": "C24.8",
+      "term": "Overlapping lesion of biliary tract (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C24",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT",
+      "groupNote": null,
+      "sortOrder": 109
+    },
+    {
+      "code": "C24.9",
+      "term": "Biliary tract, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C24",
+      "groupName": "OTHER AND UNSPECIFIED PARTS OF BILIARY TRACT",
+      "groupNote": "Note: Neoplams involving both intrahepatic and extrahepatic bile ducts",
+      "sortOrder": 110
+    },
+    {
+      "code": "C25.0",
+      "term": "Head of pancreas",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 111
+    },
+    {
+      "code": "C25.1",
+      "term": "Body of pancreas",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 112
+    },
+    {
+      "code": "C25.2",
+      "term": "Tail of pancreas",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 113
+    },
+    {
+      "code": "C25.3",
+      "term": "Pancreatic duct",
+      "synonyms": [
+        "Duct of Santorini",
+        "Duct of Wirsung"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 114
+    },
+    {
+      "code": "C25.4",
+      "term": "Islets of Langerhans",
+      "synonyms": [
+        "Islands of Langerhans",
+        "Endocrine pancreas"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 115
+    },
+    {
+      "code": "C25.7",
+      "term": "Other specified parts of pancreas",
+      "synonyms": [
+        "Neck of pancreas"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 116
+    },
+    {
+      "code": "C25.8",
+      "term": "Overlapping lesion of pancreas (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 117
+    },
+    {
+      "code": "C25.9",
+      "term": "Pancreas, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C25",
+      "groupName": "PANCREAS",
+      "groupNote": null,
+      "sortOrder": 118
+    },
+    {
+      "code": "C26.0",
+      "term": "Intestinal tract, NOS",
+      "synonyms": [
+        "Bowel, NOS",
+        "Intestine, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C26",
+      "groupName": "OTHER AND ILL-DEFINED DIGESTIVE ORGANS",
+      "groupNote": null,
+      "sortOrder": 119
+    },
+    {
+      "code": "C26.8",
+      "term": "Overlapping lesion of digestive system (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C26",
+      "groupName": "OTHER AND ILL-DEFINED DIGESTIVE ORGANS",
+      "groupNote": null,
+      "sortOrder": 120
+    },
+    {
+      "code": "C26.9",
+      "term": "Gastrointestinal tract, NOS",
+      "synonyms": [
+        "Alimentary tract, NOS",
+        "Digestive organs, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C26",
+      "groupName": "OTHER AND ILL-DEFINED DIGESTIVE ORGANS",
+      "groupNote": "Note: Neoplasms of digestive organs whose point of origin cannot be assigned to any one of the categories C15 to C26.0",
+      "sortOrder": 121
+    },
+    {
+      "code": "C30.0",
+      "term": "Nasal cavity (excludes nose, NOS C76.0)",
+      "synonyms": [
+        "Internal nose",
+        "Naris",
+        "Nasal cartilage",
+        "Nasal mucosa",
+        "Nasal septum, NOS (excludes posterior margin of nasal septum C11.3)",
+        "Nasal turbinate",
+        "Nostril",
+        "Vestibule of nose"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C30",
+      "groupName": "NASAL CAVITY AND MIDDLE EAR",
+      "groupNote": null,
+      "sortOrder": 122
+    },
+    {
+      "code": "C30.1",
+      "term": "Middle ear",
+      "synonyms": [
+        "Inner ear",
+        "Auditory tube",
+        "Eustachian tube",
+        "Mastoid antrum",
+        "Tympanic cavity"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C30",
+      "groupName": "NASAL CAVITY AND MIDDLE EAR",
+      "groupNote": null,
+      "sortOrder": 123
+    },
+    {
+      "code": "C31.0",
+      "term": "Maxillary sinus",
+      "synonyms": [
+        "Maxillary antrum",
+        "Antrum, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 124
+    },
+    {
+      "code": "C31.1",
+      "term": "Ethmoid sinus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 125
+    },
+    {
+      "code": "C31.2",
+      "term": "Frontal sinus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 126
+    },
+    {
+      "code": "C31.3",
+      "term": "Sphenoid sinus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 127
+    },
+    {
+      "code": "C31.8",
+      "term": "Overlapping lesion of accessory sinuses (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 128
+    },
+    {
+      "code": "C31.9",
+      "term": "Accessory sinus, NOS",
+      "synonyms": [
+        "Accessory nasal sinus",
+        "Paranasal sinus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C31",
+      "groupName": "ACCESSORY SINUSES",
+      "groupNote": null,
+      "sortOrder": 129
+    },
+    {
+      "code": "C32.0",
+      "term": "Glottis",
+      "synonyms": [
+        "Intrinsic larynx",
+        "Laryngeal commissure",
+        "Vocal cord, NOS",
+        "True vocal cord",
+        "True cord"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 130
+    },
+    {
+      "code": "C32.1",
+      "term": "Supraglottis",
+      "synonyms": [
+        "Epiglottis, NOS (excludes anterior surface of epiglottis C10.1)",
+        "Extrinsic larynx",
+        "Laryngeal aspect of aryepiglottic fold",
+        "Posterior surface of epiglottis",
+        "Ventricular band of larynx",
+        "False vocal cord",
+        "False cord"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 131
+    },
+    {
+      "code": "C32.2",
+      "term": "Subglottis",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 132
+    },
+    {
+      "code": "C32.3",
+      "term": "Laryngeal cartilage",
+      "synonyms": [
+        "Arytenoid cartilage",
+        "Cricoid cartilage",
+        "Cuneiform cartilage",
+        "Thyroid cartilage"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 133
+    },
+    {
+      "code": "C32.8",
+      "term": "Overlapping lesion of larynx (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 134
+    },
+    {
+      "code": "C32.9",
+      "term": "Larynx, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C32",
+      "groupName": "LARYNX",
+      "groupNote": null,
+      "sortOrder": 135
+    },
+    {
+      "code": "C33.9",
+      "term": "Trachea",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C33",
+      "groupName": "TRACHEA",
+      "groupNote": null,
+      "sortOrder": 136
+    },
+    {
+      "code": "C34.0",
+      "term": "Main bronchus",
+      "synonyms": [
+        "Carina",
+        "Hilus of lung"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 137
+    },
+    {
+      "code": "C34.1",
+      "term": "Upper lobe, lung",
+      "synonyms": [
+        "Lingula of lung",
+        "Upper lobe, bronchus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 138
+    },
+    {
+      "code": "C34.2",
+      "term": "Middle lobe, lung",
+      "synonyms": [
+        "Middle lobe, bronchus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 139
+    },
+    {
+      "code": "C34.3",
+      "term": "Lower lobe, lung",
+      "synonyms": [
+        "Lower lobe, bronchus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 140
+    },
+    {
+      "code": "C34.8",
+      "term": "Overlapping lesion of lung (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 141
+    },
+    {
+      "code": "C34.9",
+      "term": "Lung, NOS",
+      "synonyms": [
+        "Bronchus, NOS",
+        "Bronchiole",
+        "Bronchogenic",
+        "Pulmonary, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C34",
+      "groupName": "BRONCHUS AND LUNG",
+      "groupNote": null,
+      "sortOrder": 142
+    },
+    {
+      "code": "C37.9",
+      "term": "Thymus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C37",
+      "groupName": "THYMUS",
+      "groupNote": null,
+      "sortOrder": 143
+    },
+    {
+      "code": "C38.0",
+      "term": "Heart",
+      "synonyms": [
+        "Endocardium",
+        "Epicardium",
+        "Myocardium",
+        "Pericardium",
+        "Cardiac ventricle",
+        "Cardiac atrium"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 144
+    },
+    {
+      "code": "C38.1",
+      "term": "Anterior mediastinum",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 145
+    },
+    {
+      "code": "C38.2",
+      "term": "Posterior mediastinum",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 146
+    },
+    {
+      "code": "C38.3",
+      "term": "Mediastinum, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 147
+    },
+    {
+      "code": "C38.4",
+      "term": "Pleura, NOS",
+      "synonyms": [
+        "Parietal pleura",
+        "Visceral pleura"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 148
+    },
+    {
+      "code": "C38.8",
+      "term": "Overlapping lesion of heart, mediastinum and pleura (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C38",
+      "groupName": "HEART, MEDIASTINUM, AND PLEURA",
+      "groupNote": null,
+      "sortOrder": 149
+    },
+    {
+      "code": "C39.0",
+      "term": "Upper respiratory tract, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C39",
+      "groupName": "OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS",
+      "groupNote": null,
+      "sortOrder": 150
+    },
+    {
+      "code": "C39.8",
+      "term": "Overlapping lesion of respiratory system and intrathoracic organs (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C39",
+      "groupName": "OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS",
+      "groupNote": null,
+      "sortOrder": 151
+    },
+    {
+      "code": "C39.9",
+      "term": "Ill-defined sites within respiratory system",
+      "synonyms": [
+        "Respiratory tract, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C39",
+      "groupName": "OTHER AND ILL-DEFINED SITES WITHIN RESPIRATORY SYSTEM AND INTRATHORACIC ORGANS",
+      "groupNote": "Note: Neoplasm of respiratory and intrathoracic organs whose point of origin cannot be assigned to any one of the categories C30 to C39.0",
+      "sortOrder": 152
+    },
+    {
+      "code": "C40.0",
+      "term": "Long bones of upper limb, scapula and associated joints",
+      "synonyms": [
+        "Acromioclavicular joint",
+        "Bone of arm",
+        "Bone of forearm",
+        "Bone of shoulder",
+        "Elbow joint",
+        "Humerus",
+        "Radius",
+        "Scapula",
+        "Shoulder girdle",
+        "Shoulder joint",
+        "Ulna"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 153
+    },
+    {
+      "code": "C40.1",
+      "term": "Short bones of upper limb and associated joints",
+      "synonyms": [
+        "Bone of finger",
+        "Bone of hand",
+        "Bone of thumb",
+        "Bone of wrist",
+        "Carpal bone",
+        "Hand joint",
+        "Metacarpal bone",
+        "Phalanx of hand",
+        "Wrist joint"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 154
+    },
+    {
+      "code": "C40.2",
+      "term": "Long bones of lower limb and associated joints",
+      "synonyms": [
+        "Bone of leg",
+        "Femur",
+        "Fibula",
+        "Knee joint, NOS",
+        "Semilunar cartilage",
+        "Lateral meniscus of knee joint",
+        "Medial meniscus of knee joint",
+        "Tibia"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 155
+    },
+    {
+      "code": "C40.3",
+      "term": "Short bones of lower limb and associated joints",
+      "synonyms": [
+        "Ankle joint",
+        "Bone of ankle",
+        "Bone of foot",
+        "Bone of heel",
+        "Bone of toe",
+        "Foot joint",
+        "Metatarsal bone",
+        "Patella",
+        "Phalanx of foot",
+        "Tarsal bone"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 156
+    },
+    {
+      "code": "C40.8",
+      "term": "Overlapping lesion of bones, joints and articular cartilage of limbs (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 157
+    },
+    {
+      "code": "C40.9",
+      "term": "Bone of limb, NOS",
+      "synonyms": [
+        "Cartilage of limb, NOS",
+        "Joint of limb, NOS",
+        "Articular cartilage of limb, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C40",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF LIMBS",
+      "groupNote": null,
+      "sortOrder": 158
+    },
+    {
+      "code": "C41.0",
+      "term": "Bones of skull and face and associated joints (excludes mandible C41.1)",
+      "synonyms": [
+        "Calvarium",
+        "Cranial bone",
+        "Ethmoid bone",
+        "Facial bone",
+        "Frontal bone",
+        "Hyoid bone",
+        "Maxilla",
+        "Upper jaw bone",
+        "Nasal bone",
+        "Occipital bone",
+        "Orbital bone",
+        "Parietal bone",
+        "Skull, NOS",
+        "Sphenoid bone",
+        "Temporal bone",
+        "Zygomatic bone"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 159
+    },
+    {
+      "code": "C41.1",
+      "term": "Mandible",
+      "synonyms": [
+        "Jaw bone, NOS",
+        "Lower jaw bone",
+        "Temporomandibular joint"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 160
+    },
+    {
+      "code": "C41.2",
+      "term": "Vertebral column (excludes sacrum and coccyx C41.4)",
+      "synonyms": [
+        "Atlas",
+        "Axis",
+        "Bone of back",
+        "Intervertebral disc",
+        "Nucleus pulposus",
+        "Spinal column",
+        "Spine",
+        "Vertebra"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 161
+    },
+    {
+      "code": "C41.3",
+      "term": "Rib, sternum, clavicle and associated joints",
+      "synonyms": [
+        "Costal cartilage",
+        "Costovertebral joint",
+        "Sternocostal joint"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 162
+    },
+    {
+      "code": "C41.4",
+      "term": "Pelvic bones, sacrum, coccyx and associated joints",
+      "synonyms": [
+        "Acetabulum",
+        "Bone of hip",
+        "Coccyx",
+        "Hip joint",
+        "Ilium",
+        "Innominate bone",
+        "Ischium",
+        "Pelvic bone",
+        "Pubic bone",
+        "Sacrum",
+        "Symphysis pubis"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 163
+    },
+    {
+      "code": "C41.8",
+      "term": "Overlapping lesion of bones, joints and articular cartilage (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": null,
+      "sortOrder": 164
+    },
+    {
+      "code": "C41.9",
+      "term": "Bone, NOS",
+      "synonyms": [
+        "Joint, NOS",
+        "Cartilage, NOS",
+        "Skeletal bone",
+        "Articular cartilage, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C41",
+      "groupName": "BONES, JOINTS AND ARTICULAR CARTILAGE OF OTHER AND UNSPECIFIED SITES",
+      "groupNote": "Note: Neoplasms of bones, joints and articular cartilage whose point of origin cannot be assigned to any one of the categories C40 to C41",
+      "sortOrder": 165
+    },
+    {
+      "code": "C42.0",
+      "term": "Blood",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C42",
+      "groupName": "HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS",
+      "groupNote": null,
+      "sortOrder": 166
+    },
+    {
+      "code": "C42.1",
+      "term": "Bone marrow",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C42",
+      "groupName": "HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS",
+      "groupNote": null,
+      "sortOrder": 167
+    },
+    {
+      "code": "C42.2",
+      "term": "Spleen",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C42",
+      "groupName": "HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS",
+      "groupNote": null,
+      "sortOrder": 168
+    },
+    {
+      "code": "C42.3",
+      "term": "Reticuloendothelial system, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C42",
+      "groupName": "HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS",
+      "groupNote": null,
+      "sortOrder": 169
+    },
+    {
+      "code": "C42.4",
+      "term": "Hematopoietic system, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C42",
+      "groupName": "HEMATOPOIETIC AND RETICULOENDOTHELIAL SYSTEMS",
+      "groupNote": null,
+      "sortOrder": 170
+    },
+    {
+      "code": "C44.0",
+      "term": "Skin of lip, NOS",
+      "synonyms": [
+        "Skin of lower lip",
+        "Skin of upper lip"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 171
+    },
+    {
+      "code": "C44.1",
+      "term": "Eyelid",
+      "synonyms": [
+        "Lid, NOS",
+        "Palpebra",
+        "Canthus, NOS",
+        "Inner canthus",
+        "Lower lid",
+        "Meibomian gland",
+        "Outer canthus",
+        "Upper lid"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 172
+    },
+    {
+      "code": "C44.2",
+      "term": "External ear",
+      "synonyms": [
+        "Auricle, NOS",
+        "Pinna",
+        "Ceruminal gland",
+        "Concha",
+        "Ear, NOS",
+        "Ear lobule",
+        "Earlobe",
+        "External auditory canal",
+        "Auditory canal, NOS",
+        "Auricular canal, NOS",
+        "External auricular canal",
+        "Ear canal",
+        "External auditory meatus",
+        "Helix",
+        "Skin of auricle",
+        "Skin of ear, NOS",
+        "Tragus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 173
+    },
+    {
+      "code": "C44.3",
+      "term": "Skin of other and unspecified parts of face",
+      "synonyms": [
+        "Ala nasi",
+        "Chin, NOS",
+        "Columnella",
+        "Eyebrow",
+        "Brow",
+        "External cheek",
+        "External nose",
+        "Forehead, NOS",
+        "Temple, NOS",
+        "Skin of head, NOS"
+      ],
+      "subSiteLeadIn": "Skin of:",
+      "subSites": [
+        "cheek",
+        "chin",
+        "face",
+        "forehead",
+        "jaw",
+        "nose",
+        "temple"
+      ],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 174
+    },
+    {
+      "code": "C44.4",
+      "term": "Skin of scalp and neck",
+      "synonyms": [
+        "Skin of neck",
+        "Skin of scalp",
+        "Scalp, NOS",
+        "Skin of cervical region",
+        "Skin of supraclavicular region"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 175
+    },
+    {
+      "code": "C44.5",
+      "term": "Skin of trunk",
+      "synonyms": [
+        "Perianal skin",
+        "Umbilicus, NOS"
+      ],
+      "subSiteLeadIn": "Skin of:",
+      "subSites": [
+        "abdomen",
+        "abdominal wall",
+        "anus",
+        "axilla",
+        "back",
+        "breast",
+        "buttock",
+        "chest",
+        "chest wall",
+        "flank",
+        "groin",
+        "perineum",
+        "thoracic wall",
+        "thorax",
+        "trunk",
+        "umbilicus",
+        "gluteal region",
+        "infraclavicular region",
+        "inguinal region",
+        "sacrococcygeal region",
+        "scapular region"
+      ],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 176
+    },
+    {
+      "code": "C44.6",
+      "term": "Skin of upper limb and shoulder",
+      "synonyms": [
+        "Finger nail",
+        "Palmar skin"
+      ],
+      "subSiteLeadIn": "Skin of:",
+      "subSites": [
+        "antecubital space",
+        "arm",
+        "elbow",
+        "finger",
+        "forearm",
+        "hand",
+        "palm",
+        "shoulder",
+        "thumb",
+        "upper limb",
+        "wrist"
+      ],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 177
+    },
+    {
+      "code": "C44.7",
+      "term": "Skin of lower limb and hip",
+      "synonyms": [
+        "Plantar skin",
+        "Sole of foot",
+        "Toe nail"
+      ],
+      "subSiteLeadIn": "Skin of:",
+      "subSites": [
+        "ankle",
+        "calf",
+        "foot",
+        "heel",
+        "hip",
+        "knee",
+        "leg",
+        "lower limb",
+        "popliteal space",
+        "thigh",
+        "toe"
+      ],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 178
+    },
+    {
+      "code": "C44.8",
+      "term": "Overlapping lesion of skin (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 179
+    },
+    {
+      "code": "C44.9",
+      "term": "Skin, NOS (excludes skin of labia majora C51.0, skin of vulva C51.9, skin of penis C60.9, and skin of scrotum C63.2)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C44",
+      "groupName": "SKIN (excludes skin of vulva C51._, skin of penis C60.9, skin of scrotum C63.2)",
+      "groupNote": null,
+      "sortOrder": 180
+    },
+    {
+      "code": "C47.0",
+      "term": "Peripheral nerves and autonomic nervous system of head, face, and neck (excludes peripheral nerves and autonomic nervous system of orbit C69.6)",
+      "synonyms": [
+        "Cervical plexus"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "cheek",
+        "chin",
+        "face",
+        "forehead",
+        "head",
+        "neck",
+        "scalp",
+        "temple",
+        "cervical region",
+        "pterygoid fossa",
+        "supraclavicular region"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 181
+    },
+    {
+      "code": "C47.1",
+      "term": "Peripheral nerves and autonomic nervous system of upper limb and shoulder",
+      "synonyms": [
+        "Brachial nerve",
+        "Brachial plexus",
+        "Median nerve",
+        "Radial nerve",
+        "Ulnar nerve"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "antecubital space",
+        "arm",
+        "elbow",
+        "finger",
+        "forearm",
+        "hand",
+        "shoulder",
+        "thumb",
+        "wrist"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 182
+    },
+    {
+      "code": "C47.2",
+      "term": "Peripheral nerves and autonomic nervous system of lower limband hip",
+      "synonyms": [
+        "Femoral nerve",
+        "Obturator nerve",
+        "Sciatic nerve"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "ankle",
+        "calf",
+        "foot",
+        "heel",
+        "hip",
+        "knee",
+        "leg",
+        "popliteal space",
+        "thigh",
+        "toe"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 183
+    },
+    {
+      "code": "C47.3",
+      "term": "Peripheral nerves and autonomic nervous system of thorax",
+      "synonyms": [
+        "Intercostal nerve"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "axilla",
+        "chest",
+        "chest wall",
+        "thoracic wall",
+        "infraclavicular region",
+        "scapular region"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 184
+    },
+    {
+      "code": "C47.4",
+      "term": "Peripheral nerves and autonomic nervous system of abdomen",
+      "synonyms": [],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "abdominal wall",
+        "umbilicus"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 185
+    },
+    {
+      "code": "C47.5",
+      "term": "Peripheral nerves and autonomic nervous system of pelvis",
+      "synonyms": [
+        "Lumbosacral plexus",
+        "Sacral nerve",
+        "Sacral plexus"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "buttock",
+        "groin",
+        "perineum",
+        "gluteal region",
+        "inguinal region",
+        "sacrococcygeal region"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 186
+    },
+    {
+      "code": "C47.6",
+      "term": "Peripheral nerves and autonomic nervous system of trunk, NOS",
+      "synonyms": [
+        "Lumbar nerve"
+      ],
+      "subSiteLeadIn": "Peripheral nerves and autonomic nervous system of: (see list under C47)",
+      "subSites": [
+        "back",
+        "flank",
+        "trunk"
+      ],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 187
+    },
+    {
+      "code": "C47.8",
+      "term": "Overlapping lesion of peripheral nerves and autonomic nervous system (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 188
+    },
+    {
+      "code": "C47.9",
+      "term": "Autonomic nervous system, NOS",
+      "synonyms": [
+        "Ganglia, NOS",
+        "Nerve, NOS",
+        "Parasympathetic nervous system, NOS",
+        "Peripheral nerve, NOS",
+        "Spinal nerve, NOS",
+        "Sympathetic nervous system, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C47",
+      "groupName": "PERIPHERAL NERVES AND AUTONOMIC NERVOUS SYSTEM (includes autonomic nervous system, ganglia, nerve, parasympathetic nervous system, peripheral nerve, spinal nerve, sympathetic nervous system)",
+      "groupNote": null,
+      "sortOrder": 189
+    },
+    {
+      "code": "C48.0",
+      "term": "Retroperitoneum",
+      "synonyms": [
+        "Periadrenal tissue",
+        "Perinephric tissue",
+        "Peripancreatic tissue",
+        "Perirenal tissue",
+        "Retrocecal tissue",
+        "Retroperitoneal tissue"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C48",
+      "groupName": "RETROPERITONEUM AND PERITONEUM",
+      "groupNote": null,
+      "sortOrder": 190
+    },
+    {
+      "code": "C48.1",
+      "term": "Specified parts of peritoneum",
+      "synonyms": [
+        "Mesentery",
+        "Mesoappendix",
+        "Mesocolon",
+        "Omentum",
+        "Pelvic peritoneum",
+        "Rectouterine pouch",
+        "Cul de sac",
+        "Pouch of Douglas (see section 4.2.6)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C48",
+      "groupName": "RETROPERITONEUM AND PERITONEUM",
+      "groupNote": null,
+      "sortOrder": 191
+    },
+    {
+      "code": "C48.2",
+      "term": "Peritoneum, NOS",
+      "synonyms": [
+        "Peritoneal cavity"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C48",
+      "groupName": "RETROPERITONEUM AND PERITONEUM",
+      "groupNote": null,
+      "sortOrder": 192
+    },
+    {
+      "code": "C48.8",
+      "term": "Overlapping lesion of retroperitoneum and peritoneum (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C48",
+      "groupName": "RETROPERITONEUM AND PERITONEUM",
+      "groupNote": null,
+      "sortOrder": 193
+    },
+    {
+      "code": "C49.0",
+      "term": "Connective, subcutaneous and other soft tissues of head, face, and neck (excludes connective tissue of orbit C69.6 and nasal cartilage C30.0)",
+      "synonyms": [
+        "Auricular cartilage",
+        "Cartilage of ear",
+        "Carotid artery",
+        "Masseter muscle",
+        "Sternocleidomastoid muscle"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "cheek",
+        "chin",
+        "face",
+        "forehead",
+        "head",
+        "neck",
+        "scalp",
+        "temple",
+        "cervical region",
+        "pterygoid fossa",
+        "supraclavicular region"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 194
+    },
+    {
+      "code": "C49.1",
+      "term": "Connective, subcutaneous and other soft tissues of upper limb and shoulder",
+      "synonyms": [
+        "Biceps brachii muscle",
+        "Brachialis muscle",
+        "Coracobrachialis muscle",
+        "Deltoideus muscle",
+        "Palmar aponeurosis",
+        "Palmar fascia",
+        "Radial artery",
+        "Triceps brachii muscle",
+        "Ulnar artery"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "antecubital space",
+        "arm",
+        "elbow",
+        "finger",
+        "forearm",
+        "hand",
+        "shoulder",
+        "thumb",
+        "wrist"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 195
+    },
+    {
+      "code": "C49.2",
+      "term": "Connective, subcutaneous and other soft tissues of lower limb and hip",
+      "synonyms": [
+        "Biceps femoris muscle",
+        "Femoral artery",
+        "Gastrocnemius muscle",
+        "Plantar aponeurosis",
+        "Plantar fascia",
+        "Quadriceps femoris muscle"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "ankle",
+        "calf",
+        "foot",
+        "heel",
+        "hip",
+        "knee",
+        "leg",
+        "popliteal space",
+        "thigh",
+        "toe"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 196
+    },
+    {
+      "code": "C49.3",
+      "term": "Connective, subcutaneous and other soft tissues of thorax (excludes thymus C37.9, heart and mediastinum C38._)",
+      "synonyms": [
+        "Aorta, NOS",
+        "Axillary artery",
+        "Diaphragm",
+        "Intercostal muscle",
+        "Internal mammary artery",
+        "Latissimus dorsi muscle",
+        "Pectoralis major muscle",
+        "Subclavian artery",
+        "Superior vena cava",
+        "Thoracic duct",
+        "Trapezius muscle"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "axilla",
+        "chest",
+        "chest wall",
+        "thorax",
+        "thoracic wall",
+        "infraclavicular region",
+        "scapular region"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 197
+    },
+    {
+      "code": "C49.4",
+      "term": "Connective, subcutaneous and other soft tissues of abdomen",
+      "synonyms": [
+        "Abdominal aorta",
+        "Abdominal vena cava",
+        "Abdominal wall muscle",
+        "Celiac artery",
+        "Iliopsoas muscle",
+        "Inferior vena cava",
+        "Mesenteric artery",
+        "Psoas muscle",
+        "Rectus abdominis muscle",
+        "Renal artery",
+        "Vena cava, NOS"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "abdomen",
+        "abdominal wall",
+        "umbilicus"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 198
+    },
+    {
+      "code": "C49.5",
+      "term": "Connective, subcutaneous and other soft tissues of pelvis",
+      "synonyms": [
+        "Gluteus maximus muscle",
+        "Iliac artery",
+        "Iliac vein"
+      ],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "buttock",
+        "groin",
+        "perineum",
+        "gluteal region",
+        "inguinal region",
+        "sacrococcygeal region"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 199
+    },
+    {
+      "code": "C49.6",
+      "term": "Connective, subcutaneous and other soft tissues of trunk NOS",
+      "synonyms": [],
+      "subSiteLeadIn": "Connective, subcutaneous and other soft tissues of: (see list under C49)",
+      "subSites": [
+        "back",
+        "flank",
+        "trunk"
+      ],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 200
+    },
+    {
+      "code": "C49.8",
+      "term": "Overlapping lesion of connective, subcutaneous and other soft tissues (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 201
+    },
+    {
+      "code": "C49.9",
+      "term": "Connective, subcutaneous and other soft tissues, NOS",
+      "synonyms": [
+        "Adipose tissue, NOS",
+        "Aponeurosis, NOS",
+        "Artery, NOS",
+        "Blood vessel, NOS",
+        "Bursa, NOS",
+        "Connective tissue, NOS",
+        "Fascia, NOS",
+        "Fatty tissue, NOS",
+        "Fibrous tissue, NOS",
+        "Ligament, NOS",
+        "Lymphatic, NOS",
+        "Muscle, NOS",
+        "Skeletal muscle, NOS",
+        "Subcutaneous tissue, NOS",
+        "Synovia, NOS",
+        "Tendon, NOS",
+        "Tendon sheath, NOS",
+        "Vein, NOS",
+        "Vessel, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C49",
+      "groupName": "CONNECTIVE, SUBCUTANEOUS AND OTHER SOFT TISSUES (includes adipose tissue, aponeuroses, artery, blood vessel, bursa, connective tissue, fascia, fatty tissue, fibrous tissue, ligament, lymphatic, muscle, skeletal muscle, subcutaneous tissue, synovia, tendon, tendon sheath, vein, vessel)",
+      "groupNote": null,
+      "sortOrder": 202
+    },
+    {
+      "code": "C50.0",
+      "term": "Nipple",
+      "synonyms": [
+        "Areola"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 203
+    },
+    {
+      "code": "C50.1",
+      "term": "Central portion of breast",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 204
+    },
+    {
+      "code": "C50.2",
+      "term": "Upper-inner quadrant of breast",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 205
+    },
+    {
+      "code": "C50.3",
+      "term": "Lower-inner quadrant of breast",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 206
+    },
+    {
+      "code": "C50.4",
+      "term": "Upper-outer quadrant of breast",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 207
+    },
+    {
+      "code": "C50.5",
+      "term": "Lower-outer quadrant of breast",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 208
+    },
+    {
+      "code": "C50.6",
+      "term": "Axillary tail of breast",
+      "synonyms": [
+        "Tail of breast, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 209
+    },
+    {
+      "code": "C50.8",
+      "term": "Overlapping lesion of breast (see section 4.2.6)",
+      "synonyms": [
+        "Inner breast",
+        "Lower breast",
+        "Midline of breast",
+        "Outer breast",
+        "Upper breast"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 210
+    },
+    {
+      "code": "C50.9",
+      "term": "Breast, NOS",
+      "synonyms": [
+        "Mammary gland"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C50",
+      "groupName": "BREAST (excludes skin of breast C44.5)",
+      "groupNote": null,
+      "sortOrder": 211
+    },
+    {
+      "code": "C51.0",
+      "term": "Labium majus",
+      "synonyms": [
+        "Labia majora, NOS",
+        "Bartholin gland",
+        "Skin of labia majora"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C51",
+      "groupName": "VULVA",
+      "groupNote": null,
+      "sortOrder": 212
+    },
+    {
+      "code": "C51.1",
+      "term": "Labium minus",
+      "synonyms": [
+        "Labia minora"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C51",
+      "groupName": "VULVA",
+      "groupNote": null,
+      "sortOrder": 213
+    },
+    {
+      "code": "C51.2",
+      "term": "Clitoris",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C51",
+      "groupName": "VULVA",
+      "groupNote": null,
+      "sortOrder": 214
+    },
+    {
+      "code": "C51.8",
+      "term": "Overlapping lesion of vulva (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C51",
+      "groupName": "VULVA",
+      "groupNote": null,
+      "sortOrder": 215
+    },
+    {
+      "code": "C51.9",
+      "term": "Vulva, NOS",
+      "synonyms": [
+        "External female genitalia",
+        "Fourchette",
+        "Labia, NOS",
+        "Labium, NOS",
+        "Mons pubis",
+        "Mons veneris",
+        "Pudendum",
+        "Skin of vulva"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C51",
+      "groupName": "VULVA",
+      "groupNote": null,
+      "sortOrder": 216
+    },
+    {
+      "code": "C52.9",
+      "term": "Vagina, NOS",
+      "synonyms": [
+        "Vaginal vault",
+        "Fornix of vagina",
+        "Gartner duct",
+        "Hymen"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C52",
+      "groupName": "VAGINA",
+      "groupNote": null,
+      "sortOrder": 217
+    },
+    {
+      "code": "C53.0",
+      "term": "Endocervix",
+      "synonyms": [
+        "Internal os",
+        "Cervical canal",
+        "Endocervical canal",
+        "Endocervical gland",
+        "Nabothian gland"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C53",
+      "groupName": "CERVIX UTERI",
+      "groupNote": null,
+      "sortOrder": 218
+    },
+    {
+      "code": "C53.1",
+      "term": "Exocervix",
+      "synonyms": [
+        "External os"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C53",
+      "groupName": "CERVIX UTERI",
+      "groupNote": null,
+      "sortOrder": 219
+    },
+    {
+      "code": "C53.8",
+      "term": "Overlapping lesion of cervix uteri (see section 4.2.6)",
+      "synonyms": [
+        "Cervical stump",
+        "Squamocolumnar junction of cervix"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C53",
+      "groupName": "CERVIX UTERI",
+      "groupNote": null,
+      "sortOrder": 220
+    },
+    {
+      "code": "C53.9",
+      "term": "Cervix uteri",
+      "synonyms": [
+        "Cervix, NOS",
+        "Uterine cervix"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C53",
+      "groupName": "CERVIX UTERI",
+      "groupNote": null,
+      "sortOrder": 221
+    },
+    {
+      "code": "C54.0",
+      "term": "Isthmus uteri",
+      "synonyms": [
+        "Lower uterine segment"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 222
+    },
+    {
+      "code": "C54.1",
+      "term": "Endometrium",
+      "synonyms": [
+        "Endometrial gland",
+        "Endometrial stroma"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 223
+    },
+    {
+      "code": "C54.2",
+      "term": "Myometrium",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 224
+    },
+    {
+      "code": "C54.3",
+      "term": "Fundus uteri",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 225
+    },
+    {
+      "code": "C54.8",
+      "term": "Overlapping lesion of corpus uteri (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 226
+    },
+    {
+      "code": "C54.9",
+      "term": "Corpus uteri",
+      "synonyms": [
+        "Body of uterus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C54",
+      "groupName": "CORPUS UTERI",
+      "groupNote": null,
+      "sortOrder": 227
+    },
+    {
+      "code": "C55.9",
+      "term": "Uterus, NOS",
+      "synonyms": [
+        "Uterine, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C55",
+      "groupName": "UTERUS, NOS",
+      "groupNote": null,
+      "sortOrder": 228
+    },
+    {
+      "code": "C56.9",
+      "term": "Ovary",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C56",
+      "groupName": "OVARY",
+      "groupNote": null,
+      "sortOrder": 229
+    },
+    {
+      "code": "C57.0",
+      "term": "Fallopian tube",
+      "synonyms": [
+        "Uterine tube"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 230
+    },
+    {
+      "code": "C57.1",
+      "term": "Broad ligament",
+      "synonyms": [
+        "Mesovarium",
+        "Parovarian region"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 231
+    },
+    {
+      "code": "C57.2",
+      "term": "Round ligament",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 232
+    },
+    {
+      "code": "C57.3",
+      "term": "Parametrium",
+      "synonyms": [
+        "Uterine ligament",
+        "Uterosacral ligament",
+        "Uterine adnexa",
+        "Adnexa, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 233
+    },
+    {
+      "code": "C57.4",
+      "term": "Uterine adnexa",
+      "synonyms": [
+        "Adnexa, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 234
+    },
+    {
+      "code": "C57.7",
+      "term": "Other specified parts of female genital organs",
+      "synonyms": [
+        "Wolffian body",
+        "Wolffian duct"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 235
+    },
+    {
+      "code": "C57.8",
+      "term": "Overlapping lesion of female genital organs (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 236
+    },
+    {
+      "code": "C57.9",
+      "term": "Female genital tract, NOS",
+      "synonyms": [
+        "Female genital organs, NOS",
+        "Female genitourinary tract, NOS",
+        "Urethrovaginal septum",
+        "Vesicocervical tissue",
+        "Vesicovaginal septum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C57",
+      "groupName": "OTHER AND UNSPECIFIED FEMALE GENITAL ORGANS",
+      "groupNote": "Note: Neoplasms of female genital organs whose point of origin cannot be assigned to any one of the categories C51 to C57.7, C58 Tubo-ovarian Utero-ovarian",
+      "sortOrder": 237
+    },
+    {
+      "code": "C58.9",
+      "term": "Placenta",
+      "synonyms": [
+        "Fetal membranes"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C58",
+      "groupName": "PLACENTA",
+      "groupNote": null,
+      "sortOrder": 238
+    },
+    {
+      "code": "C60.0",
+      "term": "Prepuce",
+      "synonyms": [
+        "Foreskin"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C60",
+      "groupName": "PENIS",
+      "groupNote": null,
+      "sortOrder": 239
+    },
+    {
+      "code": "C60.1",
+      "term": "Glans penis",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C60",
+      "groupName": "PENIS",
+      "groupNote": null,
+      "sortOrder": 240
+    },
+    {
+      "code": "C60.2",
+      "term": "Body of penis",
+      "synonyms": [
+        "Corpus cavernosum",
+        "Corpus of penis"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C60",
+      "groupName": "PENIS",
+      "groupNote": null,
+      "sortOrder": 241
+    },
+    {
+      "code": "C60.8",
+      "term": "Overlapping lesion of penis (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C60",
+      "groupName": "PENIS",
+      "groupNote": null,
+      "sortOrder": 242
+    },
+    {
+      "code": "C60.9",
+      "term": "Penis, NOS",
+      "synonyms": [
+        "Skin of penis"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C60",
+      "groupName": "PENIS",
+      "groupNote": null,
+      "sortOrder": 243
+    },
+    {
+      "code": "C61.9",
+      "term": "Prostate gland",
+      "synonyms": [
+        "Prostate, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C61",
+      "groupName": "PROSTATE GLAND",
+      "groupNote": null,
+      "sortOrder": 244
+    },
+    {
+      "code": "C62.0",
+      "term": "Undescended testis (site of neoplasm)",
+      "synonyms": [
+        "Retained testis (site of neoplasm)",
+        "Ectopic testis (site of neoplasm)"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C62",
+      "groupName": "TESTIS",
+      "groupNote": null,
+      "sortOrder": 245
+    },
+    {
+      "code": "C62.1",
+      "term": "Descended testis",
+      "synonyms": [
+        "Scrotal testis"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C62",
+      "groupName": "TESTIS",
+      "groupNote": null,
+      "sortOrder": 246
+    },
+    {
+      "code": "C62.9",
+      "term": "Testis, NOS",
+      "synonyms": [
+        "Testicle, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C62",
+      "groupName": "TESTIS",
+      "groupNote": null,
+      "sortOrder": 247
+    },
+    {
+      "code": "C63.0",
+      "term": "Epididymis",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 248
+    },
+    {
+      "code": "C63.1",
+      "term": "Spermatic cord",
+      "synonyms": [
+        "Vas deferens"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 249
+    },
+    {
+      "code": "C63.2",
+      "term": "Scrotum, NOS",
+      "synonyms": [
+        "Skin of scrotum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 250
+    },
+    {
+      "code": "C63.7",
+      "term": "Other specified parts of male genital organs",
+      "synonyms": [
+        "Seminal vesicle",
+        "Tunica vaginalis"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 251
+    },
+    {
+      "code": "C63.8",
+      "term": "Overlapping lesion of male genital organs (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": null,
+      "sortOrder": 252
+    },
+    {
+      "code": "C63.9",
+      "term": "Male genital organs, NOS",
+      "synonyms": [
+        "Male genital tract, NOS",
+        "Male genitourinary tract, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C63",
+      "groupName": "OTHER AND UNSPECIFIED MALE GENITAL ORGANS",
+      "groupNote": "Note: Neoplasms of male genital organs whose point of origin cannot be assigned to any one of the categories C60 to C63.7",
+      "sortOrder": 253
+    },
+    {
+      "code": "C64.9",
+      "term": "Kidney, NOS",
+      "synonyms": [
+        "Renal, NOS",
+        "Kidney parenchyma"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C64",
+      "groupName": "KIDNEY",
+      "groupNote": null,
+      "sortOrder": 254
+    },
+    {
+      "code": "C65.9",
+      "term": "Renal pelvis",
+      "synonyms": [
+        "Pelvis of kidney",
+        "Renal calyces",
+        "Renal calyx",
+        "Pelviureteric junction"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C65",
+      "groupName": "RENAL PELVIS",
+      "groupNote": null,
+      "sortOrder": 255
+    },
+    {
+      "code": "C66.9",
+      "term": "Ureter",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C66",
+      "groupName": "URETER",
+      "groupNote": null,
+      "sortOrder": 256
+    },
+    {
+      "code": "C67.0",
+      "term": "Trigone of bladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 257
+    },
+    {
+      "code": "C67.1",
+      "term": "Dome of bladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 258
+    },
+    {
+      "code": "C67.2",
+      "term": "Lateral wall of bladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 259
+    },
+    {
+      "code": "C67.3",
+      "term": "Anterior wall of bladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 260
+    },
+    {
+      "code": "C67.4",
+      "term": "Posterior wall of bladder",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 261
+    },
+    {
+      "code": "C67.5",
+      "term": "Bladder neck",
+      "synonyms": [
+        "Internal urethral orifice"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 262
+    },
+    {
+      "code": "C67.6",
+      "term": "Ureteric orifice",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 263
+    },
+    {
+      "code": "C67.7",
+      "term": "Urachus",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 264
+    },
+    {
+      "code": "C67.8",
+      "term": "Overlapping lesion of bladder (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 265
+    },
+    {
+      "code": "C67.9",
+      "term": "Bladder, NOS",
+      "synonyms": [
+        "Bladder wall, NOS",
+        "Urinary bladder, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C67",
+      "groupName": "BLADDER",
+      "groupNote": null,
+      "sortOrder": 266
+    },
+    {
+      "code": "C68.0",
+      "term": "Urethra",
+      "synonyms": [
+        "Urethral gland",
+        "Cowper gland",
+        "Prostatic utricle"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C68",
+      "groupName": "OTHER AND UNSPECIFIED URINARY ORGANS",
+      "groupNote": null,
+      "sortOrder": 267
+    },
+    {
+      "code": "C68.1",
+      "term": "Paraurethral gland",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C68",
+      "groupName": "OTHER AND UNSPECIFIED URINARY ORGANS",
+      "groupNote": null,
+      "sortOrder": 268
+    },
+    {
+      "code": "C68.8",
+      "term": "Overlapping lesion of urinary organs (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C68",
+      "groupName": "OTHER AND UNSPECIFIED URINARY ORGANS",
+      "groupNote": null,
+      "sortOrder": 269
+    },
+    {
+      "code": "C68.9",
+      "term": "Urinary system, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C68",
+      "groupName": "OTHER AND UNSPECIFIED URINARY ORGANS",
+      "groupNote": "Note: Neoplasms of urinary organs whose point of origin cannot be assigned to any one of the categories C64 to C68.1",
+      "sortOrder": 270
+    },
+    {
+      "code": "C69.0",
+      "term": "Conjunctiva",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 271
+    },
+    {
+      "code": "C69.1",
+      "term": "Cornea, NOS",
+      "synonyms": [
+        "Limbus of cornea"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 272
+    },
+    {
+      "code": "C69.2",
+      "term": "Retina",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 273
+    },
+    {
+      "code": "C69.3",
+      "term": "Choroid",
+      "synonyms": [
+        "Crystalline lens"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 274
+    },
+    {
+      "code": "C69.4",
+      "term": "Ciliary body",
+      "synonyms": [
+        "Iris",
+        "Sclera",
+        "Uveal tract",
+        "Intraocular",
+        "Eyeball"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 275
+    },
+    {
+      "code": "C69.5",
+      "term": "Lacrimal gland",
+      "synonyms": [
+        "Lacrimal duct, NOS",
+        "Nasal lacrimal duct",
+        "Nasolacrimal duct",
+        "Lacrimal sac"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 276
+    },
+    {
+      "code": "C69.6",
+      "term": "Orbit, NOS",
+      "synonyms": [
+        "Autonomic nervous system of orbit",
+        "Connective tissue of orbit",
+        "Extraocular muscle",
+        "Peripheral nerves of orbit",
+        "Retrobulbar tissue",
+        "Soft tissue of orbit"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 277
+    },
+    {
+      "code": "C69.8",
+      "term": "Overlapping lesion of eye and adnexa (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 278
+    },
+    {
+      "code": "C69.9",
+      "term": "Eye, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C69",
+      "groupName": "EYE AND ADNEXA",
+      "groupNote": null,
+      "sortOrder": 279
+    },
+    {
+      "code": "C70.0",
+      "term": "Cerebral meninges",
+      "synonyms": [
+        "Cranial dura mater",
+        "Cranial meninges",
+        "Cranial pia mater",
+        "Falx cerebelli",
+        "Falx cerebri",
+        "Falx, NOS",
+        "Intracranial meninges",
+        "Intracranial arachnoid",
+        "Tentorium cerebelli",
+        "Tentorium, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C70",
+      "groupName": "MENINGES",
+      "groupNote": null,
+      "sortOrder": 280
+    },
+    {
+      "code": "C70.1",
+      "term": "Spinal meninges",
+      "synonyms": [
+        "Spinal arachnoid",
+        "Spinal dura mater",
+        "Spinal pia mater"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C70",
+      "groupName": "MENINGES",
+      "groupNote": null,
+      "sortOrder": 281
+    },
+    {
+      "code": "C70.9",
+      "term": "Meninges, NOS",
+      "synonyms": [
+        "Arachnoid, NOS",
+        "Dura, NOS",
+        "Dura mater, NOS",
+        "Pia mater, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C70",
+      "groupName": "MENINGES",
+      "groupNote": null,
+      "sortOrder": 282
+    },
+    {
+      "code": "C71.0",
+      "term": "Cerebrum",
+      "synonyms": [
+        "Basal ganglia",
+        "Central white matter",
+        "Cerebral cortex",
+        "Cerebral hemisphere",
+        "Cerebral white matter",
+        "Corpus striatum",
+        "Globus pallidus",
+        "Hypothalamus",
+        "Insula",
+        "Internal capsule",
+        "Island of Reil",
+        "Operculum",
+        "Pallium",
+        "Putamen",
+        "Rhinencephalon",
+        "Supratentorial brain, NOS",
+        "Thalamus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 283
+    },
+    {
+      "code": "C71.1",
+      "term": "Frontal lobe",
+      "synonyms": [
+        "Frontal pole"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 284
+    },
+    {
+      "code": "C71.2",
+      "term": "Temporal lobe",
+      "synonyms": [
+        "Hippocampus",
+        "Uncus"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 285
+    },
+    {
+      "code": "C71.3",
+      "term": "Parietal lobe",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 286
+    },
+    {
+      "code": "C71.4",
+      "term": "Occipital lobe",
+      "synonyms": [
+        "Occipital pole"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 287
+    },
+    {
+      "code": "C71.5",
+      "term": "Ventricle, NOS",
+      "synonyms": [
+        "Cerebral ventricle",
+        "Choroid plexus, NOS",
+        "Choroid plexus of lateral ventricle",
+        "Choroid plexus of third ventricle",
+        "Ependyma",
+        "Lateral ventricle, NOS",
+        "Third ventricle, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 288
+    },
+    {
+      "code": "C71.6",
+      "term": "Cerebellum, NOS",
+      "synonyms": [
+        "Cerebellopontine angle",
+        "Vermis of cerebellum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 289
+    },
+    {
+      "code": "C71.7",
+      "term": "Brain stem",
+      "synonyms": [
+        "Cerebral peduncle",
+        "Basis pedunculi",
+        "Choroid plexus of fourth ventricle",
+        "Fourth ventricle, NOS",
+        "Infratentorial brain, NOS",
+        "Medulla oblongata",
+        "Midbrain",
+        "Olive",
+        "Pons",
+        "Pyramid"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 290
+    },
+    {
+      "code": "C71.8",
+      "term": "Overlapping lesion of brain (see section 4.2.6)",
+      "synonyms": [
+        "Corpus callosum",
+        "Tapetum"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 291
+    },
+    {
+      "code": "C71.9",
+      "term": "Brain, NOS",
+      "synonyms": [
+        "Intracranial site",
+        "Cranial fossa, NOS",
+        "Anterior cranial fossa",
+        "Middle cranial fossa",
+        "Posterior cranial fossa",
+        "Suprasellar"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C71",
+      "groupName": "BRAIN",
+      "groupNote": null,
+      "sortOrder": 292
+    },
+    {
+      "code": "C72.0",
+      "term": "Spinal cord",
+      "synonyms": [
+        "Cervical cord",
+        "Conus medullaris",
+        "Filum terminale",
+        "Lumbar cord",
+        "Sacral cord",
+        "Thoracic cord"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 293
+    },
+    {
+      "code": "C72.1",
+      "term": "Cauda equina",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 294
+    },
+    {
+      "code": "C72.2",
+      "term": "Olfactory nerve",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 295
+    },
+    {
+      "code": "C72.3",
+      "term": "Optic nerve",
+      "synonyms": [
+        "Optic chiasm",
+        "Optic tract"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 296
+    },
+    {
+      "code": "C72.4",
+      "term": "Acoustic nerve",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 297
+    },
+    {
+      "code": "C72.5",
+      "term": "Cranial nerve, NOS",
+      "synonyms": [
+        "Abducens nerve",
+        "Accessory nerve, NOS",
+        "Spinal accessory nerve",
+        "Facial nerve",
+        "Glossopharyngeal nerve",
+        "Hypoglossal nerve",
+        "Oculomotor nerve",
+        "Trigeminal nerve",
+        "Trochlear nerve",
+        "Vagus nerve"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 298
+    },
+    {
+      "code": "C72.8",
+      "term": "Overlapping lesion of brain and central nervous system (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": null,
+      "sortOrder": 299
+    },
+    {
+      "code": "C72.9",
+      "term": "Nervous system, NOS",
+      "synonyms": [
+        "Central nervous system",
+        "Epidural",
+        "Extradural",
+        "Parasellar"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C72",
+      "groupName": "SPINAL CORD, CRANIAL NERVES, AND OTHER PARTS OF CENTRAL NERVOUS SYSTEM (excludes peripheral nerves, sympathetic and parasympathetic nerves and ganglia C47)",
+      "groupNote": "Note: Neoplasms of brain and central nervous system whose point of origin cannot be assigned to any one of the categories C70 to C72.5",
+      "sortOrder": 300
+    },
+    {
+      "code": "C73.9",
+      "term": "Thyroid gland",
+      "synonyms": [
+        "Thyroid, NOS",
+        "Thyroglossal duct"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C73",
+      "groupName": "THYROID GLAND",
+      "groupNote": null,
+      "sortOrder": 301
+    },
+    {
+      "code": "C74.0",
+      "term": "Cortex of adrenal gland",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C74",
+      "groupName": "ADRENAL GLAND",
+      "groupNote": null,
+      "sortOrder": 302
+    },
+    {
+      "code": "C74.1",
+      "term": "Medulla of adrenal gland",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C74",
+      "groupName": "ADRENAL GLAND",
+      "groupNote": null,
+      "sortOrder": 303
+    },
+    {
+      "code": "C74.9",
+      "term": "Adrenal gland, NOS",
+      "synonyms": [
+        "Suprarenal gland",
+        "Adrenal, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C74",
+      "groupName": "ADRENAL GLAND",
+      "groupNote": null,
+      "sortOrder": 304
+    },
+    {
+      "code": "C75.0",
+      "term": "Parathyroid gland",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 305
+    },
+    {
+      "code": "C75.1",
+      "term": "Pituitary gland",
+      "synonyms": [
+        "Pituitary, NOS",
+        "Hypophysis",
+        "Rathke pouch",
+        "Sella turcica",
+        "Pituitary fossa"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 306
+    },
+    {
+      "code": "C75.2",
+      "term": "Craniopharyngeal duct",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 307
+    },
+    {
+      "code": "C75.3",
+      "term": "Pineal gland",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 308
+    },
+    {
+      "code": "C75.4",
+      "term": "Carotid body",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 309
+    },
+    {
+      "code": "C75.5",
+      "term": "Aortic body and other paraganglia",
+      "synonyms": [
+        "Coccygeal body",
+        "Coccygeal glomus",
+        "Glomus jugulare",
+        "Para-aortic body",
+        "Organ of Zuckerkandl",
+        "Paraganglion"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 310
+    },
+    {
+      "code": "C75.8",
+      "term": "Overlapping lesion of endocrine glands and related structures (see section 4.2.6)",
+      "synonyms": [
+        "Multiple endocrine glands",
+        "Pluriglandular"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 311
+    },
+    {
+      "code": "C75.9",
+      "term": "Endocrine gland, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C75",
+      "groupName": "OTHER ENDOCRINE GLANDS AND RELATED STRUCTURES",
+      "groupNote": null,
+      "sortOrder": 312
+    },
+    {
+      "code": "C76.0",
+      "term": "Head, face or neck, NOS",
+      "synonyms": [
+        "Cheek, NOS",
+        "Jaw, NOS",
+        "Nose, NOS",
+        "Cervical region, NOS",
+        "Supraclavicular region, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 313
+    },
+    {
+      "code": "C76.1",
+      "term": "Thorax, NOS",
+      "synonyms": [
+        "Axilla, NOS",
+        "Chest, NOS",
+        "Chest wall, NOS",
+        "Intrathoracic site, NOS",
+        "Thoracic wall, NOS",
+        "Infraclavicular region, NOS",
+        "Scapular region, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 314
+    },
+    {
+      "code": "C76.2",
+      "term": "Abdomen, NOS",
+      "synonyms": [
+        "Abdominal wall, NOS",
+        "Intra-abdominal site, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 315
+    },
+    {
+      "code": "C76.3",
+      "term": "Pelvis, NOS",
+      "synonyms": [
+        "Buttock, NOS",
+        "Groin, NOS",
+        "Ischiorectal fossa",
+        "Pelvic wall, NOS",
+        "Perineum, NOS",
+        "Rectovaginal septum",
+        "Rectovesical septum",
+        "Gluteal region, NOS",
+        "Inguinal region, NOS",
+        "Perirectal region, NOS",
+        "Presacral region, NOS",
+        "Sacrococcygeal region, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 316
+    },
+    {
+      "code": "C76.4",
+      "term": "Upper limb, NOS",
+      "synonyms": [
+        "Antecubital space, NOS",
+        "Arm, NOS",
+        "Elbow, NOS",
+        "Finger, NOS",
+        "Forearm, NOS",
+        "Hand, NOS",
+        "Shoulder, NOS",
+        "Thumb, NOS",
+        "Wrist, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 317
+    },
+    {
+      "code": "C76.5",
+      "term": "Lower limb, NOS",
+      "synonyms": [
+        "Ankle, NOS",
+        "Calf, NOS",
+        "Foot, NOS",
+        "Heel, NOS",
+        "Hip, NOS",
+        "Knee, NOS",
+        "Leg, NOS",
+        "Popliteal space, NOS",
+        "Thigh, NOS",
+        "Toe, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 318
+    },
+    {
+      "code": "C76.7",
+      "term": "Other ill-defined sites",
+      "synonyms": [
+        "Back, NOS",
+        "Flank, NOS",
+        "Trunk, NOS"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 319
+    },
+    {
+      "code": "C76.8",
+      "term": "Overlapping lesion of ill-defined sites (see section 4.2.6)",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C76",
+      "groupName": "OTHER AND ILL-DEFINED SITES",
+      "groupNote": null,
+      "sortOrder": 320
+    },
+    {
+      "code": "C77.0",
+      "term": "Lymph nodes of head, face and neck",
+      "synonyms": [
+        "Auricular lymph node",
+        "Cervical lymph node",
+        "Facial lymph node",
+        "Jugular lymph node",
+        "Mandibular lymph node",
+        "Occipital lymph node",
+        "Parotid lymph node",
+        "Preauricular lymph node",
+        "Prelaryngeal lymph node",
+        "Pretracheal lymph node",
+        "Retropharyngeal lymph node",
+        "Scalene lymph node",
+        "Sublingual lymph node",
+        "Submandibular lymph node",
+        "Submaxillary lymph node",
+        "Submental lymph node",
+        "Supraclavicular lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 321
+    },
+    {
+      "code": "C77.1",
+      "term": "Intrathoracic lymph nodes",
+      "synonyms": [
+        "Bronchial lymph node",
+        "Bronchopulmonary lymph node",
+        "Diaphragmatic lymph node",
+        "Esophageal lymph node",
+        "Hilar lymph node, NOS",
+        "Innominate lymph node",
+        "Intercostal lymph node",
+        "Mediastinal lymph node",
+        "Parasternal lymph node",
+        "Pulmonary hilar lymph node",
+        "Pulmonary lymph node, NOS",
+        "Thoracic lymph node",
+        "Tracheal lymph node",
+        "Tracheobronchial lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 322
+    },
+    {
+      "code": "C77.2",
+      "term": "Intra-abdominal lymph nodes",
+      "synonyms": [
+        "Abdominal lymph node",
+        "Aortic lymph node",
+        "Celiac lymph node",
+        "Colic lymph node",
+        "Common duct lymph node",
+        "Gastric lymph node",
+        "Hepatic lymph node",
+        "Ileocolic lymph node",
+        "Inferior mesenteric lymph node",
+        "Intestinal lymph node",
+        "Lumbar lymph node",
+        "Mesenteric lymph node, NOS",
+        "Midcolic lymph node",
+        "Pancreatic lymph node, NOS",
+        "Para-aortic lymph node",
+        "Periaortic lymph node",
+        "Peripancreatic lymph node",
+        "Porta hepatis lymph node",
+        "Portal lymph node",
+        "Pyloric lymph node",
+        "Retroperitoneal lymph node",
+        "Splenic hilar lymph node",
+        "Splenic lymph node, NOS",
+        "Superior mesenteric lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 323
+    },
+    {
+      "code": "C77.3",
+      "term": "Lymph nodes of axilla or arm",
+      "synonyms": [
+        "Axillary lymph node",
+        "Brachial lymph node",
+        "Cubital lymph node",
+        "Epitrochlear lymph node",
+        "Infraclavicular lymph node",
+        "Lymph node of upper limb",
+        "Pectoral lymph node",
+        "Subclavicular lymph node",
+        "Subscapular lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 324
+    },
+    {
+      "code": "C77.4",
+      "term": "Lymph nodes of inguinal region or leg",
+      "synonyms": [
+        "Femoral lymph node",
+        "Inguinal lymph node",
+        "Lymph node of Cloquet",
+        "Lymph node of groin",
+        "Lymph node of lower limb",
+        "Lymph node of Rosenmuller",
+        "Popliteal lymph node",
+        "Subinguinal lymph node",
+        "Tibial lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 325
+    },
+    {
+      "code": "C77.5",
+      "term": "Pelvic lymph nodes",
+      "synonyms": [
+        "Hypogastric lymph node",
+        "Iliac lymph node",
+        "Inferior epigastric lymph node",
+        "Intrapelvic lymph node",
+        "Obturator lymph node",
+        "Paracervical lymph node",
+        "Parametrial lymph node",
+        "Presymphysial lymph node",
+        "Sacral lymph node"
+      ],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 326
+    },
+    {
+      "code": "C77.8",
+      "term": "Lymph nodes of multiple regions",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 327
+    },
+    {
+      "code": "C77.9",
+      "term": "Lymph node, NOS",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C77",
+      "groupName": "LYMPH NODES",
+      "groupNote": null,
+      "sortOrder": 328
+    },
+    {
+      "code": "C80.9",
+      "term": "Unknown primary site",
+      "synonyms": [],
+      "subSiteLeadIn": null,
+      "subSites": [],
+      "groupCode": "C80",
+      "groupName": "UNKNOWN PRIMARY SITE",
+      "groupNote": null,
+      "sortOrder": 329
+    }
+  ]
+}

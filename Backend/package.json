@@ -8,6 +8,9 @@
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
     "seed": "tsx prisma/seed.ts",
+    "seed:icdo3": "tsx scripts/seed-icdo3.ts",
+    "seed:icdo3:icd10": "tsx scripts/seed-icdo3-icd10.ts",
+    "seed:icd10": "tsx scripts/seed-icd10.ts",
     "reset": "tsx prisma/reset_seed.ts",
     "constraints": "node scripts/apply-raw-constraints.mjs",
     "prisma:generate": "prisma generate",
@@ -25,6 +28,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

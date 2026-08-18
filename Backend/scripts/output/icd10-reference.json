@@ -1,0 +1,1036 @@
+{
+  "meta": {
+    "source": "/Users/shobhitsamaria/Desktop/DOITC Code/HBCR/Docs/ICD10_Cancer_Topography_Morphology.xlsx",
+    "sheetNames": [
+      "Overview",
+      "Behaviour (Rule A)",
+      "Primary vs Secondary (Rule B)",
+      "Other Rules (C-F)",
+      "Metastatic Terminology (Rule G)",
+      "All Examples",
+      "Code Ranges Reference"
+    ],
+    "generatedAt": "2026-08-17T07:27:56+00:00",
+    "note": "Extracted verbatim from the ICD-10 workbook (ICD-10 Volume 2 instruction-manual content). Contains code ranges + category names, rules and worked examples only. Individual codes are NOT mapped to descriptions — the workbook has none."
+  },
+  "ranges": [
+    {
+      "code": "C00–C75",
+      "title": "Malignant neoplasms, primary, specified site (excludes lymphoid/haematopoietic tissue)"
+    },
+    {
+      "code": "C76",
+      "title": "Malignant neoplasms of ill-defined sites (primary)"
+    },
+    {
+      "code": "C77–C79",
+      "title": "Secondary (metastatic) malignant neoplasms"
+    },
+    {
+      "code": "C80",
+      "title": "Malignant neoplasm without specification of site (C80.9 = primary site unspecified)"
+    },
+    {
+      "code": "C81–C96",
+      "title": "Malignant neoplasms, primary, lymphoid/haematopoietic/related tissue"
+    },
+    {
+      "code": "D00–D09",
+      "title": "In situ neoplasms"
+    },
+    {
+      "code": "D10–D36",
+      "title": "Benign neoplasms"
+    },
+    {
+      "code": "D37–D48",
+      "title": "Neoplasms of uncertain or unknown behaviour"
+    },
+    {
+      "code": "C40–C41",
+      "title": "Malignant neoplasms of bone and articular cartilage"
+    },
+    {
+      "code": "C43",
+      "title": "Malignant melanoma of skin"
+    },
+    {
+      "code": "C44",
+      "title": "Other malignant neoplasms of skin"
+    },
+    {
+      "code": "C45",
+      "title": "Mesothelioma"
+    },
+    {
+      "code": "C46",
+      "title": "Kaposi's sarcoma"
+    },
+    {
+      "code": "C47",
+      "title": "Malignant neoplasms of peripheral nerves and autonomic nervous system"
+    },
+    {
+      "code": "C49",
+      "title": "Malignant neoplasms of connective and soft tissue"
+    },
+    {
+      "code": "C70",
+      "title": "Malignant neoplasms of meninges"
+    },
+    {
+      "code": "C71",
+      "title": "Malignant neoplasms of brain"
+    },
+    {
+      "code": "C72",
+      "title": "Malignant neoplasms of other parts of central nervous system"
+    },
+    {
+      "code": "C00–C96",
+      "title": "Malignant — Invades surrounding tissue or spreads (metastasizes) to another site"
+    }
+  ],
+  "rules": [
+    {
+      "ruleId": "A",
+      "title": "Behaviour: Malignant, In Situ, Benign, or Uncertain/Unknown",
+      "text": "1. The term itself may indicate behaviour — look up the diagnostic term in the Alphabetical Index (morphology term first, if both morphology and site are given). 2. Other certificate information can indicate behaviour. Treat a neoplasm of unspecified behaviour, one labeled 'in situ', or a growth not indexed to Chapter II (e.g. certain polyps) as MALIGNANT when: it is named as the cause of metastatic spread or cachexia; it is on the same line as, and adjacent to, a mention of secondary spread; no other neoplasm site is mentioned but some other sign of malignancy appears elsewhere on the certificate (e.g. carcinosis, malignant cachexia, malignant transformation); or it is reported as due to a malignant neoplasm (then apply Rule B to decide primary/secondary). 3. If a neoplasm is indexed as benign but reported as causing metastases or infiltration, check whether a malignant-variety code exists and use it if so. Otherwise, try to get clarification; failing that, accept the certificate's 'benign' label. 4. If there is no indication of malignancy at all, code as uncertain/unknown behaviour (D37–D48).",
+      "source": "Behaviour (Rule A)"
+    },
+    {
+      "ruleId": "B",
+      "title": "Malignant Neoplasms: Primary or Secondary?",
+      "text": "Common sites of metastases: Bone, Brain, Diaphragm, Ill-defined sites (classifiable to C76), Liver, Lung, Lymph nodes, Mediastinum, Meninges, Peritoneum, Pleura, Retroperitoneum, Spinal cord. b) Explicit 'primary' — If the certifier writes 'primary', 'primary in', 'originating in', etc., code to the primary block (C00–C76, C80.0, or C81–C96). If morphology is stated, check Volume 3 first — some morphologies carry a specific code overriding the general site/behaviour entry. c) Other primary indications — Code as primary even without an explicit label if: every other malignant neoplasm on the certificate is labelled secondary/metastatic; the code falls in C81–C96 (unless stated secondary); or the site is NOT on the common-metastasis list. c) Primary despite being on the metastasis list — Still code primary if: the stated morphology is site-specific (e.g. glioma → brain, osteosarcoma → bone); the neoplasm is due to a recognized risk factor for that site; it's the only malignant neoplasm mentioned and not called 'metastatic' (except lymph nodes, always secondary unless stated primary; an isolated unqualified liver neoplasm gets C22.9 unspecified); it's lung cancer and every other neoplasm mentioned is metastasis-list (unless another same-part neoplasm is itself primary, then lung is secondary); or it's described as bronchogenic/of bronchus (lung always primary). c) Exceptions — If durations are given, a 'secondary' cannot have a longer duration than its presumed primary. If morphologies are given, a presumed primary and its secondary must share the same morphology. If a non-malignant neoplasm is reported as causing another non-malignant neoplasm, code both per the Alphabetical Index — don't assume malignancy or spread. d) Explicit 'secondary' — Code to C77–C79 using the 'Neoplasm, secondary' list in the Alphabetical Index. e) Other secondary indications — If morphology is stated but incompatible with the stated site, assign the default primary code for that morphology PLUS a secondary code for the stated site. e) Code as secondary when... — Explicitly labelled secondary; unstated and site is on the metastasis list (with exceptions noted above); unstated but the certifier names another site as primary (unless different morphology → two primaries); behaviour unstated and reported as due to a malignant neoplasm (unless duration rules this out); or morphology rules out that site as primary. e) Order of entry — Never used alone to decide primary/secondary. A neoplasm reported as due to another malignant one is secondary only if actually labelled secondary/metastatic, or on the metastasis list. e) 'Primary' vs 'primary in' — 'Primary in X' singles out X as the primary among several tumours of the same/unspecified morphology. Plain 'primary' just means 'not secondary' — it does not imply every other listed tumour is secondary. e) Unknown primary site stated — Code every mentioned site as secondary. All-sites-on-list exception — If EVERY mentioned site is on the metastasis list, code them all secondary and add an unknown-primary code (C80.9, or morphology-specific 'unspecified site' code) — EXCEPT if lung is among them, lung is still coded primary.",
+      "source": "Primary vs Secondary (Rule B)"
+    },
+    {
+      "ruleId": "C-F",
+      "title": "Multiple Primaries, Vague Sites, Unknown Primary, Overlapping Sites",
+      "text": "C. More than one primary malignant neoplasm — Multiple primaries can be reported together; each gets its own code (C00–C76, C80, or C81–C96). Signs of separate primaries: different morphologies for different sites; a site-specific morphology paired with a neoplasm at a site NOT on the metastasis list; neither/none of the sites are on the metastasis list. A less-specific morphology term covering a more-specific term used elsewhere is treated as the same neoplasm. 'Cancer'/'carcinoma' are not morphology terms — just synonyms for 'malignant neoplasm'. D. Site not clearly indicated — step 1 — For sites described as 'area of', 'region of', or prefixed with peri-/para-/pre-/supra-/infra- etc., first check if the compound term itself has an Alphabetical Index entry. D. Site not clearly indicated — step 2 — If no index entry, and morphology is classifiable to C40–C41 (bone/cartilage), C43 (melanoma of skin), C44 (other skin), C45 (mesothelioma), C46 (Kaposi sarcoma), C47 (peripheral nerves), C49 (connective/soft tissue), C70 (meninges), C71 (brain), or C72 (other CNS), code to the matching subdivision. D. Site not clearly indicated — step 3 — Otherwise (no index entry and no matching/stated morphology), code to C76 (other/ill-defined sites). Do NOT infer a primary site from the location of unrelated findings like perforation, obstruction, or haemorrhage — these can occur far from the actual tumour. E. Primary site unknown — If the certificate says the primary site is unknown and suggests no candidate site, code to the 'unspecified site' category for the stated morphology (e.g. adenocarcinoma → C80.0; fibrosarcoma → C49.9; osteosarcoma → C41.9). If a probable/possible primary site IS mentioned, ignore the hedge word and code to that site. If multiple possible primary sites are listed, apply the general 'either one site or another' selection rule (Section 4.3.3 A). F. Overlapping sites — The .8 'overlapping sites' subcategory is used only when the record EXPRESSLY calls the lesion overlapping, or the anatomical term itself implies overlap (e.g. 'rectosigmoid'). It is not used merely because two contiguous sites are both listed — those are coded individually instead.",
+      "source": "Other Rules (C-F)"
+    },
+    {
+      "ruleId": "G",
+      "title": "Parsing the word 'Metastatic'",
+      "text": "'Metastatic' is ambiguous: it can mean a secondary spread from elsewhere, or a primary that has itself spread. These sub-rules resolve the phrasing for multiple-cause mortality coding and take precedence even over the Alphabetical Index. a) 'Metastatic FROM a site' — That site is primary. Code in C00–C76, C80.0, or C81–C96 — even if it's on the common-metastasis list. b) 'Metastatic TO a site' — That site is secondary. Code in C77–C79 — even if it's NOT on the common-metastasis list — UNLESS the morphology is C40–C47, C49, or C70–C72, in which case code to that morphology's unspecified-site category instead. c) 'Metastatic of site A to site B' — A is primary, B is secondary. d) 'Metastatic [specific morphology]' (C40–C47, C49, or C70–C72) — If the reported site fits that morphology → code as primary at that site. If the site does NOT fit → code as secondary at the reported site PLUS a primary/unspecified-site code for that morphology. Codes assigned under this rule are not overridden by rules (e)–(g). e) 'Metastatic' + site on the common-metastasis list, single neoplasm — Coded secondary (C77–C79) even if nothing else is mentioned, plus an unspecified-primary code (C80.9). Exceptions: primary if due to a recognized risk factor for that site; for lung specifically — primary (C34.-) if it's the only neoplasm mentioned, but secondary (C78.0) if another non-metastasis-list neoplasm is also mentioned. e) 'Metastatic' + several metastasis-list sites — If several such neoplasms are mentioned and one or more called 'metastatic', code ALL secondary plus an unspecified-primary code — EXCEPT lung, still primary if every other listed site is also metastasis-list. f) 'Metastatic' + site NOT on the common-metastasis list, mixed with others — Metastasis-list sites → secondary. Non-list sites called 'metastatic' → secondary. Non-list sites not called 'metastatic' → primary. Exception: still primary if due to a recognized site-specific risk factor, regardless of list status.",
+      "source": "Metastatic Terminology (Rule G)"
+    }
+  ],
+  "examples": [
+    {
+      "exampleNo": "1a",
+      "rule": "A",
+      "scenario": "A colon tumour is named as the cause of liver metastases",
+      "resultText": "Colon tumour = primary, C18.9",
+      "codes": [
+        "C18.9"
+      ]
+    },
+    {
+      "exampleNo": "1b",
+      "rule": "A",
+      "scenario": "A colon tumour is named as the cause of cachexia",
+      "resultText": "Colon tumour = primary, C18.9",
+      "codes": [
+        "C18.9"
+      ]
+    },
+    {
+      "exampleNo": "1c",
+      "rule": "A",
+      "scenario": "A colon tumour is linked separately to both liver/lung metastases and to respiratory failure",
+      "resultText": "Colon tumour = primary, C18.9",
+      "codes": [
+        "C18.9"
+      ]
+    },
+    {
+      "exampleNo": "1d",
+      "rule": "A",
+      "scenario": "A colon tumour is written on the same line as, and next to, 'liver metastases'",
+      "resultText": "Colon tumour = primary, C18.9; liver = secondary, C78.7",
+      "codes": [
+        "C18.9",
+        "C78.7"
+      ]
+    },
+    {
+      "exampleNo": "1e",
+      "rule": "A",
+      "scenario": "A breast tumour appears on a line with several unrelated conditions, not adjacent to any mention of spread",
+      "resultText": "Breast tumour not presumed malignant = D48.6 (uncertain behaviour)",
+      "codes": [
+        "D48.6"
+      ]
+    },
+    {
+      "exampleNo": "1f",
+      "rule": "A",
+      "scenario": "All neoplasms except a colon tumour are explicitly called secondary spread",
+      "resultText": "Colon tumour = primary, C18.9",
+      "codes": [
+        "C18.9"
+      ]
+    },
+    {
+      "exampleNo": "1g",
+      "rule": "A",
+      "scenario": "A colon tumour is the only neoplasm named; cancer cachexia noted in Part 2",
+      "resultText": "Colon tumour = primary, C18.9",
+      "codes": [
+        "C18.9"
+      ]
+    },
+    {
+      "exampleNo": "1h",
+      "rule": "A",
+      "scenario": "A brain tumour is reported as due to breast cancer",
+      "resultText": "Brain tumour = secondary, C79.3; breast cancer = underlying cause, C50.9",
+      "codes": [
+        "C50.9",
+        "C79.3"
+      ]
+    },
+    {
+      "exampleNo": "2",
+      "rule": "A",
+      "scenario": "A lung tumour is reported as causing a brain metastasis",
+      "resultText": "Lung tumour = primary, C34.9",
+      "codes": [
+        "C34.9"
+      ]
+    },
+    {
+      "exampleNo": "3",
+      "rule": "B",
+      "scenario": "Cancer of pancreas and stomach reported together",
+      "resultText": "Both primary (neither site is on the metastasis list): C25.9, C16.9",
+      "codes": [
+        "C16.9",
+        "C25.9"
+      ]
+    },
+    {
+      "exampleNo": "4",
+      "rule": "B",
+      "scenario": "Liver and lung cancer reported, with chronic hepatitis also noted",
+      "resultText": "Liver = primary (hepatitis is a known risk factor), C22.9; lung = secondary, C78.0",
+      "codes": [
+        "C22.9",
+        "C78.0"
+      ]
+    },
+    {
+      "exampleNo": "5",
+      "rule": "B",
+      "scenario": "Kidney and lung cancer reported together",
+      "resultText": "Kidney = primary, C64; lung = secondary, C78.0",
+      "codes": [
+        "C64",
+        "C78.0"
+      ]
+    },
+    {
+      "exampleNo": "6",
+      "rule": "B",
+      "scenario": "Lung cancer in Part 1, kidney cancer in Part 2",
+      "resultText": "Both primary — different certificate parts don't influence each other: C34.9, C64",
+      "codes": [
+        "C34.9",
+        "C64"
+      ]
+    },
+    {
+      "exampleNo": "7",
+      "rule": "B",
+      "scenario": "Brain tumour plus a lung tumour called 'probably secondary'",
+      "resultText": "Brain = primary; 'probably' disregarded as uncertainty qualifier",
+      "codes": []
+    },
+    {
+      "exampleNo": "8",
+      "rule": "A",
+      "scenario": "Chest wall involvement called metastatic; breast described as carcinoma in situ",
+      "resultText": "Breast no longer 'in situ' once spread = primary breast cancer, C50.9",
+      "codes": [
+        "C50.9"
+      ]
+    },
+    {
+      "exampleNo": "9",
+      "rule": "A",
+      "scenario": "A stomach polyp is reported as the cause of secondary lung/brain spread",
+      "resultText": "Polyp = primary stomach cancer, C16.9",
+      "codes": [
+        "C16.9"
+      ]
+    },
+    {
+      "exampleNo": "10a",
+      "rule": "B",
+      "scenario": "Brain cancer specified as glioma, alongside kidney cancer",
+      "resultText": "Brain = primary (glioma-specific), C71.9; kidney = primary, C64",
+      "codes": [
+        "C64",
+        "C71.9"
+      ]
+    },
+    {
+      "exampleNo": "10b",
+      "rule": "B",
+      "scenario": "Bone cancer specified as osteosarcoma, alongside colon cancer",
+      "resultText": "Bone = primary (osteosarcoma-specific), C40.9; colon = primary, C18.9",
+      "codes": [
+        "C18.9",
+        "C40.9"
+      ]
+    },
+    {
+      "exampleNo": "10c",
+      "rule": "B",
+      "scenario": "Brain cancer is the only neoplasm mentioned",
+      "resultText": "Brain = primary, C71.9",
+      "codes": [
+        "C71.9"
+      ]
+    },
+    {
+      "exampleNo": "11",
+      "rule": "B",
+      "scenario": "Cancer of cervical lymph nodes, alone on the certificate",
+      "resultText": "Lymph nodes = still secondary, C77.0 (exception to 'sole neoplasm' rule)",
+      "codes": [
+        "C77.0"
+      ]
+    },
+    {
+      "exampleNo": "12",
+      "rule": "B",
+      "scenario": "Cancer described explicitly as 'primary in prostate'",
+      "resultText": "C61",
+      "codes": [
+        "C61"
+      ]
+    },
+    {
+      "exampleNo": "13",
+      "rule": "A",
+      "scenario": "Bladder and lung tumours with no indication of behaviour at all",
+      "resultText": "Both coded uncertain/unspecified behaviour: D41.4, D38.1 (malignancy never assumed without evidence)",
+      "codes": [
+        "D38.1",
+        "D41.4"
+      ]
+    },
+    {
+      "exampleNo": "14",
+      "rule": "B",
+      "scenario": "Adrenal carcinoma reported, with 'primary in kidney' noted elsewhere",
+      "resultText": "Adrenal = secondary, C79.7; kidney = primary, C64",
+      "codes": [
+        "C64",
+        "C79.7"
+      ]
+    },
+    {
+      "exampleNo": "15",
+      "rule": "B",
+      "scenario": "Prostate cancer reported, with primary site stated as unknown",
+      "resultText": "Prostate = secondary, C79.8; C80.0 for unknown primary",
+      "codes": [
+        "C79.8",
+        "C80.0"
+      ]
+    },
+    {
+      "exampleNo": "16a/16b",
+      "rule": "B",
+      "scenario": "A brain tumour reported as due to lung cancer",
+      "resultText": "Brain = secondary (metastasis-list + linked to lung), C79.3; lung = primary, C34.9",
+      "codes": [
+        "C34.9",
+        "C79.3"
+      ]
+    },
+    {
+      "exampleNo": "17",
+      "rule": "B",
+      "scenario": "Liver and lymph-node involvement reported, plus stomach cancer",
+      "resultText": "Liver & lymph nodes = secondary; stomach = primary, C16.9",
+      "codes": [
+        "C16.9"
+      ]
+    },
+    {
+      "exampleNo": "18",
+      "rule": "B",
+      "scenario": "Lung, pleura, and chest-wall cancer reported together",
+      "resultText": "Lung = primary, C34.9; pleura/chest wall = secondary",
+      "codes": [
+        "C34.9"
+      ]
+    },
+    {
+      "exampleNo": "19",
+      "rule": "B",
+      "scenario": "Mesothelioma of pleura, plus lymph-node involvement",
+      "resultText": "Pleura = primary (mesothelioma-compatible), C45.0; lymph nodes = secondary, C77.9",
+      "codes": [
+        "C45.0",
+        "C77.9"
+      ]
+    },
+    {
+      "exampleNo": "20",
+      "rule": "B",
+      "scenario": "Lung cancer in Part 1, stomach cancer in Part 2",
+      "resultText": "Both primary — lung's coding unaffected by a neoplasm in a different certificate part",
+      "codes": []
+    },
+    {
+      "exampleNo": "21",
+      "rule": "B",
+      "scenario": "Bladder and kidney cancer reported together",
+      "resultText": "Both primary — neither is on the metastasis list: C67.9, C64",
+      "codes": [
+        "C64",
+        "C67.9"
+      ]
+    },
+    {
+      "exampleNo": "22",
+      "rule": "C",
+      "scenario": "Osteosarcoma of sacrum plus clear-cell kidney cancer",
+      "resultText": "Both primary — bone is metastasis-list but osteosarcoma is bone-specific; different morphologies",
+      "codes": []
+    },
+    {
+      "exampleNo": "23",
+      "rule": "B",
+      "scenario": "Osteosarcoma reported at the lung",
+      "resultText": "Site incompatible with morphology = osteosarcoma unspecified site (primary), C41.9, plus secondary lung neoplasm, C78.0",
+      "codes": [
+        "C41.9",
+        "C78.0"
+      ]
+    },
+    {
+      "exampleNo": "24",
+      "rule": "C",
+      "scenario": "Bladder carcinoma plus osteosarcoma stated primary in knee",
+      "resultText": "Both primary — bladder not metastasis-list; different morphologies",
+      "codes": []
+    },
+    {
+      "exampleNo": "25",
+      "rule": "C",
+      "scenario": "Hepatoma plus breast cancer",
+      "resultText": "Both primary — hepatoma is liver-specific; breast not metastasis-list",
+      "codes": []
+    },
+    {
+      "exampleNo": "26",
+      "rule": "C",
+      "scenario": "Glioblastoma plus breast cancer",
+      "resultText": "Both primary — glioblastoma is brain/CNS-specific even though brain is metastasis-list; breast not metastasis-list",
+      "codes": []
+    },
+    {
+      "exampleNo": "27",
+      "rule": "D",
+      "scenario": "Fibrosarcoma 'in the region of' the pancreas",
+      "resultText": "C49.4 (connective/soft tissue, abdomen)",
+      "codes": [
+        "C49.4"
+      ]
+    },
+    {
+      "exampleNo": "28",
+      "rule": "D",
+      "scenario": "Carcinoma 'in the lung area'",
+      "resultText": "C76.1 (ill-defined site, thorax)",
+      "codes": [
+        "C76.1"
+      ]
+    },
+    {
+      "exampleNo": "29",
+      "rule": "D",
+      "scenario": "Intestinal obstruction plus an unspecified carcinoma",
+      "resultText": "Carcinoma = C80.9 (site not assumed from obstruction's location)",
+      "codes": [
+        "C80.9"
+      ]
+    },
+    {
+      "exampleNo": "30",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma, primary site unknown",
+      "resultText": "Unknown primary = C80.0",
+      "codes": [
+        "C80.0"
+      ]
+    },
+    {
+      "exampleNo": "31",
+      "rule": "E",
+      "scenario": "Generalized metastases, melanoma, primary site unknown",
+      "resultText": "Melanoma = primary, unspecified site, C43.9",
+      "codes": [
+        "C43.9"
+      ]
+    },
+    {
+      "exampleNo": "32",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma; primary 'unknown, possibly stomach'",
+      "resultText": "Stomach coded as primary, C16.9 ('possibly' disregarded)",
+      "codes": [
+        "C16.9"
+      ]
+    },
+    {
+      "exampleNo": "33",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma; primary 'probably stomach or colon'",
+      "resultText": "Coded to ill-defined digestive-system site, C26.9",
+      "codes": [
+        "C26.9"
+      ]
+    },
+    {
+      "exampleNo": "34",
+      "rule": "F",
+      "scenario": "'Overlapping' neoplasm of tongue and floor of mouth",
+      "resultText": "C14.8",
+      "codes": [
+        "C14.8"
+      ]
+    },
+    {
+      "exampleNo": "35",
+      "rule": "F",
+      "scenario": "Malignant neoplasm of 'rectosigmoid colon'",
+      "resultText": "C19 (term itself implies overlap)",
+      "codes": [
+        "C19"
+      ]
+    },
+    {
+      "exampleNo": "36",
+      "rule": "F",
+      "scenario": "Malignant neoplasm of colon and gallbladder, no overlap stated",
+      "resultText": "Coded as two separate primaries: C18.9, C23",
+      "codes": [
+        "C18.9",
+        "C23"
+      ]
+    },
+    {
+      "exampleNo": "37",
+      "rule": "G",
+      "scenario": "'Metastatic' osteosarcoma of sacrum",
+      "resultText": "Site fits morphology = primary, C41.4",
+      "codes": [
+        "C41.4"
+      ]
+    },
+    {
+      "exampleNo": "38",
+      "rule": "G",
+      "scenario": "'Metastatic' osteosarcoma of kidney",
+      "resultText": "Site doesn't fit = secondary at kidney (C79.0) + primary osteosarcoma unspecified site (C41.9)",
+      "codes": [
+        "C41.9",
+        "C79.0"
+      ]
+    },
+    {
+      "exampleNo": "39",
+      "rule": "G",
+      "scenario": "'Metastatic' lung cancer specified as adenocarcinoma, sole entry",
+      "resultText": "Adenocarcinoma can be primary in lung = primary, C34.9",
+      "codes": [
+        "C34.9"
+      ]
+    },
+    {
+      "exampleNo": "40",
+      "rule": "G",
+      "scenario": "Bladder cancer plus 'metastatic' prostate cancer",
+      "resultText": "Bladder = primary, C67.9; prostate = secondary, C79.8 (order doesn't matter)",
+      "codes": [
+        "C67.9",
+        "C79.8"
+      ]
+    },
+    {
+      "exampleNo": "41",
+      "rule": "G",
+      "scenario": "Liver cancer plus 'metastatic' colon cancer",
+      "resultText": "Liver = secondary (metastasis-list), C78.7; colon = primary (not on list), C18.9",
+      "codes": [
+        "C18.9",
+        "C78.7"
+      ]
+    },
+    {
+      "exampleNo": "42",
+      "rule": "G",
+      "scenario": "Liver cancer, 'metastatic' colon cancer, and gallbladder cancer",
+      "resultText": "Liver = secondary; colon = secondary (paired with non-list gallbladder); gallbladder = primary",
+      "codes": []
+    },
+    {
+      "exampleNo": "43",
+      "rule": "G",
+      "scenario": "'Metastatic' gallbladder cancer plus 'metastatic' colon cancer",
+      "resultText": "Both primary — neither site on metastasis list, so 'metastatic' alone doesn't force secondary",
+      "codes": []
+    }
+  ],
+  "codeMentions": [
+    {
+      "code": "C18.9",
+      "exampleNo": "1a",
+      "rule": "A",
+      "scenario": "A colon tumour is named as the cause of liver metastases",
+      "sortOrder": 0
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "1b",
+      "rule": "A",
+      "scenario": "A colon tumour is named as the cause of cachexia",
+      "sortOrder": 1
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "1c",
+      "rule": "A",
+      "scenario": "A colon tumour is linked separately to both liver/lung metastases and to respiratory failure",
+      "sortOrder": 2
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "1d",
+      "rule": "A",
+      "scenario": "A colon tumour is written on the same line as, and next to, 'liver metastases'",
+      "sortOrder": 3
+    },
+    {
+      "code": "C78.7",
+      "exampleNo": "1d",
+      "rule": "A",
+      "scenario": "A colon tumour is written on the same line as, and next to, 'liver metastases'",
+      "sortOrder": 3
+    },
+    {
+      "code": "D48.6",
+      "exampleNo": "1e",
+      "rule": "A",
+      "scenario": "A breast tumour appears on a line with several unrelated conditions, not adjacent to any mention of spread",
+      "sortOrder": 4
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "1f",
+      "rule": "A",
+      "scenario": "All neoplasms except a colon tumour are explicitly called secondary spread",
+      "sortOrder": 5
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "1g",
+      "rule": "A",
+      "scenario": "A colon tumour is the only neoplasm named; cancer cachexia noted in Part 2",
+      "sortOrder": 6
+    },
+    {
+      "code": "C50.9",
+      "exampleNo": "1h",
+      "rule": "A",
+      "scenario": "A brain tumour is reported as due to breast cancer",
+      "sortOrder": 7
+    },
+    {
+      "code": "C79.3",
+      "exampleNo": "1h",
+      "rule": "A",
+      "scenario": "A brain tumour is reported as due to breast cancer",
+      "sortOrder": 7
+    },
+    {
+      "code": "C34.9",
+      "exampleNo": "2",
+      "rule": "A",
+      "scenario": "A lung tumour is reported as causing a brain metastasis",
+      "sortOrder": 8
+    },
+    {
+      "code": "C16.9",
+      "exampleNo": "3",
+      "rule": "B",
+      "scenario": "Cancer of pancreas and stomach reported together",
+      "sortOrder": 9
+    },
+    {
+      "code": "C25.9",
+      "exampleNo": "3",
+      "rule": "B",
+      "scenario": "Cancer of pancreas and stomach reported together",
+      "sortOrder": 9
+    },
+    {
+      "code": "C22.9",
+      "exampleNo": "4",
+      "rule": "B",
+      "scenario": "Liver and lung cancer reported, with chronic hepatitis also noted",
+      "sortOrder": 10
+    },
+    {
+      "code": "C78.0",
+      "exampleNo": "4",
+      "rule": "B",
+      "scenario": "Liver and lung cancer reported, with chronic hepatitis also noted",
+      "sortOrder": 10
+    },
+    {
+      "code": "C64",
+      "exampleNo": "5",
+      "rule": "B",
+      "scenario": "Kidney and lung cancer reported together",
+      "sortOrder": 11
+    },
+    {
+      "code": "C78.0",
+      "exampleNo": "5",
+      "rule": "B",
+      "scenario": "Kidney and lung cancer reported together",
+      "sortOrder": 11
+    },
+    {
+      "code": "C34.9",
+      "exampleNo": "6",
+      "rule": "B",
+      "scenario": "Lung cancer in Part 1, kidney cancer in Part 2",
+      "sortOrder": 12
+    },
+    {
+      "code": "C64",
+      "exampleNo": "6",
+      "rule": "B",
+      "scenario": "Lung cancer in Part 1, kidney cancer in Part 2",
+      "sortOrder": 12
+    },
+    {
+      "code": "C50.9",
+      "exampleNo": "8",
+      "rule": "A",
+      "scenario": "Chest wall involvement called metastatic; breast described as carcinoma in situ",
+      "sortOrder": 14
+    },
+    {
+      "code": "C16.9",
+      "exampleNo": "9",
+      "rule": "A",
+      "scenario": "A stomach polyp is reported as the cause of secondary lung/brain spread",
+      "sortOrder": 15
+    },
+    {
+      "code": "C64",
+      "exampleNo": "10a",
+      "rule": "B",
+      "scenario": "Brain cancer specified as glioma, alongside kidney cancer",
+      "sortOrder": 16
+    },
+    {
+      "code": "C71.9",
+      "exampleNo": "10a",
+      "rule": "B",
+      "scenario": "Brain cancer specified as glioma, alongside kidney cancer",
+      "sortOrder": 16
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "10b",
+      "rule": "B",
+      "scenario": "Bone cancer specified as osteosarcoma, alongside colon cancer",
+      "sortOrder": 17
+    },
+    {
+      "code": "C40.9",
+      "exampleNo": "10b",
+      "rule": "B",
+      "scenario": "Bone cancer specified as osteosarcoma, alongside colon cancer",
+      "sortOrder": 17
+    },
+    {
+      "code": "C71.9",
+      "exampleNo": "10c",
+      "rule": "B",
+      "scenario": "Brain cancer is the only neoplasm mentioned",
+      "sortOrder": 18
+    },
+    {
+      "code": "C77.0",
+      "exampleNo": "11",
+      "rule": "B",
+      "scenario": "Cancer of cervical lymph nodes, alone on the certificate",
+      "sortOrder": 19
+    },
+    {
+      "code": "C61",
+      "exampleNo": "12",
+      "rule": "B",
+      "scenario": "Cancer described explicitly as 'primary in prostate'",
+      "sortOrder": 20
+    },
+    {
+      "code": "D38.1",
+      "exampleNo": "13",
+      "rule": "A",
+      "scenario": "Bladder and lung tumours with no indication of behaviour at all",
+      "sortOrder": 21
+    },
+    {
+      "code": "D41.4",
+      "exampleNo": "13",
+      "rule": "A",
+      "scenario": "Bladder and lung tumours with no indication of behaviour at all",
+      "sortOrder": 21
+    },
+    {
+      "code": "C64",
+      "exampleNo": "14",
+      "rule": "B",
+      "scenario": "Adrenal carcinoma reported, with 'primary in kidney' noted elsewhere",
+      "sortOrder": 22
+    },
+    {
+      "code": "C79.7",
+      "exampleNo": "14",
+      "rule": "B",
+      "scenario": "Adrenal carcinoma reported, with 'primary in kidney' noted elsewhere",
+      "sortOrder": 22
+    },
+    {
+      "code": "C79.8",
+      "exampleNo": "15",
+      "rule": "B",
+      "scenario": "Prostate cancer reported, with primary site stated as unknown",
+      "sortOrder": 23
+    },
+    {
+      "code": "C80.0",
+      "exampleNo": "15",
+      "rule": "B",
+      "scenario": "Prostate cancer reported, with primary site stated as unknown",
+      "sortOrder": 23
+    },
+    {
+      "code": "C34.9",
+      "exampleNo": "16a/16b",
+      "rule": "B",
+      "scenario": "A brain tumour reported as due to lung cancer",
+      "sortOrder": 24
+    },
+    {
+      "code": "C79.3",
+      "exampleNo": "16a/16b",
+      "rule": "B",
+      "scenario": "A brain tumour reported as due to lung cancer",
+      "sortOrder": 24
+    },
+    {
+      "code": "C16.9",
+      "exampleNo": "17",
+      "rule": "B",
+      "scenario": "Liver and lymph-node involvement reported, plus stomach cancer",
+      "sortOrder": 25
+    },
+    {
+      "code": "C34.9",
+      "exampleNo": "18",
+      "rule": "B",
+      "scenario": "Lung, pleura, and chest-wall cancer reported together",
+      "sortOrder": 26
+    },
+    {
+      "code": "C45.0",
+      "exampleNo": "19",
+      "rule": "B",
+      "scenario": "Mesothelioma of pleura, plus lymph-node involvement",
+      "sortOrder": 27
+    },
+    {
+      "code": "C77.9",
+      "exampleNo": "19",
+      "rule": "B",
+      "scenario": "Mesothelioma of pleura, plus lymph-node involvement",
+      "sortOrder": 27
+    },
+    {
+      "code": "C64",
+      "exampleNo": "21",
+      "rule": "B",
+      "scenario": "Bladder and kidney cancer reported together",
+      "sortOrder": 29
+    },
+    {
+      "code": "C67.9",
+      "exampleNo": "21",
+      "rule": "B",
+      "scenario": "Bladder and kidney cancer reported together",
+      "sortOrder": 29
+    },
+    {
+      "code": "C41.9",
+      "exampleNo": "23",
+      "rule": "B",
+      "scenario": "Osteosarcoma reported at the lung",
+      "sortOrder": 31
+    },
+    {
+      "code": "C78.0",
+      "exampleNo": "23",
+      "rule": "B",
+      "scenario": "Osteosarcoma reported at the lung",
+      "sortOrder": 31
+    },
+    {
+      "code": "C49.4",
+      "exampleNo": "27",
+      "rule": "D",
+      "scenario": "Fibrosarcoma 'in the region of' the pancreas",
+      "sortOrder": 35
+    },
+    {
+      "code": "C76.1",
+      "exampleNo": "28",
+      "rule": "D",
+      "scenario": "Carcinoma 'in the lung area'",
+      "sortOrder": 36
+    },
+    {
+      "code": "C80.9",
+      "exampleNo": "29",
+      "rule": "D",
+      "scenario": "Intestinal obstruction plus an unspecified carcinoma",
+      "sortOrder": 37
+    },
+    {
+      "code": "C80.0",
+      "exampleNo": "30",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma, primary site unknown",
+      "sortOrder": 38
+    },
+    {
+      "code": "C43.9",
+      "exampleNo": "31",
+      "rule": "E",
+      "scenario": "Generalized metastases, melanoma, primary site unknown",
+      "sortOrder": 39
+    },
+    {
+      "code": "C16.9",
+      "exampleNo": "32",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma; primary 'unknown, possibly stomach'",
+      "sortOrder": 40
+    },
+    {
+      "code": "C26.9",
+      "exampleNo": "33",
+      "rule": "E",
+      "scenario": "Secondary liver carcinoma; primary 'probably stomach or colon'",
+      "sortOrder": 41
+    },
+    {
+      "code": "C14.8",
+      "exampleNo": "34",
+      "rule": "F",
+      "scenario": "'Overlapping' neoplasm of tongue and floor of mouth",
+      "sortOrder": 42
+    },
+    {
+      "code": "C19",
+      "exampleNo": "35",
+      "rule": "F",
+      "scenario": "Malignant neoplasm of 'rectosigmoid colon'",
+      "sortOrder": 43
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "36",
+      "rule": "F",
+      "scenario": "Malignant neoplasm of colon and gallbladder, no overlap stated",
+      "sortOrder": 44
+    },
+    {
+      "code": "C23",
+      "exampleNo": "36",
+      "rule": "F",
+      "scenario": "Malignant neoplasm of colon and gallbladder, no overlap stated",
+      "sortOrder": 44
+    },
+    {
+      "code": "C41.4",
+      "exampleNo": "37",
+      "rule": "G",
+      "scenario": "'Metastatic' osteosarcoma of sacrum",
+      "sortOrder": 45
+    },
+    {
+      "code": "C41.9",
+      "exampleNo": "38",
+      "rule": "G",
+      "scenario": "'Metastatic' osteosarcoma of kidney",
+      "sortOrder": 46
+    },
+    {
+      "code": "C79.0",
+      "exampleNo": "38",
+      "rule": "G",
+      "scenario": "'Metastatic' osteosarcoma of kidney",
+      "sortOrder": 46
+    },
+    {
+      "code": "C34.9",
+      "exampleNo": "39",
+      "rule": "G",
+      "scenario": "'Metastatic' lung cancer specified as adenocarcinoma, sole entry",
+      "sortOrder": 47
+    },
+    {
+      "code": "C67.9",
+      "exampleNo": "40",
+      "rule": "G",
+      "scenario": "Bladder cancer plus 'metastatic' prostate cancer",
+      "sortOrder": 48
+    },
+    {
+      "code": "C79.8",
+      "exampleNo": "40",
+      "rule": "G",
+      "scenario": "Bladder cancer plus 'metastatic' prostate cancer",
+      "sortOrder": 48
+    },
+    {
+      "code": "C18.9",
+      "exampleNo": "41",
+      "rule": "G",
+      "scenario": "Liver cancer plus 'metastatic' colon cancer",
+      "sortOrder": 49
+    },
+    {
+      "code": "C78.7",
+      "exampleNo": "41",
+      "rule": "G",
+      "scenario": "Liver cancer plus 'metastatic' colon cancer",
+      "sortOrder": 49
+    }
+  ]
+}

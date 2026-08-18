@@ -2,9 +2,27 @@ import { useEffect, useState } from "react";
 import { useFormStateOptional } from "@/lib/formState";
 import { DiagnosticTable } from "../DiagnosticTable";
 
-export function DiagnosticDetails() {
-  const [methods, setMethods] = useState<string[]>([]);
+// The Complete Pathological Diagnosis fields (22.1 - 22.5) are only
+// editable when "(2) Microscopic" is selected as a method of diagnosis.
+// The keys mirror the Field labels so they can be cleared from the
+// form-state capture when Microscopic is unchecked.
+const PATHOLOGICAL_DIAGNOSIS_KEYS = [
+  "22.1 Anatomical Site of Specimen / Biopsy / SMEAR",
+  "22.2 Pathology Slide No",
+  "22.3 Date of Reporting",
+  "22.4 Primary Site of Tumour - Topography",
+  "22.5 Primary Histology - Morphology",
+];
+
+export function DiagnosticDetails({
+  methods,
+  setMethods,
+}: {
+  methods: string[];
+  setMethods: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
   const [clinicalDate, setClinicalDate] = useState("");
+  const [microscopicLater, setMicroscopicLater] = useState<"" | "Yes" | "No">("");
   const ctx = useFormStateOptional();
 
   // Mirror into the form-state capture so the orchestrator can persist them
@@ -15,11 +33,20 @@ export function DiagnosticDetails() {
   useEffect(() => {
     ctx?.set("_diagnostic.clinicalDate", clinicalDate);
   }, [clinicalDate]);
+  useEffect(() => {
+    ctx?.set("_diagnostic.microscopicLater", microscopicLater);
+  }, [microscopicLater]);
 
-  const toggle = (method: string, checked: boolean) =>
+  const toggle = (method: string, checked: boolean) => {
+    if (!checked && method === "Microscopic") {
+      // Pathological-diagnosis fields are gated on Microscopic being
+      // selected; drop any captured values so stale data isn't submitted.
+      PATHOLOGICAL_DIAGNOSIS_KEYS.forEach((key) => ctx?.set(key, ""));
+    }
     setMethods((items) =>
       checked ? [...items, method] : items.filter((item) => item !== method),
     );
+  };
   return (
     <div className="space-y-7">
       <div>
@@ -31,7 +58,7 @@ export function DiagnosticDetails() {
             (method) => (
               <label
                 key={method}
-                className="flex items-center gap-2 text-xs text-[#718991]"
+                className="flex flex-wrap items-center gap-2 text-xs text-[#718991]"
               >
                 <input
                   type="checkbox"
@@ -48,6 +75,36 @@ export function DiagnosticDetails() {
                     onChange={(e) => setClinicalDate(e.target.value)}
                     className="ml-2 h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] outline-none focus:border-[#36a99c]"
                   />
+                )}
+                {method === "Other" && methods.includes(method) && (
+                  <span className="flex w-full flex-col gap-1.5 rounded-lg border border-[#e3edef] bg-[#f7fbfb] p-2.5">
+                    <span className="text-[11px] font-semibold leading-snug text-[#486b77]">
+                      Was microscopic confirmation done at a later date (if
+                      other than (2) above is selected)?
+                    </span>
+                    <span className="flex gap-4 text-[11px]">
+                      <label className="flex items-center gap-1.5">
+                        <input
+                          type="radio"
+                          name="microscopic-later"
+                          checked={microscopicLater === "Yes"}
+                          onChange={() => setMicroscopicLater("Yes")}
+                          className="accent-[#0b7d87]"
+                        />
+                        Yes
+                      </label>
+                      <label className="flex items-center gap-1.5">
+                        <input
+                          type="radio"
+                          name="microscopic-later"
+                          checked={microscopicLater === "No"}
+                          onChange={() => setMicroscopicLater("No")}
+                          className="accent-[#0b7d87]"
+                        />
+                        No
+                      </label>
+                    </span>
+                  </span>
                 )}
               </label>
             ),

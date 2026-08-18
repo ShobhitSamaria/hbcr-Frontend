@@ -5,6 +5,7 @@ import { Dashboard } from "@/lib/index/components/Dashboard";
 import { Header } from "@/lib/index/components/Header";
 import { Records } from "@/lib/index/components/Records";
 import { Registration } from "@/lib/index/components/Registration";
+import { FollowUp } from "@/lib/index/components/followup/FollowUp";
 import { Sidebar } from "@/lib/index/components/Sidebar";
 import { pageTitles } from "@/lib/index/data";
 
@@ -16,7 +17,9 @@ export default function Index() {
     ? "register"
     : location.pathname.includes("records")
       ? "records"
-      : "dashboard";
+      : location.pathname.includes("followup")
+        ? "followup"
+        : "dashboard";
   const [view, setViewState] = useState(initial);
   const setView = (next: string) => {
     setViewState(next);
@@ -64,8 +67,10 @@ export default function Index() {
                   <Dashboard setView={setView} />
                 ) : view === "register" ? (
                   <Registration setView={setView} />
-                ) : (
+                ) : view === "records" ? (
                   <Records setView={setView} />
+                ) : (
+                  <FollowUp />
                 )}
               </motion.div>
             </AnimatePresence>

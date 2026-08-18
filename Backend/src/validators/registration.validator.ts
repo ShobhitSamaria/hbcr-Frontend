@@ -5,10 +5,11 @@ import {
   ReferralType,
   RegistrationStatus,
 } from "../../generated/prisma/enums.ts";
-import { inEnum, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim } from "./common.ts";
+import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim } from "./common.ts";
 
 // HBCR-2024-0185 style: HBCR-YYYY-NNNNN or HBCR-YYYY-NNNN
 const HBCR_RE = /^HBCR-\d{4}-\d{4,5}$/;
+const PIN_RE = /^[1-9][0-9]{5}$/;
 
 export const HBCR_REGISTRATION_NO_REGEX = HBCR_RE;
 
@@ -22,46 +23,58 @@ export const HBCR_REGISTRATION_NO_REGEX = HBCR_RE;
 export const createRegistrationValidator = makeValidator({
   hbcrRegistrationNo: [required(), isString(), trim(), maxLen(20), matches(HBCR_RE, "must look like HBCR-2024-0185")],
   hospitalId: [required(), isInt("hospitalId is required and must be a positive integer")],
+  referenceNo: [isString(), trim(), maxLen(64)],
   departmentName: [isString(), trim(), maxLen(128)],
   unitNumber: [isString(), trim(), maxLen(32)],
   hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
+  hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
+  referralFacilityPincode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
   referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
   referralFacilityRegDate: [isDate()],
   dateOfFirstDiagnosis: [isDate()],
+  microscopicConfirmationLater: [isBoolean()],
   anthropometricHeightCm: [isNumber("must be a number")],
   anthropometricWeightKg: [isNumber("must be a number")],
   maritalStatus: [inEnum(MaritalStatus)],
   education: [inEnum(Education)],
+  occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],
   formCompletionDate: [isDate()],
+  remarks: [isString(), trim(), maxLen(1000)],
   createdByUserId: [isInt()],
 });
 
 export const updateRegistrationValidator = makeValidator({
+  referenceNo: [isString(), trim(), maxLen(64)],
   departmentName: [isString(), trim(), maxLen(128)],
   unitNumber: [isString(), trim(), maxLen(32)],
   hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
+  hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
+  referralFacilityPincode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
   referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
   referralFacilityRegDate: [isDate()],
   dateOfFirstDiagnosis: [isDate()],
+  microscopicConfirmationLater: [isBoolean()],
   anthropometricHeightCm: [isNumber("must be a number")],
   anthropometricWeightKg: [isNumber("must be a number")],
   maritalStatus: [inEnum(MaritalStatus)],
   education: [inEnum(Education)],
+  occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],
   formCompletionDate: [isDate()],
+  remarks: [isString(), trim(), maxLen(1000)],
 });

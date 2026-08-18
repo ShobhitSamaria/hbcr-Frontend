@@ -55,9 +55,14 @@ export async function submitRegistration(
     }
     const created = await patientApi.create({
       fullName: p.fullName,
+      firstName: p.firstName ?? undefined,
+      middleName: p.middleName ?? undefined,
+      lastName: p.lastName ?? undefined,
       age: p.age ?? undefined,
       dateOfBirth: p.dateOfBirth ?? undefined,
       gender: p.gender,
+      healthSchemeBeneficiary: p.healthSchemeBeneficiary,
+      healthSchemeDetails: p.healthSchemeDetails ?? undefined,
     });
     patientId = created.id;
   }

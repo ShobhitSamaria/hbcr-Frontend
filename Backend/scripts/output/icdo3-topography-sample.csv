@@ -1,0 +1,26 @@
+code,term,group_code,group_name,group_note,synonyms,sub_site_lead_in,sub_sites,sort_order
+C00.0,External upper lip,C00,LIP (excludes skin of lip C44.0),,"Vermilion border of upper lip | Upper lip, NOS (excludes skin of upper lip C44.0)",,,0
+C00.1,External lower lip,C00,LIP (excludes skin of lip C44.0),,"Vermilion border of lower lip | Lower lip, NOS (excludes skin of lower lip C44.0)",,,1
+C00.2,"External lip, NOS",C00,LIP (excludes skin of lip C44.0),,"Vermilion border of lip, NOS",,,2
+C00.3,Mucosa of upper lip,C00,LIP (excludes skin of lip C44.0),,Frenulum of upper lip | Inner aspect of upper lip,,,3
+C00.4,Mucosa of lower lip,C00,LIP (excludes skin of lip C44.0),,Inner aspect of lower lip | Frenulum of lower lip,,,4
+C00.5,"Mucosa of lip, NOS",C00,LIP (excludes skin of lip C44.0),,"Inner aspect of lip, NOS | Internal lip, NOS | Frenulum of lip, NOS | Frenulum labii, NOS",,,5
+C00.6,Commissure of lip,C00,LIP (excludes skin of lip C44.0),,Labial commissure,,,6
+C00.8,Overlapping lesion of lip (see section 4.2.6),C00,LIP (excludes skin of lip C44.0),,,,,7
+C00.9,"Lip, NOS (excludes skin of lip C44.0)",C00,LIP (excludes skin of lip C44.0),,,,,8
+C01.9,"Base of tongue, NOS",C01,BASE OF TONGUE,,"Dorsal surface of base of tongue | Posterior third of tongue | Posterior tongue, NOS | Root of tongue",,,9
+C02.0,"Dorsal surface of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior 2/3 of tongue, dorsal surface | Midline of tongue | Dorsal surface of anterior tongue",,,10
+C02.1,Border of tongue,C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,Tip of tongue,,,11
+C02.2,"Ventral surface of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior 2/3 of tongue, ventral surface | Frenulum linguae | Ventral surface of anterior tongue, NOS",,,12
+C02.3,"Anterior 2/3 of tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Anterior tongue, NOS",,,13
+C02.4,Lingual tonsil,C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,,,,14
+C02.8,Overlapping lesion of tongue (see section 4.2.6),C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,Junctional zone of tongue,,,15
+C02.9,"Tongue, NOS",C02,OTHER AND UNSPECIFIED PARTS OF TONGUE,,"Lingual, NOS",,,16
+C03.0,Upper gum,C03,GUM,,Maxillary gingiva | Upper alveolar mucosa | Upper alveolar ridge mucosa | Upper alveolus | Upper gingiva,,,17
+C03.1,Lower gum,C03,GUM,,Mandibular gingiva | Lower alveolar mucosa | Lower alveolar ridge mucosa | Lower alveolus | Lower gingiva,,,18
+C03.9,"Gum, NOS",C03,GUM,,"Gingiva, NOS | Alveolar mucosa, NOS | Alveolar ridge mucosa, NOS | Alveolus, NOS | Periodontal tissue | Tooth socket",,,19
+C04.0,Anterior floor of mouth,C04,FLOOR OF MOUTH,,,,,20
+C04.1,Lateral floor of mouth,C04,FLOOR OF MOUTH,,,,,21
+C04.8,Overlapping lesion of floor of mouth (see section 4.2.6),C04,FLOOR OF MOUTH,,,,,22
+C04.9,"Floor of mouth, NOS",C04,FLOOR OF MOUTH,,,,,23
+C05.0,Hard palate,C05,PALATE,,,,,24

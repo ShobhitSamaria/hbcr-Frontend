@@ -12,6 +12,10 @@ export function TreatmentBlock({
 }: TreatmentBlockProps) {
   const [given, setGiven] = useState(requiredChoice ? "Yes" : "");
   const [type, setType] = useState("");
+  // When "Non-Allopathic" is chosen, the Treatment Modalities table is
+  // disabled and any previously entered rows are cleared (the table is
+  // remounted via `key` so its local state resets).
+  const nonAllopathic = type === "Non-Allopathic";
   return (
     <div className="space-y-4">
       <label className="block text-xs font-bold text-[#486b77]">{title}</label>
@@ -53,7 +57,7 @@ export function TreatmentBlock({
         <>
           <div>
             <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-              30(a). Type of treatment given
+              29.1. If Yes, Type of Treatment Given
             </p>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               {["Allopathic", "Non-Allopathic", "Both"].map((option) => (
@@ -70,7 +74,11 @@ export function TreatmentBlock({
               ))}
             </div>
           </div>
-          <TreatmentTable title="Treatment modalities" />
+          <TreatmentTable
+            key={type}
+            title="Treatment modalities"
+            disabled={nonAllopathic}
+          />
         </>
       )}
     </div>

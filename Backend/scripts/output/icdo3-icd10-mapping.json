@@ -1,0 +1,1980 @@
+{
+  "source": "ICD-O-3, Third Edition, First Revision (WHO) — topography numerical list",
+  "mappingRule": "Identity mapping: ICD-O-3 topography codes C00.0–C80.9 map to the identical ICD-10 code (the ICD-O-3 topography axis is derived from ICD-10 Chapter II). Excluded: C42.x (haematopoietic and reticuloendothelial systems) — ICD-10 has no topography equivalent, so no suggestion is produced for those codes.",
+  "count": 325,
+  "excludedCount": 5,
+  "excluded": [
+    {
+      "code": "C42.0",
+      "term": "Blood"
+    },
+    {
+      "code": "C42.1",
+      "term": "Bone marrow"
+    },
+    {
+      "code": "C42.2",
+      "term": "Spleen"
+    },
+    {
+      "code": "C42.3",
+      "term": "Reticuloendothelial system, NOS"
+    },
+    {
+      "code": "C42.4",
+      "term": "Hematopoietic system, NOS"
+    }
+  ],
+  "entries": [
+    {
+      "icdo3Code": "C00.0",
+      "icdo3Term": "External upper lip",
+      "icd10Code": "C00.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.1",
+      "icdo3Term": "External lower lip",
+      "icd10Code": "C00.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.2",
+      "icdo3Term": "External lip, NOS",
+      "icd10Code": "C00.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.3",
+      "icdo3Term": "Mucosa of upper lip",
+      "icd10Code": "C00.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.4",
+      "icdo3Term": "Mucosa of lower lip",
+      "icd10Code": "C00.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.5",
+      "icdo3Term": "Mucosa of lip, NOS",
+      "icd10Code": "C00.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.6",
+      "icdo3Term": "Commissure of lip",
+      "icd10Code": "C00.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.8",
+      "icdo3Term": "Overlapping lesion of lip (see section 4.2.6)",
+      "icd10Code": "C00.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C00.9",
+      "icdo3Term": "Lip, NOS (excludes skin of lip C44.0)",
+      "icd10Code": "C00.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C01.9",
+      "icdo3Term": "Base of tongue, NOS",
+      "icd10Code": "C01.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.0",
+      "icdo3Term": "Dorsal surface of tongue, NOS",
+      "icd10Code": "C02.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.1",
+      "icdo3Term": "Border of tongue",
+      "icd10Code": "C02.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.2",
+      "icdo3Term": "Ventral surface of tongue, NOS",
+      "icd10Code": "C02.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.3",
+      "icdo3Term": "Anterior 2/3 of tongue, NOS",
+      "icd10Code": "C02.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.4",
+      "icdo3Term": "Lingual tonsil",
+      "icd10Code": "C02.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.8",
+      "icdo3Term": "Overlapping lesion of tongue (see section 4.2.6)",
+      "icd10Code": "C02.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C02.9",
+      "icdo3Term": "Tongue, NOS",
+      "icd10Code": "C02.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C03.0",
+      "icdo3Term": "Upper gum",
+      "icd10Code": "C03.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C03.1",
+      "icdo3Term": "Lower gum",
+      "icd10Code": "C03.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C03.9",
+      "icdo3Term": "Gum, NOS",
+      "icd10Code": "C03.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C04.0",
+      "icdo3Term": "Anterior floor of mouth",
+      "icd10Code": "C04.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C04.1",
+      "icdo3Term": "Lateral floor of mouth",
+      "icd10Code": "C04.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C04.8",
+      "icdo3Term": "Overlapping lesion of floor of mouth (see section 4.2.6)",
+      "icd10Code": "C04.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C04.9",
+      "icdo3Term": "Floor of mouth, NOS",
+      "icd10Code": "C04.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C05.0",
+      "icdo3Term": "Hard palate",
+      "icd10Code": "C05.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C05.1",
+      "icdo3Term": "Soft palate, NOS (excludes nasopharyngeal surface of soft palate C11.3)",
+      "icd10Code": "C05.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C05.2",
+      "icdo3Term": "Uvula",
+      "icd10Code": "C05.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C05.8",
+      "icdo3Term": "Overlapping lesion of palate (see section 4.2.6)",
+      "icd10Code": "C05.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C05.9",
+      "icdo3Term": "Palate, NOS",
+      "icd10Code": "C05.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C06.0",
+      "icdo3Term": "Cheek mucosa",
+      "icd10Code": "C06.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C06.1",
+      "icdo3Term": "Vestibule of mouth",
+      "icd10Code": "C06.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C06.2",
+      "icdo3Term": "Retromolar area",
+      "icd10Code": "C06.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C06.8",
+      "icdo3Term": "Overlapping lesion of other and unspecified parts of mouth (see section 4.2.6)",
+      "icd10Code": "C06.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C06.9",
+      "icdo3Term": "Mouth, NOS",
+      "icd10Code": "C06.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C07.9",
+      "icdo3Term": "Parotid gland",
+      "icd10Code": "C07.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C08.0",
+      "icdo3Term": "Submandibular gland",
+      "icd10Code": "C08.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C08.1",
+      "icdo3Term": "Sublingual gland",
+      "icd10Code": "C08.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C08.8",
+      "icdo3Term": "Overlapping lesion of major salivary glands (see section 4.2.6)",
+      "icd10Code": "C08.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C08.9",
+      "icdo3Term": "Major salivary gland, NOS",
+      "icd10Code": "C08.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C09.0",
+      "icdo3Term": "Tonsillar fossa",
+      "icd10Code": "C09.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C09.1",
+      "icdo3Term": "Tonsillar pillar",
+      "icd10Code": "C09.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C09.8",
+      "icdo3Term": "Overlapping lesion of tonsil (see section 4.2.6)",
+      "icd10Code": "C09.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C09.9",
+      "icdo3Term": "Tonsil, NOS (excludes lingual tonsil C02.4 and pharyngeal tonsil C11.1)",
+      "icd10Code": "C09.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.0",
+      "icdo3Term": "Vallecula",
+      "icd10Code": "C10.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.1",
+      "icdo3Term": "Anterior surface of epiglottis",
+      "icd10Code": "C10.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.2",
+      "icdo3Term": "Lateral wall of oropharynx",
+      "icd10Code": "C10.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.3",
+      "icdo3Term": "Posterior wall of oropharynx",
+      "icd10Code": "C10.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.4",
+      "icdo3Term": "Branchial cleft (site of neoplasm)",
+      "icd10Code": "C10.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.8",
+      "icdo3Term": "Overlapping lesion of oropharynx (see section 4.2.6)",
+      "icd10Code": "C10.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C10.9",
+      "icdo3Term": "Oropharynx, NOS",
+      "icd10Code": "C10.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.0",
+      "icdo3Term": "Superior wall of nasopharynx",
+      "icd10Code": "C11.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.1",
+      "icdo3Term": "Posterior wall of nasopharynx",
+      "icd10Code": "C11.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.2",
+      "icdo3Term": "Lateral wall of nasopharynx",
+      "icd10Code": "C11.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.3",
+      "icdo3Term": "Anterior wall of nasopharynx",
+      "icd10Code": "C11.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.8",
+      "icdo3Term": "Overlapping lesion of nasopharynx (see section 4.2.6)",
+      "icd10Code": "C11.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C11.9",
+      "icdo3Term": "Nasopharynx, NOS",
+      "icd10Code": "C11.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C12.9",
+      "icdo3Term": "Pyriform sinus",
+      "icd10Code": "C12.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C13.0",
+      "icdo3Term": "Postcricoid region",
+      "icd10Code": "C13.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C13.1",
+      "icdo3Term": "Hypopharyngeal aspect of aryepiglottic fold",
+      "icd10Code": "C13.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C13.2",
+      "icdo3Term": "Posterior wall of hypopharynx",
+      "icd10Code": "C13.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C13.8",
+      "icdo3Term": "Overlapping lesion of hypopharynx (see section 4.2.6)",
+      "icd10Code": "C13.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C13.9",
+      "icdo3Term": "Hypopharynx, NOS",
+      "icd10Code": "C13.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C14.0",
+      "icdo3Term": "Pharynx, NOS",
+      "icd10Code": "C14.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C14.2",
+      "icdo3Term": "Waldeyer ring",
+      "icd10Code": "C14.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C14.8",
+      "icdo3Term": "Overlapping lesion of lip, oral cavity and pharynx (see section 4.2.6)",
+      "icd10Code": "C14.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.0",
+      "icdo3Term": "Cervical esophagus",
+      "icd10Code": "C15.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.1",
+      "icdo3Term": "Thoracic esophagus",
+      "icd10Code": "C15.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.2",
+      "icdo3Term": "Abdominal esophagus",
+      "icd10Code": "C15.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.3",
+      "icdo3Term": "Upper third of esophagus",
+      "icd10Code": "C15.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.4",
+      "icdo3Term": "Middle third of esophagus",
+      "icd10Code": "C15.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.5",
+      "icdo3Term": "Lower third of esophagus",
+      "icd10Code": "C15.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.8",
+      "icdo3Term": "Overlapping lesion of esophagus (see section 4.2.6)",
+      "icd10Code": "C15.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C15.9",
+      "icdo3Term": "Esophagus, NOS",
+      "icd10Code": "C15.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.0",
+      "icdo3Term": "Cardia, NOS",
+      "icd10Code": "C16.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.1",
+      "icdo3Term": "Fundus of stomach",
+      "icd10Code": "C16.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.2",
+      "icdo3Term": "Body of stomach",
+      "icd10Code": "C16.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.3",
+      "icdo3Term": "Gastric antrum",
+      "icd10Code": "C16.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.4",
+      "icdo3Term": "Pylorus",
+      "icd10Code": "C16.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.5",
+      "icdo3Term": "Lesser curvature of stomach, NOS (not classifiable to C16.1 to C16.4)",
+      "icd10Code": "C16.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.6",
+      "icdo3Term": "Greater curvature of stomach, NOS (not classifiable to C16.0 to C16.4)",
+      "icd10Code": "C16.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.8",
+      "icdo3Term": "Overlapping lesion of stomach (see section 4.2.6)",
+      "icd10Code": "C16.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C16.9",
+      "icdo3Term": "Stomach, NOS",
+      "icd10Code": "C16.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.0",
+      "icdo3Term": "Duodenum",
+      "icd10Code": "C17.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.1",
+      "icdo3Term": "Jejunum",
+      "icd10Code": "C17.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.2",
+      "icdo3Term": "Ileum (excludes ileocecal valve C18.0)",
+      "icd10Code": "C17.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.3",
+      "icdo3Term": "Meckel diverticulum (site of neoplasm)",
+      "icd10Code": "C17.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.8",
+      "icdo3Term": "Overlapping lesion of small intestine (see section 4.2.6)",
+      "icd10Code": "C17.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C17.9",
+      "icdo3Term": "Small intestine, NOS",
+      "icd10Code": "C17.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.0",
+      "icdo3Term": "Cecum",
+      "icd10Code": "C18.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.1",
+      "icdo3Term": "Appendix",
+      "icd10Code": "C18.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.2",
+      "icdo3Term": "Ascending colon",
+      "icd10Code": "C18.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.3",
+      "icdo3Term": "Hepatic flexure of colon",
+      "icd10Code": "C18.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.4",
+      "icdo3Term": "Transverse colon",
+      "icd10Code": "C18.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.5",
+      "icdo3Term": "Splenic flexure of colon",
+      "icd10Code": "C18.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.6",
+      "icdo3Term": "Descending colon",
+      "icd10Code": "C18.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.7",
+      "icdo3Term": "Sigmoid colon",
+      "icd10Code": "C18.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.8",
+      "icdo3Term": "Overlapping lesion of colon (see section 4.2.6)",
+      "icd10Code": "C18.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C18.9",
+      "icdo3Term": "Colon, NOS",
+      "icd10Code": "C18.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C19.9",
+      "icdo3Term": "Rectosigmoid junction",
+      "icd10Code": "C19.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C20.9",
+      "icdo3Term": "Rectum, NOS",
+      "icd10Code": "C20.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C21.0",
+      "icdo3Term": "Anus, NOS (excludes skin of anus and perianal skin C44.5)",
+      "icd10Code": "C21.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C21.1",
+      "icdo3Term": "Anal canal",
+      "icd10Code": "C21.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C21.2",
+      "icdo3Term": "Cloacogenic zone",
+      "icd10Code": "C21.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C21.8",
+      "icdo3Term": "Overlapping lesion of rectum, anus and anal canal (see section 4.2.6)",
+      "icd10Code": "C21.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C22.0",
+      "icdo3Term": "Liver",
+      "icd10Code": "C22.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C22.1",
+      "icdo3Term": "Intrahepatic bile duct",
+      "icd10Code": "C22.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C23.9",
+      "icdo3Term": "Gallbladder",
+      "icd10Code": "C23.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C24.0",
+      "icdo3Term": "Extrahepatic bile duct",
+      "icd10Code": "C24.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C24.1",
+      "icdo3Term": "Ampulla of Vater",
+      "icd10Code": "C24.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C24.8",
+      "icdo3Term": "Overlapping lesion of biliary tract (see section 4.2.6)",
+      "icd10Code": "C24.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C24.9",
+      "icdo3Term": "Biliary tract, NOS",
+      "icd10Code": "C24.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.0",
+      "icdo3Term": "Head of pancreas",
+      "icd10Code": "C25.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.1",
+      "icdo3Term": "Body of pancreas",
+      "icd10Code": "C25.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.2",
+      "icdo3Term": "Tail of pancreas",
+      "icd10Code": "C25.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.3",
+      "icdo3Term": "Pancreatic duct",
+      "icd10Code": "C25.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.4",
+      "icdo3Term": "Islets of Langerhans",
+      "icd10Code": "C25.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.7",
+      "icdo3Term": "Other specified parts of pancreas",
+      "icd10Code": "C25.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.8",
+      "icdo3Term": "Overlapping lesion of pancreas (see section 4.2.6)",
+      "icd10Code": "C25.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C25.9",
+      "icdo3Term": "Pancreas, NOS",
+      "icd10Code": "C25.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C26.0",
+      "icdo3Term": "Intestinal tract, NOS",
+      "icd10Code": "C26.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C26.8",
+      "icdo3Term": "Overlapping lesion of digestive system (see section 4.2.6)",
+      "icd10Code": "C26.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C26.9",
+      "icdo3Term": "Gastrointestinal tract, NOS",
+      "icd10Code": "C26.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C30.0",
+      "icdo3Term": "Nasal cavity (excludes nose, NOS C76.0)",
+      "icd10Code": "C30.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C30.1",
+      "icdo3Term": "Middle ear",
+      "icd10Code": "C30.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.0",
+      "icdo3Term": "Maxillary sinus",
+      "icd10Code": "C31.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.1",
+      "icdo3Term": "Ethmoid sinus",
+      "icd10Code": "C31.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.2",
+      "icdo3Term": "Frontal sinus",
+      "icd10Code": "C31.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.3",
+      "icdo3Term": "Sphenoid sinus",
+      "icd10Code": "C31.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.8",
+      "icdo3Term": "Overlapping lesion of accessory sinuses (see section 4.2.6)",
+      "icd10Code": "C31.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C31.9",
+      "icdo3Term": "Accessory sinus, NOS",
+      "icd10Code": "C31.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.0",
+      "icdo3Term": "Glottis",
+      "icd10Code": "C32.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.1",
+      "icdo3Term": "Supraglottis",
+      "icd10Code": "C32.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.2",
+      "icdo3Term": "Subglottis",
+      "icd10Code": "C32.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.3",
+      "icdo3Term": "Laryngeal cartilage",
+      "icd10Code": "C32.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.8",
+      "icdo3Term": "Overlapping lesion of larynx (see section 4.2.6)",
+      "icd10Code": "C32.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C32.9",
+      "icdo3Term": "Larynx, NOS",
+      "icd10Code": "C32.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C33.9",
+      "icdo3Term": "Trachea",
+      "icd10Code": "C33.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.0",
+      "icdo3Term": "Main bronchus",
+      "icd10Code": "C34.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.1",
+      "icdo3Term": "Upper lobe, lung",
+      "icd10Code": "C34.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.2",
+      "icdo3Term": "Middle lobe, lung",
+      "icd10Code": "C34.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.3",
+      "icdo3Term": "Lower lobe, lung",
+      "icd10Code": "C34.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.8",
+      "icdo3Term": "Overlapping lesion of lung (see section 4.2.6)",
+      "icd10Code": "C34.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C34.9",
+      "icdo3Term": "Lung, NOS",
+      "icd10Code": "C34.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C37.9",
+      "icdo3Term": "Thymus",
+      "icd10Code": "C37.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.0",
+      "icdo3Term": "Heart",
+      "icd10Code": "C38.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.1",
+      "icdo3Term": "Anterior mediastinum",
+      "icd10Code": "C38.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.2",
+      "icdo3Term": "Posterior mediastinum",
+      "icd10Code": "C38.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.3",
+      "icdo3Term": "Mediastinum, NOS",
+      "icd10Code": "C38.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.4",
+      "icdo3Term": "Pleura, NOS",
+      "icd10Code": "C38.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C38.8",
+      "icdo3Term": "Overlapping lesion of heart, mediastinum and pleura (see section 4.2.6)",
+      "icd10Code": "C38.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C39.0",
+      "icdo3Term": "Upper respiratory tract, NOS",
+      "icd10Code": "C39.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C39.8",
+      "icdo3Term": "Overlapping lesion of respiratory system and intrathoracic organs (see section 4.2.6)",
+      "icd10Code": "C39.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C39.9",
+      "icdo3Term": "Ill-defined sites within respiratory system",
+      "icd10Code": "C39.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.0",
+      "icdo3Term": "Long bones of upper limb, scapula and associated joints",
+      "icd10Code": "C40.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.1",
+      "icdo3Term": "Short bones of upper limb and associated joints",
+      "icd10Code": "C40.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.2",
+      "icdo3Term": "Long bones of lower limb and associated joints",
+      "icd10Code": "C40.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.3",
+      "icdo3Term": "Short bones of lower limb and associated joints",
+      "icd10Code": "C40.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.8",
+      "icdo3Term": "Overlapping lesion of bones, joints and articular cartilage of limbs (see section 4.2.6)",
+      "icd10Code": "C40.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C40.9",
+      "icdo3Term": "Bone of limb, NOS",
+      "icd10Code": "C40.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.0",
+      "icdo3Term": "Bones of skull and face and associated joints (excludes mandible C41.1)",
+      "icd10Code": "C41.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.1",
+      "icdo3Term": "Mandible",
+      "icd10Code": "C41.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.2",
+      "icdo3Term": "Vertebral column (excludes sacrum and coccyx C41.4)",
+      "icd10Code": "C41.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.3",
+      "icdo3Term": "Rib, sternum, clavicle and associated joints",
+      "icd10Code": "C41.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.4",
+      "icdo3Term": "Pelvic bones, sacrum, coccyx and associated joints",
+      "icd10Code": "C41.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.8",
+      "icdo3Term": "Overlapping lesion of bones, joints and articular cartilage (see section 4.2.6)",
+      "icd10Code": "C41.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C41.9",
+      "icdo3Term": "Bone, NOS",
+      "icd10Code": "C41.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.0",
+      "icdo3Term": "Skin of lip, NOS",
+      "icd10Code": "C44.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.1",
+      "icdo3Term": "Eyelid",
+      "icd10Code": "C44.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.2",
+      "icdo3Term": "External ear",
+      "icd10Code": "C44.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.3",
+      "icdo3Term": "Skin of other and unspecified parts of face",
+      "icd10Code": "C44.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.4",
+      "icdo3Term": "Skin of scalp and neck",
+      "icd10Code": "C44.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.5",
+      "icdo3Term": "Skin of trunk",
+      "icd10Code": "C44.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.6",
+      "icdo3Term": "Skin of upper limb and shoulder",
+      "icd10Code": "C44.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.7",
+      "icdo3Term": "Skin of lower limb and hip",
+      "icd10Code": "C44.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.8",
+      "icdo3Term": "Overlapping lesion of skin (see section 4.2.6)",
+      "icd10Code": "C44.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C44.9",
+      "icdo3Term": "Skin, NOS (excludes skin of labia majora C51.0, skin of vulva C51.9, skin of penis C60.9, and skin of scrotum C63.2)",
+      "icd10Code": "C44.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.0",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of head, face, and neck (excludes peripheral nerves and autonomic nervous system of orbit C69.6)",
+      "icd10Code": "C47.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.1",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of upper limb and shoulder",
+      "icd10Code": "C47.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.2",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of lower limband hip",
+      "icd10Code": "C47.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.3",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of thorax",
+      "icd10Code": "C47.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.4",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of abdomen",
+      "icd10Code": "C47.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.5",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of pelvis",
+      "icd10Code": "C47.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.6",
+      "icdo3Term": "Peripheral nerves and autonomic nervous system of trunk, NOS",
+      "icd10Code": "C47.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.8",
+      "icdo3Term": "Overlapping lesion of peripheral nerves and autonomic nervous system (see section 4.2.6)",
+      "icd10Code": "C47.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C47.9",
+      "icdo3Term": "Autonomic nervous system, NOS",
+      "icd10Code": "C47.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C48.0",
+      "icdo3Term": "Retroperitoneum",
+      "icd10Code": "C48.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C48.1",
+      "icdo3Term": "Specified parts of peritoneum",
+      "icd10Code": "C48.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C48.2",
+      "icdo3Term": "Peritoneum, NOS",
+      "icd10Code": "C48.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C48.8",
+      "icdo3Term": "Overlapping lesion of retroperitoneum and peritoneum (see section 4.2.6)",
+      "icd10Code": "C48.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.0",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of head, face, and neck (excludes connective tissue of orbit C69.6 and nasal cartilage C30.0)",
+      "icd10Code": "C49.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.1",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of upper limb and shoulder",
+      "icd10Code": "C49.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.2",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of lower limb and hip",
+      "icd10Code": "C49.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.3",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of thorax (excludes thymus C37.9, heart and mediastinum C38._)",
+      "icd10Code": "C49.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.4",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of abdomen",
+      "icd10Code": "C49.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.5",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of pelvis",
+      "icd10Code": "C49.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.6",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues of trunk NOS",
+      "icd10Code": "C49.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.8",
+      "icdo3Term": "Overlapping lesion of connective, subcutaneous and other soft tissues (see section 4.2.6)",
+      "icd10Code": "C49.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C49.9",
+      "icdo3Term": "Connective, subcutaneous and other soft tissues, NOS",
+      "icd10Code": "C49.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.0",
+      "icdo3Term": "Nipple",
+      "icd10Code": "C50.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.1",
+      "icdo3Term": "Central portion of breast",
+      "icd10Code": "C50.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.2",
+      "icdo3Term": "Upper-inner quadrant of breast",
+      "icd10Code": "C50.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.3",
+      "icdo3Term": "Lower-inner quadrant of breast",
+      "icd10Code": "C50.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.4",
+      "icdo3Term": "Upper-outer quadrant of breast",
+      "icd10Code": "C50.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.5",
+      "icdo3Term": "Lower-outer quadrant of breast",
+      "icd10Code": "C50.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.6",
+      "icdo3Term": "Axillary tail of breast",
+      "icd10Code": "C50.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.8",
+      "icdo3Term": "Overlapping lesion of breast (see section 4.2.6)",
+      "icd10Code": "C50.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C50.9",
+      "icdo3Term": "Breast, NOS",
+      "icd10Code": "C50.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C51.0",
+      "icdo3Term": "Labium majus",
+      "icd10Code": "C51.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C51.1",
+      "icdo3Term": "Labium minus",
+      "icd10Code": "C51.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C51.2",
+      "icdo3Term": "Clitoris",
+      "icd10Code": "C51.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C51.8",
+      "icdo3Term": "Overlapping lesion of vulva (see section 4.2.6)",
+      "icd10Code": "C51.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C51.9",
+      "icdo3Term": "Vulva, NOS",
+      "icd10Code": "C51.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C52.9",
+      "icdo3Term": "Vagina, NOS",
+      "icd10Code": "C52.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C53.0",
+      "icdo3Term": "Endocervix",
+      "icd10Code": "C53.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C53.1",
+      "icdo3Term": "Exocervix",
+      "icd10Code": "C53.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C53.8",
+      "icdo3Term": "Overlapping lesion of cervix uteri (see section 4.2.6)",
+      "icd10Code": "C53.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C53.9",
+      "icdo3Term": "Cervix uteri",
+      "icd10Code": "C53.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.0",
+      "icdo3Term": "Isthmus uteri",
+      "icd10Code": "C54.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.1",
+      "icdo3Term": "Endometrium",
+      "icd10Code": "C54.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.2",
+      "icdo3Term": "Myometrium",
+      "icd10Code": "C54.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.3",
+      "icdo3Term": "Fundus uteri",
+      "icd10Code": "C54.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.8",
+      "icdo3Term": "Overlapping lesion of corpus uteri (see section 4.2.6)",
+      "icd10Code": "C54.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C54.9",
+      "icdo3Term": "Corpus uteri",
+      "icd10Code": "C54.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C55.9",
+      "icdo3Term": "Uterus, NOS",
+      "icd10Code": "C55.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C56.9",
+      "icdo3Term": "Ovary",
+      "icd10Code": "C56.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.0",
+      "icdo3Term": "Fallopian tube",
+      "icd10Code": "C57.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.1",
+      "icdo3Term": "Broad ligament",
+      "icd10Code": "C57.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.2",
+      "icdo3Term": "Round ligament",
+      "icd10Code": "C57.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.3",
+      "icdo3Term": "Parametrium",
+      "icd10Code": "C57.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.4",
+      "icdo3Term": "Uterine adnexa",
+      "icd10Code": "C57.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.7",
+      "icdo3Term": "Other specified parts of female genital organs",
+      "icd10Code": "C57.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.8",
+      "icdo3Term": "Overlapping lesion of female genital organs (see section 4.2.6)",
+      "icd10Code": "C57.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C57.9",
+      "icdo3Term": "Female genital tract, NOS",
+      "icd10Code": "C57.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C58.9",
+      "icdo3Term": "Placenta",
+      "icd10Code": "C58.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C60.0",
+      "icdo3Term": "Prepuce",
+      "icd10Code": "C60.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C60.1",
+      "icdo3Term": "Glans penis",
+      "icd10Code": "C60.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C60.2",
+      "icdo3Term": "Body of penis",
+      "icd10Code": "C60.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C60.8",
+      "icdo3Term": "Overlapping lesion of penis (see section 4.2.6)",
+      "icd10Code": "C60.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C60.9",
+      "icdo3Term": "Penis, NOS",
+      "icd10Code": "C60.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C61.9",
+      "icdo3Term": "Prostate gland",
+      "icd10Code": "C61.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C62.0",
+      "icdo3Term": "Undescended testis (site of neoplasm)",
+      "icd10Code": "C62.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C62.1",
+      "icdo3Term": "Descended testis",
+      "icd10Code": "C62.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C62.9",
+      "icdo3Term": "Testis, NOS",
+      "icd10Code": "C62.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.0",
+      "icdo3Term": "Epididymis",
+      "icd10Code": "C63.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.1",
+      "icdo3Term": "Spermatic cord",
+      "icd10Code": "C63.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.2",
+      "icdo3Term": "Scrotum, NOS",
+      "icd10Code": "C63.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.7",
+      "icdo3Term": "Other specified parts of male genital organs",
+      "icd10Code": "C63.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.8",
+      "icdo3Term": "Overlapping lesion of male genital organs (see section 4.2.6)",
+      "icd10Code": "C63.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C63.9",
+      "icdo3Term": "Male genital organs, NOS",
+      "icd10Code": "C63.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C64.9",
+      "icdo3Term": "Kidney, NOS",
+      "icd10Code": "C64.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C65.9",
+      "icdo3Term": "Renal pelvis",
+      "icd10Code": "C65.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C66.9",
+      "icdo3Term": "Ureter",
+      "icd10Code": "C66.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.0",
+      "icdo3Term": "Trigone of bladder",
+      "icd10Code": "C67.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.1",
+      "icdo3Term": "Dome of bladder",
+      "icd10Code": "C67.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.2",
+      "icdo3Term": "Lateral wall of bladder",
+      "icd10Code": "C67.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.3",
+      "icdo3Term": "Anterior wall of bladder",
+      "icd10Code": "C67.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.4",
+      "icdo3Term": "Posterior wall of bladder",
+      "icd10Code": "C67.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.5",
+      "icdo3Term": "Bladder neck",
+      "icd10Code": "C67.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.6",
+      "icdo3Term": "Ureteric orifice",
+      "icd10Code": "C67.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.7",
+      "icdo3Term": "Urachus",
+      "icd10Code": "C67.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.8",
+      "icdo3Term": "Overlapping lesion of bladder (see section 4.2.6)",
+      "icd10Code": "C67.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C67.9",
+      "icdo3Term": "Bladder, NOS",
+      "icd10Code": "C67.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C68.0",
+      "icdo3Term": "Urethra",
+      "icd10Code": "C68.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C68.1",
+      "icdo3Term": "Paraurethral gland",
+      "icd10Code": "C68.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C68.8",
+      "icdo3Term": "Overlapping lesion of urinary organs (see section 4.2.6)",
+      "icd10Code": "C68.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C68.9",
+      "icdo3Term": "Urinary system, NOS",
+      "icd10Code": "C68.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.0",
+      "icdo3Term": "Conjunctiva",
+      "icd10Code": "C69.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.1",
+      "icdo3Term": "Cornea, NOS",
+      "icd10Code": "C69.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.2",
+      "icdo3Term": "Retina",
+      "icd10Code": "C69.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.3",
+      "icdo3Term": "Choroid",
+      "icd10Code": "C69.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.4",
+      "icdo3Term": "Ciliary body",
+      "icd10Code": "C69.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.5",
+      "icdo3Term": "Lacrimal gland",
+      "icd10Code": "C69.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.6",
+      "icdo3Term": "Orbit, NOS",
+      "icd10Code": "C69.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.8",
+      "icdo3Term": "Overlapping lesion of eye and adnexa (see section 4.2.6)",
+      "icd10Code": "C69.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C69.9",
+      "icdo3Term": "Eye, NOS",
+      "icd10Code": "C69.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C70.0",
+      "icdo3Term": "Cerebral meninges",
+      "icd10Code": "C70.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C70.1",
+      "icdo3Term": "Spinal meninges",
+      "icd10Code": "C70.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C70.9",
+      "icdo3Term": "Meninges, NOS",
+      "icd10Code": "C70.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.0",
+      "icdo3Term": "Cerebrum",
+      "icd10Code": "C71.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.1",
+      "icdo3Term": "Frontal lobe",
+      "icd10Code": "C71.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.2",
+      "icdo3Term": "Temporal lobe",
+      "icd10Code": "C71.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.3",
+      "icdo3Term": "Parietal lobe",
+      "icd10Code": "C71.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.4",
+      "icdo3Term": "Occipital lobe",
+      "icd10Code": "C71.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.5",
+      "icdo3Term": "Ventricle, NOS",
+      "icd10Code": "C71.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.6",
+      "icdo3Term": "Cerebellum, NOS",
+      "icd10Code": "C71.6",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.7",
+      "icdo3Term": "Brain stem",
+      "icd10Code": "C71.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.8",
+      "icdo3Term": "Overlapping lesion of brain (see section 4.2.6)",
+      "icd10Code": "C71.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C71.9",
+      "icdo3Term": "Brain, NOS",
+      "icd10Code": "C71.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.0",
+      "icdo3Term": "Spinal cord",
+      "icd10Code": "C72.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.1",
+      "icdo3Term": "Cauda equina",
+      "icd10Code": "C72.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.2",
+      "icdo3Term": "Olfactory nerve",
+      "icd10Code": "C72.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.3",
+      "icdo3Term": "Optic nerve",
+      "icd10Code": "C72.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.4",
+      "icdo3Term": "Acoustic nerve",
+      "icd10Code": "C72.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.5",
+      "icdo3Term": "Cranial nerve, NOS",
+      "icd10Code": "C72.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.8",
+      "icdo3Term": "Overlapping lesion of brain and central nervous system (see section 4.2.6)",
+      "icd10Code": "C72.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C72.9",
+      "icdo3Term": "Nervous system, NOS",
+      "icd10Code": "C72.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C73.9",
+      "icdo3Term": "Thyroid gland",
+      "icd10Code": "C73.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C74.0",
+      "icdo3Term": "Cortex of adrenal gland",
+      "icd10Code": "C74.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C74.1",
+      "icdo3Term": "Medulla of adrenal gland",
+      "icd10Code": "C74.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C74.9",
+      "icdo3Term": "Adrenal gland, NOS",
+      "icd10Code": "C74.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.0",
+      "icdo3Term": "Parathyroid gland",
+      "icd10Code": "C75.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.1",
+      "icdo3Term": "Pituitary gland",
+      "icd10Code": "C75.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.2",
+      "icdo3Term": "Craniopharyngeal duct",
+      "icd10Code": "C75.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.3",
+      "icdo3Term": "Pineal gland",
+      "icd10Code": "C75.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.4",
+      "icdo3Term": "Carotid body",
+      "icd10Code": "C75.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.5",
+      "icdo3Term": "Aortic body and other paraganglia",
+      "icd10Code": "C75.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.8",
+      "icdo3Term": "Overlapping lesion of endocrine glands and related structures (see section 4.2.6)",
+      "icd10Code": "C75.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C75.9",
+      "icdo3Term": "Endocrine gland, NOS",
+      "icd10Code": "C75.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.0",
+      "icdo3Term": "Head, face or neck, NOS",
+      "icd10Code": "C76.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.1",
+      "icdo3Term": "Thorax, NOS",
+      "icd10Code": "C76.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.2",
+      "icdo3Term": "Abdomen, NOS",
+      "icd10Code": "C76.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.3",
+      "icdo3Term": "Pelvis, NOS",
+      "icd10Code": "C76.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.4",
+      "icdo3Term": "Upper limb, NOS",
+      "icd10Code": "C76.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.5",
+      "icdo3Term": "Lower limb, NOS",
+      "icd10Code": "C76.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.7",
+      "icdo3Term": "Other ill-defined sites",
+      "icd10Code": "C76.7",
+      "note": null
+    },
+    {
+      "icdo3Code": "C76.8",
+      "icdo3Term": "Overlapping lesion of ill-defined sites (see section 4.2.6)",
+      "icd10Code": "C76.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.0",
+      "icdo3Term": "Lymph nodes of head, face and neck",
+      "icd10Code": "C77.0",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.1",
+      "icdo3Term": "Intrathoracic lymph nodes",
+      "icd10Code": "C77.1",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.2",
+      "icdo3Term": "Intra-abdominal lymph nodes",
+      "icd10Code": "C77.2",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.3",
+      "icdo3Term": "Lymph nodes of axilla or arm",
+      "icd10Code": "C77.3",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.4",
+      "icdo3Term": "Lymph nodes of inguinal region or leg",
+      "icd10Code": "C77.4",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.5",
+      "icdo3Term": "Pelvic lymph nodes",
+      "icd10Code": "C77.5",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.8",
+      "icdo3Term": "Lymph nodes of multiple regions",
+      "icd10Code": "C77.8",
+      "note": null
+    },
+    {
+      "icdo3Code": "C77.9",
+      "icdo3Term": "Lymph node, NOS",
+      "icd10Code": "C77.9",
+      "note": null
+    },
+    {
+      "icdo3Code": "C80.9",
+      "icdo3Term": "Unknown primary site",
+      "icd10Code": "C80.9",
+      "note": null
+    }
+  ]
+}

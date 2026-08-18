@@ -1,11 +1,13 @@
 import {
+  CalendarCheck,
   ClipboardList,
   FilePlus2,
   LayoutDashboard,
-  Settings,
+  LogOut,
   ShieldCheck,
   X,
 } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 import { Brand } from "./Brand";
 
 type SidebarProps = {
@@ -18,9 +20,14 @@ const nav = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "register", label: "New Registration", icon: FilePlus2 },
   { id: "records", label: "Patient Records", icon: ClipboardList },
+  { id: "followup", label: "Follow-up", icon: CalendarCheck },
 ];
 
 export function Sidebar({ view, setView, close }: SidebarProps) {
+  const { session, logout } = useAuth();
+  const user = session?.user;
+  const hospitalName = session?.hospital?.name;
+
   return (
     <aside className="flex h-full w-[250px] flex-col border-r border-[#dcebef] bg-white px-5 py-6">
       <div className="mb-11 flex items-center justify-between">
@@ -64,16 +71,24 @@ export function Sidebar({ view, setView, close }: SidebarProps) {
         </p>
       </div>
       <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#d9eff0] text-xs font-bold text-[#087888]">
-          AS
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#d9eff0] text-xs font-bold text-[#087888]">
+          {user?.initials ?? "AS"}
         </div>
         <div className="min-w-0">
           <p className="truncate text-xs font-bold text-[#103e54]">
-            Dr. A. Srinivasan
+            {user?.fullName ?? "Registry user"}
           </p>
-          <p className="text-[10px] text-[#8aa0a7]">Registry coordinator</p>
+          <p className="truncate text-[10px] text-[#8aa0a7]">
+            {hospitalName ?? user?.role ?? "Registry coordinator"}
+          </p>
         </div>
-        <Settings size={15} className="ml-auto text-slate-400" />
+        <button
+          onClick={logout}
+          title="Log out"
+          className="ml-auto rounded-lg p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
+        >
+          <LogOut size={15} />
+        </button>
       </div>
     </aside>
   );

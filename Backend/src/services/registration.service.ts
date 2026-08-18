@@ -24,25 +24,31 @@ export const registrationService = {
     input: {
       hbcrRegistrationNo: string;
       hospitalId: number;
+      referenceNo?: string;
       departmentName?: string;
       unitNumber?: string;
       hospitalRegistrationNo?: string;
+      hospitalRegistrationNoType?: string;
       dateOfReporting?: Date;
       caseRegisteredThrough?: string;
       referralType?: string;
       referralFacilityName?: string;
       referralFacilityCity?: string;
       referralFacilityDistrict?: string;
+      referralFacilityPincode?: string;
       referralFacilityHospitalLabNh?: string;
       referralFacilityRegDate?: Date;
       dateOfFirstDiagnosis?: Date;
+      microscopicConfirmationLater?: boolean;
       anthropometricHeightCm?: number;
       anthropometricWeightKg?: number;
       maritalStatus?: string;
       education?: string;
+      occupation?: string;
       status?: string;
       formCompletedBy?: string;
       formCompletionDate?: Date;
+      remarks?: string;
       createdByUserId?: number;
     },
   ) {
@@ -59,10 +65,14 @@ export const registrationService = {
         patientId,
         hbcrRegistrationNo: input.hbcrRegistrationNo,
         hospitalId: input.hospitalId,
+        ...(input.referenceNo !== undefined ? { referenceNo: input.referenceNo } : {}),
         ...(input.departmentName !== undefined ? { departmentName: input.departmentName } : {}),
         ...(input.unitNumber !== undefined ? { unitNumber: input.unitNumber } : {}),
         ...(input.hospitalRegistrationNo !== undefined
           ? { hospitalRegistrationNo: input.hospitalRegistrationNo }
+          : {}),
+        ...(input.hospitalRegistrationNoType !== undefined
+          ? { hospitalRegistrationNoType: input.hospitalRegistrationNoType }
           : {}),
         ...(input.dateOfReporting !== undefined ? { dateOfReporting: input.dateOfReporting } : {}),
         ...(input.caseRegisteredThrough !== undefined
@@ -80,6 +90,9 @@ export const registrationService = {
         ...(input.referralFacilityDistrict !== undefined
           ? { referralFacilityDistrict: input.referralFacilityDistrict }
           : {}),
+        ...(input.referralFacilityPincode !== undefined
+          ? { referralFacilityPincode: input.referralFacilityPincode }
+          : {}),
         ...(input.referralFacilityHospitalLabNh !== undefined
           ? { referralFacilityHospitalLabNh: input.referralFacilityHospitalLabNh }
           : {}),
@@ -88,6 +101,9 @@ export const registrationService = {
           : {}),
         ...(input.dateOfFirstDiagnosis !== undefined
           ? { dateOfFirstDiagnosis: input.dateOfFirstDiagnosis }
+          : {}),
+        ...(input.microscopicConfirmationLater !== undefined
+          ? { microscopicConfirmationLater: input.microscopicConfirmationLater }
           : {}),
         ...(input.anthropometricHeightCm !== undefined
           ? { anthropometricHeightCm: input.anthropometricHeightCm }
@@ -99,6 +115,7 @@ export const registrationService = {
           ? { maritalStatus: input.maritalStatus as never }
           : {}),
         ...(input.education !== undefined ? { education: input.education as never } : {}),
+        ...(input.occupation !== undefined ? { occupation: input.occupation } : {}),
         ...(input.status !== undefined ? { status: input.status as never } : {}),
         ...(input.formCompletedBy !== undefined
           ? { formCompletedBy: input.formCompletedBy }
@@ -106,6 +123,7 @@ export const registrationService = {
         ...(input.formCompletionDate !== undefined
           ? { formCompletionDate: input.formCompletionDate }
           : {}),
+        ...(input.remarks !== undefined ? { remarks: input.remarks } : {}),
         ...(input.createdByUserId !== undefined
           ? { createdByUserId: input.createdByUserId }
           : {}),

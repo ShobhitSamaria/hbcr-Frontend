@@ -33,28 +33,37 @@ async function main() {
     create: { id: 2, name: "Tata Memorial Hospital", centreId: centre2.id },
   });
 
-  await prisma.user.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
+  // Login credentials (dev seed). Usernames are the hospital codes and the
+  // shared password is documented in the README / login helper.
+  const seedUsers = [
+    {
       id: 1,
+      username: "hospital1",
       fullName: "Dr. A. Srinivasan",
       role: "Registry coordinator",
       initials: "AS",
       hospitalId: hospital.id,
     },
-  });
-  await prisma.user.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
+    {
       id: 2,
+      username: "hospital2",
       fullName: "Dr. P. Mehta",
       role: "Registry coordinator",
       initials: "PM",
       hospitalId: hospital2.id,
     },
-  });
+  ];
+  const { hashSync } = await import("bcryptjs");
+  const passwordHash = hashSync("HBCR@2024", 10);
+
+  for (const u of seedUsers) {
+    const { id, ...data } = u;
+    await prisma.user.upsert({
+      where: { id },
+      update: { ...data, passwordHash },
+      create: { id, ...data, passwordHash },
+    });
+  }
 
   // Patients from the dashboard mock
   const demoPatients = [
@@ -140,6 +149,18 @@ async function main() {
       },
     });
   }
+
+  // The demo rows above are inserted with explicit ids (101-105), so the
+  // Postgres autoincrement sequences are left behind the seeded rows. If the
+  // seed ever runs against a fresh/migrate-reset database, the next patient
+  // or registration insert would collide with a seeded id and fail with a
+  // unique-constraint error (409). Advance both sequences past the max id.
+  await prisma.$executeRawUnsafe(
+    `SELECT setval('"hbcr.patients_id_seq"', GREATEST((SELECT COALESCE(MAX(id), 0) FROM "hbcr.patients"), (SELECT last_value FROM "hbcr.patients_id_seq")))`,
+  );
+  await prisma.$executeRawUnsafe(
+    `SELECT setval('"hbcr.registrations_id_seq"', GREATEST((SELECT COALESCE(MAX(id), 0) FROM "hbcr.registrations"), (SELECT last_value FROM "hbcr.registrations_id_seq")))`,
+  );
 
   // eslint-disable-next-line no-console
   console.log("Seed complete: 2 centres, 2 hospitals, 2 users, 5 patients, 5 registrations");

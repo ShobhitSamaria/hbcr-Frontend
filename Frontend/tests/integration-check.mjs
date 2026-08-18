@@ -9,12 +9,34 @@
 // Hit the running backend directly (`npm run start` should be in 5050).
 const BASE = process.env.BASE_URL || "http://localhost:5050/api";
 
+// Data routes are protected now, so sign in first and attach the token.
+const AUTH = {
+  username: process.env.AUTH_USERNAME || "hospital1",
+  password: process.env.AUTH_PASSWORD || "HBCR@2024",
+};
+
+async function login() {
+  const res = await fetch(`${BASE}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(AUTH),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || !body?.data?.token) {
+    throw new Error(`Login failed: ${res.status} ${body?.error?.message ?? "(no body)"}`);
+  }
+  return body.data.token;
+}
+
+const TOKEN = await login();
+
 async function call(path, init = {}) {
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      Authorization: `Bearer ${TOKEN}`,
       ...(init.headers ?? {}),
     },
   });
