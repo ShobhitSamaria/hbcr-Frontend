@@ -41,9 +41,7 @@ const EMPTY_MODALITY = (): ModalityRow => ({
 
 /** Prepends an explicit "Select…" option so an empty value is visibly empty
  *  instead of silently showing the first real option. */
-const withPlaceholder = <T extends string>(
-  opts: { value: T; label: string }[],
-): { value: string; label: string }[] => [{ value: "", label: "Select…" }, ...opts];
+
 
 const fmtDate = (iso: string): string => {
   if (!iso) return "";
@@ -254,7 +252,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
         />
         <SelectField
           label="2. Method of Follow-up"
-          options={withPlaceholder(FOLLOW_UP_METHOD_OPTIONS)}
+          options={FOLLOW_UP_METHOD_OPTIONS}
           value={method}
           onChange={(v) => {
             setMethod(v as FollowUpMethod);
@@ -264,7 +262,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
         />
         <SelectField
           label="3. Vital Status"
-          options={withPlaceholder(VITAL_STATUS_OPTIONS)}
+          options={VITAL_STATUS_OPTIONS}
           value={vitalStatus}
           onChange={(v) => {
             setVitalStatus(v as VitalStatus);
@@ -282,7 +280,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
             label="4. Disease Status"
-            options={withPlaceholder(DISEASE_STATUS_OPTIONS)}
+            options={DISEASE_STATUS_OPTIONS}
             value={diseaseStatus}
             disabled={!isHospitalVisit}
             onChange={(v) => {
@@ -329,7 +327,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <SelectField
             label="5.1 Type of Treatment Given"
-            options={withPlaceholder(TREATMENT_TYPE_OPTIONS)}
+            options={TREATMENT_TYPE_OPTIONS}
             value={treatmentType}
             disabled={!treatmentEnabled}
             onChange={setTreatmentType}
@@ -419,7 +417,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
           />
           <SelectField
             label="7. Place of Death"
-            options={withPlaceholder(PLACE_OF_DEATH_OPTIONS)}
+            options={PLACE_OF_DEATH_OPTIONS}
             value={placeOfDeath}
             disabled={!isDead}
             onChange={(v) => {
@@ -434,7 +432,7 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
           />
           <SelectField
             label="8. Source of Information on Death"
-            options={withPlaceholder(DEATH_INFO_SOURCE_OPTIONS)}
+            options={DEATH_INFO_SOURCE_OPTIONS}
             value={sourceOfDeathInfo}
             disabled={placeOfDeath !== "OTHERS"}
             onChange={setSourceOfDeathInfo}

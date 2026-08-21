@@ -3,8 +3,23 @@ import { Field, SelectField, TextAreaField } from "../FormFields";
 import { TargetedTherapy } from "./TargetedTherapy";
 import { TreatmentBlock } from "./TreatmentBlock";
 
+const STAGING_SYSTEM_OPTIONS = [
+  "TNM",
+  "FIGO",
+  "Ann Arbor",
+  "Toronto stage system for childhood cancers",
+  "Not Applicable",
+  "Lugano",
+  "COG",
+  "Others (Specify)",
+  "Unknown",
+];
+
 export function ClinicalTreatment() {
   const [ecog, setEcog] = useState("Unknown");
+  const [stagingSystem, setStagingSystem] = useState("");
+  const isTNM = stagingSystem === "TNM";
+
   return (
     <div className="space-y-7">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
@@ -26,138 +41,135 @@ export function ClinicalTreatment() {
         />
         <SelectField
           label="28(a). Staging system"
-          options={[
-            "TNM",
-            "FIGO",
-            "Ann Arbor",
-            "Toronto stage system for childhood cancers",
-            "Not Applicable",
-            "Lugano",
-            "COG",
-            "Others (Specify)",
-            "Unknown",
-          ]}
+          options={STAGING_SYSTEM_OPTIONS}
+          value={stagingSystem}
+          onChange={setStagingSystem}
         />
       </div>
-      <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-        28(b). TNM (Tumour, Node, Metastasis)
-      </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <SelectField
-          label="T"
-          options={[
-            "Select T",
-            "Tx",
-            "Tis",
-            "Tis(DCIS)",
-            "Tis(paget)",
-            "T1mi",
-            "T1b3",
-            "T0",
-            "T1",
-            "T1a",
-            "T1a1",
-            "T1a2",
-            "T1b",
-            "T1b1",
-            "T1b2",
-            "T1c",
-            "T1c1",
-            "T1c2",
-            "T1c3",
-            "T2",
-            "T2a",
-            "T2a1",
-            "T2a2",
-            "T2b",
-            "T2c",
-            "T3",
-            "T3a",
-            "T3b",
-            "T3c",
-            "T3d",
-            "T3e",
-            "T4",
-            "T4a",
-            "T4b",
-            "T4c",
-            "T4d",
-          ]}
-        />
-        <SelectField
-          label="N"
-          options={[
-            "Select N",
-            "Nx",
-            "N0",
-            "N1",
-            "N1a",
-            "N1b",
-            "N1c",
-            "N1mi",
-            "N2",
-            "N2a",
-            "N2b",
-            "N2c",
-            "N3",
-            "N3a",
-            "N3b",
-            "N3c",
-          ]}
-        />
-        <SelectField
-          label="M"
-          options={[
-            "Select M",
-            "Mx",
-            "M0",
-            "M1",
-            "M1a",
-            "M1b",
-            "M1c",
-            "M1d",
-          ]}
-        />
-        <SelectField
-          label="28(c). Composite stage"
-          options={[
-            "Select stage",
-            "IA",
-            "IA1",
-            "IA2",
-            "IB",
-            "IB1",
-            "IB2",
-            "IB3",
-            "IC",
-            "IS",
-            "II",
-            "IIA",
-            "IIA1",
-            "IIA2",
-            "IIB",
-            "IIC",
-            "III",
-            "IIIA",
-            "IIIA1",
-            "IIIA2",
-            "IIIB",
-            "IIIC",
-            "IIIC1",
-            "IIIC2",
-            "IV",
-            "IVA",
-            "IVB",
-            "IVC",
-            "A",
-            "B",
-            "C",
-            "D",
-            "8888",
-            "Unknown",
-          ]}
-        />
-      </div>
+      {isTNM ? (
+        <>
+          <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
+            28(b). TNM (Tumour, Node, Metastasis)
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <SelectField
+              label="T"
+              options={["Tx",
+                "Tis",
+                "Tis(DCIS)",
+                "Tis(paget)",
+                "T1mi",
+                "T1b3",
+                "T0",
+                "T1",
+                "T1a",
+                "T1a1",
+                "T1a2",
+                "T1b",
+                "T1b1",
+                "T1b2",
+                "T1c",
+                "T1c1",
+                "T1c2",
+                "T1c3",
+                "T2",
+                "T2a",
+                "T2a1",
+                "T2a2",
+                "T2b",
+                "T2c",
+                "T3",
+                "T3a",
+                "T3b",
+                "T3c",
+                "T3d",
+                "T3e",
+                "T4",
+                "T4a",
+                "T4b",
+                "T4c",
+                "T4d",
+              ]}
+            />
+            <SelectField
+              label="N"
+              options={["Nx",
+                "N0",
+                "N1",
+                "N1a",
+                "N1b",
+                "N1c",
+                "N1mi",
+                "N2",
+                "N2a",
+                "N2b",
+                "N2c",
+                "N3",
+                "N3a",
+                "N3b",
+                "N3c",
+              ]}
+            />
+            <SelectField
+              label="M"
+              options={["Mx",
+                "M0",
+                "M1",
+                "M1a",
+                "M1b",
+                "M1c",
+                "M1d",
+              ]}
+            />
+          </div>
+        </>
+      ) : (
+        stagingSystem && (
+          <div>
+            <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
+              28(a). Staging system value
+            </p>
+            <Field
+              label=""
+              placeholder="Enter staging value"
+              stateKey="28(a). Staging system value"
+            />
+          </div>
+        )
+      )}
+      <SelectField
+        label="28(c). Composite stage"
+        options={["IA",
+          "IA1",
+          "IA2",
+          "IB",
+          "IB1",
+          "IB2",
+          "IB3",
+          "IC",
+          "IS",
+          "II",
+          "IIA",
+          "IIA1",
+          "IIA2",
+          "IIB",
+          "IIC",
+          "III",
+          "IIIA",
+          "IIIA1",
+          "IIIA2",
+          "IIIB",
+          "IIIC",
+          "IIIC1",
+          "IIIC2",
+          "IV",
+          "IVA",
+          "IVB",
+          "IVC",
+          "8888",
+          "Unknown",
+        ]}
+      />
       <TreatmentBlock
         title="29. Treatment Given Prior to Registration at RI / Outside RI"
         requiredChoice
@@ -218,6 +230,14 @@ export function ClinicalTreatment() {
           label="32. Date of completion of form"
           type="date"
           required
+        />
+        <Field
+          label="33. Contact Number"
+          placeholder="Enter contact number"
+        />
+        <Field
+          label="34. Designation"
+          placeholder="Enter designation"
         />
         <div className="sm:col-span-2">
           <TextAreaField

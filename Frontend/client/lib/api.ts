@@ -452,6 +452,13 @@ export const sideApi = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (patientId: number, id: number, data: { answer: "YES" | "NO" | "UNKNOWN"; durationMonths?: number }) =>
+      send<ApiPatientHabit>(`/patients/${patientId}/side/habits/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
+    remove: (patientId: number, id: number) =>
+      send<void>(`/patients/${patientId}/side/habits/${id}`, { method: "DELETE" }),
   },
   comorbidities: {
     list: (patientId: number) =>
@@ -461,6 +468,13 @@ export const sideApi = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (patientId: number, id: number, data: { answer: "YES" | "NO" | "UNKNOWN"; durationMonths?: number }) =>
+      send<ApiPatientComorbidity>(`/patients/${patientId}/side/comorbidities/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
+    remove: (patientId: number, id: number) =>
+      send<void>(`/patients/${patientId}/side/comorbidities/${id}`, { method: "DELETE" }),
   },
 };
 
@@ -495,6 +509,8 @@ export type ApiRegistration = {
   formCompletedBy?: string | null;
   formCompletionDate?: string | null;
   remarks?: string | null;
+  contactNumber?: string | null;
+  designation?: string | null;
   createdByUserId?: number | null;
   createdAt: string;
   hospital?: { id: number; name: string };
@@ -509,11 +525,14 @@ export type RegistrationListItem = {
   id: number;
   patientId: number;
   hbcrRegistrationNo: string;
+  referenceNo?: string | null;
   hospitalId: number;
   status: "ACTIVE" | "PENDING" | "COMPLETED";
   createdAt: string;
+  formCompletedBy?: string | null;
   patient: { id: number; fullName: string; age: number | null; gender: string };
   hospital: { id: number; name: string };
+  pathologicalDiagnosis?: { icd10Site?: string | null } | null;
 };
 
 export const registrationApi = {
@@ -522,8 +541,9 @@ export const registrationApi = {
   create: (
     patientId: number,
     data: {
-      hbcrRegistrationNo: string;
+      hbcrRegistrationNo?: string;
       hospitalId: number;
+      referenceNo?: string;
       departmentName?: string;
       unitNumber?: string;
       hospitalRegistrationNo?: string;
@@ -548,6 +568,8 @@ export const registrationApi = {
       formCompletedBy?: string;
       formCompletionDate?: string;
       remarks?: string;
+      contactNumber?: string;
+      designation?: string;
       createdByUserId?: number;
     },
   ) =>
@@ -556,6 +578,10 @@ export const registrationApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number) => send<ApiRegistration>(`/registrations/${id}`),
+  previewNumbers: (hospitalId: number) =>
+    send<{ hospitalId: number; hospitalName: string; centreCode: string; referenceNo: string; registrationNo: string }>(
+      `/registrations/preview-numbers/${hospitalId}`,
+    ),
 };
 
 // ---------- Pathological diagnosis ----------
@@ -662,6 +688,7 @@ export type ApiTreatment = {
   treatmentType?: string | null;
   clinicalExtentOfDisease?: string | null;
   stagingSystem?: string | null;
+  stagingSystemValue?: string | null;
   tnmT?: string | null;
   tnmN?: string | null;
   tnmM?: string | null;
@@ -747,15 +774,14 @@ export type FollowUpModality =
 
 export type FollowUpSearchHit = {
   registrationId: number;
-  hbcrRegistrationNo: string;
   referenceNo: string | null;
-  hospitalRegistrationNo: string | null;
   patientId: number;
   patientName: string;
   patientAge: number | null;
   patientGender: string;
   icd10Code: string | null;
   visitCount: number;
+  createdAt: string;
 };
 
 export type ApiFollowUpTreatment = {
@@ -797,7 +823,21 @@ export type FollowUpRegistrationDetail = {
   hbcrRegistrationNo: string;
   referenceNo: string | null;
   hospitalRegistrationNo: string | null;
-  patient: { id: number; fullName: string; age: number | null; gender: string };
+  patient: {
+    id: number;
+    fullName: string;
+    age: number | null;
+    gender: string;
+    firstName: string | null;
+    middleName: string | null;
+    lastName: string | null;
+    dateOfBirth: string | null;
+    relatives: ApiPatientRelative[];
+    addresses: ApiPatientAddress[];
+    habits: ApiPatientHabit[];
+    comorbidities: ApiPatientComorbidity[];
+    identifications: ApiPatientIdentification[];
+  };
   icd10Code: string | null;
   visits: ApiFollowUp[];
   /** Next visit number (backend-computed from existing records, max + 1). */

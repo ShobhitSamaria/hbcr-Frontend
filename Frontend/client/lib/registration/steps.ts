@@ -20,7 +20,8 @@ const STEP_KEYS: Record<number, string[]> = {
   1: [
     "1. Name of the Reporting Institution (RI)",
     "Centre code",
-    "2. HBCR Registration Number ( First 2 digits are for year of registration and the next 5 digits for actual registration number)",
+    "Reference Number",
+    "Registration Number",
     "3(a). Department name",
     "3(b). Unit number",
     "4. Hospital Registration Number (MRD / CR / Unique ID)",
@@ -96,6 +97,8 @@ const STEP_KEYS: Record<number, string[]> = {
     "31. Name of person completing form (IN CAPITALS)",
     "32. Date of completion of form",
     "Remarks",
+    "33. Contact Number",
+    "34. Designation",
   ],
 };
 

@@ -29,14 +29,15 @@ const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const REFERRAL_OPTIONS = [
   "Self",
   "Other Hospital/Health Facility",
-  "Screen Detected",
+  "Screen Detected Referral",
   "Unknown",
 ];
 
 export type Step1Values = {
   "1. Name of the Reporting Institution (RI)"?: string;
   "Centre code"?: string;
-  "2. HBCR Registration Number ( First 2 digits are for year of registration and the next 5 digits for actual registration number)"?: string;
+  "Reference Number"?: string;
+  "Registration Number"?: string;
   "3(a). Department name"?: string;
   "3(b). Unit number"?: string;
   "4. Hospital Registration Number (MRD / CR / Unique ID)"?: string;
@@ -79,10 +80,8 @@ export type Step1Values = {
 
 const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "1. Name of the Reporting Institution (RI)": [required(), minLen(2), maxLen(255)],
-  "2. HBCR Registration Number ( First 2 digits are for year of registration and the next 5 digits for actual registration number)": [
-    required(),
-    pattern(/^HBCR-\d{4}-\d{4,5}$/, "Format must be HBCR-YYYY-NNNN (4–5 digits)"),
-  ],
+  "Reference Number": [],
+  "Registration Number": [],
   "3(a). Department name": [maxLen(128)],
   "3(b). Unit number": [maxLen(32)],
   "4. Hospital registration number": [maxLen(64)],
@@ -104,7 +103,7 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "7(d). District": [maxLen(64)],
   "7(e). Pincode": [pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
   "7(f). Date of Registration": [isDate(), notFutureDate()],
-  "8. Date of first diagnosis": [required(), isDate(), notFutureDate()],
+  "8. Date of first diagnosis": [required(), isDate()],
   "First Name": [
     required("Please enter the patient's first name"),
     minLen(2),
@@ -114,19 +113,8 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "Last Name": [maxLen(100)],
   "10. Date of Birth": [isDate(), notFutureDate()],
   "11. Age": [isInt(), range(0, 130, "Age must be between 0 and 130")],
-  "12. Gender": [
-    // First option is the literal "Select gender" placeholder. Reject it
-    // without listing every real value, since the user can pick "Male" /
-    // "Female" / "Other" directly.
-    required("Please select a gender"),
-    notEquals(["Select gender"], "Please select a gender"),
-  ],
-  "16. Marital status": [
-    // First option is the literal "Select status" placeholder. We must
-    // reject it as "not yet chosen" without re-listing every real value.
-    required("Please select a marital status"),
-    notEquals(["Select status"], "Please select a marital status"),
-  ],
+  "12. Gender": [required("Please select a gender")],
+  "16. Marital status": [required("Please select a marital status")],
   "17. Education": [required("Please select an education level")],
   Occupation: [maxLen(128)],
   "Height (cm)": [
@@ -168,7 +156,7 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     hrNo !== undefined &&
     hrNo !== null &&
     String(hrNo).trim() !== "" &&
-    (!hrType || hrType === "Select type")
+    (!hrType || hrType === "")
   ) {
     out["4. Hospital Registration Number (MRD / CR / Unique ID)"] =
       "Please select a registration number type";
@@ -189,21 +177,6 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     const regDate = values["7(f). Date of Registration"];
     if (!regDate) {
       out["7(f). Date of Registration"] = "Facility registration date is required";
-    }
-  }
-
-  // Cross-field: 8. Date of first diagnosis >= 5. Date of reporting
-  const dx = values["8. Date of first diagnosis"];
-  const rep = values["5. Date of reporting"];
-  if (
-    typeof dx === "string" &&
-    typeof rep === "string" &&
-    /^\d{4}-\d{2}-\d{2}$/.test(dx) &&
-    /^\d{4}-\d{2}-\d{2}$/.test(rep)
-  ) {
-    if (new Date(dx + "T00:00:00Z").getTime() < new Date(rep + "T00:00:00Z").getTime()) {
-      out["8. Date of first diagnosis"] =
-        "Date of first diagnosis cannot be before date of reporting";
     }
   }
 

@@ -8,14 +8,14 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { dashboardApi } from "@/lib/api";
-import { apiRegistrationToRow } from "../utils/apiRows";
+import { apiRegistrationToRow, type PatientRow } from "../utils/apiRows";
 import { PatientTable } from "./PatientTable";
 import { StatCard } from "./StatCard";
 import {
   CaseOverviewChart,
   MonthlyRegistrationsChart,
 } from "./Charts";
-import type { Patient } from "../data";
+
 
 type DashboardProps = {
   setView: (v: string) => void;
@@ -28,7 +28,7 @@ export function Dashboard({ setView }: DashboardProps) {
     pendingCases: number;
     completedCases: number;
   } | null>(null);
-  const [recent, setRecent] = useState<Patient[]>([]);
+  const [recent, setRecent] = useState<PatientRow[]>([]);
   const [err, setErr] = useState<string | null>(null);
   const today = useMemo(() => formatToday(), []);
 

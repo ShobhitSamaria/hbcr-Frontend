@@ -2,6 +2,7 @@ import type { Prisma } from "../../generated/prisma/client.ts";
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
 import { buildMeta, parsePagination } from "../utils/pagination.ts";
+import { sequenceService } from "./sequence.service.ts";
 
 const FULL_INCLUDE = {
   hospital: { select: { id: true, name: true } },
@@ -22,8 +23,8 @@ export const registrationService = {
   async create(
     patientId: number,
     input: {
-      hbcrRegistrationNo: string;
-      hospitalId: number;
+      hbcrRegistrationNo?: string;
+      hospitalId?: number; // Ignored — forced to the authenticated user's hospital
       referenceNo?: string;
       departmentName?: string;
       unitNumber?: string;
@@ -31,6 +32,7 @@ export const registrationService = {
       hospitalRegistrationNoType?: string;
       dateOfReporting?: Date;
       caseRegisteredThrough?: string;
+      caseRegisteredThroughOther?: string;
       referralType?: string;
       referralFacilityName?: string;
       referralFacilityCity?: string;
@@ -43,6 +45,7 @@ export const registrationService = {
       anthropometricHeightCm?: number;
       anthropometricWeightKg?: number;
       maritalStatus?: string;
+      maritalStatusOther?: string;
       education?: string;
       occupation?: string;
       status?: string;
@@ -51,21 +54,43 @@ export const registrationService = {
       remarks?: string;
       createdByUserId?: number;
     },
+    /** Hospital id from the authenticated user — overrides any value in input. */
+    reqHospitalId: number,
   ) {
-    // Patient must exist; hospital must exist (Prisma also enforces via FK)
+    // Force hospitalId to the authenticated user's hospital — ignore any value
+    // the client sends in the request body to prevent cross-hospital access.
+    const hospitalId = reqHospitalId;
+
     const [patient, hospital] = await Promise.all([
       prisma.patient.findUnique({ where: { id: patientId }, select: { id: true } }),
-      prisma.hospital.findUnique({ where: { id: input.hospitalId }, select: { id: true } }),
+      prisma.hospital.findUnique({ where: { id: hospitalId }, select: { id: true, centre: { select: { code: true } } } }),
     ]);
     if (!patient) throw httpErrors.notFound(`Patient ${patientId} not found`);
-    if (!hospital) throw httpErrors.notFound(`Hospital ${input.hospitalId} not found`);
+    if (!hospital) throw httpErrors.notFound(`Hospital ${hospitalId} not found`);
+
+    // Auto-generate Reference Number and Registration Number if not provided
+    let referenceNo = input.referenceNo;
+    let hbcrRegistrationNo = input.hbcrRegistrationNo;
+
+    if (!referenceNo || !hbcrRegistrationNo) {
+      // Centre code must exist for auto-generation
+      const centreCode = hospital.centre?.code;
+      if (!centreCode) {
+        throw httpErrors.badRequest(`Hospital ${hospitalId} does not have a centre code configured for Reference Number generation`);
+      }
+
+      // Generate both numbers atomically using Centre Code as prefix
+      const numbers = await sequenceService.generateNumbers(hospitalId, centreCode);
+      referenceNo = referenceNo || numbers.referenceNo;
+      hbcrRegistrationNo = hbcrRegistrationNo || numbers.registrationNo;
+    }
 
     return prisma.registration.create({
       data: {
         patientId,
-        hbcrRegistrationNo: input.hbcrRegistrationNo,
-        hospitalId: input.hospitalId,
-        ...(input.referenceNo !== undefined ? { referenceNo: input.referenceNo } : {}),
+        hbcrRegistrationNo,
+        hospitalId,
+        ...(referenceNo !== undefined ? { referenceNo } : {}),
         ...(input.departmentName !== undefined ? { departmentName: input.departmentName } : {}),
         ...(input.unitNumber !== undefined ? { unitNumber: input.unitNumber } : {}),
         ...(input.hospitalRegistrationNo !== undefined
@@ -77,6 +102,9 @@ export const registrationService = {
         ...(input.dateOfReporting !== undefined ? { dateOfReporting: input.dateOfReporting } : {}),
         ...(input.caseRegisteredThrough !== undefined
           ? { caseRegisteredThrough: input.caseRegisteredThrough as never }
+          : {}),
+        ...(input.caseRegisteredThroughOther !== undefined
+          ? { caseRegisteredThroughOther: input.caseRegisteredThroughOther }
           : {}),
         ...(input.referralType !== undefined
           ? { referralType: input.referralType as never }
@@ -114,6 +142,9 @@ export const registrationService = {
         ...(input.maritalStatus !== undefined
           ? { maritalStatus: input.maritalStatus as never }
           : {}),
+        ...(input.maritalStatusOther !== undefined
+          ? { maritalStatusOther: input.maritalStatusOther }
+          : {}),
         ...(input.education !== undefined ? { education: input.education as never } : {}),
         ...(input.occupation !== undefined ? { occupation: input.occupation } : {}),
         ...(input.status !== undefined ? { status: input.status as never } : {}),
@@ -132,23 +163,21 @@ export const registrationService = {
     });
   },
 
-  async getById(id: number) {
+  async getById(id: number, hospitalId: number) {
     const reg = await prisma.registration.findUnique({
       where: { id },
       include: FULL_INCLUDE,
     });
     if (!reg) throw httpErrors.notFound(`Registration ${id} not found`);
+    if (reg.hospitalId !== hospitalId) throw httpErrors.notFound(`Registration ${id} not found`);
     return reg;
   },
 
-  async list(query: Record<string, unknown>) {
+  async list(query: Record<string, unknown>, hospitalId: number) {
     const { page, limit, skip, take } = parsePagination(query, { defaultLimit: 20 });
-    const where: Prisma.RegistrationWhereInput = {};
+    // Always scope to the logged-in user's hospital — ignore any hospitalId from query
+    const where: Prisma.RegistrationWhereInput = { hospitalId };
     const status = typeof query.status === "string" ? query.status : undefined;
-    const hospitalId =
-      typeof query.hospitalId === "string" || typeof query.hospitalId === "number"
-        ? Number(query.hospitalId)
-        : undefined;
     const patientId =
       typeof query.patientId === "string" || typeof query.patientId === "number"
         ? Number(query.patientId)
@@ -156,7 +185,6 @@ export const registrationService = {
     const q = typeof query.q === "string" ? query.q.trim() : undefined;
 
     if (status) where.status = status as never;
-    if (hospitalId && Number.isFinite(hospitalId)) where.hospitalId = hospitalId;
     if (patientId && Number.isFinite(patientId)) where.patientId = patientId;
     if (q) where.hbcrRegistrationNo = { contains: q, mode: "insensitive" };
 
@@ -180,8 +208,9 @@ export const registrationService = {
   async update(
     id: number,
     input: Record<string, unknown>,
+    hospitalId: number,
   ) {
-    const exists = await prisma.registration.findUnique({ where: { id }, select: { id: true } });
+    const exists = await prisma.registration.findFirst({ where: { id, hospitalId }, select: { id: true } });
     if (!exists) throw httpErrors.notFound(`Registration ${id} not found`);
     return prisma.registration.update({
       where: { id },
@@ -189,20 +218,20 @@ export const registrationService = {
     });
   },
 
-  async remove(id: number) {
-    const exists = await prisma.registration.findUnique({ where: { id }, select: { id: true } });
+  async remove(id: number, hospitalId: number) {
+    const exists = await prisma.registration.findFirst({ where: { id, hospitalId }, select: { id: true } });
     if (!exists) throw httpErrors.notFound(`Registration ${id} not found`);
     await prisma.registration.delete({ where: { id } });
   },
 
-  async listForPatient(patientId: number) {
+  async listForPatient(patientId: number, hospitalId: number) {
     const patient = await prisma.patient.findUnique({
       where: { id: patientId },
       select: { id: true },
     });
     if (!patient) throw httpErrors.notFound(`Patient ${patientId} not found`);
     return prisma.registration.findMany({
-      where: { patientId },
+      where: { patientId, hospitalId },
       orderBy: { id: "desc" },
       include: { hospital: { select: { id: true, name: true } } },
     });

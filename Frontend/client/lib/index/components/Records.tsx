@@ -14,6 +14,7 @@ import {
   type PatientRow,
 } from "../utils/apiRows";
 import { PatientTable } from "./PatientTable";
+import { PatientDetail } from "./PatientDetail";
 
 type RecordsProps = {
   setView: (v: string) => void;
@@ -51,6 +52,7 @@ export function Records({ setView }: RecordsProps) {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(null);
 
   const setFilter = <K extends keyof Filters>(key: K, value: string) => {
     setFilters((f) => ({ ...f, [key]: value }));
@@ -102,6 +104,16 @@ export function Records({ setView }: RecordsProps) {
   const hasActiveFilters = Object.values(filters).some((v) => v.trim() !== "");
   const from = total === 0 ? 0 : (page - 1) * 20 + 1;
   const to = Math.min((page - 1) * 20 + rows.length, total);
+
+  // Show patient detail view when a row is clicked
+  if (selectedPatientId !== null) {
+    return (
+      <PatientDetail
+        patientId={selectedPatientId}
+        onBack={() => setSelectedPatientId(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-5">
@@ -213,7 +225,7 @@ export function Records({ setView }: RecordsProps) {
           </div>
         )}
 
-        <PatientTable rows={rows} />
+        <PatientTable rows={rows} onRowClick={setSelectedPatientId} />
         <div className="flex items-center justify-between border-t border-[#edf3f4] px-5 py-4 text-[11px] text-[#8ba0a6]">
           <span>
             Showing {from}–{to} of {total} patients

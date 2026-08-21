@@ -11,25 +11,29 @@ export const patientController = {
   }),
 
   list: asyncHandler(async (req: Request, res: Response) => {
-    const { items, meta } = await patientService.list(req.query as Record<string, unknown>);
+    const hospitalId = req.hospitalId!;
+    const { items, meta } = await patientService.list(req.query as Record<string, unknown>, hospitalId);
     return ok(res, { items, meta });
   }),
 
   getById: asyncHandler(async (req: Request, res: Response) => {
     const id = parseIdParam(req.params.id);
-    const patient = await patientService.getById(id);
+    const hospitalId = req.hospitalId!;
+    const patient = await patientService.getById(id, hospitalId);
     return ok(res, patient);
   }),
 
   update: asyncHandler(async (req: Request, res: Response) => {
     const id = parseIdParam(req.params.id);
-    const updated = await patientService.update(id, req.body);
+    const hospitalId = req.hospitalId!;
+    const updated = await patientService.update(id, req.body, hospitalId);
     return ok(res, updated, "Patient updated");
   }),
 
   remove: asyncHandler(async (req: Request, res: Response) => {
     const id = parseIdParam(req.params.id);
-    await patientService.remove(id);
+    const hospitalId = req.hospitalId!;
+    await patientService.remove(id, hospitalId);
     return noContent(res);
   }),
 };

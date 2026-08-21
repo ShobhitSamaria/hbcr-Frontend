@@ -11,26 +11,28 @@ async function main() {
   const prisma = new PrismaClient({ adapter });
 
   // Centre & Hospital
+  // Centre codes are numeric (e.g. "961", "962") and used as the prefix
+  // for Reference Number generation.
   const centre = await prisma.centre.upsert({
-    where: { code: "DL001" },
+    where: { code: "961" },
     update: {},
-    create: { code: "DL001" },
+    create: { code: "961" },
   });
   const centre2 = await prisma.centre.upsert({
-    where: { code: "MH002" },
+    where: { code: "962" },
     update: {},
-    create: { code: "MH002" },
+    create: { code: "962" },
   });
 
   const hospital = await prisma.hospital.upsert({
     where: { id: 1 },
     update: {},
-    create: { id: 1, name: "AIIMS New Delhi", centreId: centre.id },
+    create: { id: 1, code: "961", name: "AIIMS New Delhi", centreId: centre.id },
   });
   const hospital2 = await prisma.hospital.upsert({
     where: { id: 2 },
     update: {},
-    create: { id: 2, name: "Tata Memorial Hospital", centreId: centre2.id },
+    create: { id: 2, code: "962", name: "Tata Memorial Hospital", centreId: centre2.id },
   });
 
   // Login credentials (dev seed). Usernames are the hospital codes and the
@@ -65,7 +67,23 @@ async function main() {
     });
   }
 
+  // Seed HospitalSequence rows for the demo hospitals so the sequence
+  // generator starts at 1 for each.
+  await prisma.hospitalSequence.upsert({
+    where: { hospitalId: hospital.id },
+    update: {},
+    create: { hospitalId: hospital.id, nextSequence: 1 },
+  });
+  await prisma.hospitalSequence.upsert({
+    where: { hospitalId: hospital2.id },
+    update: {},
+    create: { hospitalId: hospital2.id, nextSequence: 1 },
+  });
+
   // Patients from the dashboard mock
+  // Reference Number = HospitalCode + 5-digit sequence
+  // Registration Number = last 2 digits of year + last 5 digits of reference
+  // For demo data: hospital code 961, year 2024
   const demoPatients = [
     {
       id: 101,
@@ -73,7 +91,8 @@ async function main() {
       age: 54,
       gender: "FEMALE" as const,
       hospitalId: hospital.id,
-      hbcrRegistrationNo: "HBCR-2024-0184",
+      referenceNo: "96100001",
+      hbcrRegistrationNo: "2400001",
     },
     {
       id: 102,
@@ -81,7 +100,8 @@ async function main() {
       age: 67,
       gender: "MALE" as const,
       hospitalId: hospital.id,
-      hbcrRegistrationNo: "HBCR-2024-0183",
+      referenceNo: "96100002",
+      hbcrRegistrationNo: "2400002",
     },
     {
       id: 103,
@@ -89,7 +109,8 @@ async function main() {
       age: 42,
       gender: "FEMALE" as const,
       hospitalId: hospital2.id,
-      hbcrRegistrationNo: "HBCR-2024-0182",
+      referenceNo: "96200001",
+      hbcrRegistrationNo: "2400001",
     },
     {
       id: 104,
@@ -97,7 +118,8 @@ async function main() {
       age: 71,
       gender: "MALE" as const,
       hospitalId: hospital2.id,
-      hbcrRegistrationNo: "HBCR-2024-0181",
+      referenceNo: "96200002",
+      hbcrRegistrationNo: "2400002",
     },
     {
       id: 105,
@@ -105,13 +127,15 @@ async function main() {
       age: 49,
       gender: "FEMALE" as const,
       hospitalId: hospital.id,
-      hbcrRegistrationNo: "HBCR-2024-0180",
+      referenceNo: "96100003",
+      hbcrRegistrationNo: "2400003",
     },
   ];
 
   for (const p of demoPatients) {
-    const { hospitalId: _hid, hbcrRegistrationNo: _reg, ...patient } = p;
+    const { hospitalId: _hid, referenceNo: _ref, hbcrRegistrationNo: _reg, ...patient } = p;
     void _hid;
+    void _ref;
     void _reg;
 
     await prisma.patient.upsert({
@@ -122,6 +146,7 @@ async function main() {
     await prisma.registration.upsert({
       where: { id: p.id },
       update: {
+        referenceNo: p.referenceNo,
         hbcrRegistrationNo: p.hbcrRegistrationNo,
         hospitalId: p.hospitalId,
         status: p.fullName.includes("Suresh")
@@ -137,6 +162,7 @@ async function main() {
         id: p.id,
         patientId: p.id,
         hospitalId: p.hospitalId,
+        referenceNo: p.referenceNo,
         hbcrRegistrationNo: p.hbcrRegistrationNo,
         status: p.fullName.includes("Suresh")
           ? "COMPLETED"

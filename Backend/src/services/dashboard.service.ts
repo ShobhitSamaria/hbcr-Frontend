@@ -10,17 +10,17 @@ export const dashboardService = {
    *   total patients, new (last 30 days) registrations,
    *   pending / completed cases.
    */
-  async getStats() {
+  async getStats(hospitalId: number) {
     const since = new Date();
     since.setUTCDate(since.getUTCDate() - 30);
 
     const [patientTotal, newRegistrations, pending, completed] = await Promise.all([
-      prisma.patient.count(),
+      prisma.patient.count({ where: { registrations: { some: { hospitalId } } } }),
       prisma.registration.count({
-        where: { createdAt: { gte: since } },
+        where: { hospitalId, createdAt: { gte: since } },
       }),
-      prisma.registration.count({ where: { status: "PENDING" } }),
-      prisma.registration.count({ where: { status: "COMPLETED" } }),
+      prisma.registration.count({ where: { hospitalId, status: "PENDING" } }),
+      prisma.registration.count({ where: { hospitalId, status: "COMPLETED" } }),
     ]);
 
     return {
@@ -35,12 +35,12 @@ export const dashboardService = {
    * Monthly chart for the last 6 months (including current month). Sums new
    * registrations per month.
    */
-  async getMonthlyRegistrations(months = 6) {
+  async getMonthlyRegistrations(hospitalId: number, months = 6) {
     const now = new Date();
     const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (months - 1), 1));
 
     const items = await prisma.registration.findMany({
-      where: { createdAt: { gte: start } },
+      where: { hospitalId, createdAt: { gte: start } },
       select: { createdAt: true },
     });
 
@@ -85,9 +85,10 @@ export const dashboardService = {
   /**
    * Case overview donut: counts by status (Active / Pending / Completed).
    */
-  async getCaseOverview() {
+  async getCaseOverview(hospitalId: number) {
     const counts = await prisma.registration.groupBy({
       by: ["status"],
+      where: { hospitalId },
       _count: { _all: true },
     });
 
@@ -100,13 +101,17 @@ export const dashboardService = {
   /**
    * Recent registrations (last 5) for the dashboard "Recent patients" card.
    */
-  async getRecent(limit = 5) {
+  async getRecent(hospitalId: number, limit = 5) {
     const items = await prisma.registration.findMany({
+      where: { hospitalId },
       orderBy: { id: "desc" },
       take: limit,
       include: {
         patient: { select: { id: true, fullName: true, age: true, gender: true } },
         hospital: { select: { id: true, name: true } },
+        pathologicalDiagnosis: {
+          select: { icd10Site: true },
+        },
       },
     });
     return items;

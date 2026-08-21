@@ -20,6 +20,7 @@ const MOBILE_RE = /^[6-9][0-9]{9}$/;
 export type Step3Values = {
   "Clinical Extent of Disease Before Cancer Directed Treatment"?: string;
   "28(a). Staging system"?: string;
+  "28(a). Staging system value"?: string;
   T?: string;
   N?: string;
   M?: string;
@@ -36,6 +37,8 @@ export type Step3Values = {
   "31. Name of person completing form (IN CAPITALS)"?: string;
   "32. Date of completion of form"?: string;
   Remarks?: string;
+  "33. Contact Number"?: string;
+  "34. Designation"?: string;
 };
 
 const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
@@ -57,6 +60,8 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
     notFutureDate(),
   ],
   Remarks: [maxLen(1000)],
+  "33. Contact Number": [maxLen(15)],
+  "34. Designation": [maxLen(128)],
 });
 
 /**
@@ -64,6 +69,15 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
  */
 export function validateStep3(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step3Rules, values);
+
+  // If staging system is not TNM, require the staging system value.
+  const staging = values["28(a). Staging system"];
+  if (staging && staging !== "TNM") {
+    const v = values["28(a). Staging system value"];
+    if (!v || String(v).trim() === "") {
+      out["28(a). Staging system value"] = "Please enter the staging system value";
+    }
+  }
 
   // 30(b). Targeted therapy "Others (Specify)" requires the text input.
   if (values["30(b). Types of targeted therapy"] === "Others (Specify)") {

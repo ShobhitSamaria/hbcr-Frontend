@@ -11,6 +11,12 @@ export const registrationRouter = Router();
 // Every route uses the FULL path. The router is mounted under `/api` so the
 // prefix here is what resolves in the final URL.
 
+// Preview next Reference Number and Registration Number for a hospital
+registrationRouter.get(
+  "/registrations/preview-numbers/:hospitalId",
+  registrationController.previewNumbers,
+);
+
 registrationRouter.get("/registrations", registrationController.list);
 
 registrationRouter.get(

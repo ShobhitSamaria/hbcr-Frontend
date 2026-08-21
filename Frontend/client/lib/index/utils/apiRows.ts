@@ -12,20 +12,42 @@ import {
 
 export type PatientRow = {
   id: string;
+  patientId?: number;
+  referenceNo: string;
+  registrationNo: string;
   name: string;
   age: number;
   gender: string;
-  hospital: string;
-  diagnosis: string;
-  stage: string;
+  aadhar: string;
+  icd10: string;
   status: string;
   date: string;
+  completedBy: string;
   color: string;
 };
+
+/**
+ * Derive Registration Number from Reference Number.
+ * Formula: last 2 digits of year + last 5 digits of referenceNo.
+ * Example: ref "96100001", year 2026 → "2600001"
+ */
+function deriveRegistrationNo(
+  referenceNo: string | null | undefined,
+  createdAt: string | Date,
+): string {
+  if (!referenceNo) return "—";
+  const d = typeof createdAt === "string" ? new Date(createdAt) : createdAt;
+  const yearSuffix = String(d.getFullYear()).slice(-2);
+  const lastFive = referenceNo.slice(-5);
+  return `${yearSuffix}${lastFive}`;
+}
 
 export function apiRegistrationToRow(r: RegistrationListItem): PatientRow {
   return {
     id: r.hbcrRegistrationNo,
+    patientId: r.patientId,
+    referenceNo: r.referenceNo ?? r.hbcrRegistrationNo,
+    registrationNo: deriveRegistrationNo(r.referenceNo, r.createdAt),
     name: r.patient?.fullName ?? "(unknown)",
     age: r.patient?.age ?? 0,
     gender:
@@ -34,11 +56,11 @@ export function apiRegistrationToRow(r: RegistrationListItem): PatientRow {
         : r.patient?.gender === "MALE"
           ? "Male"
           : "Other",
-    hospital: r.hospital?.name ?? "Unassigned",
-    diagnosis: "—",
-    stage: "—",
+    aadhar: "—",
+    icd10: r.pathologicalDiagnosis?.icd10Site ?? "—",
     status: registrationStatusLabel(r.status),
     date: formatRegistrationDate(r.createdAt),
+    completedBy: r.formCompletedBy ?? "—",
     color: avatarColorClass(r.patient?.fullName ?? ""),
   };
 }
@@ -50,17 +72,22 @@ export function apiRegistrationToRow(r: RegistrationListItem): PatientRow {
 export function apiPatientToRow(p: ApiPatient): PatientRow {
   const reg = p.registrations?.[0];
   const id = reg?.hbcrRegistrationNo ?? `P-${p.id}`;
+  const aadhar =
+    p.identifications?.find((i) => i.idType === "AADHAAR")?.number ?? "—";
   return {
     id,
+    patientId: p.id,
+    referenceNo: reg?.referenceNo ?? id,
+    registrationNo: deriveRegistrationNo(reg?.referenceNo, reg?.createdAt ?? new Date()),
     name: p.fullName,
     age: p.age ?? 0,
     gender:
       p.gender === "FEMALE" ? "Female" : p.gender === "MALE" ? "Male" : "Other",
-    hospital: reg?.hospital?.name ?? "Unassigned",
-    diagnosis: "—",
-    stage: "—",
+    aadhar,
+    icd10: (reg as any)?.pathologicalDiagnosis?.icd10Site ?? "—",
     status: reg?.status ? registrationStatusLabel(reg.status) : "Active",
     date: formatRegistrationDate(reg?.createdAt ?? p.createdAt),
+    completedBy: (reg as any)?.formCompletedBy ?? "—",
     color: avatarColorClass(p.fullName),
   };
 }
@@ -82,9 +109,11 @@ function apiRegistrationFullToRow(r: ApiRegistration): PatientRow {
     id: r.id,
     patientId: r.patientId,
     hbcrRegistrationNo: r.hbcrRegistrationNo,
+    referenceNo: r.referenceNo,
     hospitalId: r.hospitalId,
     status: r.status,
     createdAt: r.createdAt,
+    formCompletedBy: r.formCompletedBy,
     patient: r.patient
       ? {
           id: r.patient.id,
@@ -96,5 +125,6 @@ function apiRegistrationFullToRow(r: ApiRegistration): PatientRow {
     hospital: r.hospital
       ? { id: r.hospital.id, name: r.hospital.name }
       : { id: 0, name: "Unassigned" },
+    pathologicalDiagnosis: r.pathologicalDiagnosis ?? null,
   });
 }

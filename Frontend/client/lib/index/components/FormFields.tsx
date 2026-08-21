@@ -181,6 +181,8 @@ type SelectFieldProps = {
   /** When true the select is not editable (used to keep fields visible but
    *  disabled when their parent condition is not currently applicable). */
   disabled?: boolean;
+  /** Placeholder text shown as the first, unselected option. Defaults to "Select". */
+  placeholder?: string;
 };
 
 export function SelectField({
@@ -191,6 +193,7 @@ export function SelectField({
   required = false,
   name,
   disabled = false,
+  placeholder = "Select",
 }: SelectFieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
@@ -232,10 +235,14 @@ export function SelectField({
             "h-10 w-full appearance-none rounded-lg border bg-[#fbfdfd] px-3 text-xs outline-none " +
             (shouldShow
               ? "border-[#d04a4a] text-[#d04a4a] focus:border-[#d04a4a]"
-              : "border-[#dce9eb] text-[#6e8790] focus:border-[#36a99c]") +
+              : "border-[#dce9eb] focus:border-[#36a99c]") +
+            (!displayValue ? " text-[#afc0c4]" : " text-[#6e8790]") +
             (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "")
           }
         >
+          <option value="" disabled>
+            {placeholder}
+          </option>
           {options.map((x) => {
             const opt =
               typeof x === "string" ? { value: x, label: x } : x;

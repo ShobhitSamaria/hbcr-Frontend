@@ -282,9 +282,7 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
                 type="button"
                 onClick={() =>
                   setSelectedVisitNo((cur) =>
-                    cur && cur > detail.visits[0].visitNo
-                      ? cur - 1
-                      : cur,
+                    cur && cur > detail.visits[0].visitNo ? cur - 1 : cur,
                   )
                 }
                 disabled={detail.visits.length === 0 || (selectedVisitNo ?? 0) <= detail.visits[0].visitNo}
@@ -353,7 +351,7 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
         </p>
         {detail.visits.length === 0 ? (
           <p className="rounded-xl border border-dashed border-[#d5e4e7] bg-[#fafdfd] px-4 py-6 text-center text-xs text-[#8aa0a7]">
-            No follow-up visits recorded yet. Click “+ Add New Follow-up” to record the
+            No follow-up visits recorded yet. Click "+ Add New Follow-up" to record the
             first visit.
           </p>
         ) : visibleVisit ? (

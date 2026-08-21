@@ -44,20 +44,12 @@ export const followUpService = {
    */
   async searchPatients(query: {
     referenceNo?: string;
-    hbcrRegNo?: string;
-    hospitalRegNo?: string;
     aadhaar?: string;
     phone?: string;
-  }) {
+  }, hospitalId: number) {
     const and: Prisma.RegistrationWhereInput[] = [];
     if (query.referenceNo) {
       and.push({ referenceNo: { contains: query.referenceNo, mode: "insensitive" } });
-    }
-    if (query.hbcrRegNo) {
-      and.push({ hbcrRegistrationNo: { contains: query.hbcrRegNo, mode: "insensitive" } });
-    }
-    if (query.hospitalRegNo) {
-      and.push({ hospitalRegistrationNo: { contains: query.hospitalRegNo, mode: "insensitive" } });
     }
     // Patient-level filters (Aadhaar lives on the identifications side table;
     // phone on the address side tables — same semantics as Patient Records).
@@ -82,7 +74,8 @@ export const followUpService = {
         },
       });
     }
-    if (and.length === 0) return [];
+    // Always scope to the logged-in user's hospital
+    and.push({ hospitalId });
 
     const rows = await prisma.registration.findMany({
       where: { AND: and },
@@ -97,15 +90,14 @@ export const followUpService = {
 
     return rows.map((r) => ({
       registrationId: r.id,
-      hbcrRegistrationNo: r.hbcrRegistrationNo,
       referenceNo: r.referenceNo,
-      hospitalRegistrationNo: r.hospitalRegistrationNo,
       patientId: r.patient.id,
       patientName: r.patient.fullName,
       patientAge: r.patient.age,
       patientGender: r.patient.gender,
       icd10Code: r.pathologicalDiagnosis?.icd10Site ?? null,
       visitCount: r._count.followUps,
+      createdAt: r.createdAt.toISOString(),
     }));
   },
 
@@ -114,11 +106,22 @@ export const followUpService = {
    * header info, the ICD-10 site code, and every existing visit (ordered by
    * visit number) with its treatment rows.
    */
-  async getRegistrationDetail(registrationId: number) {
+  async getRegistrationDetail(registrationId: number, hospitalId: number) {
     const reg = await prisma.registration.findUnique({
       where: { id: registrationId },
       include: {
-        patient: { select: { id: true, fullName: true, age: true, gender: true } },
+        patient: {
+          select: {
+            id: true, fullName: true, age: true, gender: true,
+            firstName: true, middleName: true, lastName: true,
+            dateOfBirth: true,
+            relatives: true,
+            addresses: true,
+            habits: true,
+            comorbidities: true,
+            identifications: true,
+          },
+        },
         pathologicalDiagnosis: { select: { icd10Site: true } },
         followUps: {
           orderBy: { visitNo: "asc" },
@@ -127,6 +130,7 @@ export const followUpService = {
       },
     });
     if (!reg) throw httpErrors.notFound(`Registration ${registrationId} not found`);
+    if (reg.hospitalId !== hospitalId) throw httpErrors.notFound(`Registration ${registrationId} not found`);
     return {
       registrationId: reg.id,
       hbcrRegistrationNo: reg.hbcrRegistrationNo,
@@ -135,9 +139,6 @@ export const followUpService = {
       patient: reg.patient,
       icd10Code: reg.pathologicalDiagnosis?.icd10Site ?? null,
       visits: reg.followUps,
-      // Next visit number, computed from the existing visits (max + 1). The
-      // create transaction re-computes it inside the same transaction, so
-      // this is a display hint and never a manual-entry value.
       nextVisitNo: (reg.followUps[reg.followUps.length - 1]?.visitNo ?? 0) + 1,
     };
   },
@@ -148,12 +149,12 @@ export const followUpService = {
    * same number (the [registrationId, visitNo] unique index is the final
    * guard). Existing visits are never touched.
    */
-  async create(input: FollowUpCreateInput) {
+  async create(input: FollowUpCreateInput, hospitalId: number) {
     const reg = await prisma.registration.findUnique({
       where: { id: input.registrationId },
-      select: { id: true },
+      select: { id: true, hospitalId: true },
     });
-    if (!reg) {
+    if (!reg || reg.hospitalId !== hospitalId) {
       throw httpErrors.notFound(`Registration ${input.registrationId} not found`);
     }
 
@@ -219,12 +220,13 @@ export const followUpService = {
   },
 
   /** Single follow-up with its treatment rows (retrieval API). */
-  async getById(id: number) {
+  async getById(id: number, hospitalId: number) {
     const followUp = await prisma.followUp.findUnique({
       where: { id },
-      include: { treatments: { orderBy: { modality: "asc" } } },
+      include: { treatments: { orderBy: { modality: "asc" } }, registration: { select: { hospitalId: true } } },
     });
     if (!followUp) throw httpErrors.notFound(`Follow-up ${id} not found`);
+    if (followUp.registration.hospitalId !== hospitalId) throw httpErrors.notFound(`Follow-up ${id} not found`);
     return followUp;
   },
 };

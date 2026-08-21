@@ -18,8 +18,7 @@ const BACKEND_TO_UI: Record<string, string> = {
   age: "11. Age",
   dateOfBirth: "10. Date of Birth",
   gender: "12. Gender",
-  hbcrRegistrationNo:
-    "2. HBCR Registration Number ( First 2 digits are for year of registration and the next 5 digits for actual registration number)",
+  hbcrRegistrationNo: "Registration Number",
   hospitalId: "1. Name of the Reporting Institution (RI)",
   departmentName: "3(a). Department name",
   unitNumber: "3(b). Unit number",

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useFormStateOptional } from "@/lib/formState";
+import { registrationApi } from "@/lib/api";
 import { Field, SelectField, ToggleDetails } from "../FormFields";
 
 type Step1IdentifyingProps = {
@@ -30,7 +31,41 @@ export function Step1Identifying({
   // Reporting institution + centre code come from the logged-in hospital's
   // profile (returned by the auth API); the fields are read-only.
   const hospitalName = session?.hospital?.name ?? "";
+  const hospitalId = session?.user?.hospitalId;
   const centreCode = session?.hospital?.centre?.code ?? "";
+
+  // Auto-generated Reference Number and Registration Number
+  const [previewNumbers, setPreviewNumbers] = useState<{
+    referenceNo: string;
+    registrationNo: string;
+  } | null>(null);
+  const fetchedRef = useRef<number | null>(null);
+
+  // Fetch preview numbers once when hospital is known.
+  // We intentionally do NOT list `ctx` as a dependency — the form-state
+  // context object identity changes on every render, which would cause
+  // an infinite loop of API calls.
+  useEffect(() => {
+    if (!hospitalId || fetchedRef.current === hospitalId) return;
+    fetchedRef.current = hospitalId;
+    let cancelled = false;
+    registrationApi
+      .previewNumbers(hospitalId)
+      .then((result) => {
+        if (cancelled) return;
+        setPreviewNumbers({
+          referenceNo: result.referenceNo,
+          registrationNo: result.registrationNo,
+        });
+      })
+      .catch(() => {
+        // API not available yet (e.g. migration pending) — leave fields
+        // empty so submit relies on backend auto-generation.
+        if (cancelled) return;
+        setPreviewNumbers(null);
+      });
+    return () => { cancelled = true; };
+  }, [hospitalId]);
 
   // Keep the auto-populated values in the form-state capture so validation
   // and the submit snapshot always see the logged-in hospital, even though
@@ -78,6 +113,34 @@ export function Step1Identifying({
   const handleCaseThrough = (v: string) => {
     setCaseThrough(v);
     ctx?.set("6. Case Registered Through (Patient’s first reporting at RI)", v);
+    if (v !== "Other") ctx?.set("6(a). Case Registered Through (Other)", "");
+  };
+  const [caseThroughOther, setCaseThroughOther] = useState<string>(() => {
+    const cur = ctx?.values.current["6(a). Case Registered Through (Other)"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const handleCaseThroughOther = (v: string) => {
+    setCaseThroughOther(v);
+    ctx?.set("6(a). Case Registered Through (Other)", v);
+  };
+
+  // 16. Marital Status — when "Other" is selected, show a text input.
+  const [maritalStatus, setMaritalStatus] = useState<string>(() => {
+    const cur = ctx?.values.current["16. Marital status"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const handleMaritalStatus = (v: string) => {
+    setMaritalStatus(v);
+    ctx?.set("16. Marital status", v);
+    if (v !== "Other") ctx?.set("16(a). Marital status (Other)", "");
+  };
+  const [maritalOther, setMaritalOther] = useState<string>(() => {
+    const cur = ctx?.values.current["16(a). Marital status (Other)"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const handleMaritalOther = (v: string) => {
+    setMaritalOther(v);
+    ctx?.set("16(a). Marital status (Other)", v);
   };
 
   // 10. Date of Birth → 11. Age — age is derived from the DOB and read-only.
@@ -122,10 +185,18 @@ export function Step1Identifying({
           readOnly
         />
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Field
-          label="2. HBCR Registration Number ( First 2 digits are for year of registration and the next 5 digits for actual registration number)"
-          placeholder="HBCR-2024-0185"
+          label="Reference Number"
+          value={previewNumbers?.referenceNo ?? ""}
+          readOnly
+          placeholder="Auto-generated on submission"
+        />
+        <Field
+          label="Registration Number"
+          value={previewNumbers?.registrationNo ?? ""}
+          readOnly
+          placeholder="Auto-generated on submission"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
@@ -137,16 +208,9 @@ export function Step1Identifying({
           label="4. Hospital Registration Number (MRD / CR / Unique ID)"
           value={hospitalRegType}
           onChange={handleHospitalRegType}
-          options={[
-            "Select type",
-            "ABHA",
-            "Aadhaar",
-            "MRD No",
-            "CR No.",
-            "Unique Hospital Identification Number",
-          ]}
+          options={["ABHA", "Aadhaar", "MRD No", "CR No.", "Unique Hospital Identification Number"]}
         />
-        {hospitalRegType && hospitalRegType !== "Select type" && (
+        {hospitalRegType && (
           <Field
             label="4. Hospital registration number"
             placeholder={`Enter ${hospitalRegType} number`}
@@ -157,15 +221,16 @@ export function Step1Identifying({
           label="6. Case Registered Through (Patient’s first reporting at RI)"
           value={caseThrough}
           onChange={handleCaseThrough}
-          options={[
-            "Select",
-            "Out Patient",
-            "In Patient Elective",
-            "In Patient Emergency",
-            "Unknown Person",
-            "Other",
-          ]}
+          options={["Out Patient", "In Patient Elective", "In Patient Emergency", "Unknown Person", "Other"]}
         />
+        {caseThrough === "Other" && (
+          <Field
+            label="6(a). Case Registered Through (Other)"
+            placeholder="Specify other case registered through"
+            value={caseThroughOther}
+            onChange={handleCaseThroughOther}
+          />
+        )}
         <SelectField
           label="7. Type of referral"
           value={referral}
@@ -173,7 +238,7 @@ export function Step1Identifying({
           options={[
             "Self",
             "Other Hospital/Health Facility",
-            "Screen Detected",
+            "Screen Detected Referral",
             "Unknown",
           ]}
         />
@@ -221,7 +286,7 @@ export function Step1Identifying({
         />
         <SelectField
           label="12. Gender"
-          options={["Select gender", "Male", "Female", "Other"]}
+          options={["Male", "Female", "Other"]}
         />
       </div>
       <div>
@@ -229,26 +294,27 @@ export function Step1Identifying({
           13. Unique identification
         </label>
         <div className="space-y-3">
-          {[
-            "a). Aadhaar",
-            "b). ABHA",
-            "c). Voter ID",
-            "d). Passport",
-            "d). AB-PMJAY",
-            "e). Other",
-          ].map((id) => (
+          {([
+            { label: "a). Aadhaar", maxLength: 12, pattern: "[0-9]{12}", title: "Aadhaar must be exactly 12 digits" },
+            { label: "b). ABHA" },
+            { label: "c). PAN Card", maxLength: 10, pattern: "[A-Z]{5}[0-9]{4}[A-Z]", title: "PAN must be 10 characters: 5 uppercase letters, 4 digits, 1 uppercase letter" },
+            { label: "d). Voter ID", maxLength: 10, pattern: ".{10}", title: "Voter ID must be exactly 10 characters" },
+            { label: "e). Passport", maxLength: 8, pattern: "[A-Z][0-9]{7}", title: "Passport must be 1 uppercase letter followed by 7 digits" },
+            { label: "f). AB-PMJAY" },
+            { label: "g). Other" },
+          ]).map(({ label, maxLength, pattern, title }) => (
             <div
-              key={id}
+              key={label}
               className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
             >
-              <span className="w-28">{id}</span>
+              <span className="w-28">{label}</span>
               <label className="flex items-center gap-1.5">
                 <input
                   type="radio"
-                  name={"id-" + id}
-                  checked={!selectedIds.includes(id)}
+                  name={"id-" + label}
+                  checked={!selectedIds.includes(label)}
                   onChange={() =>
-                    setSelectedIds(selectedIds.filter((x) => x !== id))
+                    setSelectedIds(selectedIds.filter((x) => x !== label))
                   }
                   className="accent-[#0b7d87]"
                 />
@@ -257,13 +323,13 @@ export function Step1Identifying({
               <label className="flex items-center gap-1.5">
                 <input
                   type="radio"
-                  name={"id-" + id}
-                  checked={selectedIds.includes(id)}
+                  name={"id-" + label}
+                  checked={selectedIds.includes(label)}
                   onChange={() =>
                     setSelectedIds(
-                      selectedIds.includes(id)
+                      selectedIds.includes(label)
                         ? selectedIds
-                        : [...selectedIds, id],
+                        : [...selectedIds, label],
                     )
                   }
                   className="accent-[#0b7d87]"
@@ -271,8 +337,11 @@ export function Step1Identifying({
                 Yes
               </label>
               <input
-                placeholder={"Enter " + id + " number"}
-                disabled={!selectedIds.includes(id)}
+                placeholder={"Enter " + label + " number"}
+                disabled={!selectedIds.includes(label)}
+                maxLength={maxLength}
+                pattern={pattern}
+                title={title}
                 className="h-8 w-44 rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-2 text-[11px] outline-none focus:border-[#36a99c] disabled:cursor-not-allowed disabled:bg-[#f1f5f5] disabled:text-[#a9b8bc]"
               />
             </div>
@@ -396,28 +465,21 @@ export function Step1Identifying({
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
           label="16. Marital status"
-          options={[
-            "Select status",
-            "Married",
-            "Single",
-            "Widowed",
-            "Divorced",
-          ]}
+          value={maritalStatus}
+          onChange={handleMaritalStatus}
+          options={["Married", "Single", "Widowed", "Divorced", "Separated", "Other", "Unknown"]}
         />
+        {maritalStatus === "Other" && (
+          <Field
+            label="16(a). Marital status (Other)"
+            placeholder="Specify other marital status"
+            value={maritalOther}
+            onChange={handleMaritalOther}
+          />
+        )}
         <SelectField
           label="17. Education"
-          options={[
-            "Not applicable (for children below 7 years)",
-            "Illiterate",
-            "Literate",
-            "Primary",
-            "Middle",
-            "Secondary/Higher Secondary",
-            "Technical-after matric",
-            "Graduate and above",
-            "Others (specify)",
-            "Unknown",
-          ]}
+          options={["Illiterate", "Literate", "Primary", "Middle", "Secondary/Higher Secondary", "Technical-after matric", "Graduate and above", "Others (specify)", "Unknown"]}
         />
       </div>
       <Field
@@ -428,8 +490,9 @@ export function Step1Identifying({
         title="18(a). Habits"
         items={[
           "Smoking",
-          "Smokeless Tobacco",
-          "Betel Nut",
+          "Smokeless",
+          "Betel Nut with Tobacco",
+          "Betel Nut without Tobacco",
           "Alcohol",
         ]}
       />
@@ -639,17 +702,7 @@ function FamilialCancerSection({
           <SelectField
             label="Primary site of tumor for relative"
             required
-            options={[
-              "Select primary site",
-              "Breast",
-              "Ovary",
-              "Colon",
-              "Prostate",
-              "Endometrial",
-              "Melanoma",
-              "Thyroid",
-              "Pancreas",
-            ]}
+            options={["Breast", "Ovary", "Colon", "Prostate", "Endometrial", "Melanoma", "Thyroid", "Pancreas"]}
           />
           <Field
             label="Age at diagnosis"

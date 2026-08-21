@@ -11,6 +11,7 @@ import { healthRouter } from "./health.routes.ts";
 import { authRouter } from "./auth.routes.ts";
 import { icdoRouter } from "./icdo.routes.ts";
 import { icd10Router } from "./icd10.routes.ts";
+import { registrationController } from "../controllers/registration.controller.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
 
 export const apiRouter = Router();
@@ -21,7 +22,13 @@ apiRouter.use("/health", healthRouter);
 // /api/auth* — login is public; /me protects itself
 apiRouter.use("/auth", authRouter);
 
-// Everything below requires a valid login token. This guards the dashboard,
+// /api/registrations/preview-numbers — public, no auth needed (display only)
+apiRouter.get(
+  "/registrations/preview-numbers/:hospitalId",
+  registrationController.previewNumbers,
+);
+
+// Everything else requires a valid login token. This guards the dashboard,
 // patient, registration and reference-data endpoints against unauthenticated
 // access; the UI additionally redirects to /login.
 apiRouter.use(requireAuth);

@@ -50,12 +50,13 @@ enum Gender {
 }
 
 enum IdType {
-  AADHAAR  @map("aadhaar")
-  ABHA     @map("abha")
-  VOTER_ID @map("voter_id")
-  PASSPORT @map("passport")
-  AB_PMJAY @map("ab_pmjay")
-  OTHER    @map("other")
+  AADHAAR   @map("aadhaar")
+  ABHA      @map("abha")
+  PAN_CARD  @map("pan_card")
+  VOTER_ID  @map("voter_id")
+  PASSPORT  @map("passport")
+  AB_PMJAY  @map("ab_pmjay")
+  OTHER     @map("other")
 
   @@map("hbcr.id_type_enum")
 }
@@ -92,10 +93,11 @@ enum YesNoUnknown {
 }
 
 enum Habit {
-  SMOKING           @map("smoking")
-  SMOKELESS_TOBACCO @map("smokeless_tobacco")
-  BETEL_NUT         @map("betel_nut")
-  ALCOHOL           @map("alcohol")
+  SMOKING                  @map("smoking")
+  SMOKELESS                @map("smokeless")
+  BETEL_NUT_WITH_TOBACCO   @map("betel_nut_with_tobacco")
+  BETEL_NUT_WITHOUT_TOBACCO @map("betel_nut_without_tobacco")
+  ALCOHOL                  @map("alcohol")
 
   @@map("hbcr.habit_enum")
 }
@@ -139,10 +141,13 @@ enum ReferralType {
 }
 
 enum MaritalStatus {
-  MARRIED  @map("married")
-  SINGLE   @map("single")
-  WIDOWED  @map("widowed")
-  DIVORCED @map("divorced")
+  MARRIED    @map("married")
+  SINGLE     @map("single")
+  WIDOWED    @map("widowed")
+  DIVORCED   @map("divorced")
+  SEPARATED  @map("separated")
+  OTHER      @map("other")
+  UNKNOWN    @map("unknown")
 
   @@map("hbcr.marital_status_enum")
 }
@@ -462,6 +467,7 @@ model Centre {
 /// Reporting Institutions (Step 1, Field 1).
 model Hospital {
   id        Int      @id @default(autoincrement())
+  code      String   @unique @db.VarChar(16) // Hospital code for Reference Number generation (e.g. "961")
   name      String   @db.VarChar(255)
   centreId  Int      @map("centre_id")
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -469,9 +475,26 @@ model Hospital {
   centre        Centre         @relation(fields: [centreId], references: [id], onDelete: Restrict)
   users         User[]
   registrations Registration[]
+  sequences     HospitalSequence[]
 
   @@index([centreId], name: "idx_hospitals_centre")
   @@map("hbcr.hospitals")
+}
+
+/// Tracks the running sequence per hospital for Reference Number generation.
+/// Each hospital has its own sequence starting from 1, which is used to
+/// generate the Reference Number: {hospital_code}{sequence} (e.g. 96100001).
+model HospitalSequence {
+  id             Int      @id @default(autoincrement())
+  hospitalId     Int      @map("hospital_id")
+  nextSequence   Int      @default(1) @map("next_sequence")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  hospital Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+
+  @@unique([hospitalId], name: "hospital_sequences_hospital_id_key")
+  @@map("hbcr.hospital_sequences")
 }
 
 /// Registry coordinators / staff (sidebar avatar, "Dr. A. Srinivasan").
@@ -626,12 +649,16 @@ model Registration {
   anthropometricHeightCm        Decimal?           @map("anthropometric_height_cm") @db.Decimal(5, 2)
   anthropometricWeightKg        Decimal?           @map("anthropometric_weight_kg") @db.Decimal(5, 2)
   maritalStatus                 MaritalStatus?     @map("marital_status")
+  maritalStatusOther            String?            @map("marital_status_other") @db.VarChar(128)
   education                     Education?         @map("education")
   occupation                    String?            @db.VarChar(128)
+  caseRegisteredThroughOther    String?            @map("case_registered_through_other") @db.VarChar(128)
   status                        RegistrationStatus @default(ACTIVE)
   formCompletedBy               String?            @map("form_completed_by") @db.VarChar(255)
   formCompletionDate            DateTime?          @map("form_completion_date") @db.Date
   remarks                       String?            @map("remarks") @db.VarChar(1000)
+  contactNumber                 String?            @map("contact_number") @db.VarChar(15)
+  designation                   String?            @map("designation") @db.VarChar(128)
   createdByUserId               Int?               @map("created_by_user_id")
   createdAt                     DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
 
@@ -723,10 +750,11 @@ model Treatment {
   treatmentType               TreatmentType?   @map("treatment_type")
   clinicalExtentOfDisease     ClinicalExtent?  @map("clinical_extent_of_disease")
   stagingSystem               StagingSystem?   @map("staging_system")
+  stagingSystemValue          String?          @map("staging_system_value") @db.VarChar(512)
   tnmT                        String?          @map("tnm_t") @db.VarChar(16)
   tnmN                        String?          @map("tnm_n") @db.VarChar(16)
   tnmM                        String?          @map("tnm_m") @db.VarChar(16)
-  compositeStage              String?          @map("composite_stage") @db.VarChar(16)
+  compositeStage              String?          @map("composite_stage") @db.VarChar(256)
   ecogStatus                  EcogStatus?      @map("ecog_status")
   ecogGrade                   EcogGrade?       @map("ecog_grade")
   targetedTherapyType         TargetedTherapy? @map("targeted_therapy_type")

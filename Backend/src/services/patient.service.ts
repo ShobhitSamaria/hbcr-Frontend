@@ -4,6 +4,15 @@ import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
 import { buildMeta, parsePagination } from "../utils/pagination.ts";
 
+/**
+ * Fields that are read-only after patient creation.
+ * These cannot be modified via the update endpoint.
+ */
+const PROTECTED_FIELDS = new Set([
+  "fullName", "firstName", "middleName", "lastName",
+  "age", "dateOfBirth", "gender",
+]);
+
 const SIDE_TABLES_INCLUDE = {
   identifications: true,
   relatives: true,
@@ -50,16 +59,19 @@ export const patientService = {
     });
   },
 
-  async getById(id: number) {
+  async getById(id: number, hospitalId: number) {
     const patient = await prisma.patient.findUnique({
       where: { id },
       include: SIDE_TABLES_INCLUDE,
     });
     if (!patient) throw httpErrors.notFound(`Patient ${id} not found`);
+    // Ensure patient has at least one registration in the caller's hospital
+    const hasAccess = patient.registrations?.some((r) => r.hospitalId === hospitalId);
+    if (!hasAccess) throw httpErrors.notFound(`Patient ${id} not found`);
     return patient;
   },
 
-  async list(query: Record<string, unknown>) {
+  async list(query: Record<string, unknown>, hospitalId: number) {
     const { page, limit, skip, take } = parsePagination(query, { defaultLimit: 20 });
 
     const str = (key: string) =>
@@ -133,6 +145,9 @@ export const patientService = {
     if (entryRange.gte || entryRange.lte) regAnd.push({ createdAt: entryRange });
     if (regAnd.length > 0) and.push({ registrations: { some: { AND: regAnd } } });
 
+    // Hospital scoping: only show patients that have at least one registration in this hospital.
+    and.push({ registrations: { some: { hospitalId } } });
+
     const where: Prisma.PatientWhereInput = and.length > 0 ? { AND: and } : {};
 
     const [items, total] = await Promise.all([
@@ -142,6 +157,7 @@ export const patientService = {
         take,
         orderBy: { id: "desc" },
         include: {
+          identifications: true,
           registrations: {
             orderBy: { id: "desc" },
             take: 1,
@@ -150,6 +166,11 @@ export const patientService = {
                 select: {
                   id: true,
                   name: true,
+                },
+              },
+              pathologicalDiagnosis: {
+                select: {
+                  icd10Site: true,
                 },
               },
             },
@@ -178,35 +199,48 @@ export const patientService = {
       healthSchemeBeneficiary?: boolean;
       healthSchemeDetails?: string;
     },
+    hospitalId: number,
   ) {
-    // Ensure patient exists first (so we can return 404 cleanly)
-    const exists = await prisma.patient.findUnique({ where: { id }, select: { id: true } });
+    // Ensure patient exists and belongs to this hospital
+    const exists = await prisma.patient.findFirst({
+      where: { id, registrations: { some: { hospitalId } } },
+      select: { id: true },
+    });
     if (!exists) throw httpErrors.notFound(`Patient ${id} not found`);
+
+    // Strip protected fields — these are read-only after creation
+    const stripped = { ...input };
+    for (const key of PROTECTED_FIELDS) {
+      delete (stripped as Record<string, unknown>)[key];
+    }
 
     return prisma.patient.update({
       where: { id },
       data: {
-        ...(input.fullName !== undefined ? { fullName: input.fullName } : {}),
-        ...(input.firstName !== undefined ? { firstName: input.firstName } : {}),
-        ...(input.middleName !== undefined ? { middleName: input.middleName } : {}),
-        ...(input.lastName !== undefined ? { lastName: input.lastName } : {}),
-        ...(input.age !== undefined ? { age: input.age } : {}),
-        ...(input.dateOfBirth !== undefined ? { dateOfBirth: input.dateOfBirth } : {}),
-        ...(input.gender !== undefined
-          ? { gender: input.gender as P.PatientUncheckedUpdateInput["gender"] }
+        ...(stripped.healthSchemeBeneficiary !== undefined
+          ? { healthSchemeBeneficiary: stripped.healthSchemeBeneficiary }
           : {}),
-        ...(input.healthSchemeBeneficiary !== undefined
-          ? { healthSchemeBeneficiary: input.healthSchemeBeneficiary }
-          : {}),
-        ...(input.healthSchemeDetails !== undefined
-          ? { healthSchemeDetails: input.healthSchemeDetails }
+        ...(stripped.healthSchemeDetails !== undefined
+          ? { healthSchemeDetails: stripped.healthSchemeDetails }
           : {}),
       },
     });
   },
 
-  async remove(id: number) {
-    const exists = await prisma.patient.findUnique({ where: { id }, select: { id: true } });
+  /**
+   * Check if a patient has any registrations — used to block side-table
+   * mutations (identifications, relatives, addresses) for existing patients.
+   */
+  async hasRegistrations(patientId: number): Promise<boolean> {
+    const count = await prisma.registration.count({ where: { patientId } });
+    return count > 0;
+  },
+
+  async remove(id: number, hospitalId: number) {
+    const exists = await prisma.patient.findFirst({
+      where: { id, registrations: { some: { hospitalId } } },
+      select: { id: true },
+    });
     if (!exists) throw httpErrors.notFound(`Patient ${id} not found`);
     await prisma.patient.delete({ where: { id } });
   },

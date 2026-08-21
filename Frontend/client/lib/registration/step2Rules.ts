@@ -63,9 +63,7 @@ const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
   "23.1 Code": [maxLen(64)],
   "23.2 Morphology": [maxLen(128)],
   "23.2 Code": [maxLen(64)],
-  "23.2 Grade": [
-    notEquals(["Select Grade"], "Please select a grade"),
-  ],
+  "23.2 Grade": [],
   "23.3 Site": [maxLen(128)],
   "23.3 Code": [maxLen(64)],
   "23.4 Morphology": [maxLen(128)],

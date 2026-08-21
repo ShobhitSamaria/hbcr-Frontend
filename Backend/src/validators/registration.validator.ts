@@ -21,15 +21,16 @@ export const HBCR_REGISTRATION_NO_REGEX = HBCR_RE;
  * `hospitalId` MUST come from the body.
  */
 export const createRegistrationValidator = makeValidator({
-  hbcrRegistrationNo: [required(), isString(), trim(), maxLen(20), matches(HBCR_RE, "must look like HBCR-2024-0185")],
+  hbcrRegistrationNo: [isString(), trim(), maxLen(20)], // Now optional - auto-generated if not provided
   hospitalId: [required(), isInt("hospitalId is required and must be a positive integer")],
-  referenceNo: [isString(), trim(), maxLen(64)],
+  referenceNo: [isString(), trim(), maxLen(64)], // Now optional - auto-generated if not provided
   departmentName: [isString(), trim(), maxLen(128)],
   unitNumber: [isString(), trim(), maxLen(32)],
   hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
   hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
+  caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
@@ -42,12 +43,15 @@ export const createRegistrationValidator = makeValidator({
   anthropometricHeightCm: [isNumber("must be a number")],
   anthropometricWeightKg: [isNumber("must be a number")],
   maritalStatus: [inEnum(MaritalStatus)],
+  maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],
   formCompletionDate: [isDate()],
   remarks: [isString(), trim(), maxLen(1000)],
+  contactNumber: [isString(), trim(), maxLen(15)],
+  designation: [isString(), trim(), maxLen(128)],
   createdByUserId: [isInt()],
 });
 
@@ -59,6 +63,7 @@ export const updateRegistrationValidator = makeValidator({
   hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
+  caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
@@ -71,10 +76,13 @@ export const updateRegistrationValidator = makeValidator({
   anthropometricHeightCm: [isNumber("must be a number")],
   anthropometricWeightKg: [isNumber("must be a number")],
   maritalStatus: [inEnum(MaritalStatus)],
+  maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],
   formCompletionDate: [isDate()],
   remarks: [isString(), trim(), maxLen(1000)],
+  contactNumber: [isString(), trim(), maxLen(15)],
+  designation: [isString(), trim(), maxLen(128)],
 });

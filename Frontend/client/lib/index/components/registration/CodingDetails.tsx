@@ -102,13 +102,7 @@ const [laterality, setLaterality] = useState(
             />
             <SelectField
               label="23.2 Grade"
-              options={[
-                "Select Grade",
-                "Grade I - Well Differentiated",
-                "Grade II - Moderately Differentiated",
-                "Grade III - Poorly Differentiated",
-                "Grade IV - Undifferentiated",
-              ]}
+              options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>
         </div>
@@ -154,13 +148,7 @@ const [laterality, setLaterality] = useState(
             />
             <SelectField
               label="23.4 Grade"
-              options={[
-                "Select Grade",
-                "Grade I - Well Differentiated",
-                "Grade II - Moderately Differentiated",
-                "Grade III - Poorly Differentiated",
-                "Grade IV - Undifferentiated",
-              ]}
+              options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>
         </div>
@@ -229,9 +217,7 @@ const [laterality, setLaterality] = useState(
       </div>
       <SelectField
         label="26. Sequence"
-        options={[
-          "Select sequence",
-          "One Primary Only",
+        options={["One Primary Only",
           "First of Two or More Primaries",
           "Second of Two or More Primaries",
           "Third of Three or More Primaries",
