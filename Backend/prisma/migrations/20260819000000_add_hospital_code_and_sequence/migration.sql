@@ -23,6 +23,7 @@ CREATE TABLE "hbcr.hospital_sequences" (
     CONSTRAINT "hospital_sequences_hospital_id_fkey" FOREIGN KEY ("hospital_id") REFERENCES "hbcr.hospitals"("id") ON DELETE CASCADE
 );
 
--- 3. Seed initial sequence rows for existing hospitals
-INSERT INTO "hbcr.hospital_sequences" ("hospital_id", "next_sequence") VALUES (1, 1) ON CONFLICT DO NOTHING;
-INSERT INTO "hbcr.hospital_sequences" ("hospital_id", "next_sequence") VALUES (2, 1) ON CONFLICT DO NOTHING;
+-- 3. Seed initial sequence rows for existing hospitals (safe: only inserts for hospitals that exist)
+INSERT INTO "hbcr.hospital_sequences" ("hospital_id", "next_sequence")
+SELECT "id", 1 FROM "hbcr.hospitals"
+ON CONFLICT ("hospital_id") DO NOTHING;
