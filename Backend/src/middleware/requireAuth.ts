@@ -25,5 +25,17 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 
   req.user = user;
   req.hospitalId = user.hospitalId;
+
+  // Guard: every authenticated user must be linked to a hospital.
+  // Without this, downstream Prisma queries that require hospitalId
+  // would crash with "Argument hospitalId must not be null".
+  if (!user.hospitalId) {
+    return fail(
+      res,
+      403,
+      "Your account is not linked to any hospital. Please contact an administrator.",
+    );
+  }
+
   return next();
 }
