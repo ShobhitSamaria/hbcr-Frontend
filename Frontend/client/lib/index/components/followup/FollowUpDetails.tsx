@@ -58,6 +58,9 @@ function VisitCard({ visit }: { visit: ApiFollowUp }) {
           <span className="font-semibold">
             {optionLabel(FOLLOW_UP_METHOD_OPTIONS, visit.methodOfFollowUp)}
           </span>
+          {visit.methodOfFollowUpOther && (
+            <span className="text-[#486b77]"> — {visit.methodOfFollowUpOther}</span>
+          )}
         </p>
         <p>
           <span className="text-[#93a9b1]">Vital Status:</span>{" "}
@@ -71,6 +74,9 @@ function VisitCard({ visit }: { visit: ApiFollowUp }) {
             <span className="font-semibold">
               {optionLabel(DISEASE_STATUS_OPTIONS, visit.diseaseStatus)}
             </span>
+            {visit.diseaseStatusOther && (
+              <span className="text-[#486b77]"> — {visit.diseaseStatusOther}</span>
+            )}
           </p>
         )}
         {isHospitalVisit && visit.dateOfFirstRecurrence && (
@@ -108,6 +114,9 @@ function VisitCard({ visit }: { visit: ApiFollowUp }) {
               <span className="font-semibold">
                 {optionLabel(PLACE_OF_DEATH_OPTIONS, visit.placeOfDeath)}
               </span>
+              {visit.placeOfDeathOther && (
+                <span className="text-[#486b77]"> — {visit.placeOfDeathOther}</span>
+              )}
             </p>
             {visit.placeOfDeath === "OTHERS" && (
               <p>
@@ -115,6 +124,9 @@ function VisitCard({ visit }: { visit: ApiFollowUp }) {
                 <span className="font-semibold">
                   {optionLabel(DEATH_INFO_SOURCE_OPTIONS, visit.sourceOfDeathInfo)}
                 </span>
+                {visit.sourceOfDeathInfoOther && (
+                  <span className="text-[#486b77]"> — {visit.sourceOfDeathInfoOther}</span>
+                )}
               </p>
             )}
             {visit.placeOfDeath === "RI" &&
@@ -143,11 +155,27 @@ function VisitCard({ visit }: { visit: ApiFollowUp }) {
           </>
         )}
         {visit.formCompletedBy && (
-          <p>
-            <span className="text-[#93a9b1]">Completed by:</span>{" "}
-            <span className="font-semibold">{visit.formCompletedBy}</span>
-            {visit.dateOfCompletion ? ` (${fmtDate(visit.dateOfCompletion)})` : ""}
-          </p>
+          <>
+            <p>
+              <span className="text-[#93a9b1]">Completed by:</span>{" "}
+              <span className="font-semibold">{visit.formCompletedBy}</span>
+              {visit.formCompletedByDesignation && (
+                <span className="text-[#486b77]"> — {visit.formCompletedByDesignation}</span>
+              )}
+            </p>
+            {visit.formCompletedByContact && (
+              <p>
+                <span className="text-[#93a9b1]">Contact Number:</span>{" "}
+                <span className="font-semibold">{visit.formCompletedByContact}</span>
+              </p>
+            )}
+            {visit.dateOfCompletion && (
+              <p>
+                <span className="text-[#93a9b1]">Date of Completion:</span>{" "}
+                <span className="font-semibold">{fmtDate(visit.dateOfCompletion)}</span>
+              </p>
+            )}
+          </>
         )}
       </div>
 
@@ -200,6 +228,8 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedVisitNo, setSelectedVisitNo] = useState<number | null>(null);
+  const [visitInputValue, setVisitInputValue] = useState("");
+  const [visitError, setVisitError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -207,9 +237,9 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
     try {
       const d = await followUpApi.registrationDetail(registrationId);
       setDetail(d);
-      setSelectedVisitNo(
-        d.visits.length > 0 ? d.visits[d.visits.length - 1].visitNo : null,
-      );
+      const lastVisit = d.visits.length > 0 ? d.visits[d.visits.length - 1] : null;
+      setSelectedVisitNo(lastVisit?.visitNo ?? null);
+      setVisitInputValue(lastVisit ? String(lastVisit.visitNo) : "");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load the patient record");
     } finally {
@@ -221,6 +251,35 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
     void load();
   }, [load]);
 
+  const handleVisitInput = (val: string) => {
+    setVisitInputValue(val);
+    setVisitError(null);
+    const num = parseInt(val, 10);
+    if (!isNaN(num) && detail) {
+      const found = detail.visits.find((v) => v.visitNo === num);
+      if (found) {
+        setSelectedVisitNo(num);
+        setVisitError(null);
+      } else {
+        setSelectedVisitNo(null);
+        if (val.length > 0) {
+          setVisitError(`Patient has only ${detail.visits.length} visit${detail.visits.length === 1 ? "" : "s"}.`);
+        }
+      }
+    }
+  };
+
+  const navigateVisit = (dir: number) => {
+    if (!detail || detail.visits.length === 0) return;
+    const current = selectedVisitNo ?? detail.visits[0].visitNo;
+    const next = current + dir;
+    const found = detail.visits.find((v) => v.visitNo === next);
+    if (found) {
+      setSelectedVisitNo(next);
+      setVisitInputValue(String(next));
+      setVisitError(null);
+    }
+  };
 
   const visibleVisit =
     detail?.visits.find((v) => v.visitNo === selectedVisitNo) ??
@@ -280,11 +339,7 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedVisitNo((cur) =>
-                    cur && cur > detail.visits[0].visitNo ? cur - 1 : cur,
-                  )
-                }
+                onClick={() => navigateVisit(-1)}
                 disabled={detail.visits.length === 0 || (selectedVisitNo ?? 0) <= detail.visits[0].visitNo}
                 aria-label="Previous visit"
                 className="flex h-10 w-9 items-center justify-center rounded-lg border border-[#dce9eb] bg-white text-[#0b7d87] transition hover:bg-[#eef8f7] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white"
@@ -292,29 +347,16 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
                 <ChevronLeft size={15} />
               </button>
               <input
-                readOnly
-                value={
-                  detail.visits.length === 0
-                    ? String(detail.nextVisitNo)
-                    : String(visibleVisit?.visitNo ?? detail.visits[detail.visits.length - 1].visitNo)
-                }
-                className="h-10 w-20 text-center text-xs font-bold text-[#244c5b]"
-                style={{
-                  border: "1px solid #e4edef",
-                  background: "#f2f6f7",
-                  borderRadius: "0.5rem",
-                  cursor: "not-allowed",
-                }}
+                type="number"
+                min="1"
+                value={visitInputValue}
+                onChange={(e) => handleVisitInput(e.target.value)}
+                placeholder="—"
+                className="h-10 w-20 rounded-lg border border-[#dce9eb] bg-white px-2 text-center text-xs font-bold text-[#244c5b] outline-none transition focus:border-[#36a99c] focus:ring-2 focus:ring-[#36a99c]/10"
               />
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedVisitNo((cur) =>
-                    cur === null || cur < detail.visits[detail.visits.length - 1].visitNo
-                      ? (cur ?? detail.visits[0].visitNo - 1) + 1
-                      : cur,
-                  )
-                }
+                onClick={() => navigateVisit(1)}
                 disabled={detail.visits.length === 0 || (selectedVisitNo ?? 0) >= detail.visits[detail.visits.length - 1].visitNo}
                 aria-label="Next visit"
                 className="flex h-10 w-9 items-center justify-center rounded-lg border border-[#dce9eb] bg-white text-[#0b7d87] transition hover:bg-[#eef8f7] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white"
@@ -322,11 +364,15 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
                 <ChevronRight size={15} />
               </button>
             </div>
-            <p className="mt-1.5 text-[10px] text-[#8aa0a7]">
-              {detail.visits.length === 0
-                ? "No visits yet — next visit will be " + detail.nextVisitNo
-                : `Visit ${selectedVisitNo ?? detail.visits[detail.visits.length - 1].visitNo} of ${detail.visits.length} · auto-generated`}
-            </p>
+            {visitError ? (
+              <p className="mt-1.5 text-[11px] font-medium text-[#b34040]">{visitError}</p>
+            ) : (
+              <p className="mt-1.5 text-[10px] text-[#8aa0a7]">
+                {detail.visits.length === 0
+                  ? "No visits yet — next visit will be " + detail.nextVisitNo
+                  : `Showing visit ${selectedVisitNo ?? detail.visits[detail.visits.length - 1].visitNo} of ${detail.visits.length}`}
+              </p>
+            )}
           </div>
           <ReadOnlyField
             label="Patient Name"

@@ -243,6 +243,7 @@ export function extractRegistration(
   maritalStatus?: string;
   maritalStatusOther?: string;
   education?: string;
+  educationOther?: string;
   occupation?: string;
   remarks?: string;
   contactNumber?: string;
@@ -281,9 +282,11 @@ export function extractRegistration(
     hospitalRegistrationNoType:
       hrType || undefined,
     dateOfReporting: val(v, "5. Date of reporting") ?? undefined,
-    caseRegisteredThrough: caseThrough
-      ? caseThrough.replace(/ /g, "_").toUpperCase()
-      : undefined,
+    caseRegisteredThrough: caseThrough === "Unknown"
+      ? "UNKNOWN"
+      : caseThrough
+        ? caseThrough.replace(/ /g, "_").toUpperCase()
+        : undefined,
     caseRegisteredThroughOther: val(v, "6(a). Case Registered Through (Other)") ?? undefined,
     referralType,
     referralFacilityName: val(v, "7(a). Name of Facility.") ?? undefined,
@@ -302,6 +305,7 @@ export function extractRegistration(
     maritalStatus: marital ? marital.replace(/ /g, "_").toUpperCase() : undefined,
     maritalStatusOther: val(v, "16(a). Marital status (Other)") ?? undefined,
     education: education ? education.replace(/ /g, "_").toUpperCase() : undefined,
+    educationOther: val(v, "17(a). Education (Other)") ?? undefined,
     occupation: val(v, "Occupation") ?? undefined,
     remarks: val(v, "Remarks") ?? undefined,
     contactNumber: val(v, "33. Contact Number") ?? undefined,
@@ -337,10 +341,10 @@ export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
   if (longest !== undefined) map.longestSymptomDurationMonths = longest;
 
   const text = (k: string) => val(v, k) ?? undefined;
-  map.anatomicalSite = text("22.1 Anatomical Site of Specimen / Biopsy / SMEAR");
-  map.pathologySlideNo = text("22.2 Pathology Slide No");
-  map.primaryTumorSite = text("22.4 Primary Site of Tumour - Topography");
-  map.morphology = text("22.5 Primary Histology - Morphology");
+  map.anatomicalSite = text("21.1 Anatomical Site of Specimen / Biopsy / SMEAR");
+  map.pathologySlideNo = text("21.2 Pathology Slide No");
+  map.primaryTumorSite = text("21.4 Primary Site of Tumour - Topography");
+  map.morphology = text("21.5 Primary Histology / Morphology");
   // 23. ICD-O-3 coding (sub-sections 23.1 - 23.4)
   map.icdoTopography = text("23.1 Code");
   map.topographySite = text("23.1 Site");
@@ -353,7 +357,7 @@ export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
   map.metastasisMorphologyCode = text("23.4 Code");
   map.metastasisMorphologyGrade = grade("23.4 Grade");
   map.icd10Site = text("24. Site of Tumour (ICD-10)");
-  map.pathologyDateOfReporting = text("22.3 Date of Reporting");
+  map.pathologyDateOfReporting = text("21.3 Date of Reporting");
   const lat = val(v, "25. Laterality");
   if (lat) map.laterality = lat.toUpperCase().replace(/ /g, "_") as any;
   // Paired-laterality radios captured via the same "25. Laterality" key.

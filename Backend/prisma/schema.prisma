@@ -125,7 +125,7 @@ enum CaseThrough {
   OUT_PATIENT          @map("out_patient")
   IN_PATIENT_ELECTIVE  @map("in_patient_elective")
   IN_PATIENT_EMERGENCY @map("in_patient_emergency")
-  UNKNOWN_PERSON       @map("unknown_person")
+  UNKNOWN              @map("unknown")
   OTHER                @map("other")
 
   @@map("hbcr.case_through_enum")
@@ -651,6 +651,7 @@ model Registration {
   maritalStatus                 MaritalStatus?     @map("marital_status")
   maritalStatusOther            String?            @map("marital_status_other") @db.VarChar(128)
   education                     Education?         @map("education")
+  educationOther                String?            @map("education_other") @db.VarChar(128)
   occupation                    String?            @db.VarChar(128)
   caseRegisteredThroughOther    String?            @map("case_registered_through_other") @db.VarChar(128)
   status                        RegistrationStatus @default(ACTIVE)
@@ -803,16 +804,20 @@ model FollowUp {
   // Section 1-3 - always present.
   dateOfFollowUp        DateTime         @map("date_of_follow_up") @db.Date
   methodOfFollowUp      FollowUpMethod   @map("method_of_follow_up")
+  methodOfFollowUpOther String?          @map("method_of_follow_up_other") @db.VarChar(255)
   vitalStatus           VitalStatus      @map("vital_status")
   // Section 4-5 - hospital visit only.
   diseaseStatus         DiseaseStatus?   @map("disease_status")
+  diseaseStatusOther    String?          @map("disease_status_other") @db.VarChar(255)
   dateOfFirstRecurrence DateTime?        @map("date_of_first_recurrence") @db.Date
   treatmentGiven        Boolean?         @map("treatment_given")
   treatmentType         TreatmentType?   @map("treatment_type") // Allopathic / Non-Allopathic / Both
   // Section 6-11 - dead only.
   dateOfDeath           DateTime?        @map("date_of_death") @db.Date
   placeOfDeath          PlaceOfDeath?    @map("place_of_death")
+  placeOfDeathOther     String?          @map("place_of_death_other") @db.VarChar(255)
   sourceOfDeathInfo     DeathInfoSource? @map("source_of_death_info")
+  sourceOfDeathInfoOther String?         @map("source_of_death_info_other") @db.VarChar(255)
   causeIa               String?          @map("cause_ia") @db.VarChar(255)
   causeIb               String?          @map("cause_ib") @db.VarChar(255)
   causeIc               String?          @map("cause_ic") @db.VarChar(255)
@@ -820,7 +825,9 @@ model FollowUp {
   icd10Ucod             String?          @map("icd10_ucod") @db.VarChar(16)
   majorCauseGroupUcod   String?          @map("major_cause_group_ucod") @db.VarChar(128)
   // Section 12-13 - form completion.
-  formCompletedBy       String?          @map("form_completed_by") @db.VarChar(255)
+  formCompletedBy           String?          @map("form_completed_by") @db.VarChar(255)
+  formCompletedByDesignation String?         @map("form_completed_by_designation") @db.VarChar(128)
+  formCompletedByContact    String?          @map("form_completed_by_contact") @db.VarChar(15)
   dateOfCompletion      DateTime?        @map("date_of_completion") @db.Date
   createdAt             DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
 

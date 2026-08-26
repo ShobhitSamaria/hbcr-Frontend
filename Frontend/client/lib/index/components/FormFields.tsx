@@ -13,6 +13,7 @@ type FieldProps = {
   readOnly?: boolean;
   disabled?: boolean;
   name?: string;
+  maxLength?: number;
   /**
    * Form-state/validation key override. Defaults to `label`, which keeps the
    * existing behaviour; components that want a prettier visible label than
@@ -32,6 +33,7 @@ export function Field({
   readOnly = false,
   disabled = false,
   name,
+  maxLength,
   stateKey,
 }: FieldProps) {
   const ctx = useFormStateOptional();
@@ -62,7 +64,7 @@ export function Field({
   return (
     <label className="block">
       <span className="mb-1.5 block text-[11px] font-bold text-[#5d7a84]">
-        {label}
+        {label}{required && <span className="ml-0.5 text-[#d04a4a]">*</span>}
       </span>
       <input
         required={required}
@@ -70,6 +72,7 @@ export function Field({
         value={displayValue}
         readOnly={readOnly}
         disabled={disabled}
+        maxLength={maxLength}
         onChange={(e) => handle(e.target.value)}
         onBlur={onBlur}
         placeholder={placeholder}
@@ -219,7 +222,7 @@ export function SelectField({
   return (
     <label className="block">
       <span className="mb-1.5 block text-[11px] font-bold text-[#5d7a84]">
-        {label}
+        {label}{required && <span className="ml-0.5 text-[#d04a4a]">*</span>}
       </span>
       <div className="relative">
         <select
@@ -273,9 +276,10 @@ export function SelectField({
 type ToggleDetailsProps = {
   title: string;
   items: string[];
+  required?: boolean;
 };
 
-export function ToggleDetails({ title, items }: ToggleDetailsProps) {
+export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
   const [answers, setAnswers] = useState<Record<string, string>>(() => {
@@ -287,52 +291,93 @@ export function ToggleDetails({ title, items }: ToggleDetailsProps) {
     }
     return base;
   });
+  const [durations, setDurations] = useState<Record<string, string>>(() => {
+    const base: Record<string, string> = {};
+    if (!ctx) return base;
+    for (const item of items) {
+      const cur = ctx.values.current[`${title}::${item}::duration`];
+      if (typeof cur === "string") base[item] = cur;
+    }
+    return base;
+  });
   const handle = (key: string, v: string) => {
     setAnswers((a) => ({ ...a, [key]: v }));
     if (ctx) ctx.set(`${title}::${key}::answer`, v);
+    if (v === "No") {
+      setDurations((d) => ({ ...d, [key]: "" }));
+      if (ctx) ctx.set(`${title}::${key}::duration`, "");
+    }
     if (validation) {
       validation.clearErrors([`${title}::${key}::answer`]);
+      validation.clearErrors([`${title}::${key}::duration`]);
+    }
+  };
+  const handleDuration = (key: string, v: string) => {
+    setDurations((d) => ({ ...d, [key]: v }));
+    if (ctx) ctx.set(`${title}::${key}::duration`, v);
+    if (validation) {
+      validation.clearErrors([`${title}::${key}::duration`]);
     }
   };
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
-        {title}
+        {title}{required && <span className="ml-0.5 text-[#d04a4a]">*</span>}
       </label>
       <div className="space-y-3">
-        {items.map((item) => (
-          <div
-            key={item}
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
-          >
-            <span className="w-40">{item}</span>
-            <label className="flex items-center gap-1.5">
+        {items.map((item) => {
+          const isYes = answers[item] === "Yes";
+          const durationKey = `${title}::${item}::duration`;
+          const durationError = validation?.errors[durationKey];
+          const showDurationError = durationError && (validation.forceShow.has(durationKey) || validation.touched.has(durationKey));
+          return (
+            <div
+              key={item}
+              className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
+            >
+              <span className="w-40">{item}</span>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name={title + item}
+                  checked={isYes}
+                  onChange={() => handle(item, "Yes")}
+                  className="accent-[#0b7d87]"
+                />
+                Yes
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name={title + item}
+                  checked={answers[item] === "No"}
+                  onChange={() => handle(item, "No")}
+                  className="accent-[#0b7d87]"
+                />
+                No
+              </label>
               <input
-                type="radio"
-                name={title + item}
-                checked={answers[item] === "Yes"}
-                onChange={() => handle(item, "Yes")}
-                className="accent-[#0b7d87]"
+                placeholder="Duration (Months)"
+                type="number"
+                disabled={!isYes}
+                value={durations[item] ?? ""}
+                onChange={(e) => handleDuration(item, e.target.value)}
+                className={`h-8 w-36 rounded-lg border px-2 text-[11px] outline-none focus:ring-2 ${
+                  showDurationError
+                    ? "border-[#d04a4a] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
+                    : isYes
+                      ? "border-[#dce9eb] bg-[#fbfdfd] focus:border-[#36a99c] focus:ring-[#36a99c]/10"
+                      : "cursor-not-allowed border-[#dce9eb] bg-[#eef2f3] text-[#9aafb5]"
+                }`}
               />
-              Yes
-            </label>
-            <label className="flex items-center gap-1.5">
-              <input
-                type="radio"
-                name={title + item}
-                checked={answers[item] === "No"}
-                onChange={() => handle(item, "No")}
-                className="accent-[#0b7d87]"
-              />
-              No
-            </label>
-            <input
-              placeholder="Duration (Months)"
-              type="number"
-              className="h-8 w-36 rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-2 text-[11px] outline-none focus:border-[#36a99c]"
-            />
-          </div>
-        ))}
+              {showDurationError && (
+                <span className="block text-[10px] font-medium text-[#d04a4a]">
+                  {durationError}
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

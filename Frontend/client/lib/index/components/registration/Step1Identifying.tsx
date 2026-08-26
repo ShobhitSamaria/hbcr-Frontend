@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useFormStateOptional } from "@/lib/formState";
+import { useValidationOptional } from "@/lib/validationContext";
 import { registrationApi } from "@/lib/api";
 import { Field, SelectField, ToggleDetails } from "../FormFields";
 
@@ -11,8 +12,6 @@ type Step1IdentifyingProps = {
   setSelectedIds: (ids: string[]) => void;
   sameAddress: boolean;
   setSameAddress: (v: boolean) => void;
-  familyHistory: string;
-  setFamilyHistory: (v: string) => void;
 };
 
 export function Step1Identifying({
@@ -22,10 +21,9 @@ export function Step1Identifying({
   setSelectedIds,
   sameAddress,
   setSameAddress,
-  familyHistory,
-  setFamilyHistory,
 }: Step1IdentifyingProps) {
   const ctx = useFormStateOptional();
+  const validation = useValidationOptional();
   const { session } = useAuth();
 
   // Reporting institution + centre code come from the logged-in hospital's
@@ -143,6 +141,25 @@ export function Step1Identifying({
     ctx?.set("16(a). Marital status (Other)", v);
   };
 
+  // 17. Education — when "Others (specify)" is selected, show a text input.
+  const [education, setEducation] = useState<string>(() => {
+    const cur = ctx?.values.current["17. Education"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const handleEducation = (v: string) => {
+    setEducation(v);
+    ctx?.set("17. Education", v);
+    if (v !== "Others (specify)") ctx?.set("17(a). Education (Other)", "");
+  };
+  const [educationOther, setEducationOther] = useState<string>(() => {
+    const cur = ctx?.values.current["17(a). Education (Other)"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const handleEducationOther = (v: string) => {
+    setEducationOther(v);
+    ctx?.set("17(a). Education (Other)", v);
+  };
+
   // 10. Date of Birth → 11. Age — age is derived from the DOB and read-only.
   const [dob, setDob] = useState<string>(() => {
     const cur = ctx?.values.current["10. Date of Birth"];
@@ -177,6 +194,7 @@ export function Step1Identifying({
           placeholder="e.g. AIIMS New Delhi"
           value={hospitalName}
           readOnly
+          required
         />
         <Field
           label="Centre code"
@@ -200,8 +218,8 @@ export function Step1Identifying({
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-        <Field label="3(a). Department name" placeholder="Oncology" />
-        <Field label="3(b). Unit number" placeholder="Unit 04" />
+        <Field label="3(a). Department name" placeholder="Oncology" required />
+        <Field label="3(b). Unit number" placeholder="Unit 04" required />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
@@ -216,12 +234,13 @@ export function Step1Identifying({
             placeholder={`Enter ${hospitalRegType} number`}
           />
         )}
-        <Field label="5. Date of reporting" type="date" />
+        <Field label="5. Date of reporting" type="date" required />
         <SelectField
           label="6. Case Registered Through (Patient’s first reporting at RI)"
           value={caseThrough}
           onChange={handleCaseThrough}
-          options={["Out Patient", "In Patient Elective", "In Patient Emergency", "Unknown Person", "Other"]}
+          options={["Out Patient", "In Patient Elective", "In Patient Emergency", "Unknown", "Other"]}
+          required
         />
         {caseThrough === "Other" && (
           <Field
@@ -234,6 +253,7 @@ export function Step1Identifying({
         <SelectField
           label="7. Type of referral"
           value={referral}
+          required
           onChange={setReferral}
           options={[
             "Self",
@@ -258,14 +278,14 @@ export function Step1Identifying({
             <Field label="7(f). Date of Registration" type="date" />
           </>
         )}
-        <Field label="8. Date of first diagnosis" type="date" />
+        <Field label="8. Date of first diagnosis" type="date" required />
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
           9. Patient Full Name
         </label>
         <div className="grid gap-4 sm:grid-cols-3">
-          <Field label="First Name" placeholder="First name" />
+          <Field label="First Name" placeholder="First name" required />
           <Field label="Middle Name" placeholder="Middle name" />
           <Field label="Last Name" placeholder="Last name" />
         </div>
@@ -276,6 +296,7 @@ export function Step1Identifying({
           type="date"
           value={dob}
           onChange={handleDobChange}
+          required
         />
         <Field
           label="11. Age"
@@ -283,10 +304,12 @@ export function Step1Identifying({
           placeholder="Years"
           value={ageFromDob(dob)}
           readOnly
+          required
         />
         <SelectField
           label="12. Gender"
           options={["Male", "Female", "Other"]}
+          required
         />
       </div>
       <div>
@@ -294,58 +317,92 @@ export function Step1Identifying({
           13. Unique identification
         </label>
         <div className="space-y-3">
+          {/* Aadhaar & ABHA — mandatory, direct input fields (no Yes/No) */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field
+              label="a). Aadhaar"
+              placeholder="Enter Aadhaar number (12 digits)"
+              maxLength={12}
+              required
+              stateKey="a). Aadhaar number"
+            />
+            <Field
+              label="b). ABHA"
+              placeholder="Enter ABHA number (14 digits)"
+              maxLength={14}
+              required
+              stateKey="b). ABHA number"
+            />
+          </div>
+          {/* Remaining ID types — optional, with Yes/No toggle */}
           {([
-            { label: "a). Aadhaar", maxLength: 12, pattern: "[0-9]{12}", title: "Aadhaar must be exactly 12 digits" },
-            { label: "b). ABHA" },
-            { label: "c). PAN Card", maxLength: 10, pattern: "[A-Z]{5}[0-9]{4}[A-Z]", title: "PAN must be 10 characters: 5 uppercase letters, 4 digits, 1 uppercase letter" },
-            { label: "d). Voter ID", maxLength: 10, pattern: ".{10}", title: "Voter ID must be exactly 10 characters" },
-            { label: "e). Passport", maxLength: 8, pattern: "[A-Z][0-9]{7}", title: "Passport must be 1 uppercase letter followed by 7 digits" },
-            { label: "f). AB-PMJAY" },
-            { label: "g). Other" },
-          ]).map(({ label, maxLength, pattern, title }) => (
-            <div
-              key={label}
-              className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
-            >
-              <span className="w-28">{label}</span>
-              <label className="flex items-center gap-1.5">
-                <input
-                  type="radio"
-                  name={"id-" + label}
-                  checked={!selectedIds.includes(label)}
-                  onChange={() =>
-                    setSelectedIds(selectedIds.filter((x) => x !== label))
-                  }
-                  className="accent-[#0b7d87]"
-                />
-                No
-              </label>
-              <label className="flex items-center gap-1.5">
-                <input
-                  type="radio"
-                  name={"id-" + label}
-                  checked={selectedIds.includes(label)}
-                  onChange={() =>
-                    setSelectedIds(
-                      selectedIds.includes(label)
-                        ? selectedIds
-                        : [...selectedIds, label],
-                    )
-                  }
-                  className="accent-[#0b7d87]"
-                />
-                Yes
-              </label>
-              <input
-                placeholder={"Enter " + label + " number"}
-                disabled={!selectedIds.includes(label)}
-                maxLength={maxLength}
-                pattern={pattern}
-                title={title}
-                className="h-8 w-44 rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-2 text-[11px] outline-none focus:border-[#36a99c] disabled:cursor-not-allowed disabled:bg-[#f1f5f5] disabled:text-[#a9b8bc]"
-              />
-            </div>
-          ))}
+            { label: "c). PAN Card", maxLength: 10, pattern: /^[A-Z]{5}[0-9]{4}[A-Z]$/, formatMsg: "PAN must be 5 uppercase letters + 4 digits + 1 uppercase letter" },
+            { label: "d). Voter ID", maxLength: 10, pattern: /^[A-Za-z0-9]{10}$/, formatMsg: "Voter ID must be exactly 10 alphanumeric characters" },
+            { label: "e). Passport", maxLength: 8, pattern: /^[A-Z][0-9]{7}$/, formatMsg: "Passport must be 1 uppercase letter + 7 digits" },
+            { label: "f). AB-PMJAY", maxLength: 20, pattern: /^[A-Za-z0-9\-]+$/, formatMsg: "AB-PMJAY ID contains invalid characters" },
+            { label: "g). Other", maxLength: 128 },
+          ]).map(({ label, maxLength, pattern, formatMsg }) => {
+            const numKey = label + " number";
+            const isSelected = selectedIds.includes(label);
+            return (
+              <div
+                key={label}
+                className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
+              >
+                <span className="w-28">{label}</span>
+                <label className="flex items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name={"id-" + label}
+                    checked={!isSelected}
+                    onChange={() =>
+                      setSelectedIds(selectedIds.filter((x) => x !== label))
+                    }
+                    className="accent-[#0b7d87]"
+                  />
+                  No
+                </label>
+                <label className="flex items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name={"id-" + label}
+                    checked={isSelected}
+                    onChange={() => {
+                      if (!isSelected) setSelectedIds([...selectedIds, label]);
+                    }}
+                    className="accent-[#0b7d87]"
+                  />
+                  Yes
+                </label>
+                <div className="flex flex-col">
+                  <input
+                    placeholder={"Enter " + label + " number"}
+                    disabled={!isSelected}
+                    maxLength={maxLength}
+                    value={ctx?.values.current[numKey] != null ? String(ctx.values.current[numKey]) : ""}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      ctx?.set(numKey, v);
+                      validation?.clearErrors([numKey]);
+                    }}
+                    onBlur={() => validation?.markTouched(numKey)}
+                    className={`h-8 w-44 rounded-lg border px-2 text-[11px] outline-none focus:ring-2 ${
+                      validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey))
+                        ? "border-[#d04a4a] bg-[#fef2f2] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
+                        : isSelected
+                          ? "border-[#dce9eb] bg-[#fbfdfd] focus:border-[#36a99c] focus:ring-[#36a99c]/10"
+                          : "cursor-not-allowed border-[#dce9eb] bg-[#f1f5f5] text-[#a9b8bc]"
+                    }`}
+                  />
+                  {validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey)) && (
+                    <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
+                      {validation.errors[numKey]}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
           <HealthSchemeField />
@@ -380,7 +437,7 @@ export function Step1Identifying({
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          15. Address
+          15. Address<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#718991]">
           <span className="text-[11px] font-bold text-[#5d7a84]">
@@ -429,6 +486,14 @@ export function Step1Identifying({
             placeholder="patient@email.com"
           />
         </div>
+        <div className="mt-4">
+          <Field
+            label="Duration of Stay at the above address (in years)"
+            type="number"
+            placeholder="e.g. 5"
+            required
+          />
+        </div>
         <label className="mt-4 flex items-center gap-2 text-xs text-[#718991]">
           <input
             type="checkbox"
@@ -468,6 +533,7 @@ export function Step1Identifying({
           value={maritalStatus}
           onChange={handleMaritalStatus}
           options={["Married", "Single", "Widowed", "Divorced", "Separated", "Other", "Unknown"]}
+          required
         />
         {maritalStatus === "Other" && (
           <Field
@@ -479,8 +545,19 @@ export function Step1Identifying({
         )}
         <SelectField
           label="17. Education"
+          value={education}
+          onChange={handleEducation}
           options={["Illiterate", "Literate", "Primary", "Middle", "Secondary/Higher Secondary", "Technical-after matric", "Graduate and above", "Others (specify)", "Unknown"]}
+          required
         />
+        {education === "Others (specify)" && (
+          <Field
+            label="17(a). Education (Other)"
+            placeholder="Specify education level"
+            value={educationOther}
+            onChange={handleEducationOther}
+          />
+        )}
       </div>
       <Field
         label="Occupation"
@@ -488,6 +565,7 @@ export function Step1Identifying({
       />
       <ToggleDetails
         title="18(a). Habits"
+        required
         items={[
           "Smoking",
           "Smokeless",
@@ -498,6 +576,7 @@ export function Step1Identifying({
       />
       <ToggleDetails
         title="18(b). Co-Morbidities"
+        required
         items={[
           "Tuberculosis",
           "Hypertension",
@@ -534,10 +613,6 @@ export function Step1Identifying({
           />
         </div>
       </div>
-      <FamilialCancerSection
-        familyHistory={familyHistory}
-        setFamilyHistory={setFamilyHistory}
-      />
     </div>
   );
 }
@@ -595,122 +670,6 @@ function HealthSchemeField() {
             label="13. Beneficiary of Health Scheme details"
             placeholder="Enter scheme name / details"
           />
-        </div>
-      )}
-    </div>
-  );
-}
-
-type FamilialCancerSectionProps = {
-  familyHistory: string;
-  setFamilyHistory: (v: string) => void;
-};
-
-function FamilialCancerSection({
-  familyHistory,
-  setFamilyHistory,
-}: FamilialCancerSectionProps) {
-  return (
-    <div>
-      <label className="mb-3 block text-xs font-bold text-[#486b77]">
-        19. Relationship to Cancer / Degree of Relationship
-      </label>
-      <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-        <label className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="familial-history"
-            checked={familyHistory === "Yes"}
-            onChange={() => setFamilyHistory("Yes")}
-            className="accent-[#0b7d87]"
-          />
-          Yes
-        </label>
-        <label className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="familial-history"
-            checked={familyHistory === "No"}
-            onChange={() => setFamilyHistory("No")}
-            className="accent-[#0b7d87]"
-          />
-          No
-        </label>
-        <label className="flex items-center gap-2">
-          <input
-            type="radio"
-            name="familial-history"
-            checked={familyHistory === "Unknown"}
-            onChange={() => setFamilyHistory("Unknown")}
-            className="accent-[#0b7d87]"
-          />
-          Unknown
-        </label>
-      </div>
-      {familyHistory === "Yes" && (
-        <div className="mt-5 space-y-5 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
-          <div>
-            <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Relationship with Cancer
-            </label>
-            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="relationship-cancer"
-                  required
-                  className="accent-[#0b7d87]"
-                />
-                Same Cancer
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="relationship-cancer"
-                  required
-                  className="accent-[#0b7d87]"
-                />
-                Other Cancer
-              </label>
-            </div>
-          </div>
-          <div>
-            <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Degree of Relationship
-            </label>
-            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="degree-relationship"
-                  required
-                  className="accent-[#0b7d87]"
-                />
-                First Degree Relative
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="degree-relationship"
-                  required
-                  className="accent-[#0b7d87]"
-                />
-                Second Degree Relative
-              </label>
-            </div>
-          </div>
-          <SelectField
-            label="Primary site of tumor for relative"
-            required
-            options={["Breast", "Ovary", "Colon", "Prostate", "Endometrial", "Melanoma", "Thyroid", "Pancreas"]}
-          />
-          <Field
-            label="Age at diagnosis"
-            type="number"
-            placeholder="Age in years"
-            required
-          />
-          <Field label="Date of diagnosis" type="date" required />
         </div>
       )}
     </div>

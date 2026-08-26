@@ -38,12 +38,14 @@ export function ClinicalTreatment() {
             "Others (Specify)",
             "Unknown",
           ]}
+          required
         />
         <SelectField
           label="28(a). Staging system"
           options={STAGING_SYSTEM_OPTIONS}
           value={stagingSystem}
           onChange={setStagingSystem}
+          required
         />
       </div>
       {isTNM ? (
@@ -139,6 +141,7 @@ export function ClinicalTreatment() {
       )}
       <SelectField
         label="28(c). Composite stage"
+        required
         options={["IA",
           "IA1",
           "IA2",
@@ -234,10 +237,12 @@ export function ClinicalTreatment() {
         <Field
           label="33. Contact Number"
           placeholder="Enter contact number"
+          required
         />
         <Field
           label="34. Designation"
           placeholder="Enter designation"
+          required
         />
         <div className="sm:col-span-2">
           <TextAreaField

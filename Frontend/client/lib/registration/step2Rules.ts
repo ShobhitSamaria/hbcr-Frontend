@@ -10,6 +10,8 @@ import {
   isInt,
   maxLen,
   notEquals,
+  range,
+  required,
   validateRecord,
   type RuleSet,
 } from "@/lib/validation";
@@ -24,11 +26,11 @@ export type Step2Values = {
     microscopicLater?: string;
   };
   "21. Longest duration of symptom for cancer (in months)"?: string;
-  "22.1 Anatomical Site of Specimen / Biopsy / SMEAR"?: string;
-  "22.2 Pathology Slide No"?: string;
-  "22.3 Date of Reporting"?: string;
-  "22.4 Primary Site of Tumour - Topography"?: string;
-  "22.5 Primary Histology - Morphology"?: string;
+  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR"?: string;
+  "21.2 Pathology Slide No"?: string;
+  "21.3 Date of Reporting"?: string;
+  "21.4 Primary Site of Tumour - Topography"?: string;
+  "21.5 Primary Histology / Morphology"?: string;
   "23.1 Site"?: string;
   "23.1 Code"?: string;
   "23.2 Morphology"?: string;
@@ -51,14 +53,15 @@ export type Step2Values = {
 
 const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
   "21. Longest duration of symptom for cancer (in months)": [
+    required("Longest duration of symptom is required"),
     isInt(),
-    // backend: SmallInt (0..32767) — but realistically capped at 600 (50y)
+    range(0, 32767, "Must be a valid number"),
   ],
-  "22.1 Anatomical Site of Specimen / Biopsy / SMEAR": [maxLen(128)],
-  "22.2 Pathology Slide No": [maxLen(64)],
-  "22.4 Primary Site of Tumour - Topography": [maxLen(128)],
-  "22.5 Primary Histology - Morphology": [maxLen(128)],
-  "22.3 Date of Reporting": [isDate("Enter a valid date")],
+  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR": [maxLen(128)],
+  "21.2 Pathology Slide No": [maxLen(64)],
+  "21.3 Date of Reporting": [isDate("Enter a valid date")],
+  "21.4 Primary Site of Tumour - Topography": [maxLen(128)],
+  "21.5 Primary Histology / Morphology": [maxLen(128)],
   "23.1 Site": [maxLen(128)],
   "23.1 Code": [maxLen(64)],
   "23.2 Morphology": [maxLen(128)],
@@ -72,6 +75,7 @@ const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
   // placeholder is acceptable when the section is left empty.
   "23.4 Grade": [maxLen(64)],
   "24. Site of Tumour (ICD-10)": [maxLen(64)],
+  "25. Laterality": [required("Laterality is required")],
   "26. Sequence": [maxLen(64)],
 });
 
@@ -82,14 +86,75 @@ const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
 export function validateStep2(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step2Rules, values);
 
-  // 20. Method of diagnosis — optional for now. If "Clinical Only" is
-  // selected, it still requires a date (consistency check, not a gate).
   const methodsRaw = values["_diagnostic.methods"];
   const methods: string[] = Array.isArray(methodsRaw) ? (methodsRaw as string[]) : [];
+
+  // 20. Method of diagnosis — mandatory.
+  if (methods.length === 0) {
+    out["_diagnostic.methods"] = "Select at least one method of diagnosis";
+  }
+
+  // Clinical Only requires a date.
   if (methods.includes("Clinical Only")) {
     const date = values["_diagnostic.clinicalDate"];
     if (!date || String(date).trim() === "") {
-      out["_diagnostic.clinicalDate"] = "Clinical Only requires a date";
+      out["_diagnostic.clinicalDate"] = "Clinical Only diagnosis date is required";
+    }
+  }
+
+  // Microscopic confirmation done at a later date — always mandatory.
+  const microscopicLater = values["_diagnostic.microscopicLater"];
+  if (!microscopicLater || String(microscopicLater).trim() === "") {
+    out["_diagnostic.microscopicLater"] = "Microscopic confirmation question is required";
+  }
+
+  // 25. Laterality — mandatory.
+  const lat = values["25. Laterality"];
+  if (!lat || String(lat).trim() === "") {
+    out["25. Laterality"] = "Laterality is required";
+  } else if (lat === "Paired Site") {
+    // When Paired Site is selected, paired laterality must also be selected.
+    const paired = values["25(a). pairedLaterality"];
+    if (!paired || String(paired).trim() === "") {
+      out["25(a). pairedLaterality"] = "Please select paired laterality";
+    }
+  }
+
+  // When Microscopic is selected, pathological fields are mandatory.
+  if (methods.includes("Microscopic")) {
+    const pathFields: [string, string][] = [
+      ["21.1 Anatomical Site of Specimen / Biopsy / SMEAR", "Anatomical Site is required"],
+      ["21.3 Date of Reporting", "Date of Reporting is required"],
+      ["21.4 Primary Site of Tumour - Topography", "Primary Site of Tumour is required"],
+      ["21.5 Primary Histology / Morphology", "Primary Histology / Morphology is required"],
+    ];
+    for (const [field, msg] of pathFields) {
+      const v = values[field];
+      if (!v || String(v).trim() === "") {
+        out[field] = msg;
+      }
+    }
+
+    // Date of First Diagnosis validation:
+    // When Microscopic is selected and microscopicLater == 'No',
+    // Date of First Diagnosis should equal Microscopic Confirmation Date
+    // (the Date of Reporting from Page 1, stored as "5. Date of reporting").
+    // When microscopicLater == 'Yes', the date can be earlier.
+    if (microscopicLater === "No") {
+      const firstDiagDate = values["8. Date of first diagnosis"];
+      const reportingDate = values["5. Date of reporting"];
+      if (
+        firstDiagDate &&
+        reportingDate &&
+        String(firstDiagDate).trim() !== "" &&
+        String(reportingDate).trim() !== ""
+      ) {
+        // Dates should be the same when microscopic confirmation is not done later
+        if (String(firstDiagDate).trim() !== String(reportingDate).trim()) {
+          out["8. Date of first diagnosis"] =
+            "Date of first diagnosis must match the microscopic confirmation date";
+        }
+      }
     }
   }
 

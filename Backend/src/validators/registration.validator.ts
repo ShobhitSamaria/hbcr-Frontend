@@ -24,8 +24,8 @@ export const createRegistrationValidator = makeValidator({
   hbcrRegistrationNo: [isString(), trim(), maxLen(20)], // Now optional - auto-generated if not provided
   hospitalId: [required(), isInt("hospitalId is required and must be a positive integer")],
   referenceNo: [isString(), trim(), maxLen(64)], // Now optional - auto-generated if not provided
-  departmentName: [isString(), trim(), maxLen(128)],
-  unitNumber: [isString(), trim(), maxLen(32)],
+  departmentName: [required(), isString(), trim(), maxLen(128)],
+  unitNumber: [required(), isString(), trim(), maxLen(32)],
   hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
   hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
@@ -45,6 +45,7 @@ export const createRegistrationValidator = makeValidator({
   maritalStatus: [inEnum(MaritalStatus)],
   maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],
+  educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],
@@ -57,8 +58,8 @@ export const createRegistrationValidator = makeValidator({
 
 export const updateRegistrationValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)],
-  departmentName: [isString(), trim(), maxLen(128)],
-  unitNumber: [isString(), trim(), maxLen(32)],
+  departmentName: [required(), isString(), trim(), maxLen(128)],
+  unitNumber: [required(), isString(), trim(), maxLen(32)],
   hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
   hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
@@ -78,6 +79,7 @@ export const updateRegistrationValidator = makeValidator({
   maritalStatus: [inEnum(MaritalStatus)],
   maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],
+  educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255)],

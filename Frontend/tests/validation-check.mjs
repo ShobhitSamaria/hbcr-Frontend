@@ -240,13 +240,13 @@ check("fully populated step 1 produces no errors", () => {
 // ---------------------------------------------------------------------------
 console.log("Step 2");
 
-check("no diagnostic method selected => no error (optional for now)", () => {
+check("no diagnostic method selected => error (now required)", () => {
   const errs = validateStep2({});
-  noError(errs, "_diagnostic.methods");
+  assert(hasError(errs, "_diagnostic.methods"), "Method of diagnosis required");
 });
 
 check("clinical only without date => error", () => {
-  const errs = validateStep2({ "_diagnostic.methods": ["Clinical Only"] });
+  const errs = validateStep2({ "_diagnostic.methods": ["Clinical Only"], "_diagnostic.microscopicLater": "Yes" });
   assert(hasError(errs, "_diagnostic.clinicalDate"), "Clinical date required");
 });
 
@@ -254,14 +254,16 @@ check("clinical only with date => no error", () => {
   const errs = validateStep2({
     "_diagnostic.methods": ["Clinical Only"],
     "_diagnostic.clinicalDate": "2024-07-01",
+    "_diagnostic.microscopicLater": "No",
   });
   noError(errs, "_diagnostic.clinicalDate");
   noError(errs, "_diagnostic.methods");
+  noError(errs, "_diagnostic.microscopicLater");
 });
 
-check("laterality optional (no longer required)", () => {
+check("laterality required", () => {
   const errs = validateStep2({});
-  noError(errs, "25. Laterality");
+  assert(hasError(errs, "25. Laterality"), "Laterality is required");
 });
 
 check("ICD-O-3 codes and sequence optional (no longer required)", () => {
@@ -275,11 +277,15 @@ check("ICD-O-3 codes and sequence optional (no longer required)", () => {
 check("fully populated step 2 produces no errors", () => {
   const errs = validateStep2({
     "_diagnostic.methods": ["Microscopic"],
+    "_diagnostic.microscopicLater": "Yes",
     "21. Longest duration of symptom for cancer (in months)": "3",
-    "22.1 Anatomical Site of Specimen / Biopsy / SMEAR": "Upper outer quadrant",
-    "22.2 Pathology Slide No": "S-1",
-    "22.4 Primary Site of Tumour - Topography": "Breast",
-    "22.5 Primary Histology - Morphology": "Ductal",
+    "21.1 Anatomical Site of Specimen / Biopsy / SMEAR": "Upper outer quadrant",
+    "21.3 Date of Reporting": "2024-01-15",
+    "25. Laterality": "Paired Site",
+    "25(a). pairedLaterality": "Right",
+    "21.2 Pathology Slide No": "S-1",
+    "21.4 Primary Site of Tumour - Topography": "Breast",
+    "21.5 Primary Histology / Morphology": "Ductal",
     "23.1 Site": "Breast - upper outer quadrant",
     "23.1 Code": "C50.4",
     "23.2 Morphology": "Infiltrating ductal carcinoma",
@@ -335,9 +341,12 @@ check("fully populated step 3 produces no errors", () => {
     N: "N1",
     M: "M0",
     "28(c). Composite stage": "IIB",
+    "29. Treatment Given Prior to Registration at RI / Outside RI": "Yes",
     "30(b). Types of targeted therapy": "Not Given",
     "31. Name of person completing form (IN CAPITALS)": "DR. A. SRINIVASAN",
     "32. Date of completion of form": "2024-07-15",
+    "33. Contact Number": "9876543210",
+    "34. Designation": "Senior Doctor",
   });
   const unexpected = Object.keys(errs);
   if (unexpected.length > 0) {

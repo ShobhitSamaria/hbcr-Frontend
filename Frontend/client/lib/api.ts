@@ -578,6 +578,11 @@ export const registrationApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number) => send<ApiRegistration>(`/registrations/${id}`),
+  update: (id: number, data: Partial<Pick<ApiRegistration, 'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate'>>) =>
+    send<ApiRegistration>(`/registrations/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
   previewNumbers: (hospitalId: number) =>
     send<{ hospitalId: number; hospitalName: string; centreCode: string; referenceNo: string; registrationNo: string }>(
       `/registrations/preview-numbers/${hospitalId}`,
@@ -611,6 +616,8 @@ export type ApiPathologicalDiagnosis = {
 };
 
 export const pathologyApi = {
+  get: (registrationId: number) =>
+    send<ApiPathologicalDiagnosis>(`/registrations/${registrationId}/pathological-diagnosis`),
   upsert: (registrationId: number, data: Partial<ApiPathologicalDiagnosis>) =>
     send<ApiPathologicalDiagnosis>(`/registrations/${registrationId}/pathological-diagnosis`, {
       method: "POST",
@@ -798,14 +805,18 @@ export type ApiFollowUp = {
   visitNo: number;
   dateOfFollowUp: string;
   methodOfFollowUp: FollowUpMethod;
+  methodOfFollowUpOther: string | null;
   vitalStatus: VitalStatus;
   diseaseStatus: DiseaseStatus | null;
+  diseaseStatusOther: string | null;
   dateOfFirstRecurrence: string | null;
   treatmentGiven: boolean | null;
   treatmentType: string | null;
   dateOfDeath: string | null;
   placeOfDeath: PlaceOfDeath | null;
+  placeOfDeathOther: string | null;
   sourceOfDeathInfo: DeathInfoSource | null;
+  sourceOfDeathInfoOther: string | null;
   causeIa: string | null;
   causeIb: string | null;
   causeIc: string | null;
@@ -813,6 +824,8 @@ export type ApiFollowUp = {
   icd10Ucod: string | null;
   majorCauseGroupUcod: string | null;
   formCompletedBy: string | null;
+  formCompletedByDesignation: string | null;
+  formCompletedByContact: string | null;
   dateOfCompletion: string | null;
   createdAt: string;
   treatments: ApiFollowUpTreatment[];
@@ -848,14 +861,18 @@ export type FollowUpCreateInput = {
   registrationId: number;
   dateOfFollowUp: string;
   methodOfFollowUp: FollowUpMethod;
+  methodOfFollowUpOther?: string;
   vitalStatus: VitalStatus;
   diseaseStatus?: DiseaseStatus;
+  diseaseStatusOther?: string;
   dateOfFirstRecurrence?: string;
   treatmentGiven?: boolean;
   treatmentType?: string;
   dateOfDeath?: string;
   placeOfDeath?: PlaceOfDeath;
+  placeOfDeathOther?: string;
   sourceOfDeathInfo?: DeathInfoSource;
+  sourceOfDeathInfoOther?: string;
   causeIa?: string;
   causeIb?: string;
   causeIc?: string;
@@ -863,6 +880,8 @@ export type FollowUpCreateInput = {
   icd10Ucod?: string;
   majorCauseGroupUcod?: string;
   formCompletedBy?: string;
+  formCompletedByDesignation?: string;
+  formCompletedByContact?: string;
   dateOfCompletion?: string;
   treatments?: {
     modality: FollowUpModality;

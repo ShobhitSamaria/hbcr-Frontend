@@ -71,9 +71,9 @@ const BACKEND_TO_UI: Record<string, string> = {
   metastasisMorphologyCode: "23.4 Code",
   metastasisMorphologyGrade: "23.4 Grade",
   icd10Site: "24. Site of Tumour (ICD-10)",
-  pathologyDateOfReporting: "22.3 Date of Reporting",
+  pathologyDateOfReporting: "21.3 Date of Reporting",
   laterality: "25. Laterality",
-  pairedLaterality: "25. Laterality",
+  pairedLaterality: "25(a). pairedLaterality",
   sequence: "26. Sequence",
   // Family history
   familyHistory:

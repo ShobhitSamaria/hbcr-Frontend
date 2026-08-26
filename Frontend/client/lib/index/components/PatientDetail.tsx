@@ -4,10 +4,12 @@ import {
   patientApi,
   registrationApi,
   sideApi,
+  pathologyApi,
   type ApiPatient,
   type ApiPatientHabit,
   type ApiPatientComorbidity,
   type ApiRegistration,
+  type ApiPathologicalDiagnosis,
 } from "@/lib/api";
 import { Field } from "./FormFields";
 
@@ -39,9 +41,16 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Editable field values (only healthScheme fields at patient level)
+  // Editable field values
   const [editHealthScheme, setEditHealthScheme] = useState(false);
   const [editHealthSchemeDetails, setEditHealthSchemeDetails] = useState("");
+
+  // Editable remarks
+  const [editRemarks, setEditRemarks] = useState("");
+
+  // Editable pathological diagnosis
+  const [pathology, setPathology] = useState<ApiPathologicalDiagnosis | null>(null);
+  const [editPathology, setEditPathology] = useState<Record<string, string>>({});
 
   // Editable habits
   const [editHabits, setEditHabits] = useState<Record<string, { answer: string; durationMonths: number | null }>>({});
@@ -67,6 +76,41 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
       // Initialize editable values
       setEditHealthScheme(p.healthSchemeBeneficiary);
       setEditHealthSchemeDetails(p.healthSchemeDetails ?? "");
+      const firstReg = regs[0];
+      setEditRemarks(firstReg?.remarks ?? "");
+
+      // Load pathological diagnosis separately
+      if (firstReg) {
+        try {
+          const pathData = await pathologyApi.get(firstReg.id);
+          setPathology(pathData);
+          setEditPathology({
+            longestSymptomDurationMonths: pathData.longestSymptomDurationMonths?.toString() ?? "",
+            anatomicalSite: pathData.anatomicalSite ?? "",
+            pathologySlideNo: pathData.pathologySlideNo ?? "",
+            primaryTumorSite: pathData.primaryTumorSite ?? "",
+            morphology: pathData.morphology ?? "",
+            icdoTopography: pathData.icdoTopography ?? "",
+            topographySite: pathData.topographySite ?? "",
+            icdoMorphology: pathData.icdoMorphology ?? "",
+            histologyMorphology: pathData.histologyMorphology ?? "",
+            morphologyGrade: pathData.morphologyGrade ?? "",
+            secondarySite: pathData.secondarySite ?? "",
+            secondarySiteCode: pathData.secondarySiteCode ?? "",
+            metastasisMorphology: pathData.metastasisMorphology ?? "",
+            metastasisMorphologyCode: pathData.metastasisMorphologyCode ?? "",
+            metastasisMorphologyGrade: pathData.metastasisMorphologyGrade ?? "",
+            icd10Site: pathData.icd10Site ?? "",
+            laterality: pathData.laterality ?? "",
+            pairedLaterality: pathData.pairedLaterality ?? "",
+            sequence: pathData.sequence ?? "",
+            pathologyDateOfReporting: pathData.pathologyDateOfReporting ?? "",
+          });
+        } catch {
+          setPathology(null);
+          setEditPathology({});
+        }
+      }
 
       const habMap: Record<string, { answer: string; durationMonths: number | null }> = {};
       for (const h of hab) {
@@ -104,6 +148,31 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
     if (patient) {
       setEditHealthScheme(patient.healthSchemeBeneficiary);
       setEditHealthSchemeDetails(patient.healthSchemeDetails ?? "");
+      setEditRemarks(registrations[0]?.remarks ?? "");
+      if (pathology) {
+        setEditPathology({
+          longestSymptomDurationMonths: pathology.longestSymptomDurationMonths?.toString() ?? "",
+          anatomicalSite: pathology.anatomicalSite ?? "",
+          pathologySlideNo: pathology.pathologySlideNo ?? "",
+          primaryTumorSite: pathology.primaryTumorSite ?? "",
+          morphology: pathology.morphology ?? "",
+          icdoTopography: pathology.icdoTopography ?? "",
+          topographySite: pathology.topographySite ?? "",
+          icdoMorphology: pathology.icdoMorphology ?? "",
+          histologyMorphology: pathology.histologyMorphology ?? "",
+          morphologyGrade: pathology.morphologyGrade ?? "",
+          secondarySite: pathology.secondarySite ?? "",
+          secondarySiteCode: pathology.secondarySiteCode ?? "",
+          metastasisMorphology: pathology.metastasisMorphology ?? "",
+          metastasisMorphologyCode: pathology.metastasisMorphologyCode ?? "",
+          metastasisMorphologyGrade: pathology.metastasisMorphologyGrade ?? "",
+          icd10Site: pathology.icd10Site ?? "",
+          laterality: pathology.laterality ?? "",
+          pairedLaterality: pathology.pairedLaterality ?? "",
+          sequence: pathology.sequence ?? "",
+          pathologyDateOfReporting: pathology.pathologyDateOfReporting ?? "",
+        });
+      }
     }
     const habMap: Record<string, { answer: string; durationMonths: number | null }> = {};
     for (const h of habits) {
@@ -193,6 +262,28 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
             durationMonths: val.durationMonths ?? undefined,
           });
         }
+      }
+
+      // 4. Save remarks to registration
+      if (registrations[0]) {
+        await registrationApi.update(registrations[0].id, {
+          remarks: editRemarks || undefined,
+        });
+      }
+
+      // 5. Save pathological diagnosis
+      if (registrations[0] && Object.keys(editPathology).length > 0) {
+        const pathologyData: Record<string, string | number | null> = {};
+        for (const [key, value] of Object.entries(editPathology)) {
+          if (value === "") {
+            pathologyData[key] = null;
+          } else if (key === "longestSymptomDurationMonths" && value !== "") {
+            pathologyData[key] = Number(value);
+          } else {
+            pathologyData[key] = value;
+          }
+        }
+        await pathologyApi.upsert(registrations[0].id, pathologyData);
       }
 
       setSaveSuccess(true);
@@ -501,31 +592,139 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
         </Section>
       )}
 
-      {/* Pathological Diagnosis — READ ONLY */}
-      {reg?.pathologicalDiagnosis && (
-        <Section title="Pathological Diagnosis">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <ReadField label="Anatomical Site" value={reg.pathologicalDiagnosis.anatomicalSite ?? "—"} />
-            <ReadField label="Primary Tumour Site" value={reg.pathologicalDiagnosis.primaryTumorSite ?? "—"} />
-            <ReadField label="Morphology" value={reg.pathologicalDiagnosis.morphology ?? "—"} />
-            <ReadField label="ICD-O-3 Topography" value={reg.pathologicalDiagnosis.icdoTopography ?? "—"} />
-            <ReadField label="Topography Site" value={reg.pathologicalDiagnosis.topographySite ?? "—"} />
-            <ReadField label="ICD-O-3 Morphology" value={reg.pathologicalDiagnosis.icdoMorphology ?? "—"} />
-            <ReadField label="Histology/Morphology" value={reg.pathologicalDiagnosis.histologyMorphology ?? "—"} />
-            <ReadField label="Morphology Grade" value={formatEnum(reg.pathologicalDiagnosis.morphologyGrade)} />
-            <ReadField label="Secondary Site" value={reg.pathologicalDiagnosis.secondarySite ?? "—"} />
-            <ReadField label="ICD-10 Site" value={reg.pathologicalDiagnosis.icd10Site ?? "—"} />
-            <ReadField label="Laterality" value={formatEnum(reg.pathologicalDiagnosis.laterality)} />
-          </div>
-        </Section>
-      )}
+      {/* Remarks — EDITABLE */}
+      <Section title="Remarks" editable>
+        {editMode ? (
+          <textarea
+            value={editRemarks}
+            onChange={(e) => setEditRemarks(e.target.value)}
+            rows={3}
+            placeholder="Enter remarks..."
+            className="w-full rounded-lg border border-[#dce9eb] bg-white px-3 py-2 text-xs text-[#244c5b] outline-none focus:border-[#36a99c] resize-y"
+          />
+        ) : (
+          <p className="text-sm text-[#52707b] whitespace-pre-wrap">{reg?.remarks || '—'}</p>
+        )}
+      </Section>
 
-      {/* Remarks — READ ONLY */}
-      {reg?.remarks && (
-        <Section title="Remarks">
-          <p className="text-sm text-[#52707b]">{reg.remarks}</p>
-        </Section>
-      )}
+      {/* Diagnostic Details — EDITABLE */}
+      <Section title="Diagnostic Details" editable>
+        {editMode ? (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <EditTextField
+                label="Longest Duration of Symptom (Months)"
+                value={editPathology.longestSymptomDurationMonths ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, longestSymptomDurationMonths: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Anatomical Site"
+                value={editPathology.anatomicalSite ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, anatomicalSite: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Pathology Slide No."
+                value={editPathology.pathologySlideNo ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, pathologySlideNo: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Primary Tumour Site"
+                value={editPathology.primaryTumorSite ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, primaryTumorSite: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Morphology"
+                value={editPathology.morphology ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, morphology: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="ICD-O-3 Topography"
+                value={editPathology.icdoTopography ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, icdoTopography: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Topography Site"
+                value={editPathology.topographySite ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, topographySite: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="ICD-O-3 Morphology"
+                value={editPathology.icdoMorphology ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, icdoMorphology: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Histology/Morphology"
+                value={editPathology.histologyMorphology ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, histologyMorphology: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Morphology Grade"
+                value={editPathology.morphologyGrade ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, morphologyGrade: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Secondary Site"
+                value={editPathology.secondarySite ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, secondarySite: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="ICD-10 Site"
+                value={editPathology.icd10Site ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, icd10Site: v })}
+                editMode={true}
+                readOnly={false}
+              />
+              <EditTextField
+                label="Laterality"
+                value={editPathology.laterality ?? ""}
+                onChange={(v) => setEditPathology({ ...editPathology, laterality: v })}
+                editMode={true}
+                readOnly={false}
+              />
+            </div>
+          </div>
+        ) : pathology ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ReadField label="Longest Duration of Symptom (Months)" value={pathology.longestSymptomDurationMonths?.toString() ?? "—"} />
+            <ReadField label="Anatomical Site" value={pathology.anatomicalSite ?? "—"} />
+            <ReadField label="Pathology Slide No." value={pathology.pathologySlideNo ?? "—"} />
+            <ReadField label="Primary Tumour Site" value={pathology.primaryTumorSite ?? "—"} />
+            <ReadField label="Morphology" value={pathology.morphology ?? "—"} />
+            <ReadField label="ICD-O-3 Topography" value={pathology.icdoTopography ?? "—"} />
+            <ReadField label="Topography Site" value={pathology.topographySite ?? "—"} />
+            <ReadField label="ICD-O-3 Morphology" value={pathology.icdoMorphology ?? "—"} />
+            <ReadField label="Histology/Morphology" value={pathology.histologyMorphology ?? "—"} />
+            <ReadField label="Morphology Grade" value={pathology.morphologyGrade ?? "—"} />
+            <ReadField label="Secondary Site" value={pathology.secondarySite ?? "—"} />
+            <ReadField label="ICD-10 Site" value={pathology.icd10Site ?? "—"} />
+            <ReadField label="Laterality" value={pathology.laterality ?? "—"} />
+          </div>
+        ) : (
+          <p className="text-sm text-[#82979e] italic">No diagnostic details available.</p>
+        )}
+      </Section>
     </div>
   );
 }

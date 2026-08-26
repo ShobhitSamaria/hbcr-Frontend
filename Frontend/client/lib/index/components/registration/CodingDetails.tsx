@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
 import { Field, SelectField } from "../FormFields";
 import { useFormStateOptional } from "@/lib/formState";
+import { useValidationOptional } from "@/lib/validationContext";
 import { icd10Api } from "@/lib/api";
 import { IcdoAutocomplete } from "./IcdoAutocomplete";
 import { Icdo10Autocomplete } from "./Icdo10Autocomplete";
 
 export function CodingDetails() {  
   const ctx = useFormStateOptional();
+  const validation = useValidationOptional();
 const [laterality, setLaterality] = useState(
   (ctx?.values.current["25. Laterality"] as string) || "Not a Paired Site"
 );
@@ -167,7 +169,7 @@ const [laterality, setLaterality] = useState(
         </div>
         <div>
           <label className="mb-3 block text-xs font-bold text-[#486b77]">
-            25. Laterality
+            25. Laterality<span className="ml-0.5 text-[#d04a4a]">*</span>
           </label>
           <div className="flex flex-wrap gap-4 text-xs text-[#718991]">
             {["Not a Paired Site", "Paired Site", "Unknown"].map((option) => (
@@ -186,6 +188,11 @@ const [laterality, setLaterality] = useState(
               </label>
             ))}
           </div>
+          {validation?.errors["25. Laterality"] && (validation.forceShow.has("25. Laterality") || validation.touched.has("25. Laterality")) && (
+            <p className="mt-1.5 text-[11px] font-medium text-[#d04a4a]">
+              {validation.errors["25. Laterality"]}
+            </p>
+          )}
           {laterality === "Paired Site" && (
             <div className="mt-4 flex flex-col gap-2 text-xs text-[#718991]">
               {[

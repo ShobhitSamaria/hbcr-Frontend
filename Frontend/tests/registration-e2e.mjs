@@ -135,19 +135,19 @@ await test("DX before reporting date errors", () => {
 
 // ---------------------------------------------------------------------------
 section("Step 2 — diagnostic + coding rules");
-await test("no diagnostic method => no error (optional for now)", () => {
+await test("no diagnostic method => error (now required)", () => {
   const errs = validateStep2({});
-  if (errs["_diagnostic.methods"]) throw new Error("methods should be optional: " + errs["_diagnostic.methods"]);
+  if (!errs["_diagnostic.methods"]) throw new Error("methods should be required now");
 });
 
 await test("Clinical Only without date => error", () => {
-  const errs = validateStep2({ "_diagnostic.methods": ["Clinical Only"] });
+  const errs = validateStep2({ "_diagnostic.methods": ["Clinical Only"], "_diagnostic.microscopicLater": "Yes" });
   if (!errs["_diagnostic.clinicalDate"]) throw new Error("expected clinical date error");
 });
 
-await test("laterality missing => no error (optional for now)", () => {
+await test("laterality missing => error (now required)", () => {
   const errs = validateStep2({});
-  if (errs["25. Laterality"]) throw new Error("laterality should be optional: " + errs["25. Laterality"]);
+  if (!errs["25. Laterality"]) throw new Error("laterality should be required now");
 });
 
 await test("ICD-O-3 codes missing => no errors (optional for now)", () => {
@@ -161,8 +161,12 @@ await test("ICD-O-3 codes missing => no errors (optional for now)", () => {
 section("Step 3 — clinical treatment rules");
 await test("empty step 3 => required errors", () => {
   const errs = validateStep3({});
+  if (!errs["28(c). Composite stage"]) throw new Error("expected composite stage error");
+  if (!errs["29. Treatment Given Prior to Registration at RI / Outside RI"]) throw new Error("expected treatment given error");
   if (!errs["31. Name of person completing form (IN CAPITALS)"]) throw new Error("expected form-completed-by error");
   if (!errs["32. Date of completion of form"]) throw new Error("expected form-completion-date error");
+  if (!errs["33. Contact Number"]) throw new Error("expected contact number error");
+  if (!errs["34. Designation"]) throw new Error("expected designation error");
 });
 
 await test("Others (Specify) targeted therapy => error", () => {

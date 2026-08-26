@@ -6,14 +6,18 @@ export type FollowUpCreateInput = {
   registrationId: number;
   dateOfFollowUp: Date;
   methodOfFollowUp: string;
+  methodOfFollowUpOther?: string;
   vitalStatus: string;
   diseaseStatus?: string;
+  diseaseStatusOther?: string;
   dateOfFirstRecurrence?: Date;
   treatmentGiven?: boolean;
   treatmentType?: string;
   dateOfDeath?: Date;
   placeOfDeath?: string;
+  placeOfDeathOther?: string;
   sourceOfDeathInfo?: string;
+  sourceOfDeathInfoOther?: string;
   causeIa?: string;
   causeIb?: string;
   causeIc?: string;
@@ -21,6 +25,8 @@ export type FollowUpCreateInput = {
   icd10Ucod?: string;
   majorCauseGroupUcod?: string;
   formCompletedBy?: string;
+  formCompletedByDesignation?: string;
+  formCompletedByContact?: string;
   dateOfCompletion?: Date;
   treatments?: {
     modality: string;
@@ -171,10 +177,12 @@ export const followUpService = {
         visitNo,
         dateOfFollowUp: input.dateOfFollowUp,
         methodOfFollowUp: input.methodOfFollowUp as Prisma.FollowUpUncheckedCreateInput["methodOfFollowUp"],
+        ...(input.methodOfFollowUpOther !== undefined ? { methodOfFollowUpOther: input.methodOfFollowUpOther } : {}),
         vitalStatus: input.vitalStatus as Prisma.FollowUpUncheckedCreateInput["vitalStatus"],
         ...(input.diseaseStatus !== undefined
           ? { diseaseStatus: input.diseaseStatus as Prisma.FollowUpUncheckedCreateInput["diseaseStatus"] }
           : {}),
+        ...(input.diseaseStatusOther !== undefined ? { diseaseStatusOther: input.diseaseStatusOther } : {}),
         ...(input.dateOfFirstRecurrence !== undefined
           ? { dateOfFirstRecurrence: input.dateOfFirstRecurrence }
           : {}),
@@ -186,9 +194,11 @@ export const followUpService = {
         ...(input.placeOfDeath !== undefined
           ? { placeOfDeath: input.placeOfDeath as Prisma.FollowUpUncheckedCreateInput["placeOfDeath"] }
           : {}),
+        ...(input.placeOfDeathOther !== undefined ? { placeOfDeathOther: input.placeOfDeathOther } : {}),
         ...(input.sourceOfDeathInfo !== undefined
           ? { sourceOfDeathInfo: input.sourceOfDeathInfo as Prisma.FollowUpUncheckedCreateInput["sourceOfDeathInfo"] }
           : {}),
+        ...(input.sourceOfDeathInfoOther !== undefined ? { sourceOfDeathInfoOther: input.sourceOfDeathInfoOther } : {}),
         ...(input.causeIa !== undefined ? { causeIa: input.causeIa } : {}),
         ...(input.causeIb !== undefined ? { causeIb: input.causeIb } : {}),
         ...(input.causeIc !== undefined ? { causeIc: input.causeIc } : {}),
@@ -198,6 +208,8 @@ export const followUpService = {
           ? { majorCauseGroupUcod: input.majorCauseGroupUcod }
           : {}),
         ...(input.formCompletedBy !== undefined ? { formCompletedBy: input.formCompletedBy } : {}),
+        ...(input.formCompletedByDesignation !== undefined ? { formCompletedByDesignation: input.formCompletedByDesignation } : {}),
+        ...(input.formCompletedByContact !== undefined ? { formCompletedByContact: input.formCompletedByContact } : {}),
         ...(input.dateOfCompletion !== undefined ? { dateOfCompletion: input.dateOfCompletion } : {}),
         ...(input.treatments && input.treatments.length > 0
           ? {

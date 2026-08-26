@@ -49,7 +49,7 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
   T: [maxLen(8)],
   N: [maxLen(8)],
   M: [maxLen(8)],
-  "28(c). Composite stage": [maxLen(16)],
+  "28(c). Composite stage": [required("Composite stage is required")],
   "31. Name of person completing form (IN CAPITALS)": [
     required("Name of person completing the form is required"),
     maxLen(255),
@@ -60,8 +60,11 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
     notFutureDate(),
   ],
   Remarks: [maxLen(1000)],
-  "33. Contact Number": [maxLen(15)],
-  "34. Designation": [maxLen(128)],
+  "33. Contact Number": [
+    required("Contact number is required"),
+    pattern(MOBILE_RE, "Enter a valid 10-digit mobile number"),
+  ],
+  "34. Designation": [required("Designation is required")],
 });
 
 /**
@@ -77,6 +80,12 @@ export function validateStep3(values: Record<string, unknown>): Record<string, s
     if (!v || String(v).trim() === "") {
       out["28(a). Staging system value"] = "Please enter the staging system value";
     }
+  }
+
+  // 29. Treatment Given Prior — mandatory (radio group).
+  const treatmentGiven = values["29. Treatment Given Prior to Registration at RI / Outside RI"];
+  if (!treatmentGiven || String(treatmentGiven).trim() === "") {
+    out["29. Treatment Given Prior to Registration at RI / Outside RI"] = "Please select treatment option";
   }
 
   // 30(b). Targeted therapy "Others (Specify)" requires the text input.

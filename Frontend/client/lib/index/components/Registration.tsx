@@ -264,11 +264,14 @@ console.log("error keys:", Object.keys(validation.errors));
                 setSelectedIds={setSelectedIds}
                 sameAddress={sameAddress}
                 setSameAddress={setSameAddress}
+              />
+            )}
+            {step === 2 && (
+              <Step2Diagnostic
                 familyHistory={familyHistory}
                 setFamilyHistory={setFamilyHistory}
               />
             )}
-            {step === 2 && <Step2Diagnostic />}
             {step === 3 && <ClinicalTreatment />}
           </motion.div>
         </AnimatePresence>

@@ -47,6 +47,7 @@ export const registrationService = {
       maritalStatus?: string;
       maritalStatusOther?: string;
       education?: string;
+      educationOther?: string;
       occupation?: string;
       status?: string;
       formCompletedBy?: string;
@@ -146,6 +147,7 @@ export const registrationService = {
           ? { maritalStatusOther: input.maritalStatusOther }
           : {}),
         ...(input.education !== undefined ? { education: input.education as never } : {}),
+        ...(input.educationOther !== undefined ? { educationOther: input.educationOther } : {}),
         ...(input.occupation !== undefined ? { occupation: input.occupation } : {}),
         ...(input.status !== undefined ? { status: input.status as never } : {}),
         ...(input.formCompletedBy !== undefined

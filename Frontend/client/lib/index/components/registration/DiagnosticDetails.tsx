@@ -7,11 +7,11 @@ import { DiagnosticTable } from "../DiagnosticTable";
 // The keys mirror the Field labels so they can be cleared from the
 // form-state capture when Microscopic is unchecked.
 const PATHOLOGICAL_DIAGNOSIS_KEYS = [
-  "22.1 Anatomical Site of Specimen / Biopsy / SMEAR",
-  "22.2 Pathology Slide No",
-  "22.3 Date of Reporting",
-  "22.4 Primary Site of Tumour - Topography",
-  "22.5 Primary Histology - Morphology",
+  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR",
+  "21.2 Pathology Slide No",
+  "21.3 Date of Reporting",
+  "21.4 Primary Site of Tumour - Topography",
+  "21.5 Primary Histology / Morphology",
 ];
 
 export function DiagnosticDetails({
@@ -51,7 +51,7 @@ export function DiagnosticDetails({
     <div className="space-y-7">
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          20. Method of diagnosis
+          20. Method of diagnosis<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {["Clinical Only", "Microscopic", "Imaging", "DCO", "Other"].map(
@@ -76,36 +76,7 @@ export function DiagnosticDetails({
                     className="ml-2 h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] outline-none focus:border-[#36a99c]"
                   />
                 )}
-                {method === "Other" && methods.includes(method) && (
-                  <span className="flex w-full flex-col gap-1.5 rounded-lg border border-[#e3edef] bg-[#f7fbfb] p-2.5">
-                    <span className="text-[11px] font-semibold leading-snug text-[#486b77]">
-                      Was microscopic confirmation done at a later date (if
-                      other than (2) above is selected)?
-                    </span>
-                    <span className="flex gap-4 text-[11px]">
-                      <label className="flex items-center gap-1.5">
-                        <input
-                          type="radio"
-                          name="microscopic-later"
-                          checked={microscopicLater === "Yes"}
-                          onChange={() => setMicroscopicLater("Yes")}
-                          className="accent-[#0b7d87]"
-                        />
-                        Yes
-                      </label>
-                      <label className="flex items-center gap-1.5">
-                        <input
-                          type="radio"
-                          name="microscopic-later"
-                          checked={microscopicLater === "No"}
-                          onChange={() => setMicroscopicLater("No")}
-                          className="accent-[#0b7d87]"
-                        />
-                        No
-                      </label>
-                    </span>
-                  </span>
-                )}
+
               </label>
             ),
           )}
@@ -144,6 +115,34 @@ export function DiagnosticDetails({
           ]}
         />
       )}
+      <div className="flex w-full flex-col gap-1.5 rounded-lg border border-[#e3edef] bg-[#f7fbfb] p-2.5">
+          <span className="text-[11px] font-semibold leading-snug text-[#486b77]">
+            Was microscopic confirmation done at a later date (if other than (2) above is selected)?
+            <span className="ml-0.5 text-[#d04a4a]">*</span>
+          </span>
+          <span className="flex gap-4 text-[11px]">
+            <label className="flex items-center gap-1.5">
+              <input
+                type="radio"
+                name="microscopic-later"
+                checked={microscopicLater === "Yes"}
+                onChange={() => setMicroscopicLater("Yes")}
+                className="accent-[#0b7d87]"
+              />
+              Yes
+            </label>
+            <label className="flex items-center gap-1.5">
+              <input
+                type="radio"
+                name="microscopic-later"
+                checked={microscopicLater === "No"}
+                onChange={() => setMicroscopicLater("No")}
+                className="accent-[#0b7d87]"
+              />
+              No
+            </label>
+          </span>
+        </div>
       {methods.includes("Other") && (
         <DiagnosticTable
           title="Other diagnostic procedures"

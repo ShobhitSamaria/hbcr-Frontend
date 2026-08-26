@@ -92,7 +92,13 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
   const [causeIi, setCauseIi] = useState("");
   const [icd10Ucod, setIcd10Ucod] = useState("");
   const [majorCauseGroupUcod, setMajorCauseGroupUcod] = useState("");
+  const [methodOther, setMethodOther] = useState("");
+  const [diseaseStatusOther, setDiseaseStatusOther] = useState("");
+  const [placeOfDeathOther, setPlaceOfDeathOther] = useState("");
+  const [sourceOfDeathInfoOther, setSourceOfDeathInfoOther] = useState("");
   const [formCompletedBy, setFormCompletedBy] = useState("");
+  const [formCompletedByDesignation, setFormCompletedByDesignation] = useState("");
+  const [formCompletedByContact, setFormCompletedByContact] = useState("");
   const [dateOfCompletion, setDateOfCompletion] = useState("");
 
   const [saving, setSaving] = useState(false);
@@ -206,7 +212,13 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
       payload.icd10Ucod = icd10Ucod.trim() || undefined;
       payload.majorCauseGroupUcod = majorCauseGroupUcod.trim() || undefined;
     }
+    payload.methodOfFollowUpOther = methodOther.trim() || undefined;
+    if (isHospitalVisit && diseaseStatus === "OTHERS") payload.diseaseStatusOther = diseaseStatusOther.trim() || undefined;
+    if (isDead && placeOfDeath === "OTHERS") payload.placeOfDeathOther = placeOfDeathOther.trim() || undefined;
+    if (isDead && placeOfDeath === "OTHERS" && sourceOfDeathInfo === "OTHERS") payload.sourceOfDeathInfoOther = sourceOfDeathInfoOther.trim() || undefined;
     payload.formCompletedBy = formCompletedBy.trim() || undefined;
+    payload.formCompletedByDesignation = formCompletedByDesignation.trim() || undefined;
+    payload.formCompletedByContact = formCompletedByContact.trim() || undefined;
     payload.dateOfCompletion = dateOfCompletion ? fmtDate(dateOfCompletion) : undefined;
 
     setSaving(true);
@@ -256,10 +268,18 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
           value={method}
           onChange={(v) => {
             setMethod(v as FollowUpMethod);
-            // Any method change invalidates the previous hospital-visit answers.
+            setMethodOther("");
             resetHospitalSection();
           }}
         />
+        {method === "OTHERS" && (
+          <Field
+            label="Specify"
+            placeholder="Please specify"
+            value={methodOther}
+            onChange={setMethodOther}
+          />
+        )}
         <SelectField
           label="3. Vital Status"
           options={VITAL_STATUS_OPTIONS}
@@ -285,10 +305,18 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
             disabled={!isHospitalVisit}
             onChange={(v) => {
               setDiseaseStatus(v);
-              // The recurrence date is only applicable for status 5.
+              setDiseaseStatusOther("");
               if (v !== "CANCER_PROGRESSION_RECURRENCE") setDateOfFirstRecurrence("");
             }}
           />
+          {isHospitalVisit && diseaseStatus === "OTHERS" && (
+            <Field
+              label="Specify"
+              placeholder="Please specify"
+              value={diseaseStatusOther}
+              onChange={setDiseaseStatusOther}
+            />
+          )}
           <Field
             label="Date of First Recurrence"
             type="date"
@@ -422,21 +450,41 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
             disabled={!isDead}
             onChange={(v) => {
               setPlaceOfDeath(v);
-              // Source info applies only to Others; causes only to RI.
+              setPlaceOfDeathOther("");
               setSourceOfDeathInfo("");
+              setSourceOfDeathInfoOther("");
               setCauseIa("");
               setCauseIb("");
               setCauseIc("");
               setCauseIi("");
             }}
           />
+          {isDead && placeOfDeath === "OTHERS" && (
+            <Field
+              label="Specify (Place of Death)"
+              placeholder="Please specify"
+              value={placeOfDeathOther}
+              onChange={setPlaceOfDeathOther}
+            />
+          )}
           <SelectField
             label="8. Source of Information on Death"
             options={DEATH_INFO_SOURCE_OPTIONS}
             value={sourceOfDeathInfo}
             disabled={placeOfDeath !== "OTHERS"}
-            onChange={setSourceOfDeathInfo}
+            onChange={(v) => {
+              setSourceOfDeathInfo(v);
+              setSourceOfDeathInfoOther("");
+            }}
           />
+          {isDead && placeOfDeath === "OTHERS" && sourceOfDeathInfo === "OTHERS" && (
+            <Field
+              label="Specify (Source of Death Info)"
+              placeholder="Please specify"
+              value={sourceOfDeathInfoOther}
+              onChange={setSourceOfDeathInfoOther}
+            />
+          )}
         </div>
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -471,13 +519,25 @@ export function FollowUpForm({ registrationId, formKey, onSaved, onCancel }: Pro
         </div>
       </div>
 
-      {/* ===== 12-13: form completion (always applicable) ===== */}
+      {/* ===== 12-14: form completion (always applicable) ===== */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field
           label="12. Name of Person Completing Form (in capitals)"
           placeholder="DR. A. SRINIVASAN"
           value={formCompletedBy}
           onChange={(v) => setFormCompletedBy(v.toUpperCase())}
+        />
+        <Field
+          label="Designation"
+          placeholder="Designation"
+          value={formCompletedByDesignation}
+          onChange={setFormCompletedByDesignation}
+        />
+        <Field
+          label="Contact Number"
+          placeholder="Contact number"
+          value={formCompletedByContact}
+          onChange={setFormCompletedByContact}
         />
         <Field
           label="13. Date of Completion of this Form"
