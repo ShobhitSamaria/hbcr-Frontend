@@ -10,7 +10,7 @@ export function CodingDetails() {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
 const [laterality, setLaterality] = useState(
-  (ctx?.values.current["25. Laterality"] as string) || "Not a Paired Site"
+  (ctx?.values.current["25. Laterality"] as string) || ""
 );
   const [pairedSite, setPairedSite] = useState(
   (ctx?.values.current["25(a). pairedLaterality"] as string) || ""
@@ -188,6 +188,11 @@ const [laterality, setLaterality] = useState(
               </label>
             ))}
           </div>
+          {!laterality && (
+            <p className="mt-1.5 text-[10px] italic text-[#96aab0]">
+              Please select a Laterality option
+            </p>
+          )}
           {validation?.errors["25. Laterality"] && (validation.forceShow.has("25. Laterality") || validation.touched.has("25. Laterality")) && (
             <p className="mt-1.5 text-[11px] font-medium text-[#d04a4a]">
               {validation.errors["25. Laterality"]}

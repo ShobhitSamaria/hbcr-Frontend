@@ -464,67 +464,76 @@ export function Step1Identifying({
             Rural
           </label>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Field
-            label="Flat / House No."
-            placeholder="House number"
-          />
-          <Field label="Ward No." placeholder="Ward number" />
-          <Field label="Street / Road" placeholder="Street or road" />
-          <Field label="City" placeholder="City" />
-          <Field label="District" placeholder="District" />
-          <Field label="State" placeholder="State" />
-          <Field
-            label="PIN Code"
-            type="number"
-            placeholder="PIN code"
-          />
-          <Field label="Mobile number" placeholder="Mobile number" />
-          <Field
-            label="Email address"
-            type="email"
-            placeholder="patient@email.com"
-          />
-        </div>
-        <div className="mt-4">
-          <Field
-            label="Duration of Stay at the above address (in years)"
-            type="number"
-            placeholder="e.g. 5"
-            required
-          />
-        </div>
-        <label className="mt-4 flex items-center gap-2 text-xs text-[#718991]">
-          <input
-            type="checkbox"
-            checked={sameAddress}
-            onChange={(e) => setSameAddress(e.target.checked)}
-            className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
-          />
-          Residential Address is same as Permanent Address
-        </label>
-        {!sameAddress && (
-          <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Field
-              label="Permanent Flat / House No."
-              placeholder="House number"
-            />
-            <Field
-              label="Permanent Street / Road"
-              placeholder="Street or road"
-            />
-            <Field label="Permanent City" placeholder="City" />
-            <Field
-              label="Permanent District"
-              placeholder="District"
-            />
-            <Field label="Permanent State" placeholder="State" />
-            <Field
-              label="Permanent PIN Code"
-              type="number"
-              placeholder="PIN code"
-            />
-          </div>
+        {!urbanRural && (
+          <p className="mb-2 text-[11px] italic text-[#96aab0]">
+            Please select Urban or Rural to enter address details
+          </p>
+        )}
+        {urbanRural && (
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Field
+                label="Flat / House No."
+                placeholder="House number"
+              />
+              <Field label="Ward No." placeholder="Ward number" />
+              <Field label="Street / Road" placeholder="Street or road" />
+              <Field label="City" placeholder="City" />
+              <Field label="District" placeholder="District" />
+              <Field label="State" placeholder="State" />
+              <Field
+                label="PIN Code"
+                type="number"
+                placeholder="PIN code"
+              />
+              <Field label="Mobile number" placeholder="Mobile number" />
+              <Field
+                label="Email address"
+                type="email"
+                placeholder="patient@email.com"
+              />
+            </div>
+            <div className="mt-4">
+              <Field
+                label="Duration of Stay at the above address (in years)"
+                type="number"
+                placeholder="e.g. 5"
+                required
+              />
+            </div>
+            <label className="mt-4 flex items-center gap-2 text-xs text-[#718991]">
+              <input
+                type="checkbox"
+                checked={sameAddress}
+                onChange={(e) => setSameAddress(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
+              />
+              Residential Address is same as Permanent Address
+            </label>
+            {!sameAddress && (
+              <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
+                <Field
+                  label="Permanent Flat / House No."
+                  placeholder="House number"
+                />
+                <Field
+                  label="Permanent Street / Road"
+                  placeholder="Street or road"
+                />
+                <Field label="Permanent City" placeholder="City" />
+                <Field
+                  label="Permanent District"
+                  placeholder="District"
+                />
+                <Field label="Permanent State" placeholder="State" />
+                <Field
+                  label="Permanent PIN Code"
+                  type="number"
+                  placeholder="PIN code"
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">

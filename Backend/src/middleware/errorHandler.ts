@@ -22,13 +22,16 @@ export function errorHandler(
   // Prisma known request errors (record not found, unique conflict, FK violation, ...)
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     if (err.code === "P2002") {
-      const target = (err.meta?.target as string[]) ?? [];
-      return fail(
-        res,
-        409,
-        `Unique constraint failed on: ${target.join(", ") || "unknown field"}`,
-        { code: err.code, target },
-      );
+      const raw = err.meta?.target;
+      const target: string[] = Array.isArray(raw) ? raw : typeof raw === "string" ? [raw] : [];
+      // Prisma constraint names follow: <table>_<field>_key — extract the field.
+      const fields = target.map((t) => t.replace(/^\w+_/, "").replace(/_key$/, ""));
+      const label = fields.length ? fields.join(", ") : "unknown field";
+      return fail(res, 409, `Unique constraint failed on: ${label}`, {
+        code: err.code,
+        target: fields,
+        constraint: target,
+      });
     }
     if (err.code === "P2025") {
       return fail(res, 404, "Record not found", { code: err.code });

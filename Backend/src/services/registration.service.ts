@@ -69,22 +69,16 @@ export const registrationService = {
     if (!patient) throw httpErrors.notFound(`Patient ${patientId} not found`);
     if (!hospital) throw httpErrors.notFound(`Hospital ${hospitalId} not found`);
 
-    // Auto-generate Reference Number and Registration Number if not provided
-    let referenceNo = input.referenceNo;
-    let hbcrRegistrationNo = input.hbcrRegistrationNo;
-
-    if (!referenceNo || !hbcrRegistrationNo) {
-      // Centre code must exist for auto-generation
-      const centreCode = hospital.centre?.code;
-      if (!centreCode) {
-        throw httpErrors.badRequest(`Hospital ${hospitalId} does not have a centre code configured for Reference Number generation`);
-      }
-
-      // Generate both numbers atomically using Centre Code as prefix
-      const numbers = await sequenceService.generateNumbers(hospitalId, centreCode);
-      referenceNo = referenceNo || numbers.referenceNo;
-      hbcrRegistrationNo = hbcrRegistrationNo || numbers.registrationNo;
+    // Always auto-generate Reference Number and Registration Number server-side.
+    // Preview numbers from the frontend are for display only; generating here
+    // prevents P2002 duplicate-key errors from concurrent submissions.
+    const centreCode = hospital.centre?.code;
+    if (!centreCode) {
+      throw httpErrors.badRequest(`Hospital ${hospitalId} does not have a centre code configured for Reference Number generation`);
     }
+    const numbers = await sequenceService.generateNumbers(hospitalId, centreCode);
+    const referenceNo = numbers.referenceNo;
+    const hbcrRegistrationNo = numbers.registrationNo;
 
     return prisma.registration.create({
       data: {
