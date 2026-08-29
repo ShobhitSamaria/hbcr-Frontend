@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
 import { TreatmentTable } from "./TreatmentTable";
 
 type TreatmentBlockProps = {
@@ -12,6 +12,7 @@ export function TreatmentBlock({
   requiredChoice = false,
 }: TreatmentBlockProps) {
   const ctx = useFormStateOptional();
+  const readOnly = useForceReadOnly();
   const [given, setGiven] = useState(requiredChoice ? "Yes" : "");
   const [type, setType] = useState("");
 
@@ -31,6 +32,7 @@ export function TreatmentBlock({
         <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
           <label className="flex items-center gap-2">
             <input
+              disabled={readOnly}
               type="radio"
               name={title}
               checked={given === "Yes"}
@@ -41,6 +43,7 @@ export function TreatmentBlock({
           </label>
           <label className="flex items-center gap-2">
             <input
+              disabled={readOnly}
               type="radio"
               name={title}
               checked={given === "No"}
@@ -51,6 +54,7 @@ export function TreatmentBlock({
           </label>
           <label className="flex items-center gap-2">
             <input
+              disabled={readOnly}
               type="radio"
               name={title}
               checked={given === "Unknown"}
@@ -71,6 +75,7 @@ export function TreatmentBlock({
               {["Allopathic", "Non-Allopathic", "Both"].map((option) => (
                 <label key={option} className="flex items-center gap-2">
                   <input
+                    disabled={readOnly}
                     type="radio"
                     name={title + "type"}
                     checked={type === option}
@@ -85,7 +90,7 @@ export function TreatmentBlock({
           <TreatmentTable
             key={type}
             title="Treatment modalities"
-            disabled={nonAllopathic}
+            disabled={readOnly || nonAllopathic}
           />
         </>
       )}

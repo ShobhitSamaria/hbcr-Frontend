@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Field, SelectField } from "../FormFields";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 import { icd10Api } from "@/lib/api";
 import { IcdoAutocomplete } from "./IcdoAutocomplete";
@@ -9,6 +9,7 @@ import { Icdo10Autocomplete } from "./Icdo10Autocomplete";
 export function CodingDetails() {  
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
+  const readOnly = useForceReadOnly();
 const [laterality, setLaterality] = useState(
   (ctx?.values.current["25. Laterality"] as string) || ""
 );
@@ -175,6 +176,7 @@ const [laterality, setLaterality] = useState(
             {["Not a Paired Site", "Paired Site", "Unknown"].map((option) => (
               <label key={option} className="flex items-center gap-2">
                 <input
+                  disabled={readOnly}
                   type="radio"
                   name="laterality"
                   checked={laterality === option}
@@ -210,6 +212,7 @@ const [laterality, setLaterality] = useState(
               ].map((option) => (
                 <label key={option} className="flex items-center gap-2">
                   <input
+                    disabled={readOnly}
                     type="radio"
                     name="paired-laterality"
                     checked={pairedSite === option}

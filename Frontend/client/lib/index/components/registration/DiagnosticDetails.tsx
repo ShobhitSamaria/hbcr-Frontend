@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
 import { DiagnosticTable } from "../DiagnosticTable";
 
 // The Complete Pathological Diagnosis fields (22.1 - 22.5) are only
@@ -21,6 +21,7 @@ export function DiagnosticDetails({
   methods: string[];
   setMethods: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
+  const readOnly = useForceReadOnly();
   const [clinicalDate, setClinicalDate] = useState("");
   const [microscopicLater, setMicroscopicLater] = useState<"" | "Yes" | "No">("");
   const ctx = useFormStateOptional();
@@ -62,6 +63,7 @@ export function DiagnosticDetails({
               >
                 <input
                   type="checkbox"
+                  disabled={readOnly}
                   checked={methods.includes(method)}
                   onChange={(e) => toggle(method, e.target.checked)}
                   className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
@@ -123,6 +125,7 @@ export function DiagnosticDetails({
           <span className="flex gap-4 text-[11px]">
             <span className="flex items-center gap-1.5">
               <input
+                disabled={readOnly}
                 type="radio"
                 name="microscopic-later"
                 checked={microscopicLater === "Yes"}
@@ -133,6 +136,7 @@ export function DiagnosticDetails({
             </span>
             <span className="flex items-center gap-1.5">
               <input
+                disabled={readOnly}
                 type="radio"
                 name="microscopic-later"
                 checked={microscopicLater === "No"}

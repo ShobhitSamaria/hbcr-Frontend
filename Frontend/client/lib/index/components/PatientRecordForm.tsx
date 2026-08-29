@@ -75,43 +75,6 @@ const READONLY_FIELDS = new Set([
   "19. Relationship to Cancer / Degree of Relationship",
 ]);
 
-/**
- * Inner component that syncs loaded data into FormState context.
- * Must be rendered inside FormStateProvider.
- * Uses a key to force children to re-mount after data is set,
- * so their innerValue states pick up the correct initial values.
- */
-function DataInitializer({
-  data,
-  children,
-}: {
-  data: Record<string, unknown>;
-  children: React.ReactNode;
-}) {
-  const ctx = useFormStateOptional();
-  const [dataVersion, setDataVersion] = useState(0);
-  const prevDataRef = useRef(data);
-
-  // When data reference changes, bump the version so children remount.
-  useEffect(() => {
-    if (prevDataRef.current !== data) {
-      prevDataRef.current = data;
-      setDataVersion((v) => v + 1);
-    }
-  }, [data]);
-
-  // Whenever context is available, push all data values into it.
-  // The key forces children to remount when dataVersion changes,
-  // so their useState initializers re-read from context.
-  if (ctx) {
-    for (const [k, v] of Object.entries(data)) {
-      ctx.set(k, v);
-    }
-  }
-
-  return <div key={dataVersion}>{children}</div>;
-}
-
 /** Bridges form state from inside FormStateProvider to the parent via a ref. */
 function FormStateBridge({ snapshotRef }: { snapshotRef: React.MutableRefObject<Record<string, unknown>> }) {
   const ctx = useFormStateOptional();
@@ -178,10 +141,6 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
   }, [loadData]);
 
   /** Explicit reverse mapping: Prisma enum → form option label. */
-  /**
-   * Map Prisma enum values (lowercase as stored in DB) to display labels.
-   * Key must be lowercase because Postgres stores enum values as lowercase.
-   */
   const ENUM_DISPLAY: Record<string, string> = {
     out_patient: "Out Patient",
     in_patient_elective: "In Patient Elective",
@@ -454,22 +413,31 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       {/* Registration form — all 3 steps */}
       <div className="rounded-2xl border border-[#e3edef] bg-white shadow-[0_5px_20px_rgba(25,73,89,.035)] p-5 sm:p-6">
         <AuthProvider>
-          <FormStateProvider readOnlyFields={READONLY_FIELDS} initialValues={initialValues}>
+          {/* key on FormStateProvider forces full remount when patient data loads,
+              so all children mount fresh and read initial values from the ref. */}
+          <FormStateProvider
+            key={`fs-${patient.id}-${registrations[0]?.id ?? 0}`}
+            readOnlyFields={READONLY_FIELDS}
+            initialValues={initialValues}
+            forceReadOnly={!editMode}
+          >
             <ValidationProvider>
-              <DataInitializer data={initialValues}>
-                <FormStateBridge snapshotRef={formSnapshotRef} />
-                <RegistrationSteps
-                  editMode={editMode}
-                  referral={referral}
-                  setReferral={setReferral}
-                  selectedIds={selectedIds}
-                  setSelectedIds={setSelectedIds}
-                  sameAddress={sameAddress}
-                  setSameAddress={setSameAddress}
-                  familyHistory={familyHistory}
-                  setFamilyHistory={setFamilyHistory}
-                />
-              </DataInitializer>
+              <FormStateBridge snapshotRef={formSnapshotRef} />
+              <RegistrationSteps
+                editMode={editMode}
+                referral={referral}
+                setReferral={setReferral}
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
+                sameAddress={sameAddress}
+                setSameAddress={setSameAddress}
+                familyHistory={familyHistory}
+                setFamilyHistory={setFamilyHistory}
+                initialCaseThrough={initialValues["6. Case Registered Through (Patient's first reporting at RI)"] as string || ""}
+                initialCaseThroughOther={initialValues["6(a). Case Registered Through (Other)"] as string || ""}
+                initialMaritalStatus={initialValues["16. Marital status"] as string || ""}
+                initialEducation={initialValues["17. Education"] as string || ""}
+              />
             </ValidationProvider>
           </FormStateProvider>
         </AuthProvider>
@@ -493,6 +461,10 @@ function RegistrationSteps({
   setSameAddress,
   familyHistory,
   setFamilyHistory,
+  initialCaseThrough,
+  initialCaseThroughOther,
+  initialMaritalStatus,
+  initialEducation,
 }: {
   editMode: boolean;
   referral: string;
@@ -503,6 +475,10 @@ function RegistrationSteps({
   setSameAddress: (v: boolean) => void;
   familyHistory: string;
   setFamilyHistory: (v: string) => void;
+  initialCaseThrough: string;
+  initialCaseThroughOther: string;
+  initialMaritalStatus: string;
+  initialEducation: string;
 }) {
   const [step, setStep] = useState(1);
 
@@ -540,6 +516,10 @@ function RegistrationSteps({
           setSameAddress={setSameAddress}
           familyHistory={familyHistory}
           setFamilyHistory={setFamilyHistory}
+          initialCaseThrough={initialCaseThrough}
+          initialCaseThroughOther={initialCaseThroughOther}
+          initialMaritalStatus={initialMaritalStatus}
+          initialEducation={initialEducation}
         />
       )}
       {step === 2 && <Step2Diagnostic />}

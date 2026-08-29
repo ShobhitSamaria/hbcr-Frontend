@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 import { registrationApi } from "@/lib/api";
 import { Field, SelectField, ToggleDetails } from "../FormFields";
@@ -15,6 +15,11 @@ type Step1IdentifyingProps = {
   setSameAddress: (v: boolean) => void;
   familyHistory: string;
   setFamilyHistory: (v: string) => void;
+  /** Pre-populated values for edit mode (from PatientRecordForm) */
+  initialCaseThrough?: string;
+  initialCaseThroughOther?: string;
+  initialMaritalStatus?: string;
+  initialEducation?: string;
 };
 
 export function Step1Identifying({
@@ -26,10 +31,15 @@ export function Step1Identifying({
   setSameAddress,
   familyHistory,
   setFamilyHistory,
+  initialCaseThrough,
+  initialCaseThroughOther,
+  initialMaritalStatus,
+  initialEducation,
 }: Step1IdentifyingProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
   const { session } = useAuth();
+  const readOnly = useForceReadOnly();
 
   // Reporting institution + centre code come from the logged-in hospital's
   // profile (returned by the auth API); the fields are read-only.
@@ -98,15 +108,15 @@ export function Step1Identifying({
   // option selected (previously it defaulted to "Out Patient"). The user
   // must explicitly choose; validation rejects the "Select" placeholder.
   const [caseThrough, setCaseThrough] = useState<string>(() => {
+    if (initialCaseThrough && initialCaseThrough !== "") return initialCaseThrough;
     const cur = ctx?.values.current["6. Case Registered Through (Patient’s first reporting at RI)"];
     return typeof cur === "string" && cur !== "" ? cur : "";
   });
-  // Sync from context when values change (e.g., when loading patient record for edit)
+  // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    if (!ctx) return;
-    const cur = ctx.values.current["6. Case Registered Through (Patient’s first reporting at RI)"];
-    if (typeof cur === "string" && cur !== "" && cur !== caseThrough) {
-      setCaseThrough(cur);
+    const newVal = initialCaseThrough && initialCaseThrough !== "" ? initialCaseThrough : (ctx?.values.current["6. Case Registered Through (Patient’s first reporting at RI)"] as string | undefined);
+    if (typeof newVal === "string" && newVal !== "" && newVal !== caseThrough) {
+      setCaseThrough(newVal);
     }
   });
   const handleCaseThrough = (v: string) => {
@@ -115,6 +125,7 @@ export function Step1Identifying({
     if (v !== "Other") ctx?.set("6(a). Case Registered Through (Other)", "");
   };
   const [caseThroughOther, setCaseThroughOther] = useState<string>(() => {
+    if (initialCaseThroughOther && initialCaseThroughOther !== "") return initialCaseThroughOther;
     const cur = ctx?.values.current["6(a). Case Registered Through (Other)"];
     return typeof cur === "string" ? cur : "";
   });
@@ -125,15 +136,15 @@ export function Step1Identifying({
 
   // 16. Marital Status — when "Other" is selected, show a text input.
   const [maritalStatus, setMaritalStatus] = useState<string>(() => {
+    if (initialMaritalStatus && initialMaritalStatus !== "") return initialMaritalStatus;
     const cur = ctx?.values.current["16. Marital status"];
     return typeof cur === "string" ? cur : "";
   });
-  // Sync from context when values change (e.g., when loading patient record for edit)
+  // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    if (!ctx) return;
-    const cur = ctx.values.current["16. Marital status"];
-    if (typeof cur === "string" && cur !== "" && cur !== maritalStatus) {
-      setMaritalStatus(cur);
+    const newVal = initialMaritalStatus && initialMaritalStatus !== "" ? initialMaritalStatus : (ctx?.values.current["16. Marital status"] as string | undefined);
+    if (typeof newVal === "string" && newVal !== "" && newVal !== maritalStatus) {
+      setMaritalStatus(newVal);
     }
   });
   const handleMaritalStatus = (v: string) => {
@@ -152,15 +163,15 @@ export function Step1Identifying({
 
   // 17. Education — when "Others (specify)" is selected, show a text input.
   const [education, setEducation] = useState<string>(() => {
+    if (initialEducation && initialEducation !== "") return initialEducation;
     const cur = ctx?.values.current["17. Education"];
     return typeof cur === "string" ? cur : "";
   });
-  // Sync from context when values change (e.g., when loading patient record for edit)
+  // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    if (!ctx) return;
-    const cur = ctx.values.current["17. Education"];
-    if (typeof cur === "string" && cur !== "" && cur !== education) {
-      setEducation(cur);
+    const newVal = initialEducation && initialEducation !== "" ? initialEducation : (ctx?.values.current["17. Education"] as string | undefined);
+    if (typeof newVal === "string" && newVal !== "" && newVal !== education) {
+      setEducation(newVal);
     }
   });
   const handleEducation = (v: string) => {
@@ -359,6 +370,7 @@ export function Step1Identifying({
                 <span className="w-28">{label}</span>
                 <span className="flex items-center gap-1.5">
                   <input
+                    disabled={readOnly}
                     type="radio"
                     name={"id-" + label}
                     checked={!isSelected}
@@ -372,6 +384,7 @@ export function Step1Identifying({
                 </span>
                 <span className="flex items-center gap-1.5">
                   <input
+                    disabled={readOnly}
                     type="radio"
                     name={"id-" + label}
                     checked={isSelected}
@@ -471,6 +484,7 @@ export function Step1Identifying({
           </span>
           <label className="flex items-center gap-1.5">
             <input
+              disabled={readOnly}
               type="radio"
               name="urban-rural"
               checked={urbanRural === "Urban"}
@@ -481,6 +495,7 @@ export function Step1Identifying({
           </label>
           <label className="flex items-center gap-1.5">
             <input
+              disabled={readOnly}
               type="radio"
               name="urban-rural"
               checked={urbanRural === "Rural"}
@@ -653,6 +668,7 @@ function FamilialCancerSection({
   familyHistory: string;
   setFamilyHistory: (v: string) => void;
 }) {
+  const readOnly = useForceReadOnly();
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
@@ -661,6 +677,7 @@ function FamilialCancerSection({
       <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
         <span className="flex items-center gap-2">
           <input
+            disabled={readOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "Yes"}
@@ -671,6 +688,7 @@ function FamilialCancerSection({
         </span>
         <span className="flex items-center gap-2">
           <input
+            disabled={readOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "No"}
@@ -681,6 +699,7 @@ function FamilialCancerSection({
         </span>
         <span className="flex items-center gap-2">
           <input
+            disabled={readOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "Unknown"}
@@ -699,6 +718,7 @@ function FamilialCancerSection({
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
                 <input
+                  disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
                   required
@@ -708,6 +728,7 @@ function FamilialCancerSection({
               </span>
               <span className="flex items-center gap-2">
                 <input
+                  disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
                   required
@@ -724,6 +745,7 @@ function FamilialCancerSection({
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
                 <input
+                  disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
                   required
@@ -733,6 +755,7 @@ function FamilialCancerSection({
               </span>
               <span className="flex items-center gap-2">
                 <input
+                  disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
                   required
@@ -822,6 +845,7 @@ function OtherIdInput({
 }
 
 function HealthSchemeField() {
+  const readOnly = useForceReadOnly();
   const ctx = useFormStateOptional();
   const [answer, setAnswer] = useState<string>(() => {
     const cur = ctx?.values.current[
@@ -842,6 +866,7 @@ function HealthSchemeField() {
         <span className="flex items-center gap-4 whitespace-nowrap">
           <span className="flex items-center gap-1.5">
             <input
+              disabled={readOnly}
               type="radio"
               name="health-scheme"
               checked={answer === "Yes"}
@@ -852,6 +877,7 @@ function HealthSchemeField() {
           </span>
           <span className="flex items-center gap-1.5">
             <input
+              disabled={readOnly}
               type="radio"
               name="health-scheme"
               checked={answer === "No"}

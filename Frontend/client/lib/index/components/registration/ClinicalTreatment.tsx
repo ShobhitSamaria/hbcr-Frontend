@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForceReadOnly } from "@/lib/formState";
 import { Field, SelectField, TextAreaField } from "../FormFields";
 import { TargetedTherapy } from "./TargetedTherapy";
 import { TreatmentBlock } from "./TreatmentBlock";
@@ -16,6 +17,7 @@ const STAGING_SYSTEM_OPTIONS = [
 ];
 
 export function ClinicalTreatment() {
+  const readOnly = useForceReadOnly();
   const [ecog, setEcog] = useState("Unknown");
   const [stagingSystem, setStagingSystem] = useState("");
   const isTNM = stagingSystem === "TNM";
@@ -185,6 +187,7 @@ export function ClinicalTreatment() {
         <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
           <label className="flex items-center gap-2">
             <input
+              disabled={readOnly}
               type="radio"
               name="ecog-status"
               checked={ecog === "Known"}
@@ -195,6 +198,7 @@ export function ClinicalTreatment() {
           </label>
           <label className="flex items-center gap-2">
             <input
+              disabled={readOnly}
               type="radio"
               name="ecog-status"
               checked={ecog === "Unknown"}

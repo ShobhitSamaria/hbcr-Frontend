@@ -23,6 +23,8 @@ type FormStateCtx = {
   set: (label: string, value: unknown) => void;
   /** When present, fields whose label is in this set are read-only. */
   readOnlyFields?: Set<string>;
+  /** When true, ALL fields are forced read-only (view mode). */
+  forceReadOnly?: boolean;
 };
 
 const Ctx = createContext<FormStateCtx | null>(null);
@@ -31,24 +33,31 @@ export function FormStateProvider({
   children,
   readOnlyFields,
   initialValues,
+  forceReadOnly = false,
 }: {
   children: ReactNode;
   readOnlyFields?: Set<string>;
   initialValues?: Record<string, unknown>;
+  forceReadOnly?: boolean;
 }) {
   const values = useRef<Record<string, unknown>>(initialValues ?? {});
-  // We use a tiny notification stream to re-render widgets that want live
-  // previews. For our purposes only the orchestrator needs reactivity, but
-  // we provide a simple refresh hook so future widgets can subscribe too.
   const listeners = useRef<Set<Listener>>(new Set());
   const set = useCallback((label: string, value: unknown) => {
     if (values.current[label] === value) return;
     values.current[label] = value;
     listeners.current.forEach((fn) => fn());
   }, []);
+  // Sync ref when initialValues prop changes (e.g., after async data load).
+  // Must be synchronous during render so children's useState initializers
+  // and useEffect sync hooks see the values immediately.
+  if (initialValues) {
+    for (const [k, v] of Object.entries(initialValues)) {
+      if (values.current[k] !== v) values.current[k] = v;
+    }
+  }
   useEffect(() => () => listeners.current.clear(), []);
   return (
-    <Ctx.Provider value={{ values, set, readOnlyFields }}>{children}</Ctx.Provider>
+    <Ctx.Provider value={{ values, set, readOnlyFields, forceReadOnly }}>{children}</Ctx.Provider>
   );
 }
 
@@ -56,11 +65,19 @@ export function useFormStateOptional(): FormStateCtx | null {
   return useContext(Ctx);
 }
 
-/** Check if a field label is in the read-only set. */
+/** Check if a field label is in the read-only set, or if forceReadOnly is on. */
 export function useIsFieldReadOnly(label: string): boolean {
   const ctx = useContext(Ctx);
-  if (!ctx?.readOnlyFields) return false;
+  if (!ctx) return false;
+  if (ctx.forceReadOnly) return true;
+  if (!ctx.readOnlyFields) return false;
   return ctx.readOnlyFields.has(label);
+}
+
+/** Returns true when the form is in view/read-only mode (forceReadOnly). */
+export function useForceReadOnly(): boolean {
+  const ctx = useContext(Ctx);
+  return ctx?.forceReadOnly === true;
 }
 
 /**

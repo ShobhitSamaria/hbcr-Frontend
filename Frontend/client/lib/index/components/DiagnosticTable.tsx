@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useForceReadOnly } from "@/lib/formState";
 
 type DiagnosticTableProps = {
   title: string;
   rows: string[];
+  disabled?: boolean;
 };
 
-export function DiagnosticTable({ title, rows }: DiagnosticTableProps) {
+export function DiagnosticTable({ title, rows, disabled: disabledProp }: DiagnosticTableProps) {
+  const readOnly = useForceReadOnly();
+  const disabled = disabledProp || readOnly;
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <div>
@@ -25,6 +29,7 @@ export function DiagnosticTable({ title, rows }: DiagnosticTableProps) {
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
+                disabled={disabled}
                 checked={selected.includes(row)}
                 onChange={(e) =>
                   setSelected((items) =>

@@ -1,5 +1,7 @@
+-- Ensure hbcr schema exists (Neon may not have it)
+CREATE SCHEMA IF NOT EXISTS "hbcr";
+
 -- CreateTable: Reference table for Rajasthan district ↔ pincode mapping
--- Note: Uses "hbcr." prefix in public schema (consistent with other tables)
 CREATE TABLE "hbcr"."pincode_districts" (
     "id" SERIAL NOT NULL,
     "pincode" VARCHAR(6) NOT NULL,
