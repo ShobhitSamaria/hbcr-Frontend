@@ -5,11 +5,13 @@ import {
   registrationApi,
   sideApi,
   pathologyApi,
+  familyHistoryApi,
   type ApiPatient,
   type ApiPatientHabit,
   type ApiPatientComorbidity,
   type ApiRegistration,
   type ApiPathologicalDiagnosis,
+  type ApiFamilialCancerHistory,
 } from "@/lib/api";
 import { Field } from "./FormFields";
 
@@ -52,6 +54,10 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
   const [pathology, setPathology] = useState<ApiPathologicalDiagnosis | null>(null);
   const [editPathology, setEditPathology] = useState<Record<string, string>>({});
 
+  // Editable family history
+  const [familyHistory, setFamilyHistory] = useState<ApiFamilialCancerHistory | null>(null);
+  const [editFamilyHistory, setEditFamilyHistory] = useState<Partial<ApiFamilialCancerHistory>>({});
+
   // Editable habits
   const [editHabits, setEditHabits] = useState<Record<string, { answer: string; durationMonths: number | null }>>({});
 
@@ -78,6 +84,19 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
       setEditHealthSchemeDetails(p.healthSchemeDetails ?? "");
       const firstReg = regs[0];
       setEditRemarks(firstReg?.remarks ?? "");
+
+      // Load family history from registration
+      if (firstReg?.familialCancerHistory) {
+        setFamilyHistory(firstReg.familialCancerHistory);
+        setEditFamilyHistory({
+          familyHistory: firstReg.familialCancerHistory.familyHistory,
+          relationshipWithCancer: firstReg.familialCancerHistory.relationshipWithCancer ?? "",
+          degreeOfRelationship: firstReg.familialCancerHistory.degreeOfRelationship ?? "",
+          primarySite: firstReg.familialCancerHistory.primarySite ?? "",
+          ageAtDiagnosis: firstReg.familialCancerHistory.ageAtDiagnosis,
+          dateOfDiagnosis: firstReg.familialCancerHistory.dateOfDiagnosis ?? "",
+        });
+      }
 
       // Load pathological diagnosis separately
       if (firstReg) {
@@ -144,6 +163,17 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
     setEditMode(false);
     setSaveError(null);
     setSaveSuccess(false);
+    // Reset family history
+    if (familyHistory) {
+      setEditFamilyHistory({
+        familyHistory: familyHistory.familyHistory,
+        relationshipWithCancer: familyHistory.relationshipWithCancer ?? "",
+        degreeOfRelationship: familyHistory.degreeOfRelationship ?? "",
+        primarySite: familyHistory.primarySite ?? "",
+        ageAtDiagnosis: familyHistory.ageAtDiagnosis,
+        dateOfDiagnosis: familyHistory.dateOfDiagnosis ?? "",
+      });
+    }
     // Reset editable values from loaded data, clearing months when answer is not YES
     if (patient) {
       setEditHealthScheme(patient.healthSchemeBeneficiary);
@@ -286,6 +316,18 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
         await pathologyApi.upsert(registrations[0].id, pathologyData);
       }
 
+      // 6. Save family history
+      if (registrations[0] && editFamilyHistory.familyHistory) {
+        await familyHistoryApi.upsert(registrations[0].id, {
+          familyHistory: editFamilyHistory.familyHistory,
+          relationshipWithCancer: editFamilyHistory.relationshipWithCancer || undefined,
+          degreeOfRelationship: editFamilyHistory.degreeOfRelationship || undefined,
+          primarySite: editFamilyHistory.primarySite || undefined,
+          ageAtDiagnosis: editFamilyHistory.ageAtDiagnosis ?? undefined,
+          dateOfDiagnosis: editFamilyHistory.dateOfDiagnosis || undefined,
+        });
+      }
+
       setSaveSuccess(true);
       setEditMode(false);
       // Reload data to reflect changes
@@ -329,6 +371,8 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
   const father = patient.relatives?.find((r) => r.relationship === "FATHER");
   const mother = patient.relatives?.find((r) => r.relationship === "MOTHER");
   const spouse = patient.relatives?.find((r) => r.relationship === "SPOUSE");
+  const son = patient.relatives?.find((r) => r.relationship === "SON");
+  const daughter = patient.relatives?.find((r) => r.relationship === "DAUGHTER");
   const otherRelative = patient.relatives?.find((r) => r.relationship === "OTHER");
 
   return (
@@ -405,7 +449,6 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
             <ReadField label="Date of First Diagnosis" value={reg.dateOfFirstDiagnosis ?? "—"} />
             <ReadField label="Form Completed By" value={reg.formCompletedBy ?? "—"} />
             <ReadField label="Form Completion Date" value={reg.formCompletionDate ?? "—"} />
-            <ReadField label="Hospital Reg No." value={reg.hospitalRegistrationNo ?? "—"} />
             <ReadField label="Remarks" value={reg.remarks ?? "—"} />
           </div>
         </Section>
@@ -453,7 +496,7 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
           <ReadField label="Passport" value={passport?.number ?? "—"} />
           <ReadField label="AB-PMJAY ID" value={abPmjay?.number ?? "—"} />
           {otherIds.map((id, idx) => (
-            <ReadField key={id.id} label={`Other ID ${idx + 1}`} value={id.number} />
+            <ReadField key={id.id} label={id.idName ? `${id.idName} (Other)` : `Other ID ${idx + 1}`} value={id.number ?? "—"} />
           ))}
           {otherIds.length === 0 && <ReadField label="Other Beneficiary Numbers" value="—" />}
         </div>
@@ -471,6 +514,10 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
           <Field label="Mother mobile number" value={mother?.mobileNumber ?? ""} readOnly placeholder="—" />
           <Field label="Spouse name" value={spouse?.name ?? ""} readOnly placeholder="—" />
           <Field label="Spouse mobile number" value={spouse?.mobileNumber ?? ""} readOnly placeholder="—" />
+          <Field label="Son name" value={son?.name ?? ""} readOnly placeholder="—" />
+          <Field label="Son mobile number" value={son?.mobileNumber ?? ""} readOnly placeholder="—" />
+          <Field label="Daughter name" value={daughter?.name ?? ""} readOnly placeholder="—" />
+          <Field label="Daughter mobile number" value={daughter?.mobileNumber ?? ""} readOnly placeholder="—" />
           <Field label="Other name" value={otherRelative?.name ?? ""} readOnly placeholder="—" />
           <Field label="Other mobile number" value={otherRelative?.mobileNumber ?? ""} readOnly placeholder="—" />
         </div>
@@ -526,6 +573,114 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
             </>
           );
         })()}
+      </section>
+
+      {/* 19. Relationship to Cancer / Degree of Relationship */}
+      <section className="rounded-2xl border border-[#dcebef] bg-white p-5 sm:p-6">
+        <label className="mb-3 block text-xs font-bold text-[#486b77]">
+          19. Relationship to Cancer / Degree of Relationship
+        </label>
+        {editMode ? (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+              {(["YES", "NO", "UNKNOWN"] as const).map((val) => (
+                <label key={val} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="family-history"
+                    checked={editFamilyHistory.familyHistory === val}
+                    onChange={() => setEditFamilyHistory({ ...editFamilyHistory, familyHistory: val })}
+                    className="accent-[#0b7d87]"
+                  />
+                  {val.charAt(0) + val.slice(1).toLowerCase()}
+                </label>
+              ))}
+            </div>
+            {editFamilyHistory.familyHistory === "YES" && (
+              <div className="space-y-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
+                <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+                  <span className="text-[11px] font-bold text-[#5d7a84]">Relationship with Cancer</span>
+                  {(["SAME_CANCER", "OTHER_CANCER"] as const).map((val) => (
+                    <label key={val} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="relationship-cancer"
+                        checked={editFamilyHistory.relationshipWithCancer === val}
+                        onChange={() => setEditFamilyHistory({ ...editFamilyHistory, relationshipWithCancer: val })}
+                        className="accent-[#0b7d87]"
+                      />
+                      {val === "SAME_CANCER" ? "Same Cancer" : "Other Cancer"}
+                    </label>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+                  <span className="text-[11px] font-bold text-[#5d7a84]">Degree of Relationship</span>
+                  {(["FIRST_DEGREE", "SECOND_DEGREE"] as const).map((val) => (
+                    <label key={val} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="degree-relationship"
+                        checked={editFamilyHistory.degreeOfRelationship === val}
+                        onChange={() => setEditFamilyHistory({ ...editFamilyHistory, degreeOfRelationship: val })}
+                        className="accent-[#0b7d87]"
+                      />
+                      {val === "FIRST_DEGREE" ? "First Degree Relative" : "Second Degree Relative"}
+                    </label>
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <label className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-[#8ba0a6]">Primary site of tumor for relative</label>
+                    <select
+                      value={editFamilyHistory.primarySite ?? ""}
+                      onChange={(e) => setEditFamilyHistory({ ...editFamilyHistory, primarySite: e.target.value })}
+                      className="h-10 w-full rounded-lg border border-[#dce9eb] bg-white px-3 text-xs text-[#244c5b] outline-none focus:border-[#36a99c]"
+                    >
+                      <option value="">Select</option>
+                      {["Breast", "Ovary", "Colon", "Prostate", "Endometrial", "Melanoma", "Thyroid", "Pancreas"].map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <EditTextField
+                    label="Age at diagnosis"
+                    value={editFamilyHistory.ageAtDiagnosis?.toString() ?? ""}
+                    onChange={(v) => setEditFamilyHistory({ ...editFamilyHistory, ageAtDiagnosis: v ? Number(v) : null })}
+                    editMode={true}
+                    readOnly={false}
+                  />
+                  <EditTextField
+                    label="Date of diagnosis"
+                    value={editFamilyHistory.dateOfDiagnosis ?? ""}
+                    onChange={(v) => setEditFamilyHistory({ ...editFamilyHistory, dateOfDiagnosis: v })}
+                    editMode={true}
+                    readOnly={false}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+              {(["YES", "NO", "UNKNOWN"] as const).map((val) => (
+                <label key={val} className="flex items-center gap-1.5">
+                  <span className={`h-3.5 w-3.5 rounded-full border ${familyHistory?.familyHistory === val ? "border-[#0b7d87] bg-[#0b7d87]" : "border-[#c9dce0]"}`} />
+                  {val.charAt(0) + val.slice(1).toLowerCase()}
+                </label>
+              ))}
+            </div>
+            {familyHistory?.familyHistory === "YES" && (
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <ReadField label="Relationship with Cancer" value={familyHistory.relationshipWithCancer === "SAME_CANCER" ? "Same Cancer" : familyHistory.relationshipWithCancer === "OTHER_CANCER" ? "Other Cancer" : "—"} />
+                <ReadField label="Degree of Relationship" value={familyHistory.degreeOfRelationship === "FIRST_DEGREE" ? "First Degree Relative" : familyHistory.degreeOfRelationship === "SECOND_DEGREE" ? "Second Degree Relative" : "—"} />
+                <ReadField label="Primary Site" value={familyHistory.primarySite ?? "—"} />
+                <ReadField label="Age at Diagnosis" value={familyHistory.ageAtDiagnosis?.toString() ?? "—"} />
+                <ReadField label="Date of Diagnosis" value={familyHistory.dateOfDiagnosis ?? "—"} />
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* 18(a). Habits — matches ToggleDetails layout exactly */}

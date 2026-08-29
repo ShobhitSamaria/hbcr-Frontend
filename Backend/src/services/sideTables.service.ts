@@ -30,28 +30,38 @@ export const sideTablesService = {
       orderBy: { id: "asc" },
     });
   },
-  async createIdentifier(patientId: number, data: { idType: string; number: string }) {
+  async createIdentifier(patientId: number, data: { idType: string; number?: string; idName?: string }) {
     await ensurePatient(patientId);
     // Validate ID number format based on type
-    const formatError = validateIdNumberFormat(data.idType, data.number);
-    if (formatError) throw httpErrors.badRequest(formatError);
+    if (data.number) {
+      const formatError = validateIdNumberFormat(data.idType, data.number);
+      if (formatError) throw httpErrors.badRequest(formatError);
+    }
     return prisma.patientIdentification.create({
-      data: { patientId, idType: data.idType as never, number: data.number },
+      data: {
+        patientId,
+        idType: data.idType as never,
+        number: data.number ?? null,
+        idName: data.idName ?? null,
+      },
     });
   },
-  async updateIdentifier(patientId: number, identifierId: number, data: { idType?: string; number?: string }) {
+  async updateIdentifier(patientId: number, identifierId: number, data: { idType?: string; number?: string; idName?: string }) {
     const row = await prisma.patientIdentification.findUnique({ where: { id: identifierId } });
     if (!row || row.patientId !== patientId) throw httpErrors.notFound("Identification not found");
     // Validate ID number format if type or number is being updated
     const idType = data.idType ?? row.idType;
     const number = data.number ?? row.number;
-    const formatError = validateIdNumberFormat(idType, number);
-    if (formatError) throw httpErrors.badRequest(formatError);
+    if (number) {
+      const formatError = validateIdNumberFormat(idType, number);
+      if (formatError) throw httpErrors.badRequest(formatError);
+    }
     return prisma.patientIdentification.update({
       where: { id: identifierId },
       data: {
         ...(data.idType !== undefined ? { idType: data.idType as never } : {}),
-        ...(data.number !== undefined ? { number: data.number } : {}),
+        ...(data.number !== undefined ? { number: data.number ?? null } : {}),
+        ...(data.idName !== undefined ? { idName: data.idName ?? null } : {}),
       },
     });
   },

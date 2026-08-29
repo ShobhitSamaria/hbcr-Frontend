@@ -50,12 +50,16 @@ export const followUpService = {
    */
   async searchPatients(query: {
     referenceNo?: string;
+    hbcrRegNo?: string;
     aadhaar?: string;
     phone?: string;
   }, hospitalId: number) {
     const and: Prisma.RegistrationWhereInput[] = [];
     if (query.referenceNo) {
       and.push({ referenceNo: { contains: query.referenceNo, mode: "insensitive" } });
+    }
+    if (query.hbcrRegNo) {
+      and.push({ hbcrRegistrationNo: { contains: query.hbcrRegNo, mode: "insensitive" } });
     }
     // Patient-level filters (Aadhaar lives on the identifications side table;
     // phone on the address side tables — same semantics as Patient Records).
@@ -97,6 +101,7 @@ export const followUpService = {
     return rows.map((r) => ({
       registrationId: r.id,
       referenceNo: r.referenceNo,
+      hbcrRegistrationNo: r.hbcrRegistrationNo,
       patientId: r.patient.id,
       patientName: r.patient.fullName,
       patientAge: r.patient.age,

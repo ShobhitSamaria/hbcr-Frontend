@@ -12,6 +12,8 @@ type Step1IdentifyingProps = {
   setSelectedIds: (ids: string[]) => void;
   sameAddress: boolean;
   setSameAddress: (v: boolean) => void;
+  familyHistory: string;
+  setFamilyHistory: (v: string) => void;
 };
 
 export function Step1Identifying({
@@ -21,6 +23,8 @@ export function Step1Identifying({
   setSelectedIds,
   sameAddress,
   setSameAddress,
+  familyHistory,
+  setFamilyHistory,
 }: Step1IdentifyingProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
@@ -78,18 +82,6 @@ export function Step1Identifying({
       ctx?.set("Centre code", centreCode);
     }
   }, [centreCode, ctx]);
-
-  // 4. Hospital Registration Number — controlled so the matching input
-  // only appears once a type is picked. Restored from the form-state context
-  // so the choice survives step navigation.
-  const [hospitalRegType, setHospitalRegType] = useState<string>(() => {
-    const cur = ctx?.values.current["4. Hospital Registration Number (MRD / CR / Unique ID)"];
-    return typeof cur === "string" && cur !== "" ? cur : "";
-  });
-  const handleHospitalRegType = (v: string) => {
-    setHospitalRegType(v);
-    ctx?.set("4. Hospital Registration Number (MRD / CR / Unique ID)", v);
-  };
 
   // 15. Urban / Rural — same capture-into-context pattern as above.
   const [urbanRural, setUrbanRural] = useState<string>(() => {
@@ -222,18 +214,6 @@ export function Step1Identifying({
         <Field label="3(b). Unit number" placeholder="Unit 04" required />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-        <SelectField
-          label="4. Hospital Registration Number (MRD / CR / Unique ID)"
-          value={hospitalRegType}
-          onChange={handleHospitalRegType}
-          options={["ABHA", "Aadhaar", "MRD No", "CR No.", "Unique Hospital Identification Number"]}
-        />
-        {hospitalRegType && (
-          <Field
-            label="4. Hospital registration number"
-            placeholder={`Enter ${hospitalRegType} number`}
-          />
-        )}
         <Field label="5. Date of reporting" type="date" required />
         <SelectField
           label="6. Case Registered Through (Patient’s first reporting at RI)"
@@ -343,7 +323,9 @@ export function Step1Identifying({
             { label: "g). Other", maxLength: 128 },
           ]).map(({ label, maxLength, pattern, formatMsg }) => {
             const numKey = label + " number";
+            const nameKey = label + " name";
             const isSelected = selectedIds.includes(label);
+            const isOther = label === "g). Other";
             return (
               <div
                 key={label}
@@ -400,6 +382,26 @@ export function Step1Identifying({
                     </span>
                   )}
                 </div>
+                {isOther && isSelected && (
+                  <div className="flex flex-col">
+                    <input
+                      placeholder="Enter ID name (e.g. Driving License)"
+                      value={ctx?.values.current[nameKey] != null ? String(ctx.values.current[nameKey]) : ""}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        ctx?.set(nameKey, v);
+                        validation?.clearErrors([nameKey]);
+                      }}
+                      onBlur={() => validation?.markTouched(nameKey)}
+                      className="h-8 w-44 rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-2 text-[11px] outline-none focus:border-[#36a99c] focus:ring-2 focus:ring-[#36a99c]/10"
+                    />
+                    {validation?.errors[nameKey] && (validation.forceShow.has(nameKey) || validation.touched.has(nameKey)) && (
+                      <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
+                        {validation.errors[nameKey]}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -426,6 +428,16 @@ export function Step1Identifying({
           <Field label="Spouse name" placeholder="Full name" />
           <Field
             label="Spouse mobile number"
+            placeholder="Mobile number"
+          />
+          <Field label="Son name" placeholder="Full name" />
+          <Field
+            label="Son mobile number"
+            placeholder="Mobile number"
+          />
+          <Field label="Daughter name" placeholder="Full name" />
+          <Field
+            label="Daughter mobile number"
             placeholder="Mobile number"
           />
           <Field label="Other name" placeholder="Full name" />
@@ -622,6 +634,129 @@ export function Step1Identifying({
           />
         </div>
       </div>
+      {/* 19. Relationship to Cancer / Degree of Relationship */}
+      <FamilialCancerSection
+        familyHistory={familyHistory}
+        setFamilyHistory={setFamilyHistory}
+      />
+    </div>
+  );
+}
+
+/**
+ * 19. Relationship to Cancer / Degree of Relationship.
+ * Always visible on Step 1. Allows patient to declare family cancer history.
+ */
+function FamilialCancerSection({
+  familyHistory,
+  setFamilyHistory,
+}: {
+  familyHistory: string;
+  setFamilyHistory: (v: string) => void;
+}) {
+  return (
+    <div>
+      <label className="mb-3 block text-xs font-bold text-[#486b77]">
+        19. Relationship to Cancer / Degree of Relationship
+      </label>
+      <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="familial-history"
+            checked={familyHistory === "Yes"}
+            onChange={() => setFamilyHistory("Yes")}
+            className="accent-[#0b7d87]"
+          />
+          Yes
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="familial-history"
+            checked={familyHistory === "No"}
+            onChange={() => setFamilyHistory("No")}
+            className="accent-[#0b7d87]"
+          />
+          No
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            name="familial-history"
+            checked={familyHistory === "Unknown"}
+            onChange={() => setFamilyHistory("Unknown")}
+            className="accent-[#0b7d87]"
+          />
+          Unknown
+        </label>
+      </div>
+      {familyHistory === "Yes" && (
+        <div className="mt-5 space-y-5 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
+          <div>
+            <label className="mb-3 block text-xs font-bold text-[#486b77]">
+              Relationship with Cancer
+            </label>
+            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="relationship-cancer"
+                  required
+                  className="accent-[#0b7d87]"
+                />
+                Same Cancer
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="relationship-cancer"
+                  required
+                  className="accent-[#0b7d87]"
+                />
+                Other Cancer
+              </label>
+            </div>
+          </div>
+          <div>
+            <label className="mb-3 block text-xs font-bold text-[#486b77]">
+              Degree of Relationship
+            </label>
+            <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="degree-relationship"
+                  required
+                  className="accent-[#0b7d87]"
+                />
+                First Degree Relative
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="degree-relationship"
+                  required
+                  className="accent-[#0b7d87]"
+                />
+                Second Degree Relative
+              </label>
+            </div>
+          </div>
+          <SelectField
+            label="Primary site of tumor for relative"
+            required
+            options={["Breast", "Ovary", "Colon", "Prostate", "Endometrial", "Melanoma", "Thyroid", "Pancreas"]}
+          />
+          <Field
+            label="Age at diagnosis"
+            type="number"
+            placeholder="Age in years"
+            required
+          />
+          <Field label="Date of diagnosis" type="date" required />
+        </div>
+      )}
     </div>
   );
 }

@@ -81,6 +81,14 @@ const App = () => (
                 </RequireAuth>
               }
             />
+            <Route
+              path="/drafts"
+              element={
+                <RequireAuth>
+                  <Index />
+                </RequireAuth>
+              }
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

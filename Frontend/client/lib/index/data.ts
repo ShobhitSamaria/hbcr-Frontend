@@ -113,4 +113,5 @@ export const pageTitles: Record<string, string> = {
   register: "Patient registration",
   records: "Patient records",
   followup: "Follow-up records",
+  drafts: "Drafts",
 };

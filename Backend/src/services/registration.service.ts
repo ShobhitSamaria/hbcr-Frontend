@@ -28,8 +28,6 @@ export const registrationService = {
       referenceNo?: string;
       departmentName?: string;
       unitNumber?: string;
-      hospitalRegistrationNo?: string;
-      hospitalRegistrationNoType?: string;
       dateOfReporting?: Date;
       caseRegisteredThrough?: string;
       caseRegisteredThroughOther?: string;
@@ -88,12 +86,6 @@ export const registrationService = {
         ...(referenceNo !== undefined ? { referenceNo } : {}),
         ...(input.departmentName !== undefined ? { departmentName: input.departmentName } : {}),
         ...(input.unitNumber !== undefined ? { unitNumber: input.unitNumber } : {}),
-        ...(input.hospitalRegistrationNo !== undefined
-          ? { hospitalRegistrationNo: input.hospitalRegistrationNo }
-          : {}),
-        ...(input.hospitalRegistrationNoType !== undefined
-          ? { hospitalRegistrationNoType: input.hospitalRegistrationNoType }
-          : {}),
         ...(input.dateOfReporting !== undefined ? { dateOfReporting: input.dateOfReporting } : {}),
         ...(input.caseRegisteredThrough !== undefined
           ? { caseRegisteredThrough: input.caseRegisteredThrough as never }

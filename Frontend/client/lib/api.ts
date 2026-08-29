@@ -23,7 +23,11 @@ const DEFAULT_BASE = (() => {
     return import.meta.env.VITE_API_BASE as string;
   }
   // When the Vite proxy is configured (dev), use relative /api so we don't
-  // worry about ports. In production, point at the deployed host.
+  // worry about ports. In production on Vercel, we need to point at the
+  // deployed backend since Vercel doesn't proxy /api to the backend.
+  if (typeof window !== "undefined" && window.location.hostname.includes("vercel.app")) {
+    return "https://hbcr.onrender.com/api";
+  }
   return "/api";
 })();
 
@@ -307,17 +311,19 @@ export type ApiPatientIdentification = {
   idType:
     | "AADHAAR"
     | "ABHA"
+    | "PAN_CARD"
     | "VOTER_ID"
     | "PASSPORT"
     | "AB_PMJAY"
     | "OTHER";
-  number: string;
+  number: string | null;
+  idName: string | null;
 };
 
 export type ApiPatientRelative = {
   id: number;
   patientId: number;
-  relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER";
+  relationship: "FATHER" | "MOTHER" | "SPOUSE" | "SON" | "DAUGHTER" | "OTHER";
   name: string | null;
   mobileNumber: string | null;
 };
@@ -414,7 +420,7 @@ export const sideApi = {
   identifications: {
     list: (patientId: number) =>
       send<ApiPatientIdentification[]>(`/patients/${patientId}/side/identifications`),
-    create: (patientId: number, data: { idType: string; number: string }) =>
+    create: (patientId: number, data: { idType: string; number?: string; idName?: string }) =>
       send<ApiPatientIdentification>(`/patients/${patientId}/side/identifications`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -425,7 +431,7 @@ export const sideApi = {
   relatives: {
     list: (patientId: number) =>
       send<ApiPatientRelative[]>(`/patients/${patientId}/side/relatives`),
-    create: (patientId: number, data: { relationship: "FATHER" | "MOTHER" | "SPOUSE" | "OTHER"; name?: string; mobileNumber?: string }) =>
+    create: (patientId: number, data: { relationship: "FATHER" | "MOTHER" | "SPOUSE" | "SON" | "DAUGHTER" | "OTHER"; name?: string; mobileNumber?: string }) =>
       send<ApiPatientRelative>(`/patients/${patientId}/side/relatives`, {
         method: "POST",
         body: JSON.stringify(data),
@@ -645,6 +651,37 @@ export const familyHistoryApi = {
     }),
 };
 
+// ---------- Drafts ----------
+export type ApiDraftListItem = {
+  id: number;
+  patientName: string;
+  aadhaar: string;
+  currentStep: number;
+  createdAt: string;
+  updatedAt: string;
+  createdByUser: { fullName: string; initials: string };
+};
+
+export type ApiDraft = {
+  id: number;
+  hospitalId: number;
+  createdByUserId: number;
+  formData: Record<string, unknown>;
+  patientName: string | null;
+  currentStep: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const draftApi = {
+  list: (q?: string) => send<{ items: ApiDraftListItem[] }>(`/drafts${q ? `?q=${encodeURIComponent(q)}` : ""}`),
+  get: (id: number) => send<ApiDraft>(`/drafts/${id}`),
+  save: (data: { id?: number; formData: Record<string, unknown>; currentStep: number; patientName?: string }) =>
+    send<ApiDraft>("/drafts", { method: "POST", body: JSON.stringify(data) }),
+  delete: (id: number) =>
+    send<void>(`/drafts/${id}`, { method: "DELETE" }),
+};
+
 // ---------- Diagnostic ----------
 export type ApiDiagnosticMethod = {
   id: number;
@@ -782,6 +819,7 @@ export type FollowUpModality =
 export type FollowUpSearchHit = {
   registrationId: number;
   referenceNo: string | null;
+  hbcrRegistrationNo: string | null;
   patientId: number;
   patientName: string;
   patientAge: number | null;

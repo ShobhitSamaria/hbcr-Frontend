@@ -62,10 +62,12 @@ enum IdType {
 }
 
 enum Relationship {
-  FATHER @map("father")
-  MOTHER @map("mother")
-  SPOUSE @map("spouse")
-  OTHER  @map("other")
+  FATHER   @map("father")
+  MOTHER   @map("mother")
+  SPOUSE   @map("spouse")
+  SON      @map("son")
+  DAUGHTER @map("daughter")
+  OTHER    @map("other")
 
   @@map("hbcr.relationship_enum")
 }
@@ -476,6 +478,7 @@ model Hospital {
   users         User[]
   registrations Registration[]
   sequences     HospitalSequence[]
+  drafts        Draft[]
 
   @@index([centreId], name: "idx_hospitals_centre")
   @@map("hbcr.hospitals")
@@ -511,6 +514,7 @@ model User {
 
   hospital      Hospital?      @relation(fields: [hospitalId], references: [id], onDelete: SetNull)
   registrations Registration[]
+  drafts        Draft[]
 
   @@index([hospitalId], name: "idx_users_hospital")
   @@map("hbcr.users")
@@ -544,10 +548,11 @@ model Patient {
 
 /// Step 1, Field 13 - unique IDs (Aadhaar / ABHA / Voter / Passport / PMJAY / Other).
 model PatientIdentification {
-  id        Int    @id @default(autoincrement())
-  patientId Int    @map("patient_id")
-  idType    IdType @map("id_type")
-  number    String @db.VarChar(64)
+  id        Int     @id @default(autoincrement())
+  patientId Int     @map("patient_id")
+  idType    IdType  @map("id_type")
+  number    String? @db.VarChar(64)
+  idName    String? @map("id_name") @db.VarChar(128)
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 
@@ -1036,4 +1041,25 @@ model Icdo3Icd10Mapping {
 
   @@index([icd10Code], name: "idx_icdo3_icd10_mapping_icd10_code")
   @@map("hbcr.icdo3_icd10_mapping")
+}
+
+/// Temporary draft for incomplete patient registrations.
+/// Drafts do NOT consume Registration Numbers — those are only assigned on final submit.
+model Draft {
+  id              Int      @id @default(autoincrement())
+  hospitalId      Int      @map("hospital_id")
+  createdByUserId Int      @map("created_by_user_id")
+  formData        Json     @map("form_data")
+  patientName     String   @map("patient_name") @db.VarChar(256)
+  aadhaar         String   @map("aadhaar") @db.VarChar(12)
+  currentStep     Int      @default(1) @map("current_step")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  hospital      Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  createdByUser User     @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  @@index([hospitalId], name: "idx_drafts_hospital")
+  @@index([createdByUserId], name: "idx_drafts_user")
+  @@map("hbcr.drafts")
 }

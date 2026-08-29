@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Save } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
-import { auxApi, healthApi } from "@/lib/api";
+import { auxApi, healthApi, draftApi } from "@/lib/api";
 import { FormStateProvider, useFormStateOptional } from "@/lib/formState";
 import { ValidationProvider, useValidation } from "@/lib/validationContext";
 import {
@@ -37,10 +38,14 @@ export function Registration({ setView }: RegistrationProps) {
 
 function RegistrationInner({ setView }: RegistrationProps) {
   const { session } = useAuth();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [draftId, setDraftId] = useState<number | null>(null);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [draftSavedMsg, setDraftSavedMsg] = useState(false);
 
   // Step1's local-state items that ARE already controlled in the UI - we
   // keep them here AND write into the form-capture context as a sibling
@@ -120,6 +125,69 @@ function RegistrationInner({ setView }: RegistrationProps) {
     el?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
+  // Load draft if ?draft=<id> is in the URL
+  useEffect(() => {
+    const draftIdParam = searchParams.get("draft");
+    if (!draftIdParam || !ctx) return;
+    const id = Number(draftIdParam);
+    if (isNaN(id)) return;
+    draftApi.get(id).then((draft) => {
+      // Populate all form state values from the draft
+      for (const [key, value] of Object.entries(draft.formData)) {
+        ctx.set(key, value);
+      }
+      setStep(draft.currentStep);
+      setDraftId(draft.id);
+      // Restore lifted state from form values
+      const snap = draft.formData;
+      if (typeof snap["7. Type of referral"] === "string") setReferral(snap["7. Type of referral"]);
+      if (typeof snap["_sameAddress"] === "boolean") setSameAddress(snap["_sameAddress"]);
+      if (typeof snap["19. Relationship to Cancer / Degree of Relationship"] === "string")
+        setFamilyHistory(snap["19. Relationship to Cancer / Degree of Relationship"]);
+    }).catch(() => {
+      // Draft not found — start fresh
+    });
+  }, [searchParams, ctx]);
+
+  // Save Draft handler
+  const handleSaveDraft = async () => {
+    // Validate Patient Name (First Name) and Aadhaar before saving
+    const snapshot = buildSnapshot();
+    const firstName = String(snapshot["First Name"] ?? "").trim();
+    const aadhaar = String(snapshot["a). Aadhaar number"] ?? "").trim();
+
+    const missing: string[] = [];
+    if (!firstName) missing.push("Patient Name (First Name)");
+    if (!aadhaar) missing.push("Aadhaar Number");
+    if (missing.length > 0) {
+      alert(`Please fill the following required fields before saving draft:\n\n• ${missing.join("\n• ")}`);
+      return;
+    }
+
+    setSavingDraft(true);
+    setDraftSavedMsg(false);
+    try {
+      // Extract patient name for display in drafts list
+      const middleName = String(snapshot["Middle Name"] ?? "");
+      const lastName = String(snapshot["Last Name"] ?? "");
+      const patientName = [firstName, middleName, lastName].filter(Boolean).join(" ");
+
+      const result = await draftApi.save({
+        id: draftId ?? undefined,
+        formData: snapshot,
+        currentStep: step,
+        patientName,
+      });
+      setDraftId(result.id);
+      setDraftSavedMsg(true);
+      setTimeout(() => setDraftSavedMsg(false), 2500);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Failed to save draft");
+    } finally {
+      setSavingDraft(false);
+    }
+  };
+
   const goNext = () => {
     if (!validateCurrentStep()) return;
     setStep((s) => s + 1);
@@ -180,6 +248,10 @@ function RegistrationInner({ setView }: RegistrationProps) {
       }
       const values = ctx?.values.current ?? {};
       await submitRegistration({ hospitalId, values });
+      // Delete draft if one was loaded
+      if (draftId) {
+        draftApi.delete(draftId).catch(() => {}); // best-effort cleanup
+      }
       setSubmitted(true);
     } catch (e) {
       // Try to map a backend 422 onto UI fields. If we get a clean
@@ -235,9 +307,21 @@ console.log("error keys:", Object.keys(validation.errors));
             </p>
           )}
         </div>
-        <span className="rounded-lg bg-[#e8f5f5] px-3 py-2 text-[11px] font-bold text-[#087888]">
-          Draft saved just now
-        </span>
+        <div className="flex items-center gap-2">
+          {draftSavedMsg && (
+            <span className="rounded-lg bg-[#e8f6ec] px-3 py-2 text-[11px] font-bold text-[#30935c]">
+              Draft saved ✓
+            </span>
+          )}
+          <button
+            onClick={() => void handleSaveDraft()}
+            disabled={savingDraft}
+            className="flex items-center gap-1.5 rounded-xl border border-[#dce9eb] bg-white px-4 py-2.5 text-[11px] font-bold text-[#6d858e] transition hover:bg-[#f0f4f5] disabled:opacity-50"
+          >
+            <Save size={13} />
+            {savingDraft ? "Saving…" : "Save Draft"}
+          </button>
+        </div>
       </div>
       <div className="rounded-2xl border border-[#e3edef] bg-white px-5 py-5 shadow-[0_5px_20px_rgba(25,73,89,.035)] sm:px-7">
         <RegistrationStepper step={step} />
@@ -264,13 +348,12 @@ console.log("error keys:", Object.keys(validation.errors));
                 setSelectedIds={setSelectedIds}
                 sameAddress={sameAddress}
                 setSameAddress={setSameAddress}
-              />
-            )}
-            {step === 2 && (
-              <Step2Diagnostic
                 familyHistory={familyHistory}
                 setFamilyHistory={setFamilyHistory}
               />
+            )}
+            {step === 2 && (
+              <Step2Diagnostic />
             )}
             {step === 3 && <ClinicalTreatment />}
           </motion.div>

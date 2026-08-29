@@ -26,8 +26,6 @@ export const createRegistrationValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)], // Now optional - auto-generated if not provided
   departmentName: [required(), isString(), trim(), maxLen(128)],
   unitNumber: [required(), isString(), trim(), maxLen(32)],
-  hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
-  hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],
@@ -60,8 +58,6 @@ export const updateRegistrationValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)],
   departmentName: [required(), isString(), trim(), maxLen(128)],
   unitNumber: [required(), isString(), trim(), maxLen(32)],
-  hospitalRegistrationNo: [isString(), trim(), maxLen(64)],
-  hospitalRegistrationNoType: [isString(), trim(), maxLen(64)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],

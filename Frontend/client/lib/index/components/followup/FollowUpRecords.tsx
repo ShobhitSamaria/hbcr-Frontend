@@ -29,6 +29,7 @@ function deriveRegistrationNo(
  * reached by clicking the Reference Number.
  */
 export function FollowUpRecords({ onSelect }: Props) {
+  const [registrationNo, setRegistrationNo] = useState("");
   const [referenceNo, setReferenceNo] = useState("");
   const [aadhaar, setAadhaar] = useState("");
   const [phone, setPhone] = useState("");
@@ -38,13 +39,14 @@ export function FollowUpRecords({ onSelect }: Props) {
 
   const runSearch = useCallback(async () => {
     setError(null);
-    if (!referenceNo.trim() && !aadhaar.trim() && !phone.trim()) {
+    if (!registrationNo.trim() && !referenceNo.trim() && !aadhaar.trim() && !phone.trim()) {
       setResults([]);
       return;
     }
     setSearching(true);
     try {
       const hits = await followUpApi.search({
+        hbcrRegNo: registrationNo.trim() || undefined,
         referenceNo: referenceNo.trim() || undefined,
         aadhaar: aadhaar.trim() || undefined,
         phone: phone.trim() || undefined,
@@ -56,13 +58,14 @@ export function FollowUpRecords({ onSelect }: Props) {
     } finally {
       setSearching(false);
     }
-  }, [referenceNo, aadhaar, phone]);
+  }, [registrationNo, referenceNo, aadhaar, phone]);
 
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-[#dcebef] bg-white p-5 sm:p-6">
         <h2 className="mb-4 text-sm font-bold text-[#103e54]">Search For Records</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Field label="Registration Number" value={registrationNo} onChange={setRegistrationNo} />
           <Field label="Reference Number" value={referenceNo} onChange={setReferenceNo} />
           <Field label="Aadhaar Number" value={aadhaar} onChange={setAadhaar} />
           <Field label="Phone Number" value={phone} onChange={setPhone} />
@@ -94,6 +97,7 @@ export function FollowUpRecords({ onSelect }: Props) {
                   <tr className="border-b border-[#e7f0f1] bg-[#f7fbfb] text-[10px] uppercase tracking-wide text-[#93a9b1]">
                     <th className="px-4 py-2.5 font-bold">Reference No.</th>
                     <th className="px-4 py-2.5 font-bold">Registration No.</th>
+                    <th className="px-4 py-2.5 font-bold">HBCR Reg. No.</th>
                     <th className="px-4 py-2.5 font-bold">Patient Name</th>
                     <th className="px-4 py-2.5 font-bold">Age / Gender</th>
                     <th className="px-4 py-2.5 font-bold">ICD-10</th>
@@ -117,6 +121,9 @@ export function FollowUpRecords({ onSelect }: Props) {
                       </td>
                       <td className="px-4 py-2.5 font-semibold text-[#244c5b]">
                         {deriveRegistrationNo(h.referenceNo, h.createdAt)}
+                      </td>
+                      <td className="px-4 py-2.5 text-[#486b77]">
+                        {h.hbcrRegistrationNo || "—"}
                       </td>
                       <td className="px-4 py-2.5 font-semibold text-[#244c5b]">
                         {h.patientName}

@@ -6,6 +6,7 @@ import { Header } from "@/lib/index/components/Header";
 import { Records } from "@/lib/index/components/Records";
 import { Registration } from "@/lib/index/components/Registration";
 import { FollowUp } from "@/lib/index/components/followup/FollowUp";
+import { Drafts } from "@/lib/index/components/Drafts";
 import { Sidebar } from "@/lib/index/components/Sidebar";
 import { pageTitles } from "@/lib/index/data";
 
@@ -19,7 +20,9 @@ export default function Index() {
       ? "records"
       : location.pathname.includes("followup")
         ? "followup"
-        : "dashboard";
+        : location.pathname.includes("drafts")
+          ? "drafts"
+          : "dashboard";
   const [view, setViewState] = useState(initial);
   const setView = (next: string) => {
     setViewState(next);
@@ -69,6 +72,14 @@ export default function Index() {
                   <Registration setView={setView} />
                 ) : view === "records" ? (
                   <Records setView={setView} />
+                ) : view === "drafts" ? (
+                  <Drafts
+                    setView={setView}
+                    onContinueDraft={(id) => {
+                      setViewState("register");
+                      navigate(`/register?draft=${id}`, { replace: true });
+                    }}
+                  />
                 ) : (
                   <FollowUp />
                 )}

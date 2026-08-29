@@ -31,8 +31,6 @@ export type Step1Values = {
   "Registration Number"?: string;
   "3(a). Department name"?: string;
   "3(b). Unit number"?: string;
-  "4. Hospital Registration Number (MRD / CR / Unique ID)"?: string;
-  "4. Hospital registration number"?: string;
   "5. Date of reporting"?: string;
   "6. Case Registered Through (Patient’s first reporting at RI)"?: string;
   "7. Type of referral"?: string;
@@ -70,6 +68,8 @@ export type Step1Values = {
   "Father mobile number"?: string;
   "Mother mobile number"?: string;
   "Spouse mobile number"?: string;
+  "Son mobile number"?: string;
+  "Daughter mobile number"?: string;
   "Other mobile number"?: string;
   "Duration of Stay at the above address (in years)"?: string;
   "19. Relationship to Cancer / Degree of Relationship"?: string;
@@ -88,6 +88,7 @@ export type Step1Values = {
   "e). Passport number"?: string;
   "f). AB-PMJAY number"?: string;
   "g). Other number"?: string;
+  "g). Other name"?: string;
 };
 
 const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
@@ -96,7 +97,6 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "Registration Number": [],
   "3(a). Department name": [required("Department name is required"), maxLen(128)],
   "3(b). Unit number": [required("Unit number is required"), maxLen(32)],
-  "4. Hospital registration number": [maxLen(64)],
   "5. Date of reporting": [required(), isDate(), notFutureDate()],
   "6. Case Registered Through (Patient’s first reporting at RI)": [
     // The select starts with no option selected (placeholder "Select").
@@ -154,6 +154,8 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "Father mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Mother mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Spouse mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Son mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Daughter mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Other mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Urban / Rural": [required("Please select Urban or Rural")],
   "19. Relationship to Cancer / Degree of Relationship": [
@@ -167,20 +169,6 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
  */
 export function validateStep1(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step1Rules, values);
-
-  // 4. Hospital registration number: if a number is entered, a type must
-  // be chosen (the dropdown's placeholder is not a real option).
-  const hrNo = values["4. Hospital registration number"];
-  const hrType = values["4. Hospital Registration Number (MRD / CR / Unique ID)"];
-  if (
-    hrNo !== undefined &&
-    hrNo !== null &&
-    String(hrNo).trim() !== "" &&
-    (!hrType || hrType === "")
-  ) {
-    out["4. Hospital Registration Number (MRD / CR / Unique ID)"] =
-      "Please select a registration number type";
-  }
 
   // 7. Referral conditional sub-fields
   if (values["7. Type of referral"] === "Other Hospital/Health Facility") {
@@ -250,6 +238,13 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
       out[numLabel] = `${label.replace('). ', '')} number is required when Yes is selected`;
     } else if (pattern && !pattern.test(String(numVal).trim())) {
       out[numLabel] = formatMsg ?? `Invalid format for ${label}`;
+    }
+    // g). Other also requires an ID Name
+    if (label === "g). Other") {
+      const nameVal = values["g). Other name"];
+      if (nameVal === undefined || nameVal === null || String(nameVal).trim() === "") {
+        out["g). Other name"] = "ID name is required for Other identification";
+      }
     }
   }
 

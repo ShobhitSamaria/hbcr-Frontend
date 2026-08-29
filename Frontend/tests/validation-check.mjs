@@ -183,7 +183,6 @@ check("fully populated step 1 produces no errors", () => {
     "1. Name of the Reporting Institution (RI)": "AIIMS New Delhi",
     "3(a). Department name": "Oncology",
     "3(b). Unit number": "Unit 4",
-    "4. Hospital registration number (MRD No / CR No./Unique Hospital Identification Number)": "MRD-1",
     "5. Date of reporting": "2024-07-01",
     "6. Case Registered Through (Patient’s first reporting at RI)": "In Patient Elective",
     "7. Type of referral": "Self",

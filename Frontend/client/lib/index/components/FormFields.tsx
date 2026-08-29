@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useIsFieldReadOnly } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 
 type FieldProps = {
@@ -39,6 +39,8 @@ export function Field({
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
   const key = stateKey ?? label;
+  const isReadOnlyByContext = useIsFieldReadOnly(key);
+  const effectiveReadOnly = readOnly || isReadOnlyByContext;
   // If context is available, derive an initial value to keep things in sync
   // for the very first render (subsequent renders use the controlled `value`).
   const initial = ctx
@@ -70,7 +72,7 @@ export function Field({
         required={required}
         type={type}
         value={displayValue}
-        readOnly={readOnly}
+        readOnly={effectiveReadOnly}
         disabled={disabled}
         maxLength={maxLength}
         onChange={(e) => handle(e.target.value)}
@@ -84,7 +86,8 @@ export function Field({
           (shouldShow
             ? "border-[#d04a4a] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
             : "border-[#dce9eb] focus:border-[#36a99c] focus:ring-[#36a99c]/10") +
-          (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "")
+          (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "") +
+          (effectiveReadOnly && !disabled ? " cursor-not-allowed bg-[#f8fbfb] text-[#52707b]" : "")
         }
       />
       {shouldShow && (
@@ -200,6 +203,8 @@ export function SelectField({
 }: SelectFieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
+  const isReadOnlyByContext = useIsFieldReadOnly(label);
+  const effectiveDisabled = disabled || isReadOnlyByContext;
   const initial = ctx
     ? ((ctx.values.current[label] as string | undefined) ?? "")
     : undefined;
@@ -228,7 +233,7 @@ export function SelectField({
         <select
           required={required}
           value={displayValue}
-          disabled={disabled}
+          disabled={effectiveDisabled}
           onChange={(e) => handle(e.target.value)}
           onBlur={onBlur}
           name={name ?? label}
@@ -240,6 +245,7 @@ export function SelectField({
               ? "border-[#d04a4a] text-[#d04a4a] focus:border-[#d04a4a]"
               : "border-[#dce9eb] focus:border-[#36a99c]") +
             (!displayValue ? " text-[#afc0c4]" : " text-[#6e8790]") +
+            (effectiveDisabled && !disabled ? " cursor-not-allowed bg-[#f8fbfb]" : "") +
             (disabled ? " cursor-not-allowed bg-[#eef2f3] text-[#9aafb5]" : "")
           }
         >
@@ -282,6 +288,7 @@ type ToggleDetailsProps = {
 export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
+  const isReadOnlyByContext = useIsFieldReadOnly(title);
   const [answers, setAnswers] = useState<Record<string, string>>(() => {
     const base = Object.fromEntries(items.map((item) => [item, "No"]));
     if (!ctx) return base;
@@ -343,6 +350,7 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
                   checked={isYes}
                   onChange={() => handle(item, "Yes")}
                   className="accent-[#0b7d87]"
+                  disabled={isReadOnlyByContext}
                 />
                 Yes
               </label>
@@ -353,13 +361,14 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
                   checked={answers[item] === "No"}
                   onChange={() => handle(item, "No")}
                   className="accent-[#0b7d87]"
+                  disabled={isReadOnlyByContext}
                 />
                 No
               </label>
               <input
                 placeholder="Duration (Months)"
                 type="number"
-                disabled={!isYes}
+                disabled={!isYes || isReadOnlyByContext}
                 value={durations[item] ?? ""}
                 onChange={(e) => handleDuration(item, e.target.value)}
                 className={`h-8 w-36 rounded-lg border px-2 text-[11px] outline-none focus:ring-2 ${

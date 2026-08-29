@@ -24,8 +24,6 @@ const STEP_KEYS: Record<number, string[]> = {
     "Registration Number",
     "3(a). Department name",
     "3(b). Unit number",
-    "4. Hospital Registration Number (MRD / CR / Unique ID)",
-    "4. Hospital registration number",
     "5. Date of reporting",
     "6. Case Registered Through (Patient’s first reporting at RI)",
     "7. Type of referral",

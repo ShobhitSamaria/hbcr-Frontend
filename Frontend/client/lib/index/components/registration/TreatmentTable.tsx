@@ -64,6 +64,7 @@ export function TreatmentTable({ title, disabled = false }: TreatmentTableProps)
                   >
                     <option>Completed Treatment</option>
                     <option>Incomplete Treatment</option>
+                    <option>Treatment advised but not accepted</option>
                   </select>
                   <input
                     disabled={disabled || !active}
@@ -98,6 +99,7 @@ export function TreatmentTable({ title, disabled = false }: TreatmentTableProps)
                   >
                     <option>Completed Treatment</option>
                     <option>Incomplete Treatment</option>
+                    <option>Treatment advised but not accepted</option>
                   </select>
                   <input
                     disabled={disabled || !active}

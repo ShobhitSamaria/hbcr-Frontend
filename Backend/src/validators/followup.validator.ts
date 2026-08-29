@@ -179,6 +179,7 @@ export const createFollowUpValidator = makeValidator({
 /** Query validator for the follow-up patient search (all optional). */
 export const searchFollowUpValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)],
+  hbcrRegNo: [isString(), trim(), maxLen(20)],
   aadhaar: [isString(), trim(), maxLen(32)],
   phone: [isString(), trim(), maxLen(15)],
 });

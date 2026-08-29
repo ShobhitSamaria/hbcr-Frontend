@@ -14,7 +14,7 @@ import {
   type PatientRow,
 } from "../utils/apiRows";
 import { PatientTable } from "./PatientTable";
-import { PatientDetail } from "./PatientDetail";
+import { PatientRecordForm } from "./PatientRecordForm";
 
 type RecordsProps = {
   setView: (v: string) => void;
@@ -108,7 +108,7 @@ export function Records({ setView }: RecordsProps) {
   // Show patient detail view when a row is clicked
   if (selectedPatientId !== null) {
     return (
-      <PatientDetail
+      <PatientRecordForm
         patientId={selectedPatientId}
         onBack={() => setSelectedPatientId(null)}
       />

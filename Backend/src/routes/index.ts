@@ -11,6 +11,7 @@ import { healthRouter } from "./health.routes.ts";
 import { authRouter } from "./auth.routes.ts";
 import { icdoRouter } from "./icdo.routes.ts";
 import { icd10Router } from "./icd10.routes.ts";
+import { draftRouter } from "./draft.routes.ts";
 import { registrationController } from "../controllers/registration.controller.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
 
@@ -49,6 +50,9 @@ apiRouter.use(treatmentRouter);
 
 // /api/followups* — active follow-up module (search / visits / create)
 apiRouter.use("/followups", followUpRouter);
+
+// /api/drafts* — save draft for incomplete registrations
+apiRouter.use(draftRouter);
 
 // /api/icdo/* — read-only ICD-O-3 reference lookups (topography / morphology / index)
 apiRouter.use("/icdo", icdoRouter);
