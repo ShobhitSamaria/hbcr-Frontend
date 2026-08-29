@@ -121,7 +121,7 @@ export function DiagnosticDetails({
             <span className="ml-0.5 text-[#d04a4a]">*</span>
           </span>
           <span className="flex gap-4 text-[11px]">
-            <label className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5">
               <input
                 type="radio"
                 name="microscopic-later"
@@ -130,8 +130,8 @@ export function DiagnosticDetails({
                 className="accent-[#0b7d87]"
               />
               Yes
-            </label>
-            <label className="flex items-center gap-1.5">
+            </span>
+            <span className="flex items-center gap-1.5">
               <input
                 type="radio"
                 name="microscopic-later"
@@ -140,7 +140,7 @@ export function DiagnosticDetails({
                 className="accent-[#0b7d87]"
               />
               No
-            </label>
+            </span>
           </span>
         </div>
       {methods.includes("Other") && (

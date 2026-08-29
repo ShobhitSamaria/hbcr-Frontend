@@ -1063,3 +1063,15 @@ model Draft {
   @@index([createdByUserId], name: "idx_drafts_user")
   @@map("hbcr.drafts")
 }
+
+/// Reference table: Rajasthan district ↔ pincode mapping (seeded from official PDF).
+model PincodeDistrict {
+  id       Int    @id @default(autoincrement())
+  pincode  String @unique @db.VarChar(6)
+  district String @db.VarChar(64)
+  division String @db.VarChar(64)
+  state    String @default("RAJASTHAN") @db.VarChar(64)
+
+  @@index([district])
+  @@map("hbcr.pincode_districts")
+}

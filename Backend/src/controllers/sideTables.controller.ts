@@ -4,6 +4,7 @@ import { sideTablesService } from "../services/sideTables.service.ts";
 import { created, noContent, ok } from "../utils/response.ts";
 import { httpErrors, parseIdParam } from "../utils/httpError.ts";
 import { patientService } from "../services/patient.service.ts";
+import { validatePincodeDistrict } from "../services/pincode.service.ts";
 
 function pid(req: Request) {
   return parseIdParam(req.params.patientId);
@@ -90,10 +91,36 @@ const wrap = {
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
       await assertWritable(pid(req), "addresses");
+      const { district, pinCode } = req.body as Record<string, unknown>;
+      if (district && pinCode) {
+        const valid = await validatePincodeDistrict(String(pinCode), String(district));
+        if (!valid) {
+          return res.status(422).json({
+            success: false,
+            error: {
+              message: `PIN Code ${pinCode} does not belong to District ${district}`,
+              status: 422,
+            },
+          });
+        }
+      }
       return created(res, await sideTablesService.createAddress(pid(req), req.body));
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
       await assertWritable(pid(req), "addresses");
+      const { district, pinCode } = req.body as Record<string, unknown>;
+      if (district && pinCode) {
+        const valid = await validatePincodeDistrict(String(pinCode), String(district));
+        if (!valid) {
+          return res.status(422).json({
+            success: false,
+            error: {
+              message: `PIN Code ${pinCode} does not belong to District ${district}`,
+              status: 422,
+            },
+          });
+        }
+      }
       return ok(
         res,
         await sideTablesService.updateAddress(pid(req), childId(req), req.body),

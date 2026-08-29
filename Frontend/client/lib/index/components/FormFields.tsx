@@ -64,7 +64,7 @@ export function Field({
     validation?.markTouched(key);
   };
   return (
-    <label className="block">
+    <div className="block">
       <span className="mb-1.5 block text-[11px] font-bold text-[#5d7a84]">
         {label}{required && <span className="ml-0.5 text-[#d04a4a]">*</span>}
       </span>
@@ -95,7 +95,7 @@ export function Field({
           {errorMsg}
         </span>
       )}
-    </label>
+    </div>
   );
 }
 
@@ -343,7 +343,7 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
               className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
             >
               <span className="w-40">{item}</span>
-              <label className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5">
                 <input
                   type="radio"
                   name={title + item}
@@ -353,8 +353,8 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
                   disabled={isReadOnlyByContext}
                 />
                 Yes
-              </label>
-              <label className="flex items-center gap-1.5">
+              </span>
+              <span className="flex items-center gap-1.5">
                 <input
                   type="radio"
                   name={title + item}
@@ -364,7 +364,7 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
                   disabled={isReadOnlyByContext}
                 />
                 No
-              </label>
+              </span>
               <input
                 placeholder="Duration (Months)"
                 type="number"

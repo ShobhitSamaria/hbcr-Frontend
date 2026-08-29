@@ -4,6 +4,7 @@ import { useFormStateOptional } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 import { registrationApi } from "@/lib/api";
 import { Field, SelectField, ToggleDetails } from "../FormFields";
+import { DistrictPincodeFields } from "./DistrictPincodeFields";
 
 type Step1IdentifyingProps = {
   referral: string;
@@ -100,6 +101,14 @@ export function Step1Identifying({
     const cur = ctx?.values.current["6. Case Registered Through (Patient’s first reporting at RI)"];
     return typeof cur === "string" && cur !== "" ? cur : "";
   });
+  // Sync from context when values change (e.g., when loading patient record for edit)
+  useEffect(() => {
+    if (!ctx) return;
+    const cur = ctx.values.current["6. Case Registered Through (Patient’s first reporting at RI)"];
+    if (typeof cur === "string" && cur !== "" && cur !== caseThrough) {
+      setCaseThrough(cur);
+    }
+  });
   const handleCaseThrough = (v: string) => {
     setCaseThrough(v);
     ctx?.set("6. Case Registered Through (Patient’s first reporting at RI)", v);
@@ -119,6 +128,14 @@ export function Step1Identifying({
     const cur = ctx?.values.current["16. Marital status"];
     return typeof cur === "string" ? cur : "";
   });
+  // Sync from context when values change (e.g., when loading patient record for edit)
+  useEffect(() => {
+    if (!ctx) return;
+    const cur = ctx.values.current["16. Marital status"];
+    if (typeof cur === "string" && cur !== "" && cur !== maritalStatus) {
+      setMaritalStatus(cur);
+    }
+  });
   const handleMaritalStatus = (v: string) => {
     setMaritalStatus(v);
     ctx?.set("16. Marital status", v);
@@ -137,6 +154,14 @@ export function Step1Identifying({
   const [education, setEducation] = useState<string>(() => {
     const cur = ctx?.values.current["17. Education"];
     return typeof cur === "string" ? cur : "";
+  });
+  // Sync from context when values change (e.g., when loading patient record for edit)
+  useEffect(() => {
+    if (!ctx) return;
+    const cur = ctx.values.current["17. Education"];
+    if (typeof cur === "string" && cur !== "" && cur !== education) {
+      setEducation(cur);
+    }
   });
   const handleEducation = (v: string) => {
     setEducation(v);
@@ -332,68 +357,40 @@ export function Step1Identifying({
                 className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]"
               >
                 <span className="w-28">{label}</span>
-                <label className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5">
                   <input
                     type="radio"
                     name={"id-" + label}
                     checked={!isSelected}
-                    onChange={() =>
-                      setSelectedIds(selectedIds.filter((x) => x !== label))
-                    }
+                    onChange={() => {
+                      setSelectedIds(selectedIds.filter((x) => x !== label));
+                      ctx?.set("id-" + label, "No");
+                    }}
                     className="accent-[#0b7d87]"
                   />
                   No
-                </label>
-                <label className="flex items-center gap-1.5">
+                </span>
+                <span className="flex items-center gap-1.5">
                   <input
                     type="radio"
                     name={"id-" + label}
                     checked={isSelected}
                     onChange={() => {
                       if (!isSelected) setSelectedIds([...selectedIds, label]);
+                      ctx?.set("id-" + label, "Yes");
                     }}
                     className="accent-[#0b7d87]"
                   />
                   Yes
-                </label>
-                <div className="flex flex-col">
-                  <input
-                    placeholder={"Enter " + label + " number"}
-                    disabled={!isSelected}
-                    maxLength={maxLength}
-                    value={ctx?.values.current[numKey] != null ? String(ctx.values.current[numKey]) : ""}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      ctx?.set(numKey, v);
-                      validation?.clearErrors([numKey]);
-                    }}
-                    onBlur={() => validation?.markTouched(numKey)}
-                    className={`h-8 w-44 rounded-lg border px-2 text-[11px] outline-none focus:ring-2 ${
-                      validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey))
-                        ? "border-[#d04a4a] bg-[#fef2f2] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
-                        : isSelected
-                          ? "border-[#dce9eb] bg-[#fbfdfd] focus:border-[#36a99c] focus:ring-[#36a99c]/10"
-                          : "cursor-not-allowed border-[#dce9eb] bg-[#f1f5f5] text-[#a9b8bc]"
-                    }`}
-                  />
-                  {validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey)) && (
-                    <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
-                      {validation.errors[numKey]}
-                    </span>
-                  )}
-                </div>
+                </span>
                 {isOther && isSelected && (
                   <div className="flex flex-col">
-                    <input
-                      placeholder="Enter ID name (e.g. Driving License)"
-                      value={ctx?.values.current[nameKey] != null ? String(ctx.values.current[nameKey]) : ""}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        ctx?.set(nameKey, v);
-                        validation?.clearErrors([nameKey]);
-                      }}
+                    <OtherIdInput
+                      placeholder="Enter identification name/type (e.g. Card Name)"
+                      stateKey={nameKey}
                       onBlur={() => validation?.markTouched(nameKey)}
-                      className="h-8 w-44 rounded-lg border border-[#dce9eb] bg-[#fbfdfd] px-2 text-[11px] outline-none focus:border-[#36a99c] focus:ring-2 focus:ring-[#36a99c]/10"
+                      hasError={!!(validation?.errors[nameKey] && (validation.forceShow.has(nameKey) || validation.touched.has(nameKey)))}
+                      errorMessage={validation?.errors[nameKey]}
                     />
                     {validation?.errors[nameKey] && (validation.forceShow.has(nameKey) || validation.touched.has(nameKey)) && (
                       <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
@@ -402,6 +399,23 @@ export function Step1Identifying({
                     )}
                   </div>
                 )}
+                <div className="flex flex-col">
+                  <OtherIdInput
+                    placeholder={isOther ? "Enter identification number" : "Enter " + label + " number"}
+                    stateKey={numKey}
+                    disabled={!isSelected}
+                    maxLength={maxLength}
+                    onBlur={() => validation?.markTouched(numKey)}
+                    hasError={!!(validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey)))}
+                    errorMessage={validation?.errors[numKey]}
+                    isErrorStyle={isSelected}
+                  />
+                  {validation?.errors[numKey] && (validation.forceShow.has(numKey) || validation.touched.has(numKey)) && (
+                    <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
+                      {validation.errors[numKey]}
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -491,13 +505,7 @@ export function Step1Identifying({
               <Field label="Ward No." placeholder="Ward number" />
               <Field label="Street / Road" placeholder="Street or road" />
               <Field label="City" placeholder="City" />
-              <Field label="District" placeholder="District" />
-              <Field label="State" placeholder="State" />
-              <Field
-                label="PIN Code"
-                type="number"
-                placeholder="PIN code"
-              />
+              <DistrictPincodeFields />
               <Field label="Mobile number" placeholder="Mobile number" />
               <Field
                 label="Email address"
@@ -533,16 +541,7 @@ export function Step1Identifying({
                   placeholder="Street or road"
                 />
                 <Field label="Permanent City" placeholder="City" />
-                <Field
-                  label="Permanent District"
-                  placeholder="District"
-                />
-                <Field label="Permanent State" placeholder="State" />
-                <Field
-                  label="Permanent PIN Code"
-                  type="number"
-                  placeholder="PIN code"
-                />
+                <DistrictPincodeFields prefix="Permanent " />
               </div>
             )}
           </>
@@ -660,7 +659,7 @@ function FamilialCancerSection({
         19. Relationship to Cancer / Degree of Relationship
       </label>
       <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-        <label className="flex items-center gap-2">
+        <span className="flex items-center gap-2">
           <input
             type="radio"
             name="familial-history"
@@ -669,8 +668,8 @@ function FamilialCancerSection({
             className="accent-[#0b7d87]"
           />
           Yes
-        </label>
-        <label className="flex items-center gap-2">
+        </span>
+        <span className="flex items-center gap-2">
           <input
             type="radio"
             name="familial-history"
@@ -679,8 +678,8 @@ function FamilialCancerSection({
             className="accent-[#0b7d87]"
           />
           No
-        </label>
-        <label className="flex items-center gap-2">
+        </span>
+        <span className="flex items-center gap-2">
           <input
             type="radio"
             name="familial-history"
@@ -689,7 +688,7 @@ function FamilialCancerSection({
             className="accent-[#0b7d87]"
           />
           Unknown
-        </label>
+        </span>
       </div>
       {familyHistory === "Yes" && (
         <div className="mt-5 space-y-5 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
@@ -698,7 +697,7 @@ function FamilialCancerSection({
               Relationship with Cancer
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-              <label className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="relationship-cancer"
@@ -706,8 +705,8 @@ function FamilialCancerSection({
                   className="accent-[#0b7d87]"
                 />
                 Same Cancer
-              </label>
-              <label className="flex items-center gap-2">
+              </span>
+              <span className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="relationship-cancer"
@@ -715,7 +714,7 @@ function FamilialCancerSection({
                   className="accent-[#0b7d87]"
                 />
                 Other Cancer
-              </label>
+              </span>
             </div>
           </div>
           <div>
@@ -723,7 +722,7 @@ function FamilialCancerSection({
               Degree of Relationship
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
-              <label className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="degree-relationship"
@@ -731,8 +730,8 @@ function FamilialCancerSection({
                   className="accent-[#0b7d87]"
                 />
                 First Degree Relative
-              </label>
-              <label className="flex items-center gap-2">
+              </span>
+              <span className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="degree-relationship"
@@ -740,7 +739,7 @@ function FamilialCancerSection({
                   className="accent-[#0b7d87]"
                 />
                 Second Degree Relative
-              </label>
+              </span>
             </div>
           </div>
           <SelectField
@@ -767,6 +766,61 @@ function FamilialCancerSection({
  * Values are written into the form-state context (keyed by label) so the
  * submit pipeline can persist them on the patient record.
  */
+type OtherIdInputProps = {
+  placeholder?: string;
+  stateKey: string;
+  disabled?: boolean;
+  maxLength?: number;
+  onBlur?: () => void;
+  hasError?: boolean;
+  errorMessage?: string;
+  isErrorStyle?: boolean;
+};
+
+function OtherIdInput({
+  placeholder,
+  stateKey,
+  disabled = false,
+  maxLength,
+  onBlur,
+  hasError,
+  errorMessage,
+  isErrorStyle = true,
+}: OtherIdInputProps) {
+  const ctx = useFormStateOptional();
+  const [innerValue, setInnerValue] = useState<string>(
+    () => (ctx?.values.current[stateKey] != null ? String(ctx.values.current[stateKey]) : "")
+  );
+  return (
+    <>
+      <input
+        placeholder={placeholder}
+        disabled={disabled}
+        maxLength={maxLength}
+        value={innerValue}
+        onChange={(e) => {
+          const v = e.target.value;
+          setInnerValue(v);
+          ctx?.set(stateKey, v);
+        }}
+        onBlur={onBlur}
+        className={`h-8 w-44 rounded-lg border px-2 text-[11px] outline-none focus:ring-2 ${
+          hasError
+            ? "border-[#d04a4a] bg-[#fef2f2] focus:border-[#d04a4a] focus:ring-[#d04a4a]/15"
+            : isErrorStyle
+              ? "border-[#dce9eb] bg-[#fbfdfd] focus:border-[#36a99c] focus:ring-[#36a99c]/10"
+              : "cursor-not-allowed border-[#dce9eb] bg-[#f1f5f5] text-[#a9b8bc]"
+        }`}
+      />
+      {hasError && errorMessage && (
+        <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
+          {errorMessage}
+        </span>
+      )}
+    </>
+  );
+}
+
 function HealthSchemeField() {
   const ctx = useFormStateOptional();
   const [answer, setAnswer] = useState<string>(() => {
@@ -786,7 +840,7 @@ function HealthSchemeField() {
           f). Beneficiary of Health Scheme (RGHS / MAAYOGNA / CGHS)
         </span>
         <span className="flex items-center gap-4 whitespace-nowrap">
-          <label className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5">
             <input
               type="radio"
               name="health-scheme"
@@ -795,8 +849,8 @@ function HealthSchemeField() {
               className="accent-[#0b7d87]"
             />
             Yes
-          </label>
-          <label className="flex items-center gap-1.5">
+          </span>
+          <span className="flex items-center gap-1.5">
             <input
               type="radio"
               name="health-scheme"
@@ -805,7 +859,7 @@ function HealthSchemeField() {
               className="accent-[#0b7d87]"
             />
             No
-          </label>
+          </span>
         </span>
       </div>
       {answer === "Yes" && (

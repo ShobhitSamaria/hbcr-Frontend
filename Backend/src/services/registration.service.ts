@@ -221,7 +221,7 @@ export const registrationService = {
     return prisma.registration.findMany({
       where: { patientId, hospitalId },
       orderBy: { id: "desc" },
-      include: { hospital: { select: { id: true, name: true } } },
+      include: FULL_INCLUDE,
     });
   },
 };

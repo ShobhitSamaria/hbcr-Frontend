@@ -234,18 +234,14 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
       continue;
     }
     const numVal = values[numLabel];
+    // g). Other does not require a number — the input is disabled
+    if (label === "g). Other") continue;
     if (numVal === undefined || numVal === null || String(numVal).trim() === "") {
       out[numLabel] = `${label.replace('). ', '')} number is required when Yes is selected`;
     } else if (pattern && !pattern.test(String(numVal).trim())) {
       out[numLabel] = formatMsg ?? `Invalid format for ${label}`;
     }
-    // g). Other also requires an ID Name
-    if (label === "g). Other") {
-      const nameVal = values["g). Other name"];
-      if (nameVal === undefined || nameVal === null || String(nameVal).trim() === "") {
-        out["g). Other name"] = "ID name is required for Other identification";
-      }
-    }
+    // g). Other does not require number or name — the inputs are disabled
   }
 
   // 13(b). Beneficiary of Health Scheme — if Yes, details required

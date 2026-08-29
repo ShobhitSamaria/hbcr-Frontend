@@ -497,6 +497,7 @@ export type ApiRegistration = {
   hospitalRegistrationNoType?: string | null;
   dateOfReporting?: string | null;
   caseRegisteredThrough?: string | null;
+  caseRegisteredThroughOther?: string | null;
   referralType?: string | null;
   referralFacilityName?: string | null;
   referralFacilityCity?: string | null;
@@ -509,7 +510,9 @@ export type ApiRegistration = {
   anthropometricHeightCm?: string | null;
   anthropometricWeightKg?: string | null;
   maritalStatus?: string | null;
+  maritalStatusOther?: string | null;
   education?: string | null;
+  educationOther?: string | null;
   occupation?: string | null;
   status: "ACTIVE" | "PENDING" | "COMPLETED";
   formCompletedBy?: string | null;
@@ -584,7 +587,7 @@ export const registrationApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number) => send<ApiRegistration>(`/registrations/${id}`),
-  update: (id: number, data: Partial<Pick<ApiRegistration, 'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate'>>) =>
+  update: (id: number, data: Partial<Pick<ApiRegistration, 'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate' | 'designation' | 'contactNumber'>>) =>
     send<ApiRegistration>(`/registrations/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
@@ -956,6 +959,18 @@ export const followUpApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number): Promise<ApiFollowUp> => send<ApiFollowUp>(`/followups/${id}`),
+};
+
+export const pincodeApi = {
+  /** Get all unique district names (sorted alphabetically). */
+  getDistricts: (): Promise<string[]> =>
+    send<{ districts: string[] }>('/pincodes').then((r) => r.districts),
+
+  /** Get pincodes for a specific district. */
+  getPincodesByDistrict: (district: string): Promise<string[]> =>
+    send<{ district: string; pincodes: string[] }>(
+      `/pincodes?district=${encodeURIComponent(district)}`,
+    ).then((r) => r.pincodes),
 };
 
 // ---------- Re-exports ----------

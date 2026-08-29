@@ -23,9 +23,9 @@ export const createAddressValidator = makeValidator({
   flatHouseNo: [isString(), trim(), maxLen(64)],
   streetRoad: [isString(), trim(), maxLen(255)],
   city: [isString(), trim(), maxLen(64)],
-  district: [isString(), trim(), maxLen(64)],
+  district: [required("District is required"), isString(), trim(), maxLen(64)],
   state: [isString(), trim(), maxLen(64)],
-  pinCode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
+  pinCode: [required("PIN code is required"), isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
   mobileNumber: [
     isString(),
     trim(),
@@ -40,9 +40,9 @@ export const updateAddressValidator = makeValidator({
   flatHouseNo: [isString(), trim(), maxLen(64)],
   streetRoad: [isString(), trim(), maxLen(255)],
   city: [isString(), trim(), maxLen(64)],
-  district: [isString(), trim(), maxLen(64)],
+  district: [required("District is required"), isString(), trim(), maxLen(64)],
   state: [isString(), trim(), maxLen(64)],
-  pinCode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
+  pinCode: [required("PIN code is required"), isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
   mobileNumber: [
     isString(),
     trim(),

@@ -12,6 +12,7 @@ import { authRouter } from "./auth.routes.ts";
 import { icdoRouter } from "./icdo.routes.ts";
 import { icd10Router } from "./icd10.routes.ts";
 import { draftRouter } from "./draft.routes.ts";
+import { pincodeRouter } from "./pincode.routes.ts";
 import { registrationController } from "../controllers/registration.controller.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
 
@@ -59,3 +60,6 @@ apiRouter.use("/icdo", icdoRouter);
 
 // /api/icd10/* — read-only ICD-10 reference lookups (ranges / codes / examples / rules)
 apiRouter.use("/icd10", icd10Router);
+
+// /api/pincodes — Rajasthan district ↔ pincode reference data
+apiRouter.use("/pincodes", pincodeRouter);

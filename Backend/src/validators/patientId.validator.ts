@@ -9,6 +9,7 @@ import {
   required,
   trim,
   matches,
+  ValidationFieldError,
 } from "./common.ts";
 
 // Format patterns for each ID type
@@ -22,11 +23,17 @@ const ABPMJAY_RE = /^[A-Za-z0-9\-]+$/;
 export const createPatientIdentificationValidator = makeValidator({
   idType: [required(), inEnum(IdType)],
   number: [
-    required(),
+    // Number is not required for OTHER type (inputs are disabled)
+    (value, all) => {
+      if ((all as Record<string, unknown>).idType === "OTHER") return value ?? null;
+      if (value === undefined || value === null || String(value).trim() === "") {
+        throw new ValidationFieldError("ID number is required");
+      }
+      return value;
+    },
     isString(),
     trim(),
     maxLen(64),
-    // Format validation is applied dynamically based on idType below
   ],
 });
 

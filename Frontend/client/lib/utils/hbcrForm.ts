@@ -213,7 +213,11 @@ export function extractIdentifications(v: Values): Array<{
     const nameKey = label + " name";
     const number = val(v, numKey);
     const idName = val(v, nameKey);
-    if (number || idName) out.push({
+    // For Other (g)., include even without number/name when Yes is selected
+    const radioKey = `id-${label}`;
+    const radioVal = val(v, radioKey);
+    const isOtherYes = type === "OTHER" && radioVal === "Yes";
+    if (number || idName || isOtherYes) out.push({
       idType: type,
       ...(number ? { number } : {}),
       ...(idName ? { idName } : {}),

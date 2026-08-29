@@ -435,20 +435,45 @@ export function PatientDetail({ patientId, onBack }: PatientDetailProps) {
         </div>
       </div>
 
-      {/* Registration Summary — READ ONLY */}
+      {/* Registration Summary — all fields from registration */}
       {reg && (
         <Section title="Registration Summary">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <ReadField label="Reference No." value={reg.referenceNo ?? "—"} />
-            <ReadField label="Registration No." value={deriveRegNo(reg)} />
+            <ReadField label="Registration No." value={reg.hbcrRegistrationNo ?? "—"} />
             <ReadField label="Status" value={formatEnum(reg.status)} />
-            <ReadField label="Date of Reporting" value={reg.dateOfReporting ?? "—"} />
+            <ReadField label="Department Name" value={reg.departmentName ?? "—"} />
+            <ReadField label="Unit Number" value={reg.unitNumber ?? "—"} />
+            <ReadField label="Hospital Registration No." value={reg.hospitalRegistrationNo ?? "—"} />
+            <ReadField label="Date of Reporting" value={formatDate(reg.dateOfReporting)} />
             <ReadField label="Case Registered Through" value={formatEnum(reg.caseRegisteredThrough)} />
+            {reg.caseRegisteredThrough === "OTHERS" && (
+              <ReadField label="Case Registered Through (Other)" value={reg.caseRegisteredThroughOther ?? "—"} />
+            )}
             <ReadField label="Type of Referral" value={formatEnum(reg.referralType)} />
-            <ReadField label="Referral Facility" value={reg.referralFacilityName ?? "—"} />
-            <ReadField label="Date of First Diagnosis" value={reg.dateOfFirstDiagnosis ?? "—"} />
+            <ReadField label="Referral Facility Name" value={reg.referralFacilityName ?? "—"} />
+            <ReadField label="Referral Facility City" value={reg.referralFacilityCity ?? "—"} />
+            <ReadField label="Referral Facility District" value={reg.referralFacilityDistrict ?? "—"} />
+            <ReadField label="Referral Facility Pincode" value={reg.referralFacilityPincode ?? "—"} />
+            <ReadField label="Referral Facility Hospital/Lab" value={reg.referralFacilityHospitalLabNh ?? "—"} />
+            <ReadField label="Referral Facility Reg. Date" value={formatDate(reg.referralFacilityRegDate)} />
+            <ReadField label="Date of First Diagnosis" value={formatDate(reg.dateOfFirstDiagnosis)} />
+            <ReadField label="Microscopic Confirmation Later" value={reg.microscopicConfirmationLater === true ? "Yes" : reg.microscopicConfirmationLater === false ? "No" : "—"} />
+            <ReadField label="Height (cm)" value={reg.anthropometricHeightCm ?? "—"} />
+            <ReadField label="Weight (kg)" value={reg.anthropometricWeightKg ?? "—"} />
+            <ReadField label="Marital Status" value={formatEnum(reg.maritalStatus)} />
+            {reg.maritalStatus === "OTHERS" && (
+              <ReadField label="Marital Status (Other)" value={reg.maritalStatusOther ?? "—"} />
+            )}
+            <ReadField label="Education" value={formatEnum(reg.education)} />
+            {reg.education === "OTHERS" && (
+              <ReadField label="Education (Other)" value={reg.educationOther ?? "—"} />
+            )}
+            <ReadField label="Occupation" value={reg.occupation ?? "—"} />
+            <ReadField label="Contact Number" value={reg.contactNumber ?? "—"} />
+            <ReadField label="Designation" value={reg.designation ?? "—"} />
             <ReadField label="Form Completed By" value={reg.formCompletedBy ?? "—"} />
-            <ReadField label="Form Completion Date" value={reg.formCompletionDate ?? "—"} />
+            <ReadField label="Form Completion Date" value={formatDate(reg.formCompletionDate)} />
             <ReadField label="Remarks" value={reg.remarks ?? "—"} />
           </div>
         </Section>
@@ -1120,7 +1145,7 @@ function ToggleDetailsEditable({ items, values, onChange, labelToKey }: ToggleDe
         return (
           <div key={item} className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#718991]">
             <span className="w-40">{item}</span>
-            <label className="flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5">
               <input
                 type="radio"
                 name={`toggle-${item}`}
@@ -1137,8 +1162,8 @@ function ToggleDetailsEditable({ items, values, onChange, labelToKey }: ToggleDe
                 className="accent-[#0b7d87]"
               />
               Yes
-            </label>
-            <label className="flex items-center gap-1.5">
+            </span>
+            <span className="flex items-center gap-1.5">
               <input
                 type="radio"
                 name={`toggle-${item}`}
@@ -1152,7 +1177,7 @@ function ToggleDetailsEditable({ items, values, onChange, labelToKey }: ToggleDe
                 className="accent-[#0b7d87]"
               />
               No
-            </label>
+            </span>
             <input
               disabled={!isEnabled}
               placeholder="Duration (Months)"

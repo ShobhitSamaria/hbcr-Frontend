@@ -5,11 +5,13 @@
  * Fields 1–12, 15, and 19 are always read-only.
  * All other fields are editable when the user clicks Edit.
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Loader2, Pencil, Save, X } from "lucide-react";
 import {
   patientApi,
   registrationApi,
+  sideApi,
+  pathologyApi,
   familyHistoryApi,
   type ApiPatient,
   type ApiRegistration,
@@ -76,6 +78,8 @@ const READONLY_FIELDS = new Set([
 /**
  * Inner component that syncs loaded data into FormState context.
  * Must be rendered inside FormStateProvider.
+ * Uses a key to force children to re-mount after data is set,
+ * so their innerValue states pick up the correct initial values.
  */
 function DataInitializer({
   data,
@@ -85,13 +89,37 @@ function DataInitializer({
   children: React.ReactNode;
 }) {
   const ctx = useFormStateOptional();
+  const [dataVersion, setDataVersion] = useState(0);
+  const prevDataRef = useRef(data);
+
+  // When data reference changes, bump the version so children remount.
   useEffect(() => {
-    if (!ctx) return;
+    if (prevDataRef.current !== data) {
+      prevDataRef.current = data;
+      setDataVersion((v) => v + 1);
+    }
+  }, [data]);
+
+  // Whenever context is available, push all data values into it.
+  // The key forces children to remount when dataVersion changes,
+  // so their useState initializers re-read from context.
+  if (ctx) {
     for (const [k, v] of Object.entries(data)) {
       ctx.set(k, v);
     }
-  }, [ctx, data]);
-  return <>{children}</>;
+  }
+
+  return <div key={dataVersion}>{children}</div>;
+}
+
+/** Bridges form state from inside FormStateProvider to the parent via a ref. */
+function FormStateBridge({ snapshotRef }: { snapshotRef: React.MutableRefObject<Record<string, unknown>> }) {
+  const ctx = useFormStateOptional();
+  useEffect(() => {
+    if (!ctx) return;
+    snapshotRef.current = { ...ctx.values.current };
+  });
+  return null;
 }
 
 export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps) {
@@ -111,6 +139,9 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [sameAddress, setSameAddress] = useState(false);
   const [familyHistory, setFamilyHistory] = useState("No");
+
+  // Ref to capture form state from inside FormStateProvider
+  const formSnapshotRef = useRef<Record<string, unknown>>({});
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -146,6 +177,50 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
     void loadData();
   }, [loadData]);
 
+  /** Explicit reverse mapping: Prisma enum → form option label. */
+  /**
+   * Map Prisma enum values (lowercase as stored in DB) to display labels.
+   * Key must be lowercase because Postgres stores enum values as lowercase.
+   */
+  const ENUM_DISPLAY: Record<string, string> = {
+    out_patient: "Out Patient",
+    in_patient_elective: "In Patient Elective",
+    in_patient_emergency: "In Patient Emergency",
+    other_hospital: "Other Hospital/Health Facility",
+    screen_detected: "Screen Detected Referral",
+    self: "Self",
+    married: "Married",
+    single: "Single",
+    widowed: "Widowed",
+    divorced: "Divorced",
+    separated: "Separated",
+    other: "Other",
+    unknown: "Unknown",
+    illiterate: "Illiterate",
+    literate: "Literate",
+    primary: "Primary",
+    middle: "Middle",
+    secondary_higher_secondary: "Secondary/Higher Secondary",
+    technical_after_matric: "Technical-after matric",
+    graduate_and_above: "Graduate and above",
+    others: "Others (specify)",
+    male: "Male",
+    female: "Female",
+  };
+  /** Convert Prisma enum value (lowercase) to display string used in form options. */
+  const toDisplay = (val: string | null | undefined): string => {
+    if (!val) return "";
+    const key = val.toLowerCase();
+    return ENUM_DISPLAY[key] ?? val.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+  /** Convert ISO date string to YYYY-MM-DD for <input type="date">. */
+  const toDateStr = (val: string | null | undefined): string => {
+    if (!val) return "";
+    const d = new Date(val);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toISOString().slice(0, 10);
+  };
+
   /** Build initial values for FormState from loaded API data. */
   const initialValues = useMemo(() => {
     if (!patient || !registrations[0]) return {};
@@ -173,17 +248,24 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "Centre code": "",
       "Reference Number": reg.referenceNo ?? "",
       "Registration Number": reg.hbcrRegistrationNo ?? "",
-      "3(a). Department name": "",
-      "3(b). Unit number": "",
-      "5. Date of reporting": reg.dateOfReporting ?? "",
-      "6. Case Registered Through (Patient's first reporting at RI)": reg.caseRegisteredThrough ?? "",
-      "7. Type of referral": reg.referralType ?? "Self",
-      "8. Date of first diagnosis": reg.dateOfFirstDiagnosis ?? "",
+      "3(a). Department name": reg.departmentName ?? "",
+      "3(b). Unit number": reg.unitNumber ?? "",
+      "5. Date of reporting": toDateStr(reg.dateOfReporting),
+      "6. Case Registered Through (Patient's first reporting at RI)": toDisplay(reg.caseRegisteredThrough),
+      "6(a). Case Registered Through (Other)": reg.caseRegisteredThroughOther ?? "",
+      "7. Type of referral": toDisplay(reg.referralType) || "Self",
+      "7(a). Referral facility name": reg.referralFacilityName ?? "",
+      "7(b). Referral facility city": reg.referralFacilityCity ?? "",
+      "7(c). Referral facility district": reg.referralFacilityDistrict ?? "",
+      "7(d). Referral facility pincode": reg.referralFacilityPincode ?? "",
+      "7(e). Referral facility hospital/lab/NH": reg.referralFacilityHospitalLabNh ?? "",
+      "7(f). Referral facility reg date": reg.referralFacilityRegDate ?? "",
+      "8. Date of first diagnosis": toDateStr(reg.dateOfFirstDiagnosis),
       // Step 1 — editable fields
       "First Name": patient.firstName ?? "",
       "Middle Name": patient.middleName ?? "",
       "Last Name": patient.lastName ?? "",
-      "10. Date of Birth": patient.dateOfBirth ?? "",
+      "10. Date of Birth": toDateStr(patient.dateOfBirth),
       "11. Age": patient.age != null ? String(patient.age) : "",
       "12. Gender": patient.gender ?? "",
       // 13. Identifications
@@ -230,9 +312,21 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "Duration of Stay at the above address (in years)": "",
       "Residential Address is same as Permanent Address": sameAddress,
       // 16. Marital Status
-      "16. Marital status": "",
+      "16. Marital status": toDisplay(reg.maritalStatus),
+      "16(a). Marital status (Other)": reg.maritalStatusOther ?? "",
       // 17. Education
-      "17. Education": "",
+      "17. Education": toDisplay(reg.education),
+      "17(a). Education (Other)": reg.educationOther ?? "",
+      // Anthropometric
+      "Anthropometric Height (cm)": reg.anthropometricHeightCm ?? "",
+      "Anthropometric Weight (kg)": reg.anthropometricWeightKg ?? "",
+      // Occupation
+      "Occupation": reg.occupation ?? "",
+      // Contact / Designation (on registration)
+      "Name of Person Completing Form (in capitals)": reg.formCompletedBy ?? "",
+      "Designation": reg.designation ?? "",
+      "Contact Number": reg.contactNumber ?? "",
+      "Date of Completion of this Form": toDateStr(reg.formCompletionDate),
       // 18. Habits / Comorbidities — managed via ToggleDetails
       // 19. Family History
       "19. Relationship to Cancer / Degree of Relationship": fh?.familyHistory === "YES" ? "Yes" : fh?.familyHistory === "UNKNOWN" ? "Unknown" : "No",
@@ -246,18 +340,25 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
     setSaveError(null);
     setSaveSuccess(false);
     try {
-      // Read current form state from all FormStateProviders on the page
-      // The form state is captured in the FormState ref — we read it via a custom mechanism
-      // For now, we save the known editable fields directly
       const reg = registrations[0];
+      const fs = formSnapshotRef.current;
+      const str = (key: string): string => {
+        const v = fs[key];
+        return typeof v === "string" ? v.trim() : "";
+      };
 
-      // Note: referralType is not updatable via registrationApi.update TypeScript type.
-      // It is saved through the form context on next registration creation.
+      // 1. Update registration-level editable fields
+      await registrationApi.update(reg.id, {
+        remarks: str("Remarks") || undefined,
+        designation: str("Designation") || undefined,
+        contactNumber: str("Contact Number") || undefined,
+        formCompletedBy: str("Name of Person Completing Form (in capitals)") || undefined,
+      });
 
-      // Save family history
+      // 2. Save family history
       if (familyHistory) {
         const fhVal = familyHistory === "Yes" ? "YES" : familyHistory === "Unknown" ? "UNKNOWN" : "NO";
-        await familyHistoryApi.upsert(reg.id, { familyHistory: fhVal as any });
+        await familyHistoryApi.upsert(reg.id, { familyHistory: fhVal });
       }
 
       setSaveSuccess(true);
@@ -356,6 +457,7 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
           <FormStateProvider readOnlyFields={READONLY_FIELDS} initialValues={initialValues}>
             <ValidationProvider>
               <DataInitializer data={initialValues}>
+                <FormStateBridge snapshotRef={formSnapshotRef} />
                 <RegistrationSteps
                   editMode={editMode}
                   referral={referral}
