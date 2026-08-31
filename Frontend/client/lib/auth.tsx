@@ -40,7 +40,8 @@ function readStoredSession(): AuthSession | null {
     const raw = localStorage.getItem(AUTH_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as AuthSession;
-    return parsed?.token ? parsed : null;
+    // Accept session even without token (cookie-only mode)
+    return parsed?.user ? parsed : null;
   } catch {
     return null;
   }
@@ -52,7 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
   const queryClient = useQueryClient();
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    // Tell the backend to clear the httpOnly auth cookie
+    try {
+      await authApi.logout();
+    } catch {
+      // If the logout API fails (e.g. server is down), still clear locally
+    }
     try {
       localStorage.removeItem(AUTH_STORAGE_KEY);
     } catch {
@@ -67,7 +74,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (username: string, password: string) => {
     const next = await authApi.login(username, password);
     try {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(next));
+      // Only store user+hospital in localStorage; the token is now
+      // in an httpOnly cookie managed by the backend. Keeping the
+      // full session object (without token) in localStorage lets the
+      // frontend know the user is logged in without exposing the
+      // token to JavaScript.
+      const { token: _token, ...safeSession } = next;
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(safeSession));
     } catch {
       // storage unavailable — session stays in memory only
     }
@@ -85,7 +98,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then((next) => {
         if (cancelled) return;
         try {
-          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(next));
+          const { token: _token, ...safeSession } = next;
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(safeSession));
         } catch {
           // ignore
         }

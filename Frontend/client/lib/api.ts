@@ -33,6 +33,16 @@ const DEFAULT_BASE = (() => {
 
 const API_BASE = DEFAULT_BASE;
 
+/**
+ * Custom header sent on state-changing requests (POST, PATCH, DELETE).
+ * The backend checks this header to prevent CSRF attacks from
+ * cross-origin HTML forms. The header value is a fixed, non-secret
+ * string — it proves the request originated from our SPA, not a
+ * malicious form.
+ */
+const CSRF_HEADER = "X-Requested-With";
+const CSRF_VALUE = "HBCR-SPA";
+
 class ApiError extends Error {
   status: number;
   details?: unknown;
@@ -80,14 +90,20 @@ async function call<T>(
   init: RequestInit = {},
 ): Promise<Result<T>> {
   const token = readStoredToken();
+  const method = (init.method ?? "GET").toUpperCase();
+  const isStateChanging = method === "POST" || method === "PATCH" || method === "DELETE";
+
   let res: Response;
   try {
     res = await fetch(`${API_BASE}${path}`, {
       ...init,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        // CSRF header on state-changing requests
+        ...(isStateChanging ? { [CSRF_HEADER]: CSRF_VALUE } : {}),
         ...(init.headers ?? {}),
       },
     });
@@ -98,10 +114,9 @@ async function call<T>(
       status: 0,
     };
   }
-  // A 401 while a token was attached means the session is dead (expired or
-  // revoked). Notify the auth provider so it can clear the session and send
-  // the user back to the login screen.
-  if (res.status === 401 && token) {
+  // A 401 means the session is dead (expired or revoked). Notify the auth
+  // provider so it can clear the session and send the user back to login.
+  if (res.status === 401) {
     try {
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("hbcr:unauthorized"));
@@ -153,7 +168,7 @@ export type AuthHospital = {
 };
 
 export type AuthSession = {
-  token: string;
+  token?: string;
   user: AuthUser;
   hospital: AuthHospital | null;
 };
@@ -165,6 +180,8 @@ export const authApi = {
       body: JSON.stringify({ username, password }),
     }),
   me: () => send<AuthSession>("/auth/me"),
+  logout: () =>
+    send<null>("/auth/logout", { method: "POST" }),
 };
 
 // ---------- Health ----------

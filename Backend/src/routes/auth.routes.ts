@@ -11,3 +11,6 @@ authRouter.post("/login", validate(validateLogin), authController.login);
 
 // GET /api/auth/me — validates an existing token and returns the session
 authRouter.get("/me", requireAuth, authController.me);
+
+// POST /api/auth/logout — clears the httpOnly auth cookie
+authRouter.post("/logout", authController.logout);

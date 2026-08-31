@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => ({
         target: process.env.HBCR_API_TARGET || "http://localhost:5050",
         changeOrigin: true,
         ws: false,
+        // Allow cookies (httpOnly auth token) to pass through the proxy
+        cookieDomainRewrite: {
+          "*": "",
+        },
       },
     },
     fs: {

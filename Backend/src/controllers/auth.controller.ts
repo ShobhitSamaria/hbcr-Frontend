@@ -4,6 +4,7 @@ import { fail, ok } from "../utils/response.ts";
 import { prisma } from "../db/prisma.ts";
 import { hashPassword, verifyPassword } from "../utils/password.ts";
 import { signToken, tokenExpiry } from "../utils/token.ts";
+import { config } from "../config/index.js";
 
 /**
  * Pre-computed hash of a random throwaway string. Compared against when the
@@ -29,7 +30,6 @@ function publicUser(
   } | null,
 ) {
   return {
-    token: signToken({ sub: user.id, exp: tokenExpiry() }),
     user: {
       id: user.id,
       username: user.username,
@@ -51,9 +51,27 @@ function publicUser(
   };
 }
 
+/**
+ * Cookie options for the auth token.
+ * - httpOnly: JavaScript cannot read the cookie (XSS protection)
+ * - secure: only sent over HTTPS
+ * - sameSite: 'strict' prevents CSRF from cross-origin requests
+ * - path: limited to /api to avoid leaking token on static asset requests
+ */
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: config.nodeEnv === "production",
+  sameSite: "strict" as const,
+  path: "/api",
+  maxAge: config.authTokenTtlHours * 60 * 60 * 1000, // ms
+};
+
 export const authController = {
   login: asyncHandler(async (req: Request, res: Response) => {
-    const { username, password } = req.body as { username: string; password: string };
+    const { username, password } = req.body as {
+      username: string;
+      password: string;
+    };
 
     const user = await prisma.user.findUnique({
       where: { username },
@@ -69,7 +87,16 @@ export const authController = {
       return fail(res, 401, "Invalid hospital code or password");
     }
 
-    return ok(res, publicUser(user, user.hospital), {
+    // Generate token
+    const token = signToken({ sub: user.id, exp: tokenExpiry() });
+
+    // Set token as httpOnly secure cookie — invisible to JavaScript
+    res.cookie("hbcr_token", token, COOKIE_OPTIONS);
+
+    // Also return token in response body for backward compatibility
+    // (e.g. environments where cookies don't work). The frontend can
+    // choose to ignore this and rely on the cookie.
+    return ok(res, { token, ...publicUser(user, user.hospital) }, {
       message: "Login successful",
     });
   }),
@@ -78,5 +105,16 @@ export const authController = {
     const user = req.user;
     if (!user) return fail(res, 401, "Authentication required");
     return ok(res, publicUser(user, user.hospital));
+  }),
+
+  logout: asyncHandler(async (_req: Request, res: Response) => {
+    // Clear the auth cookie
+    res.clearCookie("hbcr_token", {
+      path: "/api",
+      httpOnly: true,
+      secure: config.nodeEnv === "production",
+      sameSite: "strict",
+    });
+    return ok(res, null, { message: "Logged out successfully" });
   }),
 };
