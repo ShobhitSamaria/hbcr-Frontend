@@ -21,7 +21,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   AUTH_STORAGE_KEY,
   authApi,
-  readStoredToken,
   type AuthSession,
 } from "./api";
 
@@ -90,8 +89,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Re-validate a restored session in the background. If the token is
   // expired or the user was deactivated, the /me call fails and we log out.
+  // Always attempt re-validation when a stored session exists — the actual
+  // token is in an httpOnly cookie, not in localStorage.
   useEffect(() => {
-    if (!readStoredToken()) return;
+    if (!readStoredSession()) return;
     let cancelled = false;
     authApi
       .me()
@@ -124,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         session,
-        isAuthenticated: Boolean(session?.token),
+        isAuthenticated: Boolean(session?.user),
         login,
         logout,
       }}

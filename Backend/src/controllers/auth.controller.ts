@@ -61,7 +61,9 @@ function publicUser(
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: config.nodeEnv === "production",
-  sameSite: "strict" as const,
+  // "none" is required for cross-origin cookie delivery (Vercel→Render).
+  // CSRF is protected by the X-Requested-With custom header check.
+  sameSite: config.nodeEnv === "production" ? ("none" as const) : ("lax" as const),
   path: "/api",
   maxAge: config.authTokenTtlHours * 60 * 60 * 1000, // ms
 };
@@ -132,7 +134,7 @@ export const authController = {
       path: "/api",
       httpOnly: true,
       secure: config.nodeEnv === "production",
-      sameSite: "strict",
+      sameSite: config.nodeEnv === "production" ? "none" : "lax",
     });
     return ok(res, null, { message: "Logged out successfully" });
   }),
