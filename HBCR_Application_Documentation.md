@@ -1086,7 +1086,7 @@ Backend/
 │       ├── sideTables.routes.ts   # /patients/:id/side/*
 │       ├── icdo.routes.ts         # /icdo/*
 │       ├── icd10.routes.ts        # /icd10/*
-│       ├── aux.routes.ts          # /centres, /hospitals, /users, /dashboard/*
+│       ├── auxiliary.routes.ts     # /centres, /hospitals, /users, /dashboard/*
 │       └── health.routes.ts       # /health
 ├── prisma/
 │   ├── schema.prisma              # Prisma schema (1065 lines)

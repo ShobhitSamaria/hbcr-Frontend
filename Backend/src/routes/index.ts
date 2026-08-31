@@ -6,7 +6,7 @@ import { pathologyRouter } from "./pathology.routes.ts";
 import { familyHistoryRouter } from "./familyHistory.routes.ts";
 import { treatmentRouter } from "./treatment.routes.ts";
 import { followUpRouter } from "./followup.routes.ts";
-import { auxRouter } from "./aux.routes.ts";
+import { auxRouter } from "./auxiliary.routes.ts";
 import { healthRouter } from "./health.routes.ts";
 import { authRouter } from "./auth.routes.ts";
 import { icdoRouter } from "./icdo.routes.ts";
