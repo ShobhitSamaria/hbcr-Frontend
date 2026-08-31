@@ -75,6 +75,15 @@ export function createApp(): Application {
           ? true
           : config.corsOrigin.split(",").map((o) => o.trim()),
       credentials: true,
+      // Allow the CSRF custom header and Authorization for cross-origin requests.
+      // Without this, the browser's preflight (OPTIONS) response won't include
+      // these headers and the browser will strip them from the actual request.
+      allowedHeaders: [
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "Accept",
+      ],
     }),
   );
 

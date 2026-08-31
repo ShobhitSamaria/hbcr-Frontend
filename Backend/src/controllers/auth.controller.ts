@@ -68,10 +68,29 @@ const COOKIE_OPTIONS = {
 
 export const authController = {
   login: asyncHandler(async (req: Request, res: Response) => {
-    const { username, password } = req.body as {
-      username: string;
-      password: string;
-    };
+    // Extract credentials from Authorization header (HTTP Basic Auth format)
+    // instead of JSON body. This keeps the password out of the request payload
+    // visible in browser DevTools Network tab.
+    let username = "";
+    let password = "";
+
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Basic ")) {
+      // Decode base64 "username:password"
+      const decoded = Buffer.from(authHeader.slice(6), "base64").toString("utf-8");
+      const colonIndex = decoded.indexOf(":");
+      if (colonIndex > 0) {
+        username = decoded.slice(0, colonIndex);
+        password = decoded.slice(colonIndex + 1);
+      }
+    }
+
+    // Fallback: also accept credentials from body for backward compatibility
+    if (!username || !password) {
+      const body = req.body as { username?: string; password?: string };
+      username = username || body.username || "";
+      password = password || body.password || "";
+    }
 
     const user = await prisma.user.findUnique({
       where: { username },

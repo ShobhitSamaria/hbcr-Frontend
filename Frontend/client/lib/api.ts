@@ -177,7 +177,13 @@ export const authApi = {
   login: (username: string, password: string) =>
     send<AuthSession>("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ username, password }),
+      // Credentials sent via Authorization header (HTTP Basic Auth format)
+      // instead of JSON body. This removes the password from the request
+      // payload visible in browser DevTools Network tab.
+      // HTTPS still encrypts the header during transit.
+      headers: {
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+      },
     }),
   me: () => send<AuthSession>("/auth/me"),
   logout: () =>
