@@ -516,12 +516,13 @@ export function Step1Identifying({
               <Field
                 label="Flat / House No."
                 placeholder="House number"
+                required 
               />
               <Field label="Ward No." placeholder="Ward number" />
-              <Field label="Street / Road" placeholder="Street or road" />
-              <Field label="City" placeholder="City" />
+              <Field label="Street / Road" placeholder="Street or road" required />
+              <Field label="City" placeholder="City" required />
               <DistrictPincodeFields />
-              <Field label="Mobile number" placeholder="Mobile number" />
+              <Field label="Mobile number" placeholder="Mobile number" required /> 
               <Field
                 label="Email address"
                 type="email"
@@ -547,15 +548,21 @@ export function Step1Identifying({
             </label>
             {!sameAddress && (
               <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
+               <Field
+                     label="Permanent Flat / House No."
+                     placeholder="House number"
+                     required
+                     />
                 <Field
-                  label="Permanent Flat / House No."
-                  placeholder="House number"
-                />
+                      label="Permanent Street / Road"
+                      placeholder="Street or road"
+                      required
+                      />
                 <Field
-                  label="Permanent Street / Road"
-                  placeholder="Street or road"
-                />
-                <Field label="Permanent City" placeholder="City" />
+                     label="Permanent City"
+                     placeholder="City"
+                     required
+                     />
                 <DistrictPincodeFields prefix="Permanent " />
               </div>
             )}
