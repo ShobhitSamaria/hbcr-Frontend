@@ -260,6 +260,7 @@ function RegistrationInner({ setView }: RegistrationProps) {
       const apiErr = e as Error & {
         status?: number;
         fields?: { field?: string; message: string }[];
+        details?: Record<string, unknown>;
       };
       const mapped = mapValidationDetailsToErrors(apiErr.fields);
       if (apiErr.status === 422 && Object.keys(mapped).length > 0) {
@@ -267,6 +268,12 @@ function RegistrationInner({ setView }: RegistrationProps) {
         const target = stepForLabels(Object.keys(mapped));
         setStep(target);
         requestAnimationFrame(() => scrollToLabel(Object.keys(mapped)[0]));
+      } else if (apiErr.status === 409) {
+        // Unique constraint / duplicate field — show as banner error
+        // The backend already provides a user-friendly message
+        setSubmitError(
+          apiErr instanceof Error ? apiErr.message : "A duplicate value was detected. Please check and try again.",
+        );
       } else {
         setSubmitError(
           apiErr instanceof Error ? apiErr.message : "Could not save registration",
@@ -280,9 +287,6 @@ function RegistrationInner({ setView }: RegistrationProps) {
   if (submitted) {
     return <RegistrationSuccess setView={setView} />;
   }
-
-  console.log("validation.errors:", validation.errors);
-console.log("error keys:", Object.keys(validation.errors));
 
 
   return (

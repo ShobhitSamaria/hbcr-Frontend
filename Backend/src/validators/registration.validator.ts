@@ -7,11 +7,11 @@ import {
 } from "../../generated/prisma/enums.ts";
 import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim } from "./common.ts";
 
-// HBCR-2024-0185 style: HBCR-YYYY-NNNNN or HBCR-YYYY-NNNN
-const HBCR_RE = /^HBCR-\d{4}-\d{4,5}$/;
+// Registration Number: last 2 digits of year + 5-digit sequence (e.g. 2600001)
+const REG_NO_RE = /^\d{7}$/;
 const PIN_RE = /^[1-9][0-9]{5}$/;
 
-export const HBCR_REGISTRATION_NO_REGEX = HBCR_RE;
+export const HBCR_REGISTRATION_NO_REGEX = REG_NO_RE;
 
 /**
  * Validator for the full HBCR registration record (Step 1 fields 1-8 +

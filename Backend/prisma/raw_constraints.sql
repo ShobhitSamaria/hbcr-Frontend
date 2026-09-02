@@ -65,10 +65,15 @@ DO $$ BEGIN
 END $$;
 
 -- registrations: hbcr_registration_no shape
+-- Format: last 2 digits of year + last 5 digits of reference number (e.g. 2600001)
+DO $$ BEGIN
+  ALTER TABLE "hbcr.registrations"
+      DROP CONSTRAINT IF EXISTS hbcr_reg_no_format;
+END $$;
 DO $$ BEGIN
   ALTER TABLE "hbcr.registrations"
       ADD CONSTRAINT hbcr_reg_no_format
-      CHECK (hbcr_registration_no ~ '^HBCR-[0-9]{4}-[0-9]{4,5}$');
+      CHECK (hbcr_registration_no ~ '^[0-9]{7}$');
   EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 

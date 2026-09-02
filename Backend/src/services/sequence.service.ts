@@ -53,7 +53,7 @@ export const sequenceService = {
       // Example: "961" + "00001" = "96100001"
       const referenceNo = `${hospitalCode}${String(sequence).padStart(5, "0")}`;
 
-      // Format Registration Number: last 2 digits of current year + last 5 digits of reference
+      // Format Registration Number: last 2 digits of year + last 5 digits of Reference Number
       // Example: Year 2026, reference "96100001" → "26" + "00001" = "2600001"
       const currentYear = new Date().getFullYear();
       const yearSuffix = String(currentYear).slice(-2);
