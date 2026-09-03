@@ -279,5 +279,20 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     }
   }
 
+  // 19. Relationship to Cancer — if Yes, all sub-fields are mandatory
+  if (values["19. Relationship to Cancer / Degree of Relationship"] === "Yes") {
+    const fhRequired = (label: string, msg: string) => {
+      const v = values[label];
+      if (v === undefined || v === null || String(v).trim() === "") {
+        out[label] = msg;
+      }
+    };
+    fhRequired("Relationship with Cancer", "Please select Relationship with Cancer");
+    fhRequired("Degree of Relationship", "Please select Degree of Relationship");
+    fhRequired("Primary site of tumor for relative", "Please select Primary Site");
+    fhRequired("Age at diagnosis", "Age at Diagnosis is required");
+    fhRequired("Date of diagnosis", "Date of Diagnosis is required");
+  }
+
   return out;
 }

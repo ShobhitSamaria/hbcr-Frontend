@@ -676,6 +676,24 @@ function FamilialCancerSection({
   setFamilyHistory: (v: string) => void;
 }) {
   const readOnly = useForceReadOnly();
+  const ctx = useFormStateOptional();
+
+  // Sub-field state for "Yes" conditional fields
+  const [relationshipCancer, setRelationshipCancer] = useState(
+    () => (ctx?.values.current["Relationship with Cancer"] as string) ?? ""
+  );
+  const [degreeRelationship, setDegreeRelationship] = useState(
+    () => (ctx?.values.current["Degree of Relationship"] as string) ?? ""
+  );
+
+  const handleRelationshipCancer = (v: string) => {
+    setRelationshipCancer(v);
+    ctx?.set("Relationship with Cancer", v);
+  };
+  const handleDegreeRelationship = (v: string) => {
+    setDegreeRelationship(v);
+    ctx?.set("Degree of Relationship", v);
+  };
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
@@ -720,7 +738,7 @@ function FamilialCancerSection({
         <div className="mt-5 space-y-5 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
           <div>
             <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Relationship with Cancer
+              Relationship with Cancer <span className="text-[#d04a4a]">*</span>
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
@@ -728,7 +746,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
-                  required
+                  checked={relationshipCancer === "Same Cancer"}
+                  onChange={() => handleRelationshipCancer("Same Cancer")}
                   className="accent-[#0b7d87]"
                 />
                 Same Cancer
@@ -738,7 +757,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
-                  required
+                  checked={relationshipCancer === "Other Cancer"}
+                  onChange={() => handleRelationshipCancer("Other Cancer")}
                   className="accent-[#0b7d87]"
                 />
                 Other Cancer
@@ -747,7 +767,7 @@ function FamilialCancerSection({
           </div>
           <div>
             <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Degree of Relationship
+              Degree of Relationship <span className="text-[#d04a4a]">*</span>
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
@@ -755,7 +775,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
-                  required
+                  checked={degreeRelationship === "First Degree Relative"}
+                  onChange={() => handleDegreeRelationship("First Degree Relative")}
                   className="accent-[#0b7d87]"
                 />
                 First Degree Relative
@@ -765,7 +786,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
-                  required
+                  checked={degreeRelationship === "Second Degree Relative"}
+                  onChange={() => handleDegreeRelationship("Second Degree Relative")}
                   className="accent-[#0b7d87]"
                 />
                 Second Degree Relative
