@@ -23,6 +23,8 @@ import {
 const PIN_RE = /^[1-9][0-9]{5}$/;
 const MOBILE_RE = /^[6-9][0-9]{9}$/;
 const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+// Names: only alphabets, spaces, hyphens, apostrophes, and periods
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
 
 export type Step1Values = {
   "1. Name of the Reporting Institution (RI)"?: string;
@@ -118,9 +120,16 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
     required("Please enter the patient's first name"),
     minLen(2),
     maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
   ],
-  "Middle Name": [maxLen(100)],
-  "Last Name": [maxLen(100)],
+  "Middle Name": [
+    maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
+  "Last Name": [
+    maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "10. Date of Birth": [required("Date of birth is required"), isDate(), notFutureDate()],
   "11. Age": [required("Age is required"), isInt(), range(0, 130, "Age must be between 0 and 130")],
   "12. Gender": [required("Please select a gender")],
@@ -135,12 +144,12 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "Height (cm)": [
     required("Height is required"),
     isInt(),
-    range(0, 300, "Height must be between 0 and 300 cm"),
+    range(1, 300, "Height must be between 1 and 300 cm"),
   ],
   "Weight (kg)": [
     required("Weight is required"),
     isInt(),
-    range(0, 700, "Weight must be between 0 and 700 kg"),
+    range(1, 700, "Weight must be between 1 and 700 kg"),
   ],
   "Ward No.": [maxLen(32)],
   "Flat / House No.": [required("Flat/House number is required"), maxLen(64)],

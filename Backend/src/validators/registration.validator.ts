@@ -5,7 +5,17 @@ import {
   ReferralType,
   RegistrationStatus,
 } from "../../generated/prisma/enums.ts";
-import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim } from "./common.ts";
+import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+
+/**
+ * Positive number greater than 0. Allows decimals.
+ */
+const positiveNumber = (min: number, msg: string) => (v: unknown) => {
+  if (v === undefined || v === null) return undefined;
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n) || n <= min) throw new ValidationFieldError(msg);
+  return n;
+};
 
 // Registration Number: last 2 digits of year + 5-digit sequence (e.g. 2600001)
 const REG_NO_RE = /^\d{7}$/;
@@ -38,8 +48,8 @@ export const createRegistrationValidator = makeValidator({
   referralFacilityRegDate: [isDate()],
   dateOfFirstDiagnosis: [isDate()],
   microscopicConfirmationLater: [isBoolean()],
-  anthropometricHeightCm: [isNumber("must be a number")],
-  anthropometricWeightKg: [isNumber("must be a number")],
+  anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],
+  anthropometricWeightKg: [isNumber("must be a number"), positiveNumber(0, "Weight must be greater than 0")],
   maritalStatus: [inEnum(MaritalStatus)],
   maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],
@@ -70,8 +80,8 @@ export const updateRegistrationValidator = makeValidator({
   referralFacilityRegDate: [isDate()],
   dateOfFirstDiagnosis: [isDate()],
   microscopicConfirmationLater: [isBoolean()],
-  anthropometricHeightCm: [isNumber("must be a number")],
-  anthropometricWeightKg: [isNumber("must be a number")],
+  anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],
+  anthropometricWeightKg: [isNumber("must be a number"), positiveNumber(0, "Weight must be greater than 0")],
   maritalStatus: [inEnum(MaritalStatus)],
   maritalStatusOther: [isString(), trim(), maxLen(128)],
   education: [inEnum(Education)],

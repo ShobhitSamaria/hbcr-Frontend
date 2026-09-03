@@ -1,7 +1,9 @@
 import { Gender } from "../../generated/prisma/enums.ts";
-import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, matches, maxLen, required, trim, ValidationFieldError } from "./common.ts";
 
-const NAME_PART = [isString(), trim(), maxLen(100)];
+// Names: only alphabets, spaces, hyphens, apostrophes, and periods
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const NAME_PART = [isString(), trim(), maxLen(100), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")];
 
 /**
  * Derive `fullName` from the First / Middle / Last parts when any part is
