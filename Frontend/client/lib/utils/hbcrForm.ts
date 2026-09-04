@@ -44,7 +44,7 @@ export function extractPatient(v: Values): {
   firstName: string | null;
   middleName: string | null;
   lastName: string | null;
-  age: number | null;
+  age: string | null;
   dateOfBirth: string | null;
   gender: Gender;
   healthSchemeBeneficiary: boolean;
@@ -63,7 +63,7 @@ export function extractPatient(v: Values): {
     firstName,
     middleName,
     lastName,
-    age: valInt(v, "11. Age"),
+    age: val(v, "11. Age") || null,
     dateOfBirth: val(v, "10. Date of Birth"),
     gender,
     healthSchemeBeneficiary:

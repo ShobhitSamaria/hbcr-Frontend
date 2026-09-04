@@ -1,7 +1,7 @@
 export type Patient = {
   id: string;
   name: string;
-  age: number;
+  age: string;
   gender: string;
   hospital: string;
   diagnosis: string;
@@ -17,7 +17,7 @@ const patients: Patient[] = [
   {
     id: "HBCR-2024-0184",
     name: "Anita Sharma",
-    age: 54,
+    age: "54 Years 2 Months",
     gender: "Female",
     hospital: "AIIMS Delhi",
     diagnosis: "Breast carcinoma",
@@ -29,7 +29,7 @@ const patients: Patient[] = [
   {
     id: "HBCR-2024-0183",
     name: "Rajesh Kumar",
-    age: 67,
+    age: "67 Years 8 Months",
     gender: "Male",
     hospital: "Tata Memorial",
     diagnosis: "Lung carcinoma",
@@ -41,7 +41,7 @@ const patients: Patient[] = [
   {
     id: "HBCR-2024-0182",
     name: "Meena Patel",
-    age: 42,
+    age: "42 Years 5 Months",
     gender: "Female",
     hospital: "Civil Hospital",
     diagnosis: "Cervical cancer",
@@ -53,7 +53,7 @@ const patients: Patient[] = [
   {
     id: "HBCR-2024-0181",
     name: "Suresh Nair",
-    age: 71,
+    age: "71 Years 1 Month",
     gender: "Male",
     hospital: "KEM Hospital",
     diagnosis: "Prostate cancer",
@@ -65,7 +65,7 @@ const patients: Patient[] = [
   {
     id: "HBCR-2024-0180",
     name: "Fatima Begum",
-    age: 49,
+    age: "49 Years 10 Months",
     gender: "Female",
     hospital: "AIIMS Delhi",
     diagnosis: "Ovarian carcinoma",

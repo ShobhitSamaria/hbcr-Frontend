@@ -90,7 +90,7 @@ export function FollowUpNewVisit({ registrationId, onDone }: Props) {
                 </span>
                 <input
                   readOnly
-                  value={`${detail.patient.fullName}${detail.patient.age ? `, ${detail.patient.age} yrs` : ""}`}
+                  value={`${detail.patient.fullName}${detail.patient.age ? `, ${detail.patient.age}` : ""}`}
                   className="h-10 w-full cursor-not-allowed rounded-lg border border-[#e4edef] bg-[#f2f6f7] px-3 text-xs font-semibold text-[#244c5b]"
                 />
               </label>

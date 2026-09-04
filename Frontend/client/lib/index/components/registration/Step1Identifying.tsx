@@ -196,16 +196,17 @@ export function Step1Identifying({
   const ageFromDob = (dobStr: string): string => {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dobStr);
     if (!m) return "";
-    const y = Number(m[1]);
-    const mo = Number(m[2]);
-    const d = Number(m[3]);
-    if (mo < 1 || mo > 12 || d < 1 || d > 31) return "";
-    const now = new Date();
-    let age = now.getFullYear() - y;
-    const monthDiff = now.getMonth() + 1 - mo;
-    const dayDiff = now.getDate() - d;
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) age--;
-    return age >= 0 ? String(age) : "";
+    const birthDate = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    if (Number.isNaN(birthDate.getTime())) return "";
+    const today = new Date();
+    let years = today.getFullYear() - birthDate.getFullYear();
+    let months = today.getMonth() - birthDate.getMonth();
+    if (today.getDate() < birthDate.getDate()) months--;
+    if (months < 0) { years--; months += 12; }
+    if (years < 0) return "";
+    return years === 0
+      ? `${months} ${months === 1 ? "Month" : "Months"}`
+      : `${years} ${years === 1 ? "Year" : "Years"} ${months} ${months === 1 ? "Month" : "Months"}`;
   };
   const handleDobChange = (v: string) => {
     setDob(v);
@@ -316,8 +317,8 @@ export function Step1Identifying({
         />
         <Field
           label="11. Age"
-          type="number"
-          placeholder="Years"
+          type="text"
+          placeholder="Auto-calculated from DOB"
           value={ageFromDob(dob)}
           readOnly
           required

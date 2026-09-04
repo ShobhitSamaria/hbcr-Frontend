@@ -131,7 +131,7 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
     pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
   ],
   "10. Date of Birth": [required("Date of birth is required"), isDate(), notFutureDate()],
-  "11. Age": [required("Age is required"), isInt(), range(0, 130, "Age must be between 0 and 130")],
+  "11. Age": [required("Age is required"), maxLen(32)],
   "12. Gender": [required("Please select a gender")],
   "16. Marital status": [required("Please select a marital status")],
   "17. Education": [required("Please select an education level")],
