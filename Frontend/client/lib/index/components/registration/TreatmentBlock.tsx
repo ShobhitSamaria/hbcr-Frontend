@@ -5,11 +5,13 @@ import { TreatmentTable } from "./TreatmentTable";
 type TreatmentBlockProps = {
   title: string;
   requiredChoice?: boolean;
+  onSelectionChange?: (selectedRows: string[]) => void;
 };
 
 export function TreatmentBlock({
   title,
   requiredChoice = false,
+  onSelectionChange,
 }: TreatmentBlockProps) {
   const ctx = useFormStateOptional();
   const readOnly = useForceReadOnly();
@@ -19,6 +21,11 @@ export function TreatmentBlock({
   useEffect(() => {
     if (requiredChoice) ctx?.set(title, given);
   }, [given, requiredChoice, title, ctx]);
+
+  // Write treatment type to form context for validation
+  useEffect(() => {
+    if (type) ctx?.set(title + " type", type);
+  }, [type, title, ctx]);
   // When "Non-Allopathic" is chosen, the Treatment Modalities table is
   // disabled and any previously entered rows are cleared (the table is
   // remounted via `key` so its local state resets).
@@ -91,6 +98,7 @@ export function TreatmentBlock({
             key={type}
             title="Treatment modalities"
             disabled={readOnly || nonAllopathic}
+            onSelectionChange={onSelectionChange}
           />
         </>
       )}

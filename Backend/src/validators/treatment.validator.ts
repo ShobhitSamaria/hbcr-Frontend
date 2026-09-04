@@ -12,21 +12,76 @@ import {
   TreatmentType,
   YesNoUnknown,
 } from "../../generated/prisma/enums.ts";
-import { isDate, inEnum, isString, makeValidator, maxLen, required, trim } from "./common.ts";
+import { isDate, inEnum, isString, makeValidator, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+import type { ValidatorRule } from "./common.ts";
+
+/**
+ * Conditional required: field is mandatory only when stagingSystem is TNM.
+ */
+const requiredIfTNM = (
+  msg: string,
+): ValidatorRule<Record<string, unknown>> => (v, all) => {
+  if (all.stagingSystem !== "TNM") return v;
+  if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+    throw new ValidationFieldError(msg);
+  }
+  return v;
+};
+
+/**
+ * Conditional required: field is mandatory only when treatmentGivenChoice is YES.
+ */
+const requiredIfYes = (
+  msg: string,
+): ValidatorRule<Record<string, unknown>> => (v, all) => {
+  if (all.treatmentGivenChoice !== "YES") return v;
+  if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+    throw new ValidationFieldError(msg);
+  }
+  return v;
+};
+
+/**
+ * Conditional required: ECOG grade is mandatory when ecogStatus is KNOWN.
+ */
+const requiredIfKnown = (
+  msg: string,
+): ValidatorRule<Record<string, unknown>> => (v, all) => {
+  if (all.ecogStatus !== "KNOWN") return v;
+  if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+    throw new ValidationFieldError(msg);
+  }
+  return v;
+};
 
 export const createTreatmentValidator = makeValidator({
   treatmentStage: [required(), inEnum(TreatmentStage)],
   treatmentGivenChoice: [inEnum(YesNoUnknown)],
-  treatmentType: [inEnum(TreatmentType)],
+  treatmentType: [
+    requiredIfYes("Treatment Type is required when Treatment Given is Yes"),
+    inEnum(TreatmentType),
+  ],
   clinicalExtentOfDisease: [inEnum(ClinicalExtent)],
   stagingSystem: [inEnum(StagingSystem)],
   stagingSystemValue: [isString(), trim(), maxLen(512)],
-  tnmT: [isString(), trim(), maxLen(16)],
-  tnmN: [isString(), trim(), maxLen(16)],
-  tnmM: [isString(), trim(), maxLen(16)],
+  tnmT: [
+    requiredIfTNM("T is required when staging system is TNM"),
+    isString(), trim(), maxLen(16),
+  ],
+  tnmN: [
+    requiredIfTNM("N is required when staging system is TNM"),
+    isString(), trim(), maxLen(16),
+  ],
+  tnmM: [
+    requiredIfTNM("M is required when staging system is TNM"),
+    isString(), trim(), maxLen(16),
+  ],
   compositeStage: [isString(), trim(), maxLen(256)],
   ecogStatus: [inEnum(EcogStatus)],
-  ecogGrade: [inEnum(EcogGrade)],
+  ecogGrade: [
+    requiredIfKnown("ECOG Grade is required when Performance Status is Known"),
+    inEnum(EcogGrade),
+  ],
   targetedTherapyType: [inEnum(TargetedTherapy)],
   targetedTherapyOtherSpecify: [isString(), trim(), maxLen(255)],
 });

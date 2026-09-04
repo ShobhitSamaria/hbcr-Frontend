@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFormStateOptional } from "@/lib/formState";
 import { useForceReadOnly } from "@/lib/formState";
 import { Field, SelectField, TextAreaField } from "../FormFields";
 import { TargetedTherapy } from "./TargetedTherapy";
@@ -18,9 +19,17 @@ const STAGING_SYSTEM_OPTIONS = [
 
 export function ClinicalTreatment() {
   const readOnly = useForceReadOnly();
+  const ctx = useFormStateOptional();
   const [ecog, setEcog] = useState("Unknown");
   const [stagingSystem, setStagingSystem] = useState("");
+  const [selectedModalities, setSelectedModalities] = useState<string[]>([]);
   const isTNM = stagingSystem === "TNM";
+
+  // Write ecog status to form context for validation
+  const handleEcogChange = (v: string) => {
+    setEcog(v);
+    ctx?.set("29(c). Performance Status (ECOG)", v);
+  };
 
   return (
     <div className="space-y-7">
@@ -178,6 +187,10 @@ export function ClinicalTreatment() {
       <TreatmentBlock
         title="29. Treatment Given Prior to Registration at RI / Outside RI"
         requiredChoice
+        onSelectionChange={(rows) => {
+          setSelectedModalities(rows);
+          ctx?.set("29. Treatment modalities selected", rows);
+        }}
       />
       <TargetedTherapy />
       <div>
@@ -191,7 +204,7 @@ export function ClinicalTreatment() {
               type="radio"
               name="ecog-status"
               checked={ecog === "Known"}
-              onChange={() => setEcog("Known")}
+              onChange={() => handleEcogChange("Known")}
               className="accent-[#0b7d87]"
             />
             Known
@@ -202,7 +215,7 @@ export function ClinicalTreatment() {
               type="radio"
               name="ecog-status"
               checked={ecog === "Unknown"}
-              onChange={() => setEcog("Unknown")}
+              onChange={() => handleEcogChange("Unknown")}
               className="accent-[#0b7d87]"
             />
             Unknown

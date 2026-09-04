@@ -39,6 +39,8 @@ export type Step3Values = {
   Remarks?: string;
   "33. Contact Number"?: string;
   "34. Designation"?: string;
+  "29. Treatment Given Prior to Registration at RI / Outside RI type"?: string;
+  "29. Treatment modalities selected"?: string[];
 };
 
 const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
@@ -93,6 +95,43 @@ export function validateStep3(values: Record<string, unknown>): Record<string, s
     const v = values["Specify targeted therapy"];
     if (!v || String(v).trim() === "") {
       out["Specify targeted therapy"] = "Please specify the targeted therapy";
+    }
+  }
+
+  // 28(a). When Staging System = TNM, T/N/M are mandatory
+  if (staging === "TNM") {
+    const tnmRequired = (label: string, msg: string) => {
+      const v = values[label];
+      if (v === undefined || v === null || String(v).trim() === "") {
+        out[label] = msg;
+      }
+    };
+    tnmRequired("T", "T is required when staging system is TNM");
+    tnmRequired("N", "N is required when staging system is TNM");
+    tnmRequired("M", "M is required when staging system is TNM");
+  }
+
+  // 29. When Treatment Given = Yes, Treatment Type must be selected
+  const treatmentTypeKey = "29. Treatment Given Prior to Registration at RI / Outside RI" + " type";
+  if (treatmentGiven && String(treatmentGiven).trim() === "Yes") {
+    const tt = values[treatmentTypeKey];
+    if (tt === undefined || tt === null || String(tt).trim() === "") {
+      out[treatmentTypeKey] = "Treatment type is required when Treatment Given is Yes";
+    }
+
+    // At least one treatment modality must be selected when Yes
+    const mods = values["29. Treatment modalities selected"];
+    if (!Array.isArray(mods) || mods.length === 0) {
+      out["29. Treatment modalities selected"] = "At least one treatment modality must be selected";
+    }
+  }
+
+  // 29(c). When Performance Status (ECOG) = Known, ECOG Grade ("If known") is mandatory
+  const ecogStatus = values["29(c). Performance Status (ECOG)"];
+  if (ecogStatus && String(ecogStatus).trim() === "Known") {
+    const grade = values["If known"];
+    if (grade === undefined || grade === null || String(grade).trim() === "") {
+      out["If known"] = "ECOG Grade is required when Performance Status is Known";
     }
   }
 

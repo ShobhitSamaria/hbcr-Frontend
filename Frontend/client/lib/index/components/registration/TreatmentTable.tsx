@@ -4,9 +4,10 @@ import { treatmentRows } from "../../data";
 type TreatmentTableProps = {
   title: string;
   disabled?: boolean;
+  onSelectionChange?: (selectedRows: string[]) => void;
 };
 
-export function TreatmentTable({ title, disabled = false }: TreatmentTableProps) {
+export function TreatmentTable({ title, disabled = false, onSelectionChange }: TreatmentTableProps) {
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <div>
@@ -36,11 +37,13 @@ export function TreatmentTable({ title, disabled = false }: TreatmentTableProps)
                   disabled={disabled}
                   checked={active}
                   onChange={(e) =>
-                    setSelected((items) =>
-                      e.target.checked
+                    setSelected((items) => {
+                      const next = e.target.checked
                         ? [...items, row]
-                        : items.filter((item) => item !== row),
-                    )
+                        : items.filter((item) => item !== row);
+                      onSelectionChange?.(next);
+                      return next;
+                    })
                   }
                   className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
                 />
