@@ -115,7 +115,7 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "7(d). District": [maxLen(64)],
   "7(e). Pincode": [pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
   "7(f). Date of Registration": [isDate(), notFutureDate()],
-  "8. Date of first diagnosis": [required(), isDate()],
+  "8. Date of first diagnosis": [required(), isDate(), notFutureDate()],
   "First Name": [
     required("Please enter the patient's first name"),
     minLen(2),
@@ -251,14 +251,22 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
       continue;
     }
     const numVal = values[numLabel];
-    // g). Other does not require a number — the input is disabled
-    if (label === "g). Other") continue;
+    // g). Other requires both number AND name when Yes is selected
+    if (label === "g). Other") {
+      const nameVal = values["g). Other name"];
+      if (numVal === undefined || numVal === null || String(numVal).trim() === "") {
+        out[numLabel] = "Other ID number is required when Yes is selected";
+      }
+      if (nameVal === undefined || nameVal === null || String(nameVal).trim() === "") {
+        out["g). Other name"] = "Other ID name is required when Yes is selected";
+      }
+      continue;
+    }
     if (numVal === undefined || numVal === null || String(numVal).trim() === "") {
       out[numLabel] = `${label.replace('). ', '')} number is required when Yes is selected`;
     } else if (pattern && !pattern.test(String(numVal).trim())) {
       out[numLabel] = formatMsg ?? `Invalid format for ${label}`;
     }
-    // g). Other does not require number or name — the inputs are disabled
   }
 
   // 13(b). Beneficiary of Health Scheme — if Yes, details required
