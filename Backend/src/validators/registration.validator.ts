@@ -5,7 +5,7 @@ import {
   ReferralType,
   RegistrationStatus,
 } from "../../generated/prisma/enums.ts";
-import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
 /**
  * Positive number greater than 0. Allows decimals.
@@ -38,14 +38,23 @@ export const createRegistrationValidator = makeValidator({
   unitNumber: [required(), isString(), trim(), maxLen(32)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
-  caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],
+  caseRegisteredThroughOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.caseRegisteredThrough === "OTHER" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the case registered through (Other)");
+    }
+    return v;
+  }],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
-  referralFacilityPincode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
+  referralFacilityPincode: [isString(), trim(), maxLen(6), (v: unknown) => {
+    if (v === undefined || v === null || v === "") return v;
+    if (!PIN_RE.test(String(v))) throw new ValidationFieldError("must be a 6-digit Indian PIN code");
+    return v;
+  }],
   referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
-  referralFacilityRegDate: [isDate()],
+  referralFacilityRegDate: [isDate(), notFutureDate()],
   dateOfFirstDiagnosis: [isDate()],
   microscopicConfirmationLater: [isBoolean()],
   anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],
@@ -70,14 +79,23 @@ export const updateRegistrationValidator = makeValidator({
   unitNumber: [required(), isString(), trim(), maxLen(32)],
   dateOfReporting: [isDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
-  caseRegisteredThroughOther: [isString(), trim(), maxLen(128)],
+  caseRegisteredThroughOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.caseRegisteredThrough === "OTHER" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the case registered through (Other)");
+    }
+    return v;
+  }],
   referralType: [inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
-  referralFacilityPincode: [isString(), trim(), maxLen(6), matches(PIN_RE, "must be a 6-digit Indian PIN code")],
+  referralFacilityPincode: [isString(), trim(), maxLen(6), (v: unknown) => {
+    if (v === undefined || v === null || v === "") return v;
+    if (!PIN_RE.test(String(v))) throw new ValidationFieldError("must be a 6-digit Indian PIN code");
+    return v;
+  }],
   referralFacilityHospitalLabNh: [isString(), trim(), maxLen(255)],
-  referralFacilityRegDate: [isDate()],
+  referralFacilityRegDate: [isDate(), notFutureDate()],
   dateOfFirstDiagnosis: [isDate()],
   microscopicConfirmationLater: [isBoolean()],
   anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],

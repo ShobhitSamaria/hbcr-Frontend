@@ -183,6 +183,26 @@ export function parseIdParam(value: unknown, name = "id"): number {
   return n;
 }
 
+export const notFutureDate = (msg = "must not be a future date"): ValidatorRule<unknown> => (v) => {
+  if (v === undefined || v === null || v === "") return undefined;
+  // Handle both string dates and Date objects (from isDate() in the chain)
+  let d: Date;
+  if (v instanceof Date) {
+    d = v;
+  } else if (typeof v === "string") {
+    // Validate format inline (same as isDate) so we work whether isDate ran first or not
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) throw new ValidationFieldError(msg);
+    d = new Date(v + "T00:00:00Z");
+    if (Number.isNaN(d.getTime())) throw new ValidationFieldError(msg);
+  } else {
+    throw new ValidationFieldError(msg);
+  }
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  if (d > today) throw new ValidationFieldError(msg);
+  return d;
+};
+
 // Sanity check that the helpers compile cleanly under `tsx` (excluded via
 // tree-shake on import). Keeping the import warm forces single-source truth.
 void FIELD_RE;

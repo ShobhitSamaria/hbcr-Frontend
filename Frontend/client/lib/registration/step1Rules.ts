@@ -179,6 +179,14 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
 export function validateStep1(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step1Rules, values);
 
+  // 6. Case Registered Through — if Other, the text field is mandatory
+  if (values["6. Case Registered Through (Patient's first reporting at RI)"] === "Other") {
+    const other = values["6(a). Case Registered Through (Other)"];
+    if (other === undefined || other === null || String(other).trim() === "") {
+      out["6(a). Case Registered Through (Other)"] = "Please specify the case registered through (Other)";
+    }
+  }
+
   // 7. Referral conditional sub-fields
   if (values["7. Type of referral"] === "Other Hospital/Health Facility") {
     const requiredIf = (label: string, msg: string) => {
