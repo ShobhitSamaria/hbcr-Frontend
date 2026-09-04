@@ -368,6 +368,8 @@ export function ToggleDetails({ title, items, required }: ToggleDetailsProps) {
               <input
                 placeholder="Duration (Months)"
                 type="number"
+                min="1"
+                step="1"
                 disabled={!isYes || isReadOnlyByContext}
                 value={durations[item] ?? ""}
                 onChange={(e) => handleDuration(item, e.target.value)}

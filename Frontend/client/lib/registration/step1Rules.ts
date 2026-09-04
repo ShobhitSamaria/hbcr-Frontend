@@ -324,6 +324,11 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
         const dur = values[durationKey];
         if (dur === undefined || dur === null || String(dur).trim() === "") {
           out[durationKey] = "Duration (Months) is required when Yes is selected";
+        } else {
+          const n = Number(dur);
+          if (!Number.isFinite(n) || !Number.isInteger(n) || n < 1) {
+            out[durationKey] = "Duration must be a positive whole number (minimum 1)";
+          }
         }
       }
     }
