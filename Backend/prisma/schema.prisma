@@ -590,6 +590,7 @@ model PatientAddress {
   pinCode      String?     @map("pin_code") @db.VarChar(6)
   mobileNumber String?     @map("mobile_number") @db.VarChar(15)
   email        String?     @db.VarChar(255)
+  durationStay  Int?        @map("durationStay") @db.SmallInt
 
   patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
 

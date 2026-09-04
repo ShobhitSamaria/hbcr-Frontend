@@ -539,6 +539,9 @@ export function Step1Identifying({
                 label="Duration of Stay at the above address (in years)"
                 type="number"
                 placeholder="e.g. 5"
+                min={0}
+                max={150}
+                step={1}
                 required
               />
             </div>
@@ -654,16 +657,22 @@ export function Step1Identifying({
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label="Height (cm)"
-            placeholder="Enter height"
-            type="number"
-            required
-          />
+                placeholder="Enter height"
+                type="number"
+                min={1}
+                max={300}
+                step={1}
+                required
+              />
           <Field
             label="Weight (kg)"
-            placeholder="Enter weight"
-            type="number"
-            required
-          />
+                placeholder="Enter weight"
+                type="number"
+                min={1}
+                max={700}
+                step={1}
+                required
+              />
         </div>
       </div>
       {/* 19. Relationship to Cancer / Degree of Relationship */}

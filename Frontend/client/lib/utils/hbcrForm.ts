@@ -84,6 +84,7 @@ export function extractAddresses(v: Values): Array<{
   pinCode?: string;
   mobileNumber?: string;
   email?: string;
+  durationStay?: number;
 }> {
   const urbanRural = val(v, "Urban / Rural");
   const res = {
@@ -101,6 +102,12 @@ export function extractAddresses(v: Values): Array<{
     pinCode: val(v, "PIN Code") ?? undefined,
     mobileNumber: val(v, "Mobile number") ?? undefined,
     email: val(v, "Email address") ?? undefined,
+    durationStay: (() => {
+      const raw = val(v, "Duration of Stay at the above address (in years)");
+      if (raw === undefined || raw === null || raw === "") return undefined;
+      const n = Number(raw);
+      return Number.isFinite(n) && Number.isInteger(n) ? n : undefined;
+    })(),
   };
   return [res];
 }

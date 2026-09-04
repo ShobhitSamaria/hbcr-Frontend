@@ -21,6 +21,9 @@ type FieldProps = {
    * persist under "23.1 Code") pass an explicit `stateKey`.
    */
   stateKey?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 };
 
 export function Field({
@@ -35,6 +38,9 @@ export function Field({
   name,
   maxLength,
   stateKey,
+  min,
+  max,
+  step,
 }: FieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
@@ -79,6 +85,9 @@ export function Field({
         onBlur={onBlur}
         placeholder={placeholder}
         name={name ?? label}
+        {...(min !== undefined ? { min } : {})}
+        {...(max !== undefined ? { max } : {})}
+        {...(step !== undefined ? { step } : {})}
         aria-invalid={shouldShow ? true : undefined}
         data-error={shouldShow ? "true" : undefined}
         className={
