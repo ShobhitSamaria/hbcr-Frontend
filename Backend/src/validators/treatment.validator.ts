@@ -97,7 +97,16 @@ export const createTreatmentValidator = makeValidator({
     inEnum(EcogGrade),
   ],
   targetedTherapyType: [inEnum(TargetedTherapy)],
-  targetedTherapyOtherSpecify: [isString(), trim(), maxLen(255)],
+  targetedTherapyOtherSpecify: [
+    (v, all) => {
+      if (all.targetedTherapyType !== "OTHERS_SPECIFY") return v;
+      if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+        throw new ValidationFieldError("Please specify the Targeted Therapy (Others)");
+      }
+      return v;
+    },
+    isString(), trim(), maxLen(255),
+  ],
 });
 
 export const updateTreatmentValidator = createTreatmentValidator;

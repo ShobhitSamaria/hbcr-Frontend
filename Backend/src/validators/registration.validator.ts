@@ -70,7 +70,12 @@ export const createRegistrationValidator = makeValidator({
     return v;
   }],
   education: [inEnum(Education)],
-  educationOther: [isString(), trim(), maxLen(128)],
+  educationOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.education === "OTHERS" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the education (Other)");
+    }
+    return v;
+  }],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
@@ -116,7 +121,12 @@ export const updateRegistrationValidator = makeValidator({
     return v;
   }],
   education: [inEnum(Education)],
-  educationOther: [isString(), trim(), maxLen(128)],
+  educationOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.education === "OTHERS" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the education (Other)");
+    }
+    return v;
+  }],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],

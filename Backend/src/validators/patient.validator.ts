@@ -39,7 +39,12 @@ export const createPatientValidator = makeValidator({
   dateOfBirth: [isDate(), notFutureDate()],
   gender: [required(), inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
-  healthSchemeDetails: [isString(), trim(), maxLen(255)],
+  healthSchemeDetails: [isString(), trim(), maxLen(255), (v: unknown, all: Record<string, unknown>) => {
+    if (all.healthSchemeBeneficiary === true && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please provide health scheme details (Beneficiary = Yes)");
+    }
+    return v;
+  }],
 });
 
 export const updatePatientValidator = makeValidator({
@@ -56,7 +61,12 @@ export const updatePatientValidator = makeValidator({
   dateOfBirth: [isDate(), notFutureDate()],
   gender: [inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
-  healthSchemeDetails: [isString(), trim(), maxLen(255)],
+  healthSchemeDetails: [isString(), trim(), maxLen(255), (v: unknown, all: Record<string, unknown>) => {
+    if (all.healthSchemeBeneficiary === true && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please provide health scheme details (Beneficiary = Yes)");
+    }
+    return v;
+  }],
 });
 
 // Helper used by ID search (path param)
