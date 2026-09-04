@@ -10,6 +10,7 @@ import {
   isString,
   makeValidator,
   maxLen,
+  notFutureDate,
   trim,
   ValidationFieldError,
 } from "./common.ts";
@@ -46,7 +47,7 @@ export const createPathologyValidator = makeValidator({
   laterality: [inEnum(Laterality)],
   pairedLaterality: [inEnum(PairedLaterality)],
   sequence: [inEnum(Sequence)],
-  pathologyDateOfReporting: [isDate()],
+  pathologyDateOfReporting: [isDate(), notFutureDate()],
 });
 
 export const updatePathologyValidator = makeValidator({
@@ -69,5 +70,5 @@ export const updatePathologyValidator = makeValidator({
   laterality: [inEnum(Laterality)],
   pairedLaterality: [inEnum(PairedLaterality)],
   sequence: [inEnum(Sequence)],
-  pathologyDateOfReporting: [isDate()],
+  pathologyDateOfReporting: [isDate(), notFutureDate()],
 });

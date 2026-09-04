@@ -1,5 +1,5 @@
 import { Gender } from "../../generated/prisma/enums.ts";
-import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, matches, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
 // Names: only alphabets, spaces, hyphens, apostrophes, and periods
 const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
@@ -36,7 +36,7 @@ export const createPatientValidator = makeValidator({
     maxLen(255),
   ],
   age: [isString(), trim(), maxLen(32)],
-  dateOfBirth: [isDate()],
+  dateOfBirth: [isDate(), notFutureDate()],
   gender: [required(), inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
   healthSchemeDetails: [isString(), trim(), maxLen(255)],
@@ -53,7 +53,7 @@ export const updatePatientValidator = makeValidator({
     maxLen(255),
   ],
   age: [isString(), trim(), maxLen(32)],
-  dateOfBirth: [isDate()],
+  dateOfBirth: [isDate(), notFutureDate()],
   gender: [inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
   healthSchemeDetails: [isString(), trim(), maxLen(255)],

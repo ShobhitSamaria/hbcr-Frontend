@@ -38,7 +38,7 @@ export const createRegistrationValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)], // Now optional - auto-generated if not provided
   departmentName: [required(), isString(), trim(), maxLen(128)],
   unitNumber: [required(), isString(), trim(), maxLen(32)],
-  dateOfReporting: [isDate()],
+  dateOfReporting: [isDate(), notFutureDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   caseRegisteredThroughOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
     if (all.caseRegisteredThrough === "OTHER" && (!v || String(v).trim() === "")) {
@@ -46,7 +46,7 @@ export const createRegistrationValidator = makeValidator({
     }
     return v;
   }],
-  referralType: [inEnum(ReferralType)],
+  referralType: [required(), inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
@@ -73,7 +73,7 @@ export const createRegistrationValidator = makeValidator({
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
-  formCompletionDate: [isDate()],
+  formCompletionDate: [isDate(), notFutureDate()],
   remarks: [isString(), trim(), maxLen(1000)],
   contactNumber: [isString(), trim(), maxLen(15)],
   designation: [isString(), trim(), maxLen(128)],
@@ -84,7 +84,7 @@ export const updateRegistrationValidator = makeValidator({
   referenceNo: [isString(), trim(), maxLen(64)],
   departmentName: [required(), isString(), trim(), maxLen(128)],
   unitNumber: [required(), isString(), trim(), maxLen(32)],
-  dateOfReporting: [isDate()],
+  dateOfReporting: [isDate(), notFutureDate()],
   caseRegisteredThrough: [inEnum(CaseThrough)],
   caseRegisteredThroughOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
     if (all.caseRegisteredThrough === "OTHER" && (!v || String(v).trim() === "")) {
@@ -92,7 +92,7 @@ export const updateRegistrationValidator = makeValidator({
     }
     return v;
   }],
-  referralType: [inEnum(ReferralType)],
+  referralType: [required(), inEnum(ReferralType)],
   referralFacilityName: [isString(), trim(), maxLen(255)],
   referralFacilityCity: [isString(), trim(), maxLen(64)],
   referralFacilityDistrict: [isString(), trim(), maxLen(64)],
@@ -119,7 +119,7 @@ export const updateRegistrationValidator = makeValidator({
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
-  formCompletionDate: [isDate()],
+  formCompletionDate: [isDate(), notFutureDate()],
   remarks: [isString(), trim(), maxLen(1000)],
   contactNumber: [isString(), trim(), maxLen(15)],
   designation: [isString(), trim(), maxLen(128)],
