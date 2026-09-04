@@ -54,11 +54,25 @@ const requiredIfKnown = (
   return v;
 };
 
+/**
+ * Conditional required: treatmentType is mandatory when treatmentStage is AT_RI.
+ */
+const requiredIfAT_RI = (
+  msg: string,
+): ValidatorRule<Record<string, unknown>> => (v, all) => {
+  if (all.treatmentStage !== "AT_RI") return v;
+  if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+    throw new ValidationFieldError(msg);
+  }
+  return v;
+};
+
 export const createTreatmentValidator = makeValidator({
   treatmentStage: [required(), inEnum(TreatmentStage)],
   treatmentGivenChoice: [inEnum(YesNoUnknown)],
   treatmentType: [
     requiredIfYes("Treatment Type is required when Treatment Given is Yes"),
+    requiredIfAT_RI("Treatment Type is required for Treatment at RI"),
     inEnum(TreatmentType),
   ],
   clinicalExtentOfDisease: [inEnum(ClinicalExtent)],

@@ -23,6 +23,7 @@ export function ClinicalTreatment() {
   const [ecog, setEcog] = useState("Unknown");
   const [stagingSystem, setStagingSystem] = useState("");
   const [selectedModalities, setSelectedModalities] = useState<string[]>([]);
+  const [selectedModalities30, setSelectedModalities30] = useState<string[]>([]);
   const isTNM = stagingSystem === "TNM";
 
   // Write ecog status to form context for validation
@@ -33,6 +34,7 @@ export function ClinicalTreatment() {
 
   return (
     <div className="space-y-7">
+      <style>{`input[name="31. Name of person completing form (IN CAPITALS)"] { text-transform: uppercase; }`}</style>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
           label="Clinical Extent of Disease Before Cancer Directed Treatment"
@@ -238,7 +240,13 @@ export function ClinicalTreatment() {
           </div>
         )}
       </div>
-      <TreatmentBlock title="30. Treatment at RI" />
+      <TreatmentBlock
+        title="30. Treatment at RI"
+        onSelectionChange={(rows) => {
+          setSelectedModalities30(rows);
+          ctx?.set("30. Treatment modalities selected", rows);
+        }}
+      />
       <TargetedTherapy />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field

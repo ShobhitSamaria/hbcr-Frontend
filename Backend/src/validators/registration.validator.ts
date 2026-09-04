@@ -7,6 +7,8 @@ import {
 } from "../../generated/prisma/enums.ts";
 import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+
 /**
  * Positive number greater than 0. Allows decimals.
  */
@@ -70,7 +72,7 @@ export const createRegistrationValidator = makeValidator({
   educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
-  formCompletedBy: [isString(), trim(), maxLen(255)],
+  formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
   formCompletionDate: [isDate()],
   remarks: [isString(), trim(), maxLen(1000)],
   contactNumber: [isString(), trim(), maxLen(15)],
@@ -116,7 +118,7 @@ export const updateRegistrationValidator = makeValidator({
   educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],
   status: [inEnum(RegistrationStatus)],
-  formCompletedBy: [isString(), trim(), maxLen(255)],
+  formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
   formCompletionDate: [isDate()],
   remarks: [isString(), trim(), maxLen(1000)],
   contactNumber: [isString(), trim(), maxLen(15)],
