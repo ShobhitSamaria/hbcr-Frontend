@@ -8,6 +8,7 @@ import {
 import { inEnum, isBoolean, isDate, isInt, isNumber, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
 const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const MOBILE_RE = /^[6-9][0-9]{9}$/;
 
 /**
  * Positive number greater than 0. Allows decimals.
@@ -75,8 +76,8 @@ export const createRegistrationValidator = makeValidator({
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
   formCompletionDate: [isDate(), notFutureDate()],
   remarks: [isString(), trim(), maxLen(1000)],
-  contactNumber: [isString(), trim(), maxLen(15)],
-  designation: [isString(), trim(), maxLen(128)],
+  contactNumber: [required(), isString(), trim(), maxLen(15), matches(MOBILE_RE, "Enter a valid 10-digit Indian mobile number")],
+  designation: [required(), isString(), trim(), maxLen(128)],
   createdByUserId: [isInt()],
 });
 
@@ -121,6 +122,6 @@ export const updateRegistrationValidator = makeValidator({
   formCompletedBy: [isString(), trim(), maxLen(255), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")],
   formCompletionDate: [isDate(), notFutureDate()],
   remarks: [isString(), trim(), maxLen(1000)],
-  contactNumber: [isString(), trim(), maxLen(15)],
-  designation: [isString(), trim(), maxLen(128)],
+  contactNumber: [required(), isString(), trim(), maxLen(15), matches(MOBILE_RE, "Enter a valid 10-digit Indian mobile number")],
+  designation: [required(), isString(), trim(), maxLen(128)],
 });

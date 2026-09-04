@@ -90,7 +90,7 @@ export const createTreatmentValidator = makeValidator({
     requiredIfTNM("M is required when staging system is TNM"),
     isString(), trim(), maxLen(16),
   ],
-  compositeStage: [isString(), trim(), maxLen(256)],
+  compositeStage: [required(), isString(), trim(), maxLen(256)],
   ecogStatus: [inEnum(EcogStatus)],
   ecogGrade: [
     requiredIfKnown("ECOG Grade is required when Performance Status is Known"),
