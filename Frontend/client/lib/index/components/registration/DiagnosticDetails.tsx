@@ -70,13 +70,13 @@ export function DiagnosticDetails({
                 />
                 {method}
                 {method === "Clinical Only" && methods.includes(method) && (
-                  <input
-                    type="date"
-                    required
-                    value={clinicalDate}
-                    onChange={(e) => setClinicalDate(e.target.value)}
-                    className="ml-2 h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] outline-none focus:border-[#36a99c]"
-                  />
+                  <>
+                    <input type="date" required aria-label="Clinical Only date *" value={clinicalDate}
+                      onChange={(e) => setClinicalDate(e.target.value)}
+                      className="ml-2 h-8 rounded-lg border border-[#dce9eb] bg-white px-2 text-[11px] text-[#6e8790] outline-none focus:border-[#36a99c]"
+                    />
+                    <span className="ml-0.5 text-[#d04a4a]">*</span>
+                  </>
                 )}
 
               </label>

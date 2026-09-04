@@ -69,6 +69,7 @@ export function ClinicalTreatment() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <SelectField
               label="T"
+              required={isTNM}
               options={["Tx",
                 "Tis",
                 "Tis(DCIS)",
@@ -108,6 +109,7 @@ export function ClinicalTreatment() {
             />
             <SelectField
               label="N"
+              required={isTNM}
               options={["Nx",
                 "N0",
                 "N1",
@@ -127,6 +129,7 @@ export function ClinicalTreatment() {
             />
             <SelectField
               label="M"
+              required={isTNM}
               options={["Mx",
                 "M0",
                 "M1",
@@ -148,6 +151,7 @@ export function ClinicalTreatment() {
               label=""
               placeholder="Enter staging value"
               stateKey="28(a). Staging system value"
+              required={!isTNM && stagingSystem !== ""}
             />
           </div>
         )
@@ -197,7 +201,7 @@ export function ClinicalTreatment() {
       <TargetedTherapy />
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          29(c). Performance Status (ECOG)
+          29(c). Performance Status (ECOG)<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
           <label className="flex items-center gap-2">
@@ -227,6 +231,7 @@ export function ClinicalTreatment() {
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <SelectField
               label="If known"
+              required={ecog === "Known"}
               options={[
                 "Grade 0 - Fully active",
                 "Grade 1 - Restricted in physically strenuous activity",
@@ -242,6 +247,7 @@ export function ClinicalTreatment() {
       </div>
       <TreatmentBlock
         title="30. Treatment at RI"
+        requiredChoice
         onSelectionChange={(rows) => {
           setSelectedModalities30(rows);
           ctx?.set("30. Treatment modalities selected", rows);

@@ -261,7 +261,7 @@ export function Step1Identifying({
         />
         {caseThrough === "Other" && (
           <Field
-            label="6(a). Case Registered Through (Other)"
+            label={`6(a). Case Registered Through (Other)` + (caseThrough === "Other" ? " *" : "")}
             placeholder="Specify other case registered through"
             value={caseThroughOther}
             onChange={handleCaseThroughOther}
@@ -282,17 +282,17 @@ export function Step1Identifying({
         {referral === "Other Hospital/Health Facility" && (
           <>
             <Field
-              label="7(a). Name of Facility."
+              label={`7(a). Name of Facility.` + (referral === "Other Hospital/Health Facility" ? " *" : "")}
               placeholder="Enter Facility name"
             />
             <Field
-              label="7(b). Hospital / LAB / N.H."
+              label={`7(b). Hospital / LAB / N.H.` + (referral === "Other Hospital/Health Facility" ? " *" : "")}
               placeholder="Enter Hospital / LAB / N.H."
             />
-            <Field label="7(c). City" placeholder="City" />
-            <Field label="7(d). District" placeholder="District" />
+            <Field label={`7(c). City` + (referral === "Other Hospital/Health Facility" ? " *" : "")} placeholder="City" />
+            <Field label={`7(d). District` + (referral === "Other Hospital/Health Facility" ? " *" : "")} placeholder="District" />
             <Field label="7(e). Pincode" placeholder="Pincode" />
-            <Field label="7(f). Date of Registration" type="date" />
+            <Field label={`7(f). Date of Registration` + (referral === "Other Hospital/Health Facility" ? " *" : "")} type="date" />
           </>
         )}
         <Field label="8. Date of first diagnosis" type="date" required />
@@ -399,9 +399,7 @@ export function Step1Identifying({
                 </span>
                 {isOther && isSelected && (
                   <div className="flex flex-col">
-                    <OtherIdInput
-                      placeholder="Enter identification name/type (e.g. Card Name)"
-                      stateKey={nameKey}
+                    <OtherIdInput placeholder={"Enter identification name/type (e.g. Card Name)" + (isSelected ? " *" : "")} stateKey={nameKey}
                       onBlur={() => validation?.markTouched(nameKey)}
                       hasError={!!(validation?.errors[nameKey] && (validation.forceShow.has(nameKey) || validation.touched.has(nameKey)))}
                       errorMessage={validation?.errors[nameKey]}
@@ -415,7 +413,7 @@ export function Step1Identifying({
                 )}
                 <div className="flex flex-col">
                   <OtherIdInput
-                    placeholder={isOther ? "Enter identification number" : "Enter " + label + " number"}
+                    placeholder={(isOther ? "Enter identification number" : "Enter " + label + " number") + (isSelected ? " *" : "")}
                     stateKey={numKey}
                     disabled={!isSelected}
                     maxLength={maxLength}
@@ -593,7 +591,7 @@ export function Step1Identifying({
         />
         {maritalStatus === "Other" && (
           <Field
-            label="16(a). Marital status (Other)"
+            label={`16(a). Marital status (Other)` + (maritalStatus === "Other" ? " *" : "")}
             placeholder="Specify other marital status"
             value={maritalOther}
             onChange={handleMaritalOther}
@@ -608,7 +606,7 @@ export function Step1Identifying({
         />
         {education === "Others (specify)" && (
           <Field
-            label="17(a). Education (Other)"
+            label={`17(a). Education (Other)` + (education === "Others (specify)" ? " *" : "")}
             placeholder="Specify education level"
             value={educationOther}
             onChange={handleEducationOther}
@@ -940,7 +938,7 @@ function HealthSchemeField() {
       {answer === "Yes" && (
         <div className="sm:w-1/2">
           <Field
-            label="13. Beneficiary of Health Scheme details"
+            label={`13. Beneficiary of Health Scheme details` + (answer === "Yes" ? " *" : "")}
             placeholder="Enter scheme name / details"
           />
         </div>
