@@ -510,9 +510,13 @@ export function Step1Identifying({
             Please select Urban or Rural to enter address details
           </p>
         )}
-        {urbanRural && (
-          <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+       {urbanRural && (
+        <>
+           <h3 className="mb-3 mt-5 text-sm font-bold text-[#486b77]">
+               Residential Address
+              </h3>
+
+           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Field
                 label="Flat / House No."
                 placeholder="House number"
@@ -547,7 +551,12 @@ export function Step1Identifying({
               Residential Address is same as Permanent Address
             </label>
             {!sameAddress && (
-              <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
+              <>
+              <h3 className="mb-3 mt-5 text-sm font-bold text-[#486b77]">
+               Permanent Address
+              </h3>
+
+               <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
                <Field
                      label="Permanent Flat / House No."
                      placeholder="House number"
@@ -565,6 +574,7 @@ export function Step1Identifying({
                      />
                 <DistrictPincodeFields prefix="Permanent " />
               </div>
+              </>
             )}
           </>
         )}
