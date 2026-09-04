@@ -76,8 +76,17 @@ export const createTreatmentValidator = makeValidator({
     inEnum(TreatmentType),
   ],
   clinicalExtentOfDisease: [inEnum(ClinicalExtent)],
-  stagingSystem: [inEnum(StagingSystem)],
-  stagingSystemValue: [isString(), trim(), maxLen(512)],
+  stagingSystem: [required(), inEnum(StagingSystem)],
+  stagingSystemValue: [
+    (v, all) => {
+      if (all.stagingSystem === "TNM") return v;
+      if (v === undefined || v === null || (typeof v === "string" && v.trim() === "")) {
+        throw new ValidationFieldError("Staging system value is required when staging system is not TNM");
+      }
+      return v;
+    },
+    isString(), trim(), maxLen(512),
+  ],
   tnmT: [
     requiredIfTNM("T is required when staging system is TNM"),
     isString(), trim(), maxLen(16),
@@ -91,7 +100,7 @@ export const createTreatmentValidator = makeValidator({
     isString(), trim(), maxLen(16),
   ],
   compositeStage: [required(), isString(), trim(), maxLen(256)],
-  ecogStatus: [inEnum(EcogStatus)],
+  ecogStatus: [required(), inEnum(EcogStatus)],
   ecogGrade: [
     requiredIfKnown("ECOG Grade is required when Performance Status is Known"),
     inEnum(EcogGrade),

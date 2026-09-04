@@ -20,7 +20,7 @@ function deriveFullName(v: unknown, all: Record<string, unknown>): string | unde
 }
 
 export const createPatientValidator = makeValidator({
-  firstName: NAME_PART,
+  firstName: [required(), ...NAME_PART],
   middleName: NAME_PART,
   lastName: NAME_PART,
   fullName: [
@@ -35,8 +35,8 @@ export const createPatientValidator = makeValidator({
     trim(),
     maxLen(255),
   ],
-  age: [isString(), trim(), maxLen(32)],
-  dateOfBirth: [isDate(), notFutureDate()],
+  age: [required(), isString(), trim(), maxLen(32)],
+  dateOfBirth: [required(), isDate(), notFutureDate()],
   gender: [required(), inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
   healthSchemeDetails: [isString(), trim(), maxLen(255), (v: unknown, all: Record<string, unknown>) => {
