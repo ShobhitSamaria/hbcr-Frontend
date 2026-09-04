@@ -15,6 +15,10 @@ diagnosticRouter.get(
   "/registrations/:registrationId/diagnostic-methods",
   diagnosticController.listMethods,
 );
+diagnosticRouter.get(
+  "/registrations/:registrationId/diagnostic-methods/validate",
+  diagnosticController.validateMethods,
+);
 diagnosticRouter.post(
   "/registrations/:registrationId/diagnostic-methods",
   validate(createDiagnosticMethodValidator),

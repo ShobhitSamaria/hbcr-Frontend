@@ -69,7 +69,7 @@ const requiredIfAT_RI = (
 
 export const createTreatmentValidator = makeValidator({
   treatmentStage: [required(), inEnum(TreatmentStage)],
-  treatmentGivenChoice: [inEnum(YesNoUnknown)],
+  treatmentGivenChoice: [required(), inEnum(YesNoUnknown)],
   treatmentType: [
     requiredIfYes("Treatment Type is required when Treatment Given is Yes"),
     requiredIfAT_RI("Treatment Type is required for Treatment at RI"),

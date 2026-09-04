@@ -12,6 +12,15 @@ export const diagnosticController = {
     );
   }),
 
+  /**
+   * Validate that at least one diagnostic method exists for a registration.
+   * Called by the frontend after all methods have been submitted.
+   */
+  validateMethods: asyncHandler(async (req: Request, res: Response) => {
+    await diagnosticService.validateMethodsExist(parseIdParam(req.params.registrationId));
+    return ok(res, { valid: true }, "Diagnostic methods validated");
+  }),
+
   createMethod: asyncHandler(async (req: Request, res: Response) => {
     return created(
       res,
