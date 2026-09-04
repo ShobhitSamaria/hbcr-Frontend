@@ -55,7 +55,7 @@ const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
   "21. Longest duration of symptom for cancer (in months)": [
     required("Longest duration of symptom is required"),
     isInt(),
-    range(0, 32767, "Must be a valid number"),
+    range(1, 1200, "Must be between 1 and 1200 months"),
   ],
   "21.1 Anatomical Site of Specimen / Biopsy / SMEAR": [maxLen(128)],
   "21.2 Pathology Slide No": [maxLen(64)],

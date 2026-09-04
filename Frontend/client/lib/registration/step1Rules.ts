@@ -82,6 +82,11 @@ export type Step1Values = {
   "16(a). Marital status (Other)"?: string;
   "Duration of Stay at the above address (in years)"?: string;
   "19. Relationship to Cancer / Degree of Relationship"?: string;
+  "Relationship with Cancer"?: string;
+  "Degree of Relationship"?: string;
+  "Primary site of tumor for relative"?: string;
+  "Age at diagnosis"?: string;
+  "Date of diagnosis"?: string;
   // 13. Unique Identification — radio values keyed by id-{label}
   "id-a). Aadhaar"?: string;
   "id-b). ABHA"?: string;
@@ -388,6 +393,24 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     fhRequired("Primary site of tumor for relative", "Please select Primary Site");
     fhRequired("Age at diagnosis", "Age at Diagnosis is required");
     fhRequired("Date of diagnosis", "Date of Diagnosis is required");
+
+    // Age at Diagnosis: must be 0–129
+    const ageVal = values["Age at diagnosis"];
+    if (ageVal !== undefined && ageVal !== null && String(ageVal).trim() !== "") {
+      const n = Number(ageVal);
+      if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0 || n > 129) {
+        out["Age at diagnosis"] = "Age at Diagnosis must be between 0 and 129";
+      }
+    }
+
+    // Date of Diagnosis: must not be in the future
+    const diagDate = values["Date of diagnosis"];
+    if (diagDate !== undefined && diagDate !== null && String(diagDate).trim() !== "") {
+      const err = notFutureDate("Date of Diagnosis cannot be in the future")(diagDate, values);
+      if (err !== null) {
+        out["Date of diagnosis"] = err;
+      }
+    }
   }
 
   return out;
