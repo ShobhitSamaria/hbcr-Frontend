@@ -60,7 +60,12 @@ export const createRegistrationValidator = makeValidator({
   anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],
   anthropometricWeightKg: [isNumber("must be a number"), positiveNumber(0, "Weight must be greater than 0")],
   maritalStatus: [inEnum(MaritalStatus)],
-  maritalStatusOther: [isString(), trim(), maxLen(128)],
+  maritalStatusOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.maritalStatus === "OTHER" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the marital status (Other)");
+    }
+    return v;
+  }],
   education: [inEnum(Education)],
   educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],
@@ -101,7 +106,12 @@ export const updateRegistrationValidator = makeValidator({
   anthropometricHeightCm: [isNumber("must be a number"), positiveNumber(0, "Height must be greater than 0")],
   anthropometricWeightKg: [isNumber("must be a number"), positiveNumber(0, "Weight must be greater than 0")],
   maritalStatus: [inEnum(MaritalStatus)],
-  maritalStatusOther: [isString(), trim(), maxLen(128)],
+  maritalStatusOther: [isString(), trim(), maxLen(128), (v: unknown, all: Record<string, unknown>) => {
+    if (all.maritalStatus === "OTHER" && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please specify the marital status (Other)");
+    }
+    return v;
+  }],
   education: [inEnum(Education)],
   educationOther: [isString(), trim(), maxLen(128)],
   occupation: [isString(), trim(), maxLen(128)],

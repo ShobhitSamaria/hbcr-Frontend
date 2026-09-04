@@ -67,12 +67,19 @@ export type Step1Values = {
   "Email address"?: string;
   "13. Beneficiary of Health Scheme (RGHS / MAAYOGNA / CGHS)"?: string;
   "13. Beneficiary of Health Scheme details"?: string;
+  "Father name"?: string;
   "Father mobile number"?: string;
+  "Mother name"?: string;
   "Mother mobile number"?: string;
+  "Spouse name"?: string;
   "Spouse mobile number"?: string;
+  "Son name"?: string;
   "Son mobile number"?: string;
+  "Daughter name"?: string;
   "Daughter mobile number"?: string;
+  "Other name"?: string;
   "Other mobile number"?: string;
+  "16(a). Marital status (Other)"?: string;
   "Duration of Stay at the above address (in years)"?: string;
   "19. Relationship to Cancer / Degree of Relationship"?: string;
   // 13. Unique Identification — radio values keyed by id-{label}
@@ -160,11 +167,29 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "PIN Code": [required("PIN code is required"), pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
   "Mobile number": [required("Mobile number is required"), pattern(MOBILE_RE, "Enter a valid 10-digit Indian mobile number")],
   "Email address": [pattern(EMAIL_RE, "Enter a valid email address")],
+  "Father name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Father mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Mother name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Mother mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Spouse name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Spouse mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Son name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Son mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Daughter name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Daughter mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Other name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Other mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Urban / Rural": [required("Please select Urban or Rural")],
   "19. Relationship to Cancer / Degree of Relationship": [
@@ -301,6 +326,47 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
           out[durationKey] = "Duration (Months) is required when Yes is selected";
         }
       }
+    }
+  }
+
+  // 14. Relative Details — cross-field validation
+  // If a relative name is entered, its mobile number must also be entered
+  const relativePairs: Array<{ name: string; mobile: string }> = [
+    { name: "Father name", mobile: "Father mobile number" },
+    { name: "Mother name", mobile: "Mother mobile number" },
+    { name: "Spouse name", mobile: "Spouse mobile number" },
+    { name: "Son name", mobile: "Son mobile number" },
+    { name: "Daughter name", mobile: "Daughter mobile number" },
+    { name: "Other name", mobile: "Other mobile number" },
+  ];
+  let hasAnyRelative = false;
+  for (const { name, mobile } of relativePairs) {
+    const nameVal = values[name];
+    const nameStr = nameVal !== undefined && nameVal !== null ? String(nameVal).trim() : "";
+    const mobileVal = values[mobile];
+    const mobileStr = mobileVal !== undefined && mobileVal !== null ? String(mobileVal).trim() : "";
+    if (nameStr !== "") {
+      hasAnyRelative = true;
+      if (mobileStr === "") {
+        out[mobile] = `Mobile number is required when ${name} is provided`;
+      }
+    }
+    if (mobileStr !== "") {
+      hasAnyRelative = true;
+      if (nameStr === "") {
+        out[name] = `Name is required when ${mobile} is provided`;
+      }
+    }
+  }
+  if (!hasAnyRelative) {
+    out["Father name"] = "At least one relative detail must be provided";
+  }
+
+  // 16. Marital Status — if Other, 16(a) is mandatory
+  if (values["16. Marital status"] === "Other") {
+    const other = values["16(a). Marital status (Other)"];
+    if (other === undefined || other === null || String(other).trim() === "") {
+      out["16(a). Marital status (Other)"] = "Please specify the marital status (Other)";
     }
   }
 

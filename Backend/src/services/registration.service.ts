@@ -1,6 +1,7 @@
 import type { Prisma } from "../../generated/prisma/client.ts";
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
+import { validateAtLeastOneRelative } from "../validators/relative.validator.ts";
 import { buildMeta, parsePagination } from "../utils/pagination.ts";
 import { sequenceService } from "./sequence.service.ts";
 
@@ -66,6 +67,13 @@ export const registrationService = {
     ]);
     if (!patient) throw httpErrors.notFound(`Patient ${patientId} not found`);
     if (!hospital) throw httpErrors.notFound(`Hospital ${hospitalId} not found`);
+
+    // Field 14: At least one relative must be provided
+    const relatives = await prisma.patientRelative.findMany({
+      where: { patientId },
+      select: { name: true, mobileNumber: true },
+    });
+    validateAtLeastOneRelative(relatives);
 
     // Always auto-generate Reference Number and Registration Number server-side.
     // Preview numbers from the frontend are for display only; generating here
