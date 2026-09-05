@@ -52,7 +52,7 @@ export function DiagnosticDetails({
     <div className="space-y-7">
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          20. Method of diagnosis<span className="ml-0.5 text-[#d04a4a]">*</span>
+          19. Method of diagnosis<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {["Clinical Only", "Microscopic", "Imaging", "DCO", "Other"].map(

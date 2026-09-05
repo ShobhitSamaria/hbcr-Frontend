@@ -12,14 +12,14 @@ export function Step2Diagnostic() {
       <DiagnosticDetails methods={methods} setMethods={setMethods} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Field
-          label="21. Longest duration of symptom for cancer (in months)"
+          label="20. Longest duration of symptom for cancer (in months)"
           type="number"
           placeholder="Months"
           required
         />
       </div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
-        21. Complete Pathological Diagnosis: (With Complete Description of
+        21F. Complete Pathological Diagnosis: (With Complete Description of
         Primary Site of Tumor and Morphological Diagnosis)
       </label>
       {/* Keyed by `microscopic` so the fields remount (and re-read the

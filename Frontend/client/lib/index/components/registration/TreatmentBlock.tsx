@@ -68,9 +68,11 @@ export function TreatmentBlock({
       {(!requiredChoice || given === "Yes") && (
         <>
           <div>
-            <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-              29.1. If Yes, Type of Treatment Given
-            </p>
+           <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
+          {title.includes("Prior to Registration")
+         ? "28(a). If Yes, Type of Treatment Given"
+         : "29(a). If Yes, Type of Treatment Given"}
+        </p>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               {["Allopathic", "Non-Allopathic", "Both"].map((option) => (
                 <label key={option} className="flex items-center gap-2">
