@@ -4,6 +4,7 @@ import { httpErrors } from "../utils/httpError.ts";
 import { validateAtLeastOneRelative } from "../validators/relative.validator.ts";
 import { buildMeta, parsePagination } from "../utils/pagination.ts";
 import { sequenceService } from "./sequence.service.ts";
+import { requirePatientInHospital } from "./accessGuard.ts";
 
 const FULL_INCLUDE = {
   hospital: { select: { id: true, name: true } },
@@ -61,11 +62,16 @@ export const registrationService = {
     // the client sends in the request body to prevent cross-hospital access.
     const hospitalId = reqHospitalId;
 
-    const [patient, hospital] = await Promise.all([
-      prisma.patient.findUnique({ where: { id: patientId }, select: { id: true } }),
-      prisma.hospital.findUnique({ where: { id: hospitalId }, select: { id: true, centre: { select: { code: true } } } }),
-    ]);
-    if (!patient) throw httpErrors.notFound(`Patient ${patientId} not found`);
+    // The patient must be accessible to this hospital: either a fresh patient
+    // with no registrations (in-flight new registration) or a patient this
+    // hospital already has a registration for. This stops a hospital from
+    // attaching registrations to another hospital's registered patients.
+    await requirePatientInHospital(patientId, hospitalId);
+
+    const hospital = await prisma.hospital.findUnique({
+      where: { id: hospitalId },
+      select: { id: true, centre: { select: { code: true } } },
+    });
     if (!hospital) throw httpErrors.notFound(`Hospital ${hospitalId} not found`);
 
     // Field 14: At least one relative must be provided

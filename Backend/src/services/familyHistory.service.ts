@@ -1,8 +1,10 @@
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
+import { requireRegistrationInHospital } from "./accessGuard.ts";
 
 export const familyHistoryService = {
-  async get(registrationId: number) {
+  async get(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     const f = await prisma.familialCancerHistory.findUnique({ where: { registrationId } });
     if (!f)
       throw httpErrors.notFound(
@@ -11,9 +13,8 @@ export const familyHistoryService = {
     return f;
   },
 
-  async upsert(registrationId: number, data: Record<string, unknown>) {
-    const reg = await prisma.registration.findUnique({ where: { id: registrationId } });
-    if (!reg) throw httpErrors.notFound(`Registration ${registrationId} not found`);
+  async upsert(registrationId: number, hospitalId: number, data: Record<string, unknown>) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
 
     const existing = await prisma.familialCancerHistory.findUnique({
       where: { registrationId },
@@ -29,7 +30,8 @@ export const familyHistoryService = {
     });
   },
 
-  async remove(registrationId: number) {
+  async remove(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     const f = await prisma.familialCancerHistory.findUnique({ where: { registrationId } });
     if (!f)
       throw httpErrors.notFound(

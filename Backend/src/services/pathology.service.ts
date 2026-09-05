@@ -1,10 +1,10 @@
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
+import { requireRegistrationInHospital } from "./accessGuard.ts";
 
 export const pathologyService = {
-  async upsert(registrationId: number, data: Record<string, unknown>) {
-    const reg = await prisma.registration.findUnique({ where: { id: registrationId } });
-    if (!reg) throw httpErrors.notFound(`Registration ${registrationId} not found`);
+  async upsert(registrationId: number, hospitalId: number, data: Record<string, unknown>) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
 
     const existing = await prisma.pathologicalDiagnosis.findUnique({
       where: { registrationId },
@@ -21,7 +21,8 @@ export const pathologyService = {
     });
   },
 
-  async get(registrationId: number) {
+  async get(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     const p = await prisma.pathologicalDiagnosis.findUnique({
       where: { registrationId },
     });
@@ -29,7 +30,8 @@ export const pathologyService = {
     return p;
   },
 
-  async remove(registrationId: number) {
+  async remove(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     const p = await prisma.pathologicalDiagnosis.findUnique({ where: { registrationId } });
     if (!p) throw httpErrors.notFound(`Pathological diagnosis for registration ${registrationId} not found`);
     await prisma.pathologicalDiagnosis.delete({ where: { registrationId } });

@@ -1,6 +1,7 @@
 import { Prisma } from "../../generated/prisma/client.ts";
 import { httpErrors, HttpError } from "../utils/httpError.ts";
 import { fail } from "../utils/response.ts";
+import { config } from "../config/index.js";
 import type { NextFunction, Request, Response } from "express";
 
 export function notFoundHandler(req: Request, res: Response) {
@@ -118,11 +119,17 @@ export function errorHandler(
     return fail(res, 400, `Invalid query input: ${err.message}`);
   }
 
-  // Unknown -> log and surface a generic 500
+  // Unknown -> log and surface a generic 500. In production the real error
+  // message is never returned to the client (it can leak internals / data),
+  // it is only written to the server log above.
   // eslint-disable-next-line no-console
   console.error("[error]", err);
   const fallback = httpErrors.internal(
-    err instanceof Error ? err.message : "Internal server error",
+    config.nodeEnv === "production"
+      ? "Internal server error"
+      : err instanceof Error
+        ? err.message
+        : "Internal server error",
   );
   return fail(res, fallback.status, fallback.message);
 }

@@ -8,18 +8,19 @@ export const familyHistoryController = {
   get: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await familyHistoryService.get(parseIdParam(req.params.registrationId)),
+      await familyHistoryService.get(parseIdParam(req.params.registrationId), req.hospitalId!),
     );
   }),
   upsert: asyncHandler(async (req: Request, res: Response) => {
     const result = await familyHistoryService.upsert(
       parseIdParam(req.params.registrationId),
+      req.hospitalId!,
       req.body,
     );
     return created(res, result, "Family history saved");
   }),
   remove: asyncHandler(async (req: Request, res: Response) => {
-    await familyHistoryService.remove(parseIdParam(req.params.registrationId));
+    await familyHistoryService.remove(parseIdParam(req.params.registrationId), req.hospitalId!);
     return noContent(res);
   }),
 };

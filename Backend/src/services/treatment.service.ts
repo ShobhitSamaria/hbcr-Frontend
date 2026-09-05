@@ -1,14 +1,14 @@
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
-
-async function ensureRegistration(id: number) {
-  const reg = await prisma.registration.findUnique({ where: { id }, select: { id: true } });
-  if (!reg) throw httpErrors.notFound(`Registration ${id} not found`);
-}
+import {
+  requireRegistrationInHospital,
+  requireTreatmentInHospital,
+  requireTreatmentModalityInHospital,
+} from "./accessGuard.ts";
 
 export const treatmentService = {
-  async listByRegistration(registrationId: number) {
-    await ensureRegistration(registrationId);
+  async listByRegistration(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     return prisma.treatment.findMany({
       where: { registrationId },
       orderBy: { id: "asc" },
@@ -18,9 +18,10 @@ export const treatmentService = {
 
   async upsert(
     registrationId: number,
+    hospitalId: number,
     data: { treatmentStage: string; [k: string]: unknown },
   ) {
-    await ensureRegistration(registrationId);
+    await requireRegistrationInHospital(registrationId, hospitalId);
 
     const existing = await prisma.treatment.findFirst({
       where: { registrationId, treatmentStage: data.treatmentStage as never },
@@ -40,7 +41,8 @@ export const treatmentService = {
     });
   },
 
-  async get(treatmentId: number) {
+  async get(treatmentId: number, hospitalId: number) {
+    await requireTreatmentInHospital(treatmentId, hospitalId);
     const t = await prisma.treatment.findUnique({
       where: { id: treatmentId },
       include: { modalities: { orderBy: { id: "asc" } } },
@@ -49,13 +51,15 @@ export const treatmentService = {
     return t;
   },
 
-  async update(treatmentId: number, data: Record<string, unknown>) {
+  async update(treatmentId: number, hospitalId: number, data: Record<string, unknown>) {
+    await requireTreatmentInHospital(treatmentId, hospitalId);
     const t = await prisma.treatment.findUnique({ where: { id: treatmentId } });
     if (!t) throw httpErrors.notFound(`Treatment ${treatmentId} not found`);
     return prisma.treatment.update({ where: { id: treatmentId }, data: data as never });
   },
 
-  async remove(treatmentId: number) {
+  async remove(treatmentId: number, hospitalId: number) {
+    await requireTreatmentInHospital(treatmentId, hospitalId);
     const t = await prisma.treatment.findUnique({ where: { id: treatmentId } });
     if (!t) throw httpErrors.notFound(`Treatment ${treatmentId} not found`);
     await prisma.treatment.delete({ where: { id: treatmentId } });
@@ -63,9 +67,8 @@ export const treatmentService = {
 
   // -------- modalities --------
 
-  async listModalities(treatmentId: number) {
-    const t = await prisma.treatment.findUnique({ where: { id: treatmentId } });
-    if (!t) throw httpErrors.notFound(`Treatment ${treatmentId} not found`);
+  async listModalities(treatmentId: number, hospitalId: number) {
+    await requireTreatmentInHospital(treatmentId, hospitalId);
     return prisma.treatmentModalityDetail.findMany({
       where: { treatmentId },
       orderBy: { id: "asc" },
@@ -74,10 +77,10 @@ export const treatmentService = {
 
   async upsertModality(
     treatmentId: number,
+    hospitalId: number,
     data: { modality: string; [k: string]: unknown },
   ) {
-    const t = await prisma.treatment.findUnique({ where: { id: treatmentId } });
-    if (!t) throw httpErrors.notFound(`Treatment ${treatmentId} not found`);
+    await requireTreatmentInHospital(treatmentId, hospitalId);
 
     const existing = await prisma.treatmentModalityDetail.findFirst({
       where: { treatmentId, modality: data.modality as never },
@@ -96,13 +99,15 @@ export const treatmentService = {
     });
   },
 
-  async updateModality(modalityId: number, data: Record<string, unknown>) {
+  async updateModality(modalityId: number, hospitalId: number, data: Record<string, unknown>) {
+    await requireTreatmentModalityInHospital(modalityId, hospitalId);
     const m = await prisma.treatmentModalityDetail.findUnique({ where: { id: modalityId } });
     if (!m) throw httpErrors.notFound(`Treatment modality ${modalityId} not found`);
     return prisma.treatmentModalityDetail.update({ where: { id: modalityId }, data: data as never });
   },
 
-  async deleteModality(modalityId: number) {
+  async deleteModality(modalityId: number, hospitalId: number) {
+    await requireTreatmentModalityInHospital(modalityId, hospitalId);
     const m = await prisma.treatmentModalityDetail.findUnique({ where: { id: modalityId } });
     if (!m) throw httpErrors.notFound(`Treatment modality ${modalityId} not found`);
     await prisma.treatmentModalityDetail.delete({ where: { id: modalityId } });

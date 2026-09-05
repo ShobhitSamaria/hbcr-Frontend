@@ -5,6 +5,7 @@ import { created, noContent, ok } from "../utils/response.ts";
 import { httpErrors, parseIdParam } from "../utils/httpError.ts";
 import { patientService } from "../services/patient.service.ts";
 import { validatePincodeDistrict } from "../services/pincode.service.ts";
+import { requirePatientInHospital } from "../services/accessGuard.ts";
 
 function pid(req: Request) {
   return parseIdParam(req.params.patientId);
@@ -12,6 +13,18 @@ function pid(req: Request) {
 
 function childId(req: Request) {
   return parseIdParam(req.params.id);
+}
+
+/**
+ * Hospital scoping: every side-table request must target a patient the
+ * caller's hospital owns (a patient with ≥ 1 registration in this hospital)
+ * or a fresh patient (no registrations yet) that the hospital is currently
+ * registering. Without this, any authenticated hospital could read or write
+ * the Aadhaar / ABHA / address / relative data of another hospital's patients
+ * by enumerating sequential patient ids.
+ */
+async function assertAccess(req: Request) {
+  await requirePatientInHospital(pid(req), req.hospitalId!);
 }
 
 /**
@@ -35,12 +48,14 @@ async function assertWritable(patientId: number, table: string) {
 const wrap = {
   identifiers: {
     list: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(
         res,
         await sideTablesService.listIdentifiers(pid(req)),
       );
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "identifiers");
       return created(
         res,
@@ -48,6 +63,7 @@ const wrap = {
       );
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "identifiers");
       return ok(
         res,
@@ -56,6 +72,7 @@ const wrap = {
       );
     }),
     remove: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "identifiers");
       await sideTablesService.deleteIdentifier(pid(req), childId(req));
       return noContent(res);
@@ -64,13 +81,16 @@ const wrap = {
 
   relatives: {
     list: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(res, await sideTablesService.listRelatives(pid(req)));
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "relatives");
       return created(res, await sideTablesService.createRelative(pid(req), req.body));
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "relatives");
       return ok(
         res,
@@ -79,6 +99,7 @@ const wrap = {
       );
     }),
     remove: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "relatives");
       await sideTablesService.deleteRelative(pid(req), childId(req));
       return noContent(res);
@@ -87,9 +108,11 @@ const wrap = {
 
   addresses: {
     list: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(res, await sideTablesService.listAddresses(pid(req)));
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "addresses");
       const { district, pinCode } = req.body as Record<string, unknown>;
       if (district && pinCode) {
@@ -107,6 +130,7 @@ const wrap = {
       return created(res, await sideTablesService.createAddress(pid(req), req.body));
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "addresses");
       const { district, pinCode } = req.body as Record<string, unknown>;
       if (district && pinCode) {
@@ -128,6 +152,7 @@ const wrap = {
       );
     }),
     remove: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await assertWritable(pid(req), "addresses");
       await sideTablesService.deleteAddress(pid(req), childId(req));
       return noContent(res);
@@ -136,12 +161,15 @@ const wrap = {
 
   habits: {
     list: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(res, await sideTablesService.listHabits(pid(req)));
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return created(res, await sideTablesService.createHabit(pid(req), req.body));
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(
         res,
         await sideTablesService.updateHabit(pid(req), childId(req), req.body),
@@ -149,6 +177,7 @@ const wrap = {
       );
     }),
     remove: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await sideTablesService.deleteHabit(pid(req), childId(req));
       return noContent(res);
     }),
@@ -156,12 +185,15 @@ const wrap = {
 
   comorbidities: {
     list: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(res, await sideTablesService.listComorbidities(pid(req)));
     }),
     create: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return created(res, await sideTablesService.createComorbidity(pid(req), req.body));
     }),
     update: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       return ok(
         res,
         await sideTablesService.updateComorbidity(
@@ -173,6 +205,7 @@ const wrap = {
       );
     }),
     remove: asyncHandler(async (req: Request, res: Response) => {
+      await assertAccess(req);
       await sideTablesService.deleteComorbidity(pid(req), childId(req));
       return noContent(res);
     }),
