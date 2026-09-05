@@ -261,10 +261,12 @@ export function Step1Identifying({
         />
         {caseThrough === "Other" && (
           <Field
-            label={`6(a). Case Registered Through (Other)` + (caseThrough === "Other" ? " *" : "")}
+            label="6(a). Case Registered Through (Other)"
+            stateKey="6(a). Case Registered Through (Other)"
             placeholder="Specify other case registered through"
             value={caseThroughOther}
             onChange={handleCaseThroughOther}
+            required
           />
         )}
         <SelectField
@@ -282,17 +284,21 @@ export function Step1Identifying({
         {referral === "Other Hospital/Health Facility" && (
           <>
             <Field
-              label={`7(a). Name of Facility.` + (referral === "Other Hospital/Health Facility" ? " *" : "")}
+              label="7(a). Name of Facility."
+              stateKey="7(a). Name of Facility."
               placeholder="Enter Facility name"
+              required
             />
             <Field
-              label={`7(b). Hospital / LAB / N.H.` + (referral === "Other Hospital/Health Facility" ? " *" : "")}
+              label="7(b). Hospital / LAB / N.H."
+              stateKey="7(b). Hospital / LAB / N.H."
               placeholder="Enter Hospital / LAB / N.H."
+              required
             />
-            <Field label={`7(c). City` + (referral === "Other Hospital/Health Facility" ? " *" : "")} placeholder="City" />
-            <Field label={`7(d). District` + (referral === "Other Hospital/Health Facility" ? " *" : "")} placeholder="District" />
+            <Field label="7(c). City" stateKey="7(c). City" placeholder="City" required />
+            <Field label="7(d). District" stateKey="7(d). District" placeholder="District" required />
             <Field label="7(e). Pincode" placeholder="Pincode" />
-            <Field label={`7(f). Date of Registration` + (referral === "Other Hospital/Health Facility" ? " *" : "")} type="date" />
+            <Field label="7(f). Date of Registration" stateKey="7(f). Date of Registration" type="date" required />
           </>
         )}
         <Field label="8. Date of first diagnosis" type="date" required />
@@ -591,10 +597,12 @@ export function Step1Identifying({
         />
         {maritalStatus === "Other" && (
           <Field
-            label={`16(a). Marital status (Other)` + (maritalStatus === "Other" ? " *" : "")}
+            label="16(a). Marital status (Other)"
+            stateKey="16(a). Marital status (Other)"
             placeholder="Specify other marital status"
             value={maritalOther}
             onChange={handleMaritalOther}
+            required
           />
         )}
         <SelectField
@@ -606,10 +614,12 @@ export function Step1Identifying({
         />
         {education === "Others (specify)" && (
           <Field
-            label={`17(a). Education (Other)` + (education === "Others (specify)" ? " *" : "")}
+            label="17(a). Education (Other)"
+            stateKey="17(a). Education (Other)"
             placeholder="Specify education level"
             value={educationOther}
             onChange={handleEducationOther}
+            required
           />
         )}
       </div>
@@ -938,8 +948,10 @@ function HealthSchemeField() {
       {answer === "Yes" && (
         <div className="sm:w-1/2">
           <Field
-            label={`13. Beneficiary of Health Scheme details` + (answer === "Yes" ? " *" : "")}
+            label="13. Beneficiary of Health Scheme details"
+            stateKey="13. Beneficiary of Health Scheme details"
             placeholder="Enter scheme name / details"
+            required
           />
         </div>
       )}

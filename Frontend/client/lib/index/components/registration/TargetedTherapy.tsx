@@ -7,6 +7,7 @@ export function TargetedTherapy() {
     <div className="grid gap-4 sm:grid-cols-2">
       <SelectField
         label={`30(b). Types of targeted therapy${type === "Others (Specify)" ? " *" : ""}`}
+        stateKey="30(b). Types of targeted therapy"
         value={type}
         onChange={setType}
         options={[

@@ -198,6 +198,12 @@ type SelectFieldProps = {
   disabled?: boolean;
   /** Placeholder text shown as the first, unselected option. Defaults to "Select". */
   placeholder?: string;
+  /**
+   * Form-state/validation key override. Defaults to `label`. Use this when
+   * the visible label changes dynamically (e.g. appending " *") but the
+   * underlying state key must stay stable.
+   */
+  stateKey?: string;
 };
 
 export function SelectField({
@@ -209,29 +215,31 @@ export function SelectField({
   name,
   disabled = false,
   placeholder = "Select",
+  stateKey,
 }: SelectFieldProps) {
   const ctx = useFormStateOptional();
   const validation = useValidationOptional();
-  const isReadOnlyByContext = useIsFieldReadOnly(label);
+  const key = stateKey ?? label;
+  const isReadOnlyByContext = useIsFieldReadOnly(key);
   const effectiveDisabled = disabled || isReadOnlyByContext;
   const initial = ctx
-    ? ((ctx.values.current[label] as string | undefined) ?? "")
+    ? ((ctx.values.current[key] as string | undefined) ?? "")
     : undefined;
   const [innerValue, setInnerValue] = useState<string>(initial ?? "");
   const isControlled = value !== undefined;
   const displayValue = isControlled ? (value ?? "") : innerValue;
-  const errorMsg = validation?.errors[label];
-  const shouldShow = errorMsg && (validation.forceShow.has(label) || validation.touched.has(label));
+  const errorMsg = validation?.errors[key];
+  const shouldShow = errorMsg && (validation.forceShow.has(key) || validation.touched.has(key));
   const handle = (v: string) => {
-    if (ctx) ctx.set(label, v);
+    if (ctx) ctx.set(key, v);
     if (!isControlled) setInnerValue(v);
     onChange?.(v);
     if (validation && errorMsg && v.trim() !== "") {
-      validation.clearErrors([label]);
+      validation.clearErrors([key]);
     }
   };
   const onBlur = () => {
-    validation?.markTouched(label);
+    validation?.markTouched(key);
   };
   return (
     <label className="block">

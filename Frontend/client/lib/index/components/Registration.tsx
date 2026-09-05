@@ -20,28 +20,74 @@ import { RegistrationSuccess } from "./RegistrationSuccess";
 import { Step1Identifying } from "./registration/Step1Identifying";
 import { Step2Diagnostic } from "./registration/Step2Diagnostic";
 import { ClinicalTreatment } from "./registration/ClinicalTreatment";
-import { error } from "node:console";
 
 type RegistrationProps = {
   setView: (v: string) => void;
 };
 
+/**
+ * Top-level wrapper. Handles draft loading (shows spinner while fetching)
+ * then renders FormStateProvider → RegistrationInner so that the
+ * orchestrator's useFormStateOptional() resolves to the actual context.
+ */
 export function Registration({ setView }: RegistrationProps) {
+  const [searchParams] = useSearchParams();
+  const [draftLoading, setDraftLoading] = useState(() => !!searchParams.get("draft"));
+  const [initialData, setInitialData] = useState<Record<string, unknown> | null>(null);
+  const [draftMeta, setDraftMeta] = useState<{
+    id: number;
+    currentStep: number;
+    formData: Record<string, unknown>;
+  } | null>(null);
+
+  // Load draft data BEFORE the form renders, so Field components mount
+  // with the correct initial values from the context.
+  useEffect(() => {
+    const draftIdParam = searchParams.get("draft");
+    if (!draftIdParam) return;
+    const id = Number(draftIdParam);
+    if (isNaN(id)) return;
+    draftApi.get(id).then((draft) => {
+      setInitialData(draft.formData);
+      setDraftMeta({ id: draft.id, currentStep: draft.currentStep, formData: draft.formData });
+    }).catch(() => {
+      // Draft not found — start fresh
+    }).finally(() => {
+      setDraftLoading(false);
+    });
+  }, []); // Intentionally run once on mount
+
+  // Show loading spinner while fetching draft data
+  if (draftLoading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="h-6 w-6 animate-spin text-[#087888]" />
+        <span className="ml-3 text-sm text-[#82979e]">Loading draft…</span>
+      </div>
+    );
+  }
+
   return (
     <ValidationProvider>
-      <RegistrationInner setView={setView} />
+      <FormStateProvider initialValues={initialData ?? undefined}>
+        <RegistrationInner setView={setView} draftMeta={draftMeta} />
+      </FormStateProvider>
     </ValidationProvider>
   );
 }
 
-function RegistrationInner({ setView }: RegistrationProps) {
+function RegistrationInner({
+  setView,
+  draftMeta,
+}: RegistrationProps & {
+  draftMeta: { id: number; currentStep: number; formData: Record<string, unknown> } | null;
+}) {
   const { session } = useAuth();
-  const [searchParams] = useSearchParams();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(() => draftMeta?.currentStep ?? 1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [draftId, setDraftId] = useState<number | null>(null);
+  const [draftId, setDraftId] = useState<number | null>(draftMeta?.id ?? null);
   const [savingDraft, setSavingDraft] = useState(false);
   const [draftSavedMsg, setDraftSavedMsg] = useState(false);
 
@@ -49,31 +95,40 @@ function RegistrationInner({ setView }: RegistrationProps) {
   // keep them here AND write into the form-capture context as a sibling
   // effect. These four pieces are exactly the ones that the original
   // Registration.tsx orchestrator already lifted up out of Step1.
-  const [referral, setReferral] = useState("Self");
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [sameAddress, setSameAddress] = useState(false);
-  const [familyHistory, setFamilyHistory] = useState("No");
+  const [referral, setReferral] = useState(() => {
+    const v = draftMeta?.formData["7. Type of referral"];
+    return typeof v === "string" ? v : "Self";
+  });
+  const [selectedIds, setSelectedIds] = useState<string[]>(() => {
+    const v = draftMeta?.formData["_selectedIds"];
+    return Array.isArray(v) ? (v as string[]) : [];
+  });
+  const [sameAddress, setSameAddress] = useState(() => {
+    const v = draftMeta?.formData["_sameAddress"];
+    return typeof v === "boolean" ? v : false;
+  });
+  const [familyHistory, setFamilyHistory] = useState(() => {
+    const v = draftMeta?.formData["19. Relationship to Cancer / Degree of Relationship"];
+    return typeof v === "string" ? v : "No";
+  });
 
-  // Draft loading state — load data BEFORE rendering the form
-  const [draftLoading, setDraftLoading] = useState(() => !!searchParams.get("draft"));
-  const [initialData, setInitialData] = useState<Record<string, unknown> | null>(null);
-
+  // NOW: ctx resolves correctly because FormStateProvider is an ancestor.
   const ctx = useFormStateOptional();
   const validation = useValidation();
 
   // Sync the four orchestrator-owned fields into the form-state context.
-  useEffect(() => { ctx?.set("7. Type of referral", referral); }, [referral]);
+  useEffect(() => { ctx?.set("7. Type of referral", referral); }, [referral, ctx]);
   useEffect(() => {
     // Persist which unique IDs are selected so we can persist later.
     ctx?.set("_selectedIds", [...selectedIds]);
-  }, [selectedIds]);
-  useEffect(() => { ctx?.set("_sameAddress", sameAddress); }, [sameAddress]);
+  }, [selectedIds, ctx]);
+  useEffect(() => { ctx?.set("_sameAddress", sameAddress); }, [sameAddress, ctx]);
   useEffect(() => {
     ctx?.set(
       "19. Relationship to Cancer / Degree of Relationship",
       familyHistory,
     );
-  }, [familyHistory]);
+  }, [familyHistory, ctx]);
 
   /**
    * Build a snapshot of every value the validators might read: the form
@@ -126,32 +181,6 @@ function RegistrationInner({ setView }: RegistrationProps) {
     );
     el?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
-
-  // Load draft data BEFORE the form renders, so Field components mount
-  // with the correct initial values from the context.
-  useEffect(() => {
-    const draftIdParam = searchParams.get("draft");
-    if (!draftIdParam) return;
-    const id = Number(draftIdParam);
-    if (isNaN(id)) return;
-    draftApi.get(id).then((draft) => {
-      setInitialData(draft.formData);
-      setStep(draft.currentStep);
-      setDraftId(draft.id);
-      // Restore lifted state from draft values
-      const snap = draft.formData;
-      if (typeof snap["7. Type of referral"] === "string") setReferral(snap["7. Type of referral"]);
-      if (typeof snap["_selectedIds"] === "object" && Array.isArray(snap["_selectedIds"]))
-        setSelectedIds(snap["_selectedIds"] as string[]);
-      if (typeof snap["_sameAddress"] === "boolean") setSameAddress(snap["_sameAddress"]);
-      if (typeof snap["19. Relationship to Cancer / Degree of Relationship"] === "string")
-        setFamilyHistory(snap["19. Relationship to Cancer / Degree of Relationship"]);
-    }).catch(() => {
-      // Draft not found — start fresh
-    }).finally(() => {
-      setDraftLoading(false);
-    });
-  }, []); // Intentionally run once on mount
 
   // Save Draft handler
   const handleSaveDraft = async () => {
@@ -292,18 +321,7 @@ function RegistrationInner({ setView }: RegistrationProps) {
     return <RegistrationSuccess setView={setView} />;
   }
 
-  // Show loading spinner while fetching draft data
-  if (draftLoading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-6 w-6 animate-spin text-[#087888]" />
-        <span className="ml-3 text-sm text-[#82979e]">Loading draft…</span>
-      </div>
-    );
-  }
-
   return (
-    <FormStateProvider initialValues={initialData ?? undefined}>
     <div className="space-y-5">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div>
@@ -420,7 +438,6 @@ function RegistrationInner({ setView }: RegistrationProps) {
         </div>
       </div>
     </div>
-    </FormStateProvider>
   );
 }
 
