@@ -15,6 +15,8 @@ import {
   type RuleSet,
 } from "@/lib/validation";
 
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+
 const MOBILE_RE = /^[6-9][0-9]{9}$/;
 
 export type Step3Values = {
@@ -39,6 +41,10 @@ export type Step3Values = {
   Remarks?: string;
   "33. Contact Number"?: string;
   "34. Designation"?: string;
+  "29. Treatment Given Prior to Registration at RI / Outside RI type"?: string;
+  "29. Treatment modalities selected"?: string[];
+  "30. Treatment at RI type"?: string;
+  "30. Treatment modalities selected"?: string[];
 };
 
 const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
@@ -52,6 +58,7 @@ const step3Rules: RuleSet<Step3Values> = defineRules<Step3Values>({
   "28(c). Composite stage": [required("Composite stage is required")],
   "31. Name of person completing form (IN CAPITALS)": [
     required("Name of person completing the form is required"),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
     maxLen(255),
   ],
   "32. Date of completion of form": [
@@ -94,6 +101,63 @@ export function validateStep3(values: Record<string, unknown>): Record<string, s
     if (!v || String(v).trim() === "") {
       out["Specify targeted therapy"] = "Please specify the targeted therapy";
     }
+  }
+
+  // 28(a). When Staging System = TNM, T/N/M are mandatory
+  if (staging === "TNM") {
+    const tnmRequired = (label: string, msg: string) => {
+      const v = values[label];
+      if (v === undefined || v === null || String(v).trim() === "") {
+        out[label] = msg;
+      }
+    };
+    tnmRequired("T", "T is required when staging system is TNM");
+    tnmRequired("N", "N is required when staging system is TNM");
+    tnmRequired("M", "M is required when staging system is TNM");
+  }
+
+  // 29. When Treatment Given = Yes, Treatment Type must be selected
+  const treatmentTypeKey = "29. Treatment Given Prior to Registration at RI / Outside RI" + " type";
+  if (treatmentGiven && String(treatmentGiven).trim() === "Yes") {
+    const tt = values[treatmentTypeKey];
+    if (tt === undefined || tt === null || String(tt).trim() === "") {
+      out[treatmentTypeKey] = "Treatment type is required when Treatment Given is Yes";
+    }
+
+    // At least one treatment modality must be selected when Yes
+    const mods = values["29. Treatment modalities selected"];
+    if (!Array.isArray(mods) || mods.length === 0) {
+      out["29. Treatment modalities selected"] = "At least one treatment modality must be selected";
+    }
+  }
+
+  // 29(c). When Performance Status (ECOG) = Known, ECOG Grade ("If known") is mandatory
+  const ecogStatus = values["29(c). Performance Status (ECOG)"];
+  if (ecogStatus && String(ecogStatus).trim() === "Known") {
+    const grade = values["If known"];
+    if (grade === undefined || grade === null || String(grade).trim() === "") {
+      out["If known"] = "ECOG Grade is required when Performance Status is Known";
+    }
+  }
+
+  // 30. Treatment at RI — Treatment Type is mandatory
+  const riTypeKey = "30. Treatment at RI type";
+  const riType = values[riTypeKey];
+  if (riType === undefined || riType === null || String(riType).trim() === "") {
+    out[riTypeKey] = "Treatment type is required for Treatment at RI";
+  }
+
+  // 30. Treatment at RI — at least one modality must be selected
+  const riMods = values["30. Treatment modalities selected"];
+  if (!Array.isArray(riMods) || riMods.length === 0) {
+    out["30. Treatment modalities selected"] = "At least one treatment modality must be selected for Treatment at RI";
+  }
+
+  // 31. Name of person completing form — auto-uppercase for display
+  const nameKey = "31. Name of person completing form (IN CAPITALS)";
+  const nameVal = values[nameKey];
+  if (nameVal !== undefined && nameVal !== null && String(nameVal).trim() !== "") {
+    values[nameKey] = String(nameVal).toUpperCase();
   }
 
   return out;

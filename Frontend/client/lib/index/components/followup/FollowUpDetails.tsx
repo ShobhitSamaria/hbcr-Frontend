@@ -376,7 +376,7 @@ export function FollowUpDetails({ registrationId, onBack, onAddNew }: Props) {
           </div>
           <ReadOnlyField
             label="Patient Name"
-            value={`${detail.patient.fullName}${detail.patient.age ? `, ${detail.patient.age} yrs` : ""}`}
+            value={`${detail.patient.fullName}${detail.patient.age ? `, ${detail.patient.age}` : ""}`}
           />
           <ReadOnlyField label="ICD-10 Code" value={detail.icd10Code ?? "—"} />
         </div>

@@ -200,8 +200,8 @@ const [laterality, setLaterality] = useState(
               {validation.errors["25. Laterality"]}
             </p>
           )}
-          {laterality === "Paired Site" && (
-            <div className="mt-4 flex flex-col gap-2 text-xs text-[#718991]">
+          {laterality === "Paired Site" && (              <div className="mt-4 flex flex-col gap-2 text-xs text-[#718991]">
+              <span className="mb-1 text-[11px] font-bold text-[#d04a4a]">25(a). Paired Laterality <span className="text-[#d04a4a]">*</span></span>
               {[
                 "Right",
                 "Left",

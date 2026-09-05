@@ -58,7 +58,7 @@
       "dist/spa/*"
     ],
     "scripts": [
-      "dist/server/**/*.js"
+      "dist/server/*/.js"
     ]
   }
 }

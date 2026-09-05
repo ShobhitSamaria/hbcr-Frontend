@@ -4,14 +4,16 @@ import { treatmentRows } from "../../data";
 type TreatmentTableProps = {
   title: string;
   disabled?: boolean;
+  requiredChoice?: boolean;
+  onSelectionChange?: (selectedRows: string[]) => void;
 };
 
-export function TreatmentTable({ title, disabled = false }: TreatmentTableProps) {
+export function TreatmentTable({ title, disabled = false, requiredChoice = false, onSelectionChange }: TreatmentTableProps) {
   const [selected, setSelected] = useState<string[]>([]);
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
-        {title}
+        {title}{requiredChoice && <span className="ml-0.5 text-[#d04a4a]">*</span>}
       </label>
       <div className="overflow-x-auto rounded-xl border border-[#e3edef]">
         <div className="grid min-w-[1050px] grid-cols-[170px_repeat(5,1fr)] gap-2 bg-[#f7fbfb] px-3 py-2 text-[10px] font-bold uppercase tracking-[.08em] text-[#9aafb5]">
@@ -36,11 +38,13 @@ export function TreatmentTable({ title, disabled = false }: TreatmentTableProps)
                   disabled={disabled}
                   checked={active}
                   onChange={(e) =>
-                    setSelected((items) =>
-                      e.target.checked
+                    setSelected((items) => {
+                      const next = e.target.checked
                         ? [...items, row]
-                        : items.filter((item) => item !== row),
-                    )
+                        : items.filter((item) => item !== row);
+                      onSelectionChange?.(next);
+                      return next;
+                    })
                   }
                   className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
                 />

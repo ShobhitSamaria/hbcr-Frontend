@@ -1,7 +1,9 @@
 import { Gender } from "../../generated/prisma/enums.ts";
-import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, maxLen, required, trim, ValidationFieldError } from "./common.ts";
+import { isBoolean, isDate, inEnum, isInt, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
-const NAME_PART = [isString(), trim(), maxLen(100)];
+// Names: only alphabets, spaces, hyphens, apostrophes, and periods
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
+const NAME_PART = [isString(), trim(), maxLen(100), matches(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes")];
 
 /**
  * Derive `fullName` from the First / Middle / Last parts when any part is
@@ -18,7 +20,7 @@ function deriveFullName(v: unknown, all: Record<string, unknown>): string | unde
 }
 
 export const createPatientValidator = makeValidator({
-  firstName: NAME_PART,
+  firstName: [required(), ...NAME_PART],
   middleName: NAME_PART,
   lastName: NAME_PART,
   fullName: [
@@ -33,11 +35,16 @@ export const createPatientValidator = makeValidator({
     trim(),
     maxLen(255),
   ],
-  age: [isInt()],
-  dateOfBirth: [isDate()],
+  age: [required(), isString(), trim(), maxLen(32)],
+  dateOfBirth: [required(), isDate(), notFutureDate()],
   gender: [required(), inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
-  healthSchemeDetails: [isString(), trim(), maxLen(255)],
+  healthSchemeDetails: [isString(), trim(), maxLen(255), (v: unknown, all: Record<string, unknown>) => {
+    if (all.healthSchemeBeneficiary === true && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please provide health scheme details (Beneficiary = Yes)");
+    }
+    return v;
+  }],
 });
 
 export const updatePatientValidator = makeValidator({
@@ -50,11 +57,16 @@ export const updatePatientValidator = makeValidator({
     trim(),
     maxLen(255),
   ],
-  age: [isInt()],
-  dateOfBirth: [isDate()],
+  age: [isString(), trim(), maxLen(32)],
+  dateOfBirth: [isDate(), notFutureDate()],
   gender: [inEnum(Gender)],
   healthSchemeBeneficiary: [isBoolean()],
-  healthSchemeDetails: [isString(), trim(), maxLen(255)],
+  healthSchemeDetails: [isString(), trim(), maxLen(255), (v: unknown, all: Record<string, unknown>) => {
+    if (all.healthSchemeBeneficiary === true && (!v || String(v).trim() === "")) {
+      throw new ValidationFieldError("Please provide health scheme details (Beneficiary = Yes)");
+    }
+    return v;
+  }],
 });
 
 // Helper used by ID search (path param)

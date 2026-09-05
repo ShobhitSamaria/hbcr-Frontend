@@ -196,16 +196,17 @@ export function Step1Identifying({
   const ageFromDob = (dobStr: string): string => {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dobStr);
     if (!m) return "";
-    const y = Number(m[1]);
-    const mo = Number(m[2]);
-    const d = Number(m[3]);
-    if (mo < 1 || mo > 12 || d < 1 || d > 31) return "";
-    const now = new Date();
-    let age = now.getFullYear() - y;
-    const monthDiff = now.getMonth() + 1 - mo;
-    const dayDiff = now.getDate() - d;
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) age--;
-    return age >= 0 ? String(age) : "";
+    const birthDate = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    if (Number.isNaN(birthDate.getTime())) return "";
+    const today = new Date();
+    let years = today.getFullYear() - birthDate.getFullYear();
+    let months = today.getMonth() - birthDate.getMonth();
+    if (today.getDate() < birthDate.getDate()) months--;
+    if (months < 0) { years--; months += 12; }
+    if (years < 0) return "";
+    return years === 0
+      ? `${months} ${months === 1 ? "Month" : "Months"}`
+      : `${years} ${years === 1 ? "Year" : "Years"} ${months} ${months === 1 ? "Month" : "Months"}`;
   };
   const handleDobChange = (v: string) => {
     setDob(v);
@@ -398,9 +399,7 @@ export function Step1Identifying({
                 </span>
                 {isOther && isSelected && (
                   <div className="flex flex-col">
-                    <OtherIdInput
-                      placeholder="Enter identification name/type (e.g. Card Name)"
-                      stateKey={nameKey}
+                    <OtherIdInput placeholder={"Enter identification name/type (e.g. Card Name)" + (isSelected ? " *" : "")} stateKey={nameKey}
                       onBlur={() => validation?.markTouched(nameKey)}
                       hasError={!!(validation?.errors[nameKey] && (validation.forceShow.has(nameKey) || validation.touched.has(nameKey)))}
                       errorMessage={validation?.errors[nameKey]}
@@ -414,7 +413,7 @@ export function Step1Identifying({
                 )}
                 <div className="flex flex-col">
                   <OtherIdInput
-                    placeholder={isOther ? "Enter identification number" : "Enter " + label + " number"}
+                    placeholder={(isOther ? "Enter identification number" : "Enter " + label + " number") + (isSelected ? " *" : "")}
                     stateKey={numKey}
                     disabled={!isSelected}
                     maxLength={maxLength}
@@ -538,6 +537,9 @@ export function Step1Identifying({
                 label="14(b). Duration of Stay at the above address (in years)"
                 type="number"
                 placeholder="e.g. 5"
+                min={0}
+                max={150}
+                step={1}
                 required
               />
             </div>
@@ -653,16 +655,22 @@ export function Step1Identifying({
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label="Height (cm)"
-            placeholder="Enter height"
-            type="number"
-            required
-          />
+                placeholder="Enter height"
+                type="number"
+                min={1}
+                max={300}
+                step={1}
+                required
+              />
           <Field
             label="Weight (kg)"
-            placeholder="Enter weight"
-            type="number"
-            required
-          />
+                placeholder="Enter weight"
+                type="number"
+                min={1}
+                max={700}
+                step={1}
+                required
+              />
         </div>
       </div>
       {/* 18. Relationship to Cancer / Degree of Relationship */}
@@ -686,6 +694,24 @@ function FamilialCancerSection({
   setFamilyHistory: (v: string) => void;
 }) {
   const readOnly = useForceReadOnly();
+  const ctx = useFormStateOptional();
+
+  // Sub-field state for "Yes" conditional fields
+  const [relationshipCancer, setRelationshipCancer] = useState(
+    () => (ctx?.values.current["Relationship with Cancer"] as string) ?? ""
+  );
+  const [degreeRelationship, setDegreeRelationship] = useState(
+    () => (ctx?.values.current["Degree of Relationship"] as string) ?? ""
+  );
+
+  const handleRelationshipCancer = (v: string) => {
+    setRelationshipCancer(v);
+    ctx?.set("Relationship with Cancer", v);
+  };
+  const handleDegreeRelationship = (v: string) => {
+    setDegreeRelationship(v);
+    ctx?.set("Degree of Relationship", v);
+  };
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
@@ -730,7 +756,7 @@ function FamilialCancerSection({
         <div className="mt-5 space-y-5 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4">
           <div>
             <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Relationship with Cancer
+              Relationship with Cancer <span className="text-[#d04a4a]">*</span>
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
@@ -738,7 +764,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
-                  required
+                  checked={relationshipCancer === "Same Cancer"}
+                  onChange={() => handleRelationshipCancer("Same Cancer")}
                   className="accent-[#0b7d87]"
                 />
                 Same Cancer
@@ -748,7 +775,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="relationship-cancer"
-                  required
+                  checked={relationshipCancer === "Other Cancer"}
+                  onChange={() => handleRelationshipCancer("Other Cancer")}
                   className="accent-[#0b7d87]"
                 />
                 Other Cancer
@@ -757,7 +785,7 @@ function FamilialCancerSection({
           </div>
           <div>
             <label className="mb-3 block text-xs font-bold text-[#486b77]">
-              Degree of Relationship
+              Degree of Relationship <span className="text-[#d04a4a]">*</span>
             </label>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
@@ -765,7 +793,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
-                  required
+                  checked={degreeRelationship === "First Degree Relative"}
+                  onChange={() => handleDegreeRelationship("First Degree Relative")}
                   className="accent-[#0b7d87]"
                 />
                 First Degree Relative
@@ -775,7 +804,8 @@ function FamilialCancerSection({
                   disabled={readOnly}
                   type="radio"
                   name="degree-relationship"
-                  required
+                  checked={degreeRelationship === "Second Degree Relative"}
+                  onChange={() => handleDegreeRelationship("Second Degree Relative")}
                   className="accent-[#0b7d87]"
                 />
                 Second Degree Relative

@@ -23,6 +23,8 @@ import {
 const PIN_RE = /^[1-9][0-9]{5}$/;
 const MOBILE_RE = /^[6-9][0-9]{9}$/;
 const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+// Names: only alphabets, spaces, hyphens, apostrophes, and periods
+const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
 
 export type Step1Values = {
   "1. Name of the Reporting Institution (RI)"?: string;
@@ -65,14 +67,26 @@ export type Step1Values = {
   "Email address"?: string;
   "13. Beneficiary of Health Scheme (RGHS / MAAYOGNA / CGHS)"?: string;
   "13. Beneficiary of Health Scheme details"?: string;
+  "Father name"?: string;
   "Father mobile number"?: string;
+  "Mother name"?: string;
   "Mother mobile number"?: string;
+  "Spouse name"?: string;
   "Spouse mobile number"?: string;
+  "Son name"?: string;
   "Son mobile number"?: string;
+  "Daughter name"?: string;
   "Daughter mobile number"?: string;
+  "Other name"?: string;
   "Other mobile number"?: string;
+  "16(a). Marital status (Other)"?: string;
   "Duration of Stay at the above address (in years)"?: string;
   "19. Relationship to Cancer / Degree of Relationship"?: string;
+  "Relationship with Cancer"?: string;
+  "Degree of Relationship"?: string;
+  "Primary site of tumor for relative"?: string;
+  "Age at diagnosis"?: string;
+  "Date of diagnosis"?: string;
   // 13. Unique Identification — radio values keyed by id-{label}
   "id-a). Aadhaar"?: string;
   "id-b). ABHA"?: string;
@@ -113,16 +127,23 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "7(d). District": [maxLen(64)],
   "7(e). Pincode": [pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
   "7(f). Date of Registration": [isDate(), notFutureDate()],
-  "8. Date of first diagnosis": [required(), isDate()],
+  "8. Date of first diagnosis": [required(), isDate(), notFutureDate()],
   "First Name": [
     required("Please enter the patient's first name"),
     minLen(2),
     maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
   ],
-  "Middle Name": [maxLen(100)],
-  "Last Name": [maxLen(100)],
+  "Middle Name": [
+    maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
+  "Last Name": [
+    maxLen(100),
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "10. Date of Birth": [required("Date of birth is required"), isDate(), notFutureDate()],
-  "11. Age": [required("Age is required"), isInt(), range(0, 130, "Age must be between 0 and 130")],
+  "11. Age": [required("Age is required"), maxLen(32)],
   "12. Gender": [required("Please select a gender")],
   "16. Marital status": [required("Please select a marital status")],
   "17. Education": [required("Please select an education level")],
@@ -135,12 +156,12 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "Height (cm)": [
     required("Height is required"),
     isInt(),
-    range(0, 300, "Height must be between 0 and 300 cm"),
+    range(1, 300, "Height must be between 1 and 300 cm"),
   ],
   "Weight (kg)": [
     required("Weight is required"),
     isInt(),
-    range(0, 700, "Weight must be between 0 and 700 kg"),
+    range(1, 700, "Weight must be between 1 and 700 kg"),
   ],
   "Ward No.": [maxLen(32)],
   "Flat / House No.": [required("Flat/House number is required"), maxLen(64)],
@@ -151,11 +172,29 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "PIN Code": [required("PIN code is required"), pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
   "Mobile number": [required("Mobile number is required"), pattern(MOBILE_RE, "Enter a valid 10-digit Indian mobile number")],
   "Email address": [pattern(EMAIL_RE, "Enter a valid email address")],
+  "Father name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Father mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Mother name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Mother mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Spouse name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Spouse mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Son name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Son mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Daughter name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Daughter mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
+  "Other name": [
+    pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
+  ],
   "Other mobile number": [pattern(MOBILE_RE, "Enter a valid 10-digit mobile number")],
   "Urban / Rural": [required("Please select Urban or Rural")],
   "19. Relationship to Cancer / Degree of Relationship": [
@@ -169,6 +208,14 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
  */
 export function validateStep1(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step1Rules, values);
+
+  // 6. Case Registered Through — if Other, the text field is mandatory
+  if (values["6. Case Registered Through (Patient's first reporting at RI)"] === "Other") {
+    const other = values["6(a). Case Registered Through (Other)"];
+    if (other === undefined || other === null || String(other).trim() === "") {
+      out["6(a). Case Registered Through (Other)"] = "Please specify the case registered through (Other)";
+    }
+  }
 
   // 7. Referral conditional sub-fields
   if (values["7. Type of referral"] === "Other Hospital/Health Facility") {
@@ -234,14 +281,22 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
       continue;
     }
     const numVal = values[numLabel];
-    // g). Other does not require a number — the input is disabled
-    if (label === "g). Other") continue;
+    // g). Other requires both number AND name when Yes is selected
+    if (label === "g). Other") {
+      const nameVal = values["g). Other name"];
+      if (numVal === undefined || numVal === null || String(numVal).trim() === "") {
+        out[numLabel] = "Other ID number is required when Yes is selected";
+      }
+      if (nameVal === undefined || nameVal === null || String(nameVal).trim() === "") {
+        out["g). Other name"] = "Other ID name is required when Yes is selected";
+      }
+      continue;
+    }
     if (numVal === undefined || numVal === null || String(numVal).trim() === "") {
       out[numLabel] = `${label.replace('). ', '')} number is required when Yes is selected`;
     } else if (pattern && !pattern.test(String(numVal).trim())) {
       out[numLabel] = formatMsg ?? `Invalid format for ${label}`;
     }
-    // g). Other does not require number or name — the inputs are disabled
   }
 
   // 13(b). Beneficiary of Health Scheme — if Yes, details required
@@ -274,7 +329,86 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
         const dur = values[durationKey];
         if (dur === undefined || dur === null || String(dur).trim() === "") {
           out[durationKey] = "Duration (Months) is required when Yes is selected";
+        } else {
+          const n = Number(dur);
+          if (!Number.isFinite(n) || !Number.isInteger(n) || n < 1) {
+            out[durationKey] = "Duration must be a positive whole number (minimum 1)";
+          }
         }
+      }
+    }
+  }
+
+  // 14. Relative Details — cross-field validation
+  // If a relative name is entered, its mobile number must also be entered
+  const relativePairs: Array<{ name: string; mobile: string }> = [
+    { name: "Father name", mobile: "Father mobile number" },
+    { name: "Mother name", mobile: "Mother mobile number" },
+    { name: "Spouse name", mobile: "Spouse mobile number" },
+    { name: "Son name", mobile: "Son mobile number" },
+    { name: "Daughter name", mobile: "Daughter mobile number" },
+    { name: "Other name", mobile: "Other mobile number" },
+  ];
+  let hasAnyRelative = false;
+  for (const { name, mobile } of relativePairs) {
+    const nameVal = values[name];
+    const nameStr = nameVal !== undefined && nameVal !== null ? String(nameVal).trim() : "";
+    const mobileVal = values[mobile];
+    const mobileStr = mobileVal !== undefined && mobileVal !== null ? String(mobileVal).trim() : "";
+    if (nameStr !== "") {
+      hasAnyRelative = true;
+      if (mobileStr === "") {
+        out[mobile] = `Mobile number is required when ${name} is provided`;
+      }
+    }
+    if (mobileStr !== "") {
+      hasAnyRelative = true;
+      if (nameStr === "") {
+        out[name] = `Name is required when ${mobile} is provided`;
+      }
+    }
+  }
+  if (!hasAnyRelative) {
+    out["Father name"] = "At least one relative detail must be provided";
+  }
+
+  // 16. Marital Status — if Other, 16(a) is mandatory
+  if (values["16. Marital status"] === "Other") {
+    const other = values["16(a). Marital status (Other)"];
+    if (other === undefined || other === null || String(other).trim() === "") {
+      out["16(a). Marital status (Other)"] = "Please specify the marital status (Other)";
+    }
+  }
+
+  // 19. Relationship to Cancer — if Yes, all sub-fields are mandatory
+  if (values["19. Relationship to Cancer / Degree of Relationship"] === "Yes") {
+    const fhRequired = (label: string, msg: string) => {
+      const v = values[label];
+      if (v === undefined || v === null || String(v).trim() === "") {
+        out[label] = msg;
+      }
+    };
+    fhRequired("Relationship with Cancer", "Please select Relationship with Cancer");
+    fhRequired("Degree of Relationship", "Please select Degree of Relationship");
+    fhRequired("Primary site of tumor for relative", "Please select Primary Site");
+    fhRequired("Age at diagnosis", "Age at Diagnosis is required");
+    fhRequired("Date of diagnosis", "Date of Diagnosis is required");
+
+    // Age at Diagnosis: must be 0–129
+    const ageVal = values["Age at diagnosis"];
+    if (ageVal !== undefined && ageVal !== null && String(ageVal).trim() !== "") {
+      const n = Number(ageVal);
+      if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0 || n > 129) {
+        out["Age at diagnosis"] = "Age at Diagnosis must be between 0 and 129";
+      }
+    }
+
+    // Date of Diagnosis: must not be in the future
+    const diagDate = values["Date of diagnosis"];
+    if (diagDate !== undefined && diagDate !== null && String(diagDate).trim() !== "") {
+      const err = notFutureDate("Date of Diagnosis cannot be in the future")(diagDate, values);
+      if (err !== null) {
+        out["Date of diagnosis"] = err;
       }
     }
   }

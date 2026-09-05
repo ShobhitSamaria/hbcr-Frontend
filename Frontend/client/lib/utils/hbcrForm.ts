@@ -44,7 +44,7 @@ export function extractPatient(v: Values): {
   firstName: string | null;
   middleName: string | null;
   lastName: string | null;
-  age: number | null;
+  age: string | null;
   dateOfBirth: string | null;
   gender: Gender;
   healthSchemeBeneficiary: boolean;
@@ -63,7 +63,7 @@ export function extractPatient(v: Values): {
     firstName,
     middleName,
     lastName,
-    age: valInt(v, "11. Age"),
+    age: val(v, "11. Age") || null,
     dateOfBirth: val(v, "10. Date of Birth"),
     gender,
     healthSchemeBeneficiary:
@@ -84,6 +84,7 @@ export function extractAddresses(v: Values): Array<{
   pinCode?: string;
   mobileNumber?: string;
   email?: string;
+  durationStay?: number;
 }> {
   const urbanRural = val(v, "Urban / Rural");
   const res = {
@@ -101,6 +102,12 @@ export function extractAddresses(v: Values): Array<{
     pinCode: val(v, "PIN Code") ?? undefined,
     mobileNumber: val(v, "Mobile number") ?? undefined,
     email: val(v, "Email address") ?? undefined,
+    durationStay: (() => {
+      const raw = val(v, "Duration of Stay at the above address (in years)");
+      if (raw === undefined || raw === null || raw === "") return undefined;
+      const n = Number(raw);
+      return Number.isFinite(n) && Number.isInteger(n) ? n : undefined;
+    })(),
   };
   return [res];
 }
@@ -392,8 +399,36 @@ export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
 
 export function extractFamilyHistory(v: Values): Partial<ApiFamilialCancerHistory> {
   const yesNo = (val(v, "19. Relationship to Cancer / Degree of Relationship") ?? "No") as string;
+  const familyHistory = (yesNo === "Yes" ? "YES" : yesNo === "Unknown" ? "UNKNOWN" : "NO") as any;
+
+  if (familyHistory !== "YES") {
+    return { familyHistory };
+  }
+
+  // Map frontend labels to backend enums
+  const relCancer = val(v, "Relationship with Cancer");
+  const relationshipWithCancer =
+    relCancer === "Same Cancer" ? "SAME_CANCER" : relCancer === "Other Cancer" ? "OTHER_CANCER" : undefined;
+
+  const degreeRel = val(v, "Degree of Relationship");
+  const degreeOfRelationship =
+    degreeRel === "First Degree Relative" ? "FIRST_DEGREE" : degreeRel === "Second Degree Relative" ? "SECOND_DEGREE" : undefined;
+
+  const primarySiteRaw = val(v, "Primary site of tumor for relative");
+  const primarySite = primarySiteRaw ? primarySiteRaw.toUpperCase() : undefined;
+
+  const ageAtDiagnosisRaw = val(v, "Age at diagnosis");
+  const ageAtDiagnosis = ageAtDiagnosisRaw ? parseInt(ageAtDiagnosisRaw, 10) : undefined;
+
+  const dateOfDiagnosis = val(v, "Date of diagnosis") || undefined;
+
   return {
-    familyHistory: (yesNo === "Yes" ? "YES" : yesNo === "Unknown" ? "UNKNOWN" : "NO") as any,
+    familyHistory,
+    relationshipWithCancer: relationshipWithCancer as any,
+    degreeOfRelationship: degreeOfRelationship as any,
+    primarySite: primarySite as any,
+    ageAtDiagnosis,
+    dateOfDiagnosis,
   };
 }
 

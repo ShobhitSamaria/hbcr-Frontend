@@ -313,7 +313,7 @@ export type ApiPatient = {
   firstName: string | null;
   middleName: string | null;
   lastName: string | null;
-  age: number | null;
+  age: string | null;
   dateOfBirth: string | null;
   gender: "MALE" | "FEMALE" | "OTHER";
   healthSchemeBeneficiary: boolean;
@@ -431,9 +431,9 @@ export const patientApi = {
     return send<PaginatedPatients>(`/patients${qs ? `?${qs}` : ""}`);
   },
   get: (id: number) => send<ApiPatient>(`/patients/${id}`),
-  create: (data: { fullName: string; firstName?: string; middleName?: string; lastName?: string; age?: number; dateOfBirth?: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary?: boolean; healthSchemeDetails?: string }) =>
+  create: (data: { fullName: string; firstName?: string; middleName?: string; lastName?: string; age?: string; dateOfBirth?: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary?: boolean; healthSchemeDetails?: string }) =>
     send<ApiPatient>(`/patients`, { method: "POST", body: JSON.stringify(data) }),
-  update: (id: number, data: Partial<{ fullName: string; firstName: string; middleName: string; lastName: string; age: number; dateOfBirth: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary: boolean; healthSchemeDetails: string }>) =>
+  update: (id: number, data: Partial<{ fullName: string; firstName: string; middleName: string; lastName: string; age: string; dateOfBirth: string; gender: "MALE" | "FEMALE" | "OTHER"; healthSchemeBeneficiary: boolean; healthSchemeDetails: string }>) =>
     send<ApiPatient>(`/patients/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
   remove: (id: number) => send<void>(`/patients/${id}`, { method: "DELETE" }),
 };
@@ -550,7 +550,7 @@ export type ApiRegistration = {
   familialCancerHistory?: ApiFamilialCancerHistory | null;
   diagnosticMethods?: ApiDiagnosticMethod[];
   treatments?: ApiTreatment[];
-  patient?: { id: number; fullName: string; age?: number | null; gender?: string };
+  patient?: { id: number; fullName: string; age?: string | null; gender?: string };
 };
 
 export type RegistrationListItem = {
@@ -562,7 +562,7 @@ export type RegistrationListItem = {
   status: "ACTIVE" | "PENDING" | "COMPLETED";
   createdAt: string;
   formCompletedBy?: string | null;
-  patient: { id: number; fullName: string; age: number | null; gender: string };
+  patient: { id: number; fullName: string; age: string | null; gender: string };
   hospital: { id: number; name: string };
   pathologicalDiagnosis?: { icd10Site?: string | null } | null;
 };
@@ -903,7 +903,7 @@ export type FollowUpRegistrationDetail = {
   patient: {
     id: number;
     fullName: string;
-    age: number | null;
+    age: string | null;
     gender: string;
     firstName: string | null;
     middleName: string | null;

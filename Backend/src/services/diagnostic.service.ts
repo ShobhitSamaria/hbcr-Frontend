@@ -9,6 +9,20 @@ async function ensureRegistration(id: number) {
   if (!reg) throw httpErrors.notFound(`Registration ${id} not found`);
 }
 
+/**
+ * Validate that at least one diagnostic method exists for a registration.
+ * Called after all diagnostic methods have been submitted to ensure
+ * the registration is not left without a diagnosis method.
+ */
+async function validateDiagnosticMethodsExist(registrationId: number) {
+  const count = await prisma.diagnosticMethod.count({
+    where: { registrationId },
+  });
+  if (count === 0) {
+    throw httpErrors.badRequest("At least one method of diagnosis is required");
+  }
+}
+
 export const diagnosticService = {
   async listMethods(registrationId: number) {
     await ensureRegistration(registrationId);
@@ -58,6 +72,14 @@ export const diagnosticService = {
     const method = await prisma.diagnosticMethod.findUnique({ where: { id: methodId } });
     if (!method) throw httpErrors.notFound(`Diagnostic method ${methodId} not found`);
     await prisma.diagnosticMethod.delete({ where: { id: methodId } });
+  },
+
+  /**
+   * Validate that at least one diagnostic method exists for a registration.
+   * Exposed for external callers (e.g. registration service post-submission check).
+   */
+  async validateMethodsExist(registrationId: number) {
+    await validateDiagnosticMethodsExist(registrationId);
   },
 
   // -------- procedures --------

@@ -32,6 +32,15 @@ export const sideTablesService = {
   },
   async createIdentifier(patientId: number, data: { idType: string; number?: string; idName?: string }) {
     await ensurePatient(patientId);
+    // For OTHER type, both number and idName are required
+    if (data.idType === "OTHER") {
+      if (!data.number || String(data.number).trim() === "") {
+        throw httpErrors.badRequest("Other ID number is required when type is OTHER");
+      }
+      if (!data.idName || String(data.idName).trim() === "") {
+        throw httpErrors.badRequest("Other ID name is required when type is OTHER");
+      }
+    }
     // Validate ID number format based on type
     if (data.number) {
       const formatError = validateIdNumberFormat(data.idType, data.number);
@@ -49,8 +58,19 @@ export const sideTablesService = {
   async updateIdentifier(patientId: number, identifierId: number, data: { idType?: string; number?: string; idName?: string }) {
     const row = await prisma.patientIdentification.findUnique({ where: { id: identifierId } });
     if (!row || row.patientId !== patientId) throw httpErrors.notFound("Identification not found");
-    // Validate ID number format if type or number is being updated
+    // For OTHER type, both number and idName are required
     const idType = data.idType ?? row.idType;
+    if (idType === "OTHER") {
+      const num = data.number ?? row.number;
+      const name = data.idName ?? row.idName;
+      if (!num || String(num).trim() === "") {
+        throw httpErrors.badRequest("Other ID number is required when type is OTHER");
+      }
+      if (!name || String(name).trim() === "") {
+        throw httpErrors.badRequest("Other ID name is required when type is OTHER");
+      }
+    }
+    // Validate ID number format if type or number is being updated
     const number = data.number ?? row.number;
     if (number) {
       const formatError = validateIdNumberFormat(idType, number);

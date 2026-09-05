@@ -16,7 +16,7 @@ export type PatientRow = {
   referenceNo: string;
   registrationNo: string;
   name: string;
-  age: number;
+  age: string;
   gender: string;
   aadhar: string;
   icd10: string;
@@ -49,7 +49,7 @@ export function apiRegistrationToRow(r: RegistrationListItem): PatientRow {
     referenceNo: r.referenceNo ?? r.hbcrRegistrationNo,
     registrationNo: deriveRegistrationNo(r.referenceNo, r.createdAt),
     name: r.patient?.fullName ?? "(unknown)",
-    age: r.patient?.age ?? 0,
+    age: r.patient?.age ?? "—",
     gender:
       r.patient?.gender === "FEMALE"
         ? "Female"
@@ -80,7 +80,7 @@ export function apiPatientToRow(p: ApiPatient): PatientRow {
     referenceNo: reg?.referenceNo ?? id,
     registrationNo: deriveRegistrationNo(reg?.referenceNo, reg?.createdAt ?? new Date()),
     name: p.fullName,
-    age: p.age ?? 0,
+    age: p.age ?? "—",
     gender:
       p.gender === "FEMALE" ? "Female" : p.gender === "MALE" ? "Male" : "Other",
     aadhar,

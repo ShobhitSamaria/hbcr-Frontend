@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronLeft, ChevronRight, Save } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Save, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
@@ -28,11 +28,9 @@ type RegistrationProps = {
 
 export function Registration({ setView }: RegistrationProps) {
   return (
-    <FormStateProvider>
-      <ValidationProvider>
-        <RegistrationInner setView={setView} />
-      </ValidationProvider>
-    </FormStateProvider>
+    <ValidationProvider>
+      <RegistrationInner setView={setView} />
+    </ValidationProvider>
   );
 }
 
@@ -55,6 +53,10 @@ function RegistrationInner({ setView }: RegistrationProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [sameAddress, setSameAddress] = useState(false);
   const [familyHistory, setFamilyHistory] = useState("No");
+
+  // Draft loading state — load data BEFORE rendering the form
+  const [draftLoading, setDraftLoading] = useState(() => !!searchParams.get("draft"));
+  const [initialData, setInitialData] = useState<Record<string, unknown> | null>(null);
 
   const ctx = useFormStateOptional();
   const validation = useValidation();
@@ -125,29 +127,31 @@ function RegistrationInner({ setView }: RegistrationProps) {
     el?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  // Load draft if ?draft=<id> is in the URL
+  // Load draft data BEFORE the form renders, so Field components mount
+  // with the correct initial values from the context.
   useEffect(() => {
     const draftIdParam = searchParams.get("draft");
-    if (!draftIdParam || !ctx) return;
+    if (!draftIdParam) return;
     const id = Number(draftIdParam);
     if (isNaN(id)) return;
     draftApi.get(id).then((draft) => {
-      // Populate all form state values from the draft
-      for (const [key, value] of Object.entries(draft.formData)) {
-        ctx.set(key, value);
-      }
+      setInitialData(draft.formData);
       setStep(draft.currentStep);
       setDraftId(draft.id);
-      // Restore lifted state from form values
+      // Restore lifted state from draft values
       const snap = draft.formData;
       if (typeof snap["7. Type of referral"] === "string") setReferral(snap["7. Type of referral"]);
+      if (typeof snap["_selectedIds"] === "object" && Array.isArray(snap["_selectedIds"]))
+        setSelectedIds(snap["_selectedIds"] as string[]);
       if (typeof snap["_sameAddress"] === "boolean") setSameAddress(snap["_sameAddress"]);
       if (typeof snap["19. Relationship to Cancer / Degree of Relationship"] === "string")
         setFamilyHistory(snap["19. Relationship to Cancer / Degree of Relationship"]);
     }).catch(() => {
       // Draft not found — start fresh
+    }).finally(() => {
+      setDraftLoading(false);
     });
-  }, [searchParams, ctx]);
+  }, []); // Intentionally run once on mount
 
   // Save Draft handler
   const handleSaveDraft = async () => {
@@ -260,6 +264,7 @@ function RegistrationInner({ setView }: RegistrationProps) {
       const apiErr = e as Error & {
         status?: number;
         fields?: { field?: string; message: string }[];
+        details?: Record<string, unknown>;
       };
       const mapped = mapValidationDetailsToErrors(apiErr.fields);
       if (apiErr.status === 422 && Object.keys(mapped).length > 0) {
@@ -267,6 +272,12 @@ function RegistrationInner({ setView }: RegistrationProps) {
         const target = stepForLabels(Object.keys(mapped));
         setStep(target);
         requestAnimationFrame(() => scrollToLabel(Object.keys(mapped)[0]));
+      } else if (apiErr.status === 409) {
+        // Unique constraint / duplicate field — show as banner error
+        // The backend already provides a user-friendly message
+        setSubmitError(
+          apiErr instanceof Error ? apiErr.message : "A duplicate value was detected. Please check and try again.",
+        );
       } else {
         setSubmitError(
           apiErr instanceof Error ? apiErr.message : "Could not save registration",
@@ -281,11 +292,18 @@ function RegistrationInner({ setView }: RegistrationProps) {
     return <RegistrationSuccess setView={setView} />;
   }
 
-  console.log("validation.errors:", validation.errors);
-console.log("error keys:", Object.keys(validation.errors));
-
+  // Show loading spinner while fetching draft data
+  if (draftLoading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="h-6 w-6 animate-spin text-[#087888]" />
+        <span className="ml-3 text-sm text-[#82979e]">Loading draft…</span>
+      </div>
+    );
+  }
 
   return (
+    <FormStateProvider initialValues={initialData ?? undefined}>
     <div className="space-y-5">
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div>
@@ -402,6 +420,7 @@ console.log("error keys:", Object.keys(validation.errors));
         </div>
       </div>
     </div>
+    </FormStateProvider>
   );
 }
 
