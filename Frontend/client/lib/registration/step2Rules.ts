@@ -136,27 +136,10 @@ export function validateStep2(values: Record<string, unknown>): Record<string, s
       }
     }
 
-    // Date of First Diagnosis validation:
-    // When Microscopic is selected and microscopicLater == 'No',
-    // Date of First Diagnosis should equal Microscopic Confirmation Date
-    // (the Date of Reporting from Page 1, stored as "5. Date of reporting").
-    // When microscopicLater == 'Yes', the date can be earlier.
-    if (microscopicLater === "No") {
-      const firstDiagDate = values["8. Date of first diagnosis"];
-      const reportingDate = values["5. Date of reporting"];
-      if (
-        firstDiagDate &&
-        reportingDate &&
-        String(firstDiagDate).trim() !== "" &&
-        String(reportingDate).trim() !== ""
-      ) {
-        // Dates should be the same when microscopic confirmation is not done later
-        if (String(firstDiagDate).trim() !== String(reportingDate).trim()) {
-          out["8. Date of first diagnosis"] =
-            "Date of first diagnosis must match the microscopic confirmation date";
-        }
-      }
-    }
+    // NOTE: No cross-field comparison between Date of First Diagnosis (Field 8)
+    // and the microscopic confirmation / reporting dates. Per the business rule,
+    // Field 8 only needs to be a valid, non-future date (enforced in step1Rules)
+    // and MAY be earlier than the Date of Reporting.
   }
 
   return out;

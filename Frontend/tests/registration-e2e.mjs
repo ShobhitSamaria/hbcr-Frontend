@@ -125,12 +125,12 @@ await test("'Self' referral with no other fields passes the referral branch", ()
   if (errs["7(a). Name of Facility."]) throw new Error("Self should not require facility name");
 });
 
-await test("DX before reporting date errors", () => {
+await test("DX before reporting date is allowed (no cross-field error)", () => {
   const errs = validateStep1({
     "5. Date of reporting": "2024-07-10",
     "8. Date of first diagnosis": "2024-07-01",
   });
-  if (!errs["8. Date of first diagnosis"]) throw new Error("expected cross-field DX-before-report error");
+  if (errs["8. Date of first diagnosis"]) throw new Error("DX earlier than reporting must be allowed");
 });
 
 // ---------------------------------------------------------------------------
