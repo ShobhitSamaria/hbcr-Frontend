@@ -29,10 +29,15 @@ async function assertAccess(req: Request) {
 
 /**
  * Protected side tables that cannot be modified once a patient has
- * existing registrations: identifications, relatives, addresses.
- * Habits and comorbidities remain editable.
+ * existing registrations.
+ *
+ * Identifications (Aadhaar / ABHA / PAN etc.) are intentionally NOT in this
+ * set: the Patient Records → Edit flow lets a hospital correct/update a
+ * registered patient's identification numbers, and cross-hospital access is
+ * already blocked by assertAccess above. Relatives and addresses remain
+ * locked once a registration exists. Habits and comorbidities are editable.
  */
-const PROTECTED_TABLES = new Set(["identifiers", "relatives", "addresses"]);
+const PROTECTED_TABLES = new Set(["relatives", "addresses"]);
 
 async function assertWritable(patientId: number, table: string) {
   if (PROTECTED_TABLES.has(table)) {

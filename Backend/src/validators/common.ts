@@ -203,6 +203,47 @@ export const notFutureDate = (msg = "must not be a future date"): ValidatorRule<
   return d;
 };
 
+/**
+ * Partial-update validator for PATCH routes.
+ *
+ * Only fields present in the request body are validated/stored. Absent keys
+ * are skipped entirely, so `required()` (and friends) never fire for fields
+ * the client did not send. Present-but-empty values still fail `required()`.
+ */
+export function makePartialValidator<T extends Record<string, unknown>>(schema: Schema<T>) {
+  return (raw: unknown): T => {
+    const data = (raw ?? {}) as T;
+    const errors: { field: string; message: string }[] = [];
+    const cleaned = {} as T;
+
+    for (const key of Object.keys(schema) as (keyof T)[]) {
+      const rules = schema[key];
+      if (!rules) continue;
+      const present = (data as Record<string, unknown>)[key as string] !== undefined;
+      if (!present) continue;
+      let value: unknown = (data as Record<string, unknown>)[key as string];
+
+      for (const rule of rules) {
+        try {
+          value = rule(value, cleaned);
+        } catch (e) {
+          if (e instanceof ValidationFieldError) {
+            errors.push({ field: String(key), message: e.message });
+            break;
+          }
+          throw e;
+        }
+      }
+
+      (cleaned as Record<string, unknown>)[key as string] = value as unknown;
+    }
+
+    if (errors.length > 0) throw new ValidationError(errors);
+
+    return cleaned;
+  };
+}
+
 // Sanity check that the helpers compile cleanly under `tsx` (excluded via
 // tree-shake on import). Keeping the import warm forces single-source truth.
 void FIELD_RE;

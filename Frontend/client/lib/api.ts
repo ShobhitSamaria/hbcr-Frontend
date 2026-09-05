@@ -448,6 +448,11 @@ export const sideApi = {
         method: "POST",
         body: JSON.stringify(data),
       }),
+    update: (patientId: number, id: number, data: { number?: string; idName?: string }) =>
+      send<ApiPatientIdentification>(`/patients/${patientId}/side/identifications/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      }),
     remove: (patientId: number, id: number) =>
       send<void>(`/patients/${patientId}/side/identifications/${id}`, { method: "DELETE" }),
   },
@@ -610,7 +615,18 @@ export const registrationApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number) => send<ApiRegistration>(`/registrations/${id}`),
-  update: (id: number, data: Partial<Pick<ApiRegistration, 'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate' | 'designation' | 'contactNumber'>>) =>
+  update: (
+    id: number,
+    data: Partial<
+      Pick<
+        ApiRegistration,
+        'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate' | 'designation' | 'contactNumber' | 'occupation'
+      > & {
+        anthropometricHeightCm?: number;
+        anthropometricWeightKg?: number;
+      }
+    >,
+  ) =>
     send<ApiRegistration>(`/registrations/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),

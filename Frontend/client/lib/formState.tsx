@@ -21,6 +21,8 @@ type FormStateCtx = {
   /** Mutable map of `field label -> current value`. */
   values: React.MutableRefObject<Record<string, unknown>>;
   set: (label: string, value: unknown) => void;
+  /** Subscribe to value changes; returns an unsubscribe function. */
+  subscribe: (listener: () => void) => () => void;
   /** When present, fields whose label is in this set are read-only. */
   readOnlyFields?: Set<string>;
   /** When true, ALL fields are forced read-only (view mode). */
@@ -47,6 +49,10 @@ export function FormStateProvider({
     values.current[label] = value;
     listeners.current.forEach((fn) => fn());
   }, []);
+  const subscribe = useCallback((listener: () => void) => {
+    listeners.current.add(listener);
+    return () => listeners.current.delete(listener);
+  }, []);
   // Sync ref when initialValues prop changes (e.g., after async data load).
   // Must be synchronous during render so children's useState initializers
   // and useEffect sync hooks see the values immediately.
@@ -57,7 +63,7 @@ export function FormStateProvider({
   }
   useEffect(() => () => listeners.current.clear(), []);
   return (
-    <Ctx.Provider value={{ values, set, readOnlyFields, forceReadOnly }}>{children}</Ctx.Provider>
+    <Ctx.Provider value={{ values, set, subscribe, readOnlyFields, forceReadOnly }}>{children}</Ctx.Provider>
   );
 }
 

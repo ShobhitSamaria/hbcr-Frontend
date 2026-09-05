@@ -14,6 +14,7 @@ import {
   pathologyApi,
   familyHistoryApi,
   type ApiPatient,
+  type ApiPatientIdentification,
   type ApiRegistration,
 } from "@/lib/api";
 import { FormStateProvider, useFormStateOptional } from "@/lib/formState";
@@ -26,6 +27,25 @@ import { ClinicalTreatment } from "./registration/ClinicalTreatment";
 type PatientRecordFormProps = {
   patientId: number;
   onBack: () => void;
+};
+
+/** Optional ID rows in Section 13 (label used by the Step-1 form ↔ idType in DB). */
+const OPTIONAL_ID_DEFS: { label: string; idType: string }[] = [
+  { label: "c). PAN Card", idType: "PAN_CARD" },
+  { label: "d). Voter ID", idType: "VOTER_ID" },
+  { label: "e). Passport", idType: "PASSPORT" },
+  { label: "f). AB-PMJAY", idType: "AB_PMJAY" },
+  { label: "g). Other", idType: "OTHER" },
+];
+
+/** Same format rules the Step-1 inputs and backend enforce. */
+const ID_FORMAT: Record<string, RegExp> = {
+  AADHAAR: /^\d{12}$/,
+  ABHA: /^\d{14}$/,
+  PAN_CARD: /^[A-Z]{5}[0-9]{4}[A-Z]$/,
+  VOTER_ID: /^[A-Za-z0-9]{10}$/,
+  PASSPORT: /^[A-Z][0-9]{7}$/,
+  AB_PMJAY: /^[A-Za-z0-9\-]+$/,
 };
 
 /** Fields that are always read-only in Patient Records view. */
@@ -75,13 +95,26 @@ const READONLY_FIELDS = new Set([
   "19. Relationship to Cancer / Degree of Relationship",
 ]);
 
-/** Bridges form state from inside FormStateProvider to the parent via a ref. */
+/**
+ * Bridges form state from inside FormStateProvider to the parent via a ref.
+ *
+ * Subscribes to every value change and copies the *current* map into the ref
+ * on each render, so the parent's save handler always sees the latest typed
+ * values instead of the initial ones.
+ */
 function FormStateBridge({ snapshotRef }: { snapshotRef: React.MutableRefObject<Record<string, unknown>> }) {
   const ctx = useFormStateOptional();
+  const [, force] = useState(0);
   useEffect(() => {
     if (!ctx) return;
     snapshotRef.current = { ...ctx.values.current };
   });
+  // Re-render whenever any form value changes so the effect above re-syncs the
+  // ref immediately after each keystroke / selection.
+  useEffect(() => {
+    if (!ctx) return;
+    return ctx.subscribe(() => force((n) => n + 1));
+  }, [ctx]);
   return null;
 }
 
@@ -139,6 +172,16 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  // Derive the "Yes" toggles for the optional Section-13 IDs (c–g) from the
+  // rows that are actually persisted for this patient, so view/edit mode shows
+  // them correctly instead of defaulting to "No".
+  useEffect(() => {
+    if (!patient) return;
+    const byType = new Set<string>((patient.identifications ?? []).map((i) => i.idType));
+    const present = OPTIONAL_ID_DEFS.filter((d) => byType.has(d.idType)).map((d) => d.label);
+    setSelectedIds(present);
+  }, [patient]);
 
   /** Explicit reverse mapping: Prisma enum → form option label. */
   const ENUM_DISPLAY: Record<string, string> = {
@@ -227,22 +270,23 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "10. Date of Birth": toDateStr(patient.dateOfBirth),
       "11. Age": patient.age != null ? String(patient.age) : "",
       "12. Gender": patient.gender ?? "",
-      // 13. Identifications
-      "a). Aadhaar": aadhaar?.number ?? "",
-      "b). ABHA": abha?.number ?? "",
+      // 13. Identifications — the keys must match the stateKeys the Step-1
+      // form reads (Aadhaar/ABHA end in " number"; optional ID numbers use
+      // the bare "<label> number" key; Yes/No radios use "id-<label>").
+      "a). Aadhaar number": aadhaar?.number ?? "",
+      "b). ABHA number": abha?.number ?? "",
       "id-c). PAN Card": pan ? "Yes" : "No",
-      "Enter c). PAN Card number": pan?.number ?? "",
+      "c). PAN Card number": pan?.number ?? "",
       "id-d). Voter ID": voter ? "Yes" : "No",
-      "Enter d). Voter ID number": voter?.number ?? "",
+      "d). Voter ID number": voter?.number ?? "",
       "id-e). Passport": passport ? "Yes" : "No",
-      "Enter e). Passport number": passport?.number ?? "",
+      "e). Passport number": passport?.number ?? "",
       "id-f). AB-PMJAY": abPmjay ? "Yes" : "No",
-      "Enter f). AB-PMJAY number": abPmjay?.number ?? "",
+      "f). AB-PMJAY number": abPmjay?.number ?? "",
       "id-g). Other": otherIds.length > 0 ? "Yes" : "No",
-      "Enter g). Other number": otherIds[0]?.number ?? "",
-      "g). Other ID Name": otherIds[0]?.idName ?? "",
+      "g). Other number": otherIds[0]?.number ?? "",
+      "g). Other name": otherIds[0]?.idName ?? "",
       "health-scheme": patient.healthSchemeBeneficiary ? "Yes" : "No",
-      "13. Beneficiary of Health Scheme (RGHS / MAAYOGNA / CGHS)": patient.healthSchemeBeneficiary ? "Yes" : "No",
       "13. Beneficiary of Health Scheme details": patient.healthSchemeDetails ?? "",
       // 14. Relatives
       "Father name": father?.name ?? "",
@@ -276,16 +320,17 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       // 17. Education
       "17. Education": toDisplay(reg.education),
       "17(a). Education (Other)": reg.educationOther ?? "",
-      // Anthropometric
-      "Anthropometric Height (cm)": reg.anthropometricHeightCm ?? "",
-      "Anthropometric Weight (kg)": reg.anthropometricWeightKg ?? "",
+      // 18(c). Anthropometric — Step-1 form keys are "Height (cm)"/"Weight (kg)"
+      "Height (cm)": reg.anthropometricHeightCm != null ? String(reg.anthropometricHeightCm) : "",
+      "Weight (kg)": reg.anthropometricWeightKg != null ? String(reg.anthropometricWeightKg) : "",
       // Occupation
       "Occupation": reg.occupation ?? "",
-      // Contact / Designation (on registration)
-      "Name of Person Completing Form (in capitals)": reg.formCompletedBy ?? "",
-      "Designation": reg.designation ?? "",
-      "Contact Number": reg.contactNumber ?? "",
-      "Date of Completion of this Form": toDateStr(reg.formCompletionDate),
+      // Step-3 completion block (keys must match the ClinicalTreatment labels)
+      "31. Name of person completing form (IN CAPITALS)": reg.formCompletedBy ?? "",
+      "32. Date of completion of form": toDateStr(reg.formCompletionDate),
+      "33. Contact Number": reg.contactNumber ?? "",
+      "34. Designation": reg.designation ?? "",
+      "Remarks": reg.remarks ?? "",
       // 18. Habits / Comorbidities — managed via ToggleDetails
       // 19. Family History
       "19. Relationship to Cancer / Degree of Relationship": fh?.familyHistory === "YES" ? "Yes" : fh?.familyHistory === "UNKNOWN" ? "Unknown" : "No",
@@ -298,23 +343,113 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
     setSaving(true);
     setSaveError(null);
     setSaveSuccess(false);
+    const fs = formSnapshotRef.current;
+    const str = (key: string): string => {
+      const v = fs[key];
+      return typeof v === "string" ? v.trim() : "";
+    };
+
     try {
       const reg = registrations[0];
-      const fs = formSnapshotRef.current;
-      const str = (key: string): string => {
-        const v = fs[key];
-        return typeof v === "string" ? v.trim() : "";
-      };
+      const patientId = patient.id;
+      const existing = new Map<string, ApiPatientIdentification>(
+        (patient.identifications ?? []).map((i) => [i.idType, i] as const),
+      );
 
-      // 1. Update registration-level editable fields
+      // 1) Client-side validation (mirrors Step-1 rules) so an invalid value
+      // can never overwrite a valid persisted one.
+      const errors: string[] = [];
+      const aadhaar = str("a). Aadhaar number");
+      const abha = str("b). ABHA number");
+      if (!/^\d{12}$/.test(aadhaar)) errors.push("Aadhaar must be exactly 12 digits");
+      if (!/^\d{14}$/.test(abha)) errors.push("ABHA must be exactly 14 digits");
+      for (const { label, idType } of OPTIONAL_ID_DEFS) {
+        const toggled = str(`id-${label}`) === "Yes";
+        if (!toggled) continue;
+        const num = str(`${label} number`);
+        const name = str(`${label} name`);
+        if (!num) {
+          errors.push(`${label} number is required`);
+        } else if (ID_FORMAT[idType] && !ID_FORMAT[idType].test(num)) {
+          errors.push(`${label} number is not in a valid format`);
+        }
+        if (idType === "OTHER" && !name) errors.push("Other ID name is required");
+      }
+      const height = str("Height (cm)");
+      const weight = str("Weight (kg)");
+      for (const [nm, val] of [["Height", height], ["Weight", weight]] as const) {
+        if (val === "") continue; // blank = leave unchanged
+        const n = Number(val);
+        if (!Number.isInteger(n) || n <= 0 || n > 999) {
+          errors.push(`${nm} must be a positive whole number`);
+        }
+      }
+      if (errors.length > 0) {
+        setSaveError(errors.join("; "));
+        setSaving(false);
+        return;
+      }
+
+      // 2) Persist Aadhaar / ABHA (create when missing, otherwise update only
+      // when the value actually changed).
+      for (const [idType, value] of [["AADHAAR", aadhaar], ["ABHA", abha]] as const) {
+        const row = existing.get(idType);
+        if (row) {
+          if ((row.number ?? "") !== value) {
+            await sideApi.identifications.update(patientId, row.id, { number: value });
+          }
+        } else if (value) {
+          await sideApi.identifications.create(patientId, { idType, number: value });
+        }
+      }
+
+      // 3) Optional IDs (c–g): create / update / remove to match the form.
+      for (const { label, idType } of OPTIONAL_ID_DEFS) {
+        const row = existing.get(idType);
+        const toggled = str(`id-${label}`) === "Yes";
+        const num = toggled ? str(`${label} number`) : "";
+        const name = toggled ? str(`${label} name`) : "";
+        if (!toggled) {
+          if (row) await sideApi.identifications.remove(patientId, row.id);
+        } else if (!row) {
+          await sideApi.identifications.create(patientId, {
+            idType,
+            number: num || undefined,
+            idName: name || undefined,
+          });
+        } else {
+          const changed =
+            (row.number ?? "") !== num ||
+            (idType === "OTHER" && (row.idName ?? "") !== name);
+          if (changed) {
+            await sideApi.identifications.update(patientId, row.id, {
+              number: num || undefined,
+              ...(idType === "OTHER" ? { idName: name || undefined } : {}),
+            });
+          }
+        }
+      }
+
+      // 4) Registration-level editable fields (completion block, occupation,
+      // anthropometrics). Blank anthropometrics are left unchanged.
+      const numOrUndef = (v: string): number | undefined => {
+        const n = Number(v);
+        return v !== "" && Number.isFinite(n) ? n : undefined;
+      };
+      const hCm = numOrUndef(height);
+      const wKg = numOrUndef(weight);
       await registrationApi.update(reg.id, {
         remarks: str("Remarks") || undefined,
-        designation: str("Designation") || undefined,
-        contactNumber: str("Contact Number") || undefined,
-        formCompletedBy: str("Name of Person Completing Form (in capitals)") || undefined,
+        designation: str("34. Designation") || undefined,
+        contactNumber: str("33. Contact Number") || undefined,
+        formCompletedBy: str("31. Name of person completing form (IN CAPITALS)") || undefined,
+        formCompletionDate: str("32. Date of completion of form") || undefined,
+        occupation: str("Occupation") || undefined,
+        ...(hCm !== undefined ? { anthropometricHeightCm: hCm } : {}),
+        ...(wKg !== undefined ? { anthropometricWeightKg: wKg } : {}),
       });
 
-      // 2. Save family history
+      // 5) Family history
       if (familyHistory) {
         const fhVal = familyHistory === "Yes" ? "YES" : familyHistory === "Unknown" ? "UNKNOWN" : "NO";
         await familyHistoryApi.upsert(reg.id, { familyHistory: fhVal });
@@ -324,7 +459,11 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       setEditMode(false);
       await loadData();
     } catch (e) {
-      setSaveError(e instanceof Error ? e.message : "Failed to save");
+      const msg = e instanceof Error ? e.message : "Failed to save";
+      setSaveError(msg);
+      // Re-sync with the database so the UI never shows values that weren't
+      // actually persisted.
+      await loadData().catch(() => {});
     } finally {
       setSaving(false);
     }

@@ -5,7 +5,7 @@ import {
   ReferralType,
   RegistrationStatus,
 } from "../../generated/prisma/enums.ts";
-import { inEnum, isBoolean, isDate, isInt, isPositiveInt, isString, makeValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
+import { inEnum, isBoolean, isDate, isInt, isPositiveInt, isString, makeValidator, makePartialValidator, matches, maxLen, notFutureDate, required, trim, ValidationFieldError } from "./common.ts";
 
 const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
 const MOBILE_RE = /^[6-9][0-9]{9}$/;
@@ -94,7 +94,7 @@ export const createRegistrationValidator = makeValidator({
   createdByUserId: [isInt()],
 });
 
-export const updateRegistrationValidator = makeValidator({
+export const updateRegistrationValidator = makePartialValidator({
   referenceNo: [isString(), trim(), maxLen(64)],
   departmentName: [required(), isString(), trim(), maxLen(255)],
   unitNumber: [required(), isString(), trim(), maxLen(32)],
