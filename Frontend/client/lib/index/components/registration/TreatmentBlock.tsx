@@ -5,18 +5,31 @@ import { TreatmentTable } from "./TreatmentTable";
 type TreatmentBlockProps = {
   title: string;
   requiredChoice?: boolean;
+  /** Form-state key where the selected modality labels are stored (seeded in
+   *  Patient Records so the table checkboxes reflect persisted data). */
+  modalityStateKey?: string;
   onSelectionChange?: (selectedRows: string[]) => void;
 };
 
 export function TreatmentBlock({
   title,
   requiredChoice = false,
+  modalityStateKey,
   onSelectionChange,
 }: TreatmentBlockProps) {
   const ctx = useFormStateOptional();
   const readOnly = useForceReadOnly();
-  const [given, setGiven] = useState(requiredChoice ? "Yes" : "");
-  const [type, setType] = useState("");
+  // Initialize from the form-state capture (Patient Records seeds these) so
+  // saved choices display instead of the registration defaults.
+  const [given, setGiven] = useState(() => {
+    const cur = ctx?.values.current[title];
+    if (typeof cur === "string" && cur !== "") return cur;
+    return requiredChoice ? "Yes" : "";
+  });
+  const [type, setType] = useState(() => {
+    const cur = ctx?.values.current[title + " type"];
+    return typeof cur === "string" ? cur : "";
+  });
 
   useEffect(() => {
     if (requiredChoice) ctx?.set(title, given);
@@ -96,6 +109,7 @@ export function TreatmentBlock({
           <TreatmentTable
             key={type}
             title="Treatment modalities"
+            stateKey={modalityStateKey}
             requiredChoice={requiredChoice && given === "Yes"}
             disabled={readOnly || nonAllopathic}
             onSelectionChange={onSelectionChange}

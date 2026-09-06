@@ -365,6 +365,7 @@ export type ApiPatientAddress = {
   pinCode: string | null;
   mobileNumber: string | null;
   email: string | null;
+  durationStay?: number | null;
 };
 
 export type ApiPatientHabit = {

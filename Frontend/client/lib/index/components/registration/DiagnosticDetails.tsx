@@ -22,9 +22,23 @@ export function DiagnosticDetails({
   setMethods: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const readOnly = useForceReadOnly();
-  const [clinicalDate, setClinicalDate] = useState("");
-  const [microscopicLater, setMicroscopicLater] = useState<"" | "Yes" | "No">("");
   const ctx = useFormStateOptional();
+  // Initialize local state from the form-state capture (seeded values in
+  // Patient Records / resumed drafts) so saved values display correctly.
+  const [clinicalDate, setClinicalDate] = useState<string>(() => {
+    const cur = ctx?.values.current["_diagnostic.clinicalDate"];
+    return typeof cur === "string" ? cur : "";
+  });
+  const [microscopicLater, setMicroscopicLater] = useState<"" | "Yes" | "No">(() => {
+    const cur = ctx?.values.current["_diagnostic.microscopicLater"];
+    return cur === "Yes" || cur === "No" ? cur : "";
+  });
+  // Saved procedure rows per section (seeded by PatientRecordForm) so the
+  // DiagnosticTable checkboxes reflect persisted data.
+  const initialProcedures = (section: string): string[] => {
+    const v = ctx?.values.current[`_diagnostic.procedures.${section}`];
+    return Array.isArray(v) ? (v as string[]) : [];
+  };
 
   // Mirror into the form-state capture so the orchestrator can persist them
   // on submit. Pure addition - no UI/flow change.
@@ -100,6 +114,7 @@ export function DiagnosticDetails({
             "(j).Flow Cytometry",
             "(k) Others",
           ]}
+          initialSelected={initialProcedures("Microscopic")}
         />
       )}
       {methods.includes("Imaging") && (
@@ -115,6 +130,7 @@ export function DiagnosticDetails({
             "(g). PET Scan",
             "(i). Others",
           ]}
+          initialSelected={initialProcedures("Imaging")}
         />
       )}
       <div className="flex w-full flex-col gap-1.5 rounded-lg border border-[#e3edef] bg-[#f7fbfb] p-2.5">
@@ -157,6 +173,7 @@ export function DiagnosticDetails({
             "(d). Biological Markers",
             "(e). Others",
           ]}
+          initialSelected={initialProcedures("Other")}
         />
       )}
     </div>
