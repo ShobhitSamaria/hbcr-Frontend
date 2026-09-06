@@ -231,7 +231,7 @@ export function Step1Identifying({
           required
         />
         <Field
-          label="Centre code"
+          label="1(a). Centre code"
           placeholder="e.g. DL001"
           value={centreCode}
           readOnly
@@ -239,13 +239,13 @@ export function Step1Identifying({
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Field
-          label="Reference Number"
+          label="1(b).Reference Number"
           value={previewNumbers?.referenceNo ?? ""}
           readOnly
           placeholder="Auto-generated on submission"
         />
         <Field
-          label="Registration Number"
+          label="2.Registration Number"
           value={previewNumbers?.registrationNo ?? ""}
           readOnly
           placeholder="Auto-generated on submission"
@@ -256,9 +256,9 @@ export function Step1Identifying({
         <Field label="3(b). Unit number" placeholder="Unit 04" required />
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-        <Field label="5. Date of reporting" type="date" required />
+        <Field label="4. Date of reporting" type="date" required />
         <SelectField
-          label="6. Case Registered Through (Patient’s first reporting at RI)"
+          label="5. Case Registered Through (Patient’s first reporting at RI)"
           value={caseThrough}
           onChange={handleCaseThrough}
           options={["Out Patient", "In Patient Elective", "In Patient Emergency", "Unknown", "Other"]}
@@ -266,7 +266,7 @@ export function Step1Identifying({
         />
         {caseThrough === "Other" && (
           <Field
-            label="6(a). Case Registered Through (Other)"
+            label="5(a). Case Registered Through (Other)"
             stateKey="6(a). Case Registered Through (Other)"
             placeholder="Specify other case registered through"
             value={caseThroughOther}
@@ -275,7 +275,7 @@ export function Step1Identifying({
           />
         )}
         <SelectField
-          label="7. Type of referral"
+          label="6. Type of referral"
           value={referral}
           required
           onChange={setReferral}
@@ -289,28 +289,28 @@ export function Step1Identifying({
         {referral === "Other Hospital/Health Facility" && (
           <>
             <Field
-              label="7(a). Name of Facility."
-              stateKey="7(a). Name of Facility."
+              label="6(a). Name of Facility."
+              stateKey="6(a). Name of Facility."
               placeholder="Enter Facility name"
               required
             />
             <Field
-              label="7(b). Hospital / LAB / N.H."
-              stateKey="7(b). Hospital / LAB / N.H."
+              label="6(b). Hospital / LAB / N.H."
+              stateKey="6(b). Hospital / LAB / N.H."
               placeholder="Enter Hospital / LAB / N.H."
               required
             />
-            <Field label="7(c). City" stateKey="7(c). City" placeholder="City" required />
-            <Field label="7(d). District" stateKey="7(d). District" placeholder="District" required />
-            <Field label="7(e). Pincode" placeholder="Pincode" />
-            <Field label="7(f). Date of Registration" stateKey="7(f). Date of Registration" type="date" required />
+            <Field label="6(c). City" stateKey="7(c). City" placeholder="City" required />
+            <Field label="6(d). District" stateKey="7(d). District" placeholder="District" required />
+            <Field label="6(e). Pincode" placeholder="Pincode" />
+            <Field label="6(f). Date of Registration" stateKey="7(f). Date of Registration" type="date" required />
           </>
         )}
-        <Field label="8. Date of first diagnosis" type="date" required />
+        <Field label="7. Date of first diagnosis" type="date" required />
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          9. Patient Full Name
+          8. Patient Full Name
         </label>
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="First Name" placeholder="First name" required />
@@ -320,14 +320,14 @@ export function Step1Identifying({
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field
-          label="10. Date of Birth"
+          label="9. Date of Birth"
           type="date"
           value={dob}
           onChange={handleDobChange}
           required
         />
         <Field
-          label="11. Age"
+          label="10. Age"
           type="text"
           placeholder="Auto-calculated from DOB"
           value={ageFromDob(dob)}
@@ -335,14 +335,14 @@ export function Step1Identifying({
           required
         />
         <SelectField
-          label="12. Gender"
+          label="11. Gender"
           options={["Male", "Female", "Other"]}
           required
         />
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          13. Unique identification
+          12. Unique identification
         </label>
         <div className="space-y-3">
           {/* Aadhaar & ABHA — mandatory, direct input fields (no Yes/No) */}
@@ -449,7 +449,7 @@ export function Step1Identifying({
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          14. Relative details
+          13. Relative details
         </label>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
           <Field label="Father name" placeholder="Full name" />
@@ -486,11 +486,11 @@ export function Step1Identifying({
       </div>
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          15. Address<span className="ml-0.5 text-[#d04a4a]">*</span>
+          14. Address<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#718991]">
           <span className="text-[11px] font-bold text-[#5d7a84]">
-            Urban / Rural
+            14(a).Urban / Rural
           </span>
           <label className="flex items-center gap-1.5">
             <input
@@ -545,7 +545,7 @@ export function Step1Identifying({
             </div>
             <div className="mt-4">
               <Field
-                label="Duration of Stay at the above address (in years)"
+                label="14(b).Duration of Stay at the above address (in years)"
                 type="number"
                 placeholder="e.g. 5"
                 min={0}
@@ -567,7 +567,7 @@ export function Step1Identifying({
             {!sameAddress && (
               <>
               <h3 className="mb-3 mt-5 text-sm font-bold text-[#486b77]">
-               Permanent Address
+                 14(c).Permanent Address
               </h3>
 
                <div className="mt-5 grid gap-4 rounded-xl border border-[#e7f0f1] bg-[#fbfdfd] p-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -595,7 +595,7 @@ export function Step1Identifying({
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
-          label="16. Marital status"
+          label="15. Marital status"
           value={maritalStatus}
           onChange={handleMaritalStatus}
           options={["Married", "Single", "Widowed", "Divorced", "Separated", "Other", "Unknown"]}
@@ -603,8 +603,8 @@ export function Step1Identifying({
         />
         {maritalStatus === "Other" && (
           <Field
-            label="16(a). Marital status (Other)"
-            stateKey="16(a). Marital status (Other)"
+            label="15(a). Marital status (Other)"
+            stateKey="15(a). Marital status (Other)"
             placeholder="Specify other marital status"
             value={maritalOther}
             onChange={handleMaritalOther}
@@ -612,7 +612,7 @@ export function Step1Identifying({
           />
         )}
         <SelectField
-          label="17. Education"
+          label="16. Education"
           value={education}
           onChange={handleEducation}
           options={["Illiterate", "Literate", "Primary", "Middle", "Secondary/Higher Secondary", "Technical-after matric", "Graduate and above", "Others (specify)", "Unknown"]}
@@ -620,8 +620,8 @@ export function Step1Identifying({
         />
         {education === "Others (specify)" && (
           <Field
-            label="17(a). Education (Other)"
-            stateKey="17(a). Education (Other)"
+            label="16(a). Education (Other)"
+            stateKey="16(a). Education (Other)"
             placeholder="Specify education level"
             value={educationOther}
             onChange={handleEducationOther}
@@ -634,7 +634,7 @@ export function Step1Identifying({
         placeholder="Enter occupation"
       />
       <ToggleDetails
-        title="18(a). Habits"
+        title="17(a). Habits"
         required
         items={[
           "Smoking",
@@ -645,7 +645,7 @@ export function Step1Identifying({
         ]}
       />
       <ToggleDetails
-        title="18(b). Co-Morbidities"
+        title="17(b). Co-Morbidities"
         required
         items={[
           "Tuberculosis",
@@ -666,7 +666,7 @@ export function Step1Identifying({
       />
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          18(c)Anthropometric measurements
+          17(c). Anthropometric measurements
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
@@ -734,7 +734,7 @@ function FamilialCancerSection({
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">
-        19. Relationship to Cancer / Degree of Relationship
+        18. Relationship to Cancer / Degree of Relationship
       </label>
       <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
         <span className="flex items-center gap-2">
@@ -957,7 +957,7 @@ function HealthSchemeField() {
       {answer === "Yes" && (
         <div className="sm:w-1/2">
           <Field
-            label="13. Beneficiary of Health Scheme details"
+            label="Beneficiary of Health Scheme details"
             stateKey="13. Beneficiary of Health Scheme details"
             placeholder="Enter scheme name / details"
             required
