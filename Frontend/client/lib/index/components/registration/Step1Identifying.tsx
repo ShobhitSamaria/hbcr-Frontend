@@ -948,7 +948,7 @@ function HealthSchemeField() {
       {answer === "Yes" && (
         <div className="sm:w-1/2">
           <Field
-            label="13. Beneficiary of Health Scheme details"
+            label="Beneficiary of Health Scheme details"
             stateKey="13. Beneficiary of Health Scheme details"
             placeholder="Enter scheme name / details"
             required
