@@ -4,6 +4,7 @@ import { TreatmentTable } from "./TreatmentTable";
 
 type TreatmentBlockProps = {
   title: string;
+  number: string;
   requiredChoice?: boolean;
   /** Form-state key where the selected modality labels are stored (seeded in
    *  Patient Records so the table checkboxes reflect persisted data). */
@@ -13,6 +14,7 @@ type TreatmentBlockProps = {
 
 export function TreatmentBlock({
   title,
+  number,
   requiredChoice = false,
   modalityStateKey,
   onSelectionChange,
@@ -88,7 +90,7 @@ export function TreatmentBlock({
       {(!requiredChoice || given === "Yes") && (
         <>
           <div>              <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-              29.1. If Yes, Type of Treatment Given{(requiredChoice && given === "Yes") ? <span className="ml-0.5 text-[#d04a4a]">*</span> : null}
+              {number}(a). If Yes, Type of Treatment Given{(requiredChoice && given === "Yes") ? <span className="ml-0.5 text-[#d04a4a]">*</span> : null}
             </p>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               {["Allopathic", "Non-Allopathic", "Both"].map((option) => (
