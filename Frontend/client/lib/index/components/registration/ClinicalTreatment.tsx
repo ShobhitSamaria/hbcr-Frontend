@@ -37,7 +37,7 @@ export function ClinicalTreatment() {
       <style>{`input[name="31. Name of person completing form (IN CAPITALS)"] { text-transform: uppercase; }`}</style>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
-          label="Clinical Extent of Disease Before Cancer Directed Treatment"
+          label="26. Clinical Extent of Disease Before Cancer Directed Treatment"
           options={[
             "In-situ/benign/borderline/pre invasive",
             "Localized",
@@ -54,7 +54,7 @@ export function ClinicalTreatment() {
           required
         />
         <SelectField
-          label="28(a). Staging system"
+          label="27(a). Staging system"
           options={STAGING_SYSTEM_OPTIONS}
           value={stagingSystem}
           onChange={setStagingSystem}
@@ -64,7 +64,7 @@ export function ClinicalTreatment() {
       {isTNM ? (
         <>
           <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-            28(b). TNM (Tumour, Node, Metastasis)
+            27(b). TNM (Tumour, Node, Metastasis)
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <SelectField
@@ -145,7 +145,7 @@ export function ClinicalTreatment() {
         stagingSystem && (
           <div>
             <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-              28(a). Staging system value
+              27(a). Staging system value
             </p>
             <Field
               label=""
@@ -157,7 +157,7 @@ export function ClinicalTreatment() {
         )
       )}
       <SelectField
-        label="28(c). Composite stage"
+        label="27(b). Composite stage"
         required
         options={["IA",
           "IA1",
@@ -191,17 +191,18 @@ export function ClinicalTreatment() {
         ]}
       />
       <TreatmentBlock
-        title="29. Treatment Given Prior to Registration at RI / Outside RI"
+        number="28"
+        title="28. Treatment Given Prior to Registration at RI / Outside RI"
         requiredChoice
         onSelectionChange={(rows) => {
           setSelectedModalities(rows);
           ctx?.set("29. Treatment modalities selected", rows);
         }}
       />
-      <TargetedTherapy />
+      <TargetedTherapy number="28" />
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          29(c). Performance Status (ECOG)<span className="ml-0.5 text-[#d04a4a]">*</span>
+          28(c). Performance Status (ECOG)<span className="ml-0.5 text-[#d04a4a]">*</span>
         </label>
         <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
           <label className="flex items-center gap-2">
@@ -246,32 +247,33 @@ export function ClinicalTreatment() {
         )}
       </div>
       <TreatmentBlock
-        title="30. Treatment at RI"
+      number="29"
+        title="29. Treatment at RI"
         requiredChoice
         onSelectionChange={(rows) => {
           setSelectedModalities30(rows);
           ctx?.set("30. Treatment modalities selected", rows);
         }}
       />
-      <TargetedTherapy />
+      <TargetedTherapy number="29" />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
-          label="31. Name of person completing form (IN CAPITALS)"
+          label="30. Name of person completing form (IN CAPITALS)"
           placeholder="Enter full name"
           required
         />
         <Field
-          label="32. Date of completion of form"
+          label="31. Date of completion of form"
           type="date"
           required
         />
         <Field
-          label="33. Contact Number"
+          label="32. Contact Number"
           placeholder="Enter contact number"
           required
         />
         <Field
-          label="34. Designation"
+          label="33. Designation"
           placeholder="Enter designation"
           required
         />

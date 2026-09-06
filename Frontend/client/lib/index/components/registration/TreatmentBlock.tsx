@@ -4,12 +4,14 @@ import { TreatmentTable } from "./TreatmentTable";
 
 type TreatmentBlockProps = {
   title: string;
+  number: string;
   requiredChoice?: boolean;
   onSelectionChange?: (selectedRows: string[]) => void;
 };
 
 export function TreatmentBlock({
   title,
+  number,
   requiredChoice = false,
   onSelectionChange,
 }: TreatmentBlockProps) {
@@ -75,7 +77,7 @@ export function TreatmentBlock({
       {(!requiredChoice || given === "Yes") && (
         <>
           <div>              <p className="mb-2 text-[11px] font-bold text-[#5d7a84]">
-              29.1. If Yes, Type of Treatment Given{(requiredChoice && given === "Yes") ? <span className="ml-0.5 text-[#d04a4a]">*</span> : null}
+              {number}(a). If Yes, Type of Treatment Given{(requiredChoice && given === "Yes") ? <span className="ml-0.5 text-[#d04a4a]">*</span> : null}
             </p>
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               {["Allopathic", "Non-Allopathic", "Both"].map((option) => (

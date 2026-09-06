@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { Field, SelectField } from "../FormFields";
 
-export function TargetedTherapy() {
+interface TargetedTherapyProps {
+  number: string;
+}
+
+export function TargetedTherapy({ number }: TargetedTherapyProps) {
   const [type, setType] = useState("Not Given");
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <SelectField
-        label={`30(b). Types of targeted therapy${type === "Others (Specify)" ? " *" : ""}`}
-        stateKey="30(b). Types of targeted therapy"
+        label={`${number}(b). Types of targeted therapy${type === "Others (Specify)" ? " *" : ""}`}
+        stateKey={`${number}(b). Types of targeted therapy`}
         value={type}
         onChange={setType}
         options={[
