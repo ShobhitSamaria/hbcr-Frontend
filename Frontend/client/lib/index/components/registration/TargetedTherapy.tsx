@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useFormStateOptional } from "@/lib/formState";
 import { Field, SelectField } from "../FormFields";
-import { useFormStateOptional } from "@/lib/formState";
 
 interface TargetedTherapyProps {
   number: string;
@@ -9,21 +8,14 @@ interface TargetedTherapyProps {
 
 export function TargetedTherapy({ number }: TargetedTherapyProps) {
   const ctx = useFormStateOptional();
-}
-  
+
+  // Initialize from the form-state capture so Patient Records shows the saved
+  // therapy type instead of always defaulting to "Not Given".
   const [type, setType] = useState(() => {
     const cur = ctx?.values.current[`${number}(b). Types of targeted therapy`];
     return typeof cur === "string" && cur !== "" ? cur : "Not Given";
   });
 
-export function TargetedTherapy() {
-  const ctx = useFormStateOptional();
-  // Initialize from the form-state capture so Patient Records shows the saved
-  // therapy type instead of always defaulting to "Not Given".
-  const [type, setType] = useState(() => {
-    const cur = ctx?.values.current["30(b). Types of targeted therapy"];
-    return typeof cur === "string" && cur !== "" ? cur : "Not Given";
-  });
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <SelectField
@@ -44,6 +36,7 @@ export function TargetedTherapy() {
           "Unknown",
         ]}
       />
+
       {type === "Others (Specify)" && (
         <Field
           label="Specify targeted therapy"
