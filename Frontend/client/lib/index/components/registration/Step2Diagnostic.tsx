@@ -12,7 +12,7 @@ export function Step2Diagnostic() {
       <DiagnosticDetails methods={methods} setMethods={setMethods} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <Field
-          label="21. Longest duration of symptom for cancer (in months)"
+          label="20. Longest duration of symptom for cancer (in months)"
           type="number"
           placeholder="Months"
           required
@@ -29,31 +29,31 @@ export function Step2Diagnostic() {
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2"
       >
         <Field
-          label="21.1 Anatomical Site of Specimen / Biopsy / SMEAR"
+          label="21(a). Anatomical Site of Specimen / Biopsy / SMEAR"
           placeholder="e.g. Upper outer quadrant"
           disabled={!microscopic}
           required={microscopic}
         />
         <Field
-          label="21.2 Pathology Slide No"
+          label="21(b). Pathology Slide No"
           placeholder="Slide number"
           disabled={!microscopic}
           required={microscopic}
         />
         <Field
-          label="21.3 Date of Reporting"
+          label="21(c). Date of Reporting"
           type="date"
           disabled={!microscopic}
           required={microscopic}
         />
         <Field
-          label="21.4 Primary Site of Tumour - Topography"
+          label="21(d). Primary Site of Tumour - Topography"
           placeholder="e.g. Breast"
           disabled={!microscopic}
           required={microscopic}
         />
         <Field
-          label="21.5 Primary Histology / Morphology"
+          label="21(e). Primary Histology / Morphology"
           placeholder="Enter morphology"
           disabled={!microscopic}
           required={microscopic}

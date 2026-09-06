@@ -61,14 +61,14 @@ const [laterality, setLaterality] = useState(
     <div className="space-y-6 border-t border-[#edf3f4] pt-6">
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
-          23. Coding According to ICD-O-3
+          22. Coding According to ICD-O-3
         </label>
 
         {/* 23.1 Primary Site of Tumour - Topography */}
         <div className="mt-4 space-y-3">
           <div className="grid gap-4 sm:grid-cols-3">
             <IcdoAutocomplete
-              label="23.1 Primary Site of Tumour - Topography"
+              label="22(a). Primary Site of Tumour - Topography"
               placeholder="Search by code or site name"
               termKey="23.1 Site"
               codeKey="23.1 Code"
@@ -89,7 +89,7 @@ const [laterality, setLaterality] = useState(
         <div className="mt-4 space-y-3">
           <div className="grid gap-4 md:grid-cols-3">
             <IcdoAutocomplete
-              label="23.2 Primary Histology - Morphology"
+              label="22(b). Primary Histology - Morphology"
               placeholder="Search by code or morphology name"
               termKey="23.2 Morphology"
               codeKey="23.2 Code"
@@ -104,7 +104,7 @@ const [laterality, setLaterality] = useState(
               placeholder="Enter ICD-O-3 morphology code"
             />
             <SelectField
-              label="23.2 Grade"
+              label="Grade"
               options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>
@@ -114,7 +114,7 @@ const [laterality, setLaterality] = useState(
         <div className="mt-4 space-y-3">
           <div className="grid gap-4 sm:grid-cols-3">
             <IcdoAutocomplete
-              label="23.3 Secondary Site of Tumour"
+              label="22(c). Secondary Site of Tumour"
               placeholder="Search by code or site name"
               termKey="23.3 Site"
               codeKey="23.3 Code"
@@ -135,7 +135,7 @@ const [laterality, setLaterality] = useState(
         <div className="mt-4 space-y-3">
           <div className="grid gap-4 md:grid-cols-3">
             <IcdoAutocomplete
-              label="23.4 Morphology of Metastasis"
+              label="22(d). Morphology of Metastasis"
               placeholder="Search by code or morphology name"
               termKey="23.4 Morphology"
               codeKey="23.4 Code"
@@ -150,7 +150,7 @@ const [laterality, setLaterality] = useState(
               placeholder="Enter metastasis morphology code"
             />
             <SelectField
-              label="23.4 Grade"
+              label= "Grade"
               options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>
@@ -159,7 +159,7 @@ const [laterality, setLaterality] = useState(
       <div className="grid gap-4 sm:grid-cols-1">
         <div className="block">
           <Icdo10Autocomplete
-            label="24. Site of Tumour (ICD-10)"
+            label="23. Site of Tumour (ICD-10)"
             placeholder="Search by ICD-10 code or site name"
             stateKey="24. Site of Tumour (ICD-10)"
             suggestion={icd10Suggestion}
@@ -170,7 +170,7 @@ const [laterality, setLaterality] = useState(
         </div>
         <div>
           <label className="mb-3 block text-xs font-bold text-[#486b77]">
-            25. Laterality<span className="ml-0.5 text-[#d04a4a]">*</span>
+            24. Laterality<span className="ml-0.5 text-[#d04a4a]">*</span>
           </label>
           <div className="flex flex-wrap gap-4 text-xs text-[#718991]">
             {["Not a Paired Site", "Paired Site", "Unknown"].map((option) => (
@@ -231,7 +231,7 @@ const [laterality, setLaterality] = useState(
         </div>
       </div>
       <SelectField
-        label="26. Sequence"
+        label="25. Sequence"
         options={["One Primary Only",
           "First of Two or More Primaries",
           "Second of Two or More Primaries",
