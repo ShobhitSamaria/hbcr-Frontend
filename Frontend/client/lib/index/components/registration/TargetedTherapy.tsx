@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Field, SelectField } from "../FormFields";
+import { useFormStateOptional } from "@/lib/formState";
 
 interface TargetedTherapyProps {
   number: string;
 }
 
 export function TargetedTherapy({ number }: TargetedTherapyProps) {
-  const [type, setType] = useState("Not Given");
+  const ctx = useFormStateOptional();
+
+  
+  const [type, setType] = useState(() => {
+    const cur = ctx?.values.current[`${number}(b). Types of targeted therapy`];
+    return typeof cur === "string" && cur !== "" ? cur : "Not Given";
+  });
+
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <SelectField
