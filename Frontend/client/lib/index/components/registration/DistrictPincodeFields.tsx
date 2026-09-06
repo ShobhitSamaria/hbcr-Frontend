@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { pincodeApi } from "@/lib/api";
-import { useFormStateOptional } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly, useIsFieldReadOnly } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 
 type Props = {
@@ -207,6 +207,9 @@ export function DistrictPincodeFields({ prefix = "" }: Props) {
   const districtKey = prefix + "District";
   const pincodeKey = prefix + "PIN Code";
   const stateKey = prefix + "State";
+  // In Patient Records the address section is read-only — disable the
+  // searchable selects so District/Pincode can never be changed in edit mode.
+  const sectionReadOnly = useForceReadOnly() || useIsFieldReadOnly(districtKey) || useIsFieldReadOnly(pincodeKey);
 
   const [districts, setDistricts] = useState<string[]>([]);
   const [pincodes, setPincodes] = useState<string[]>([]);
@@ -286,6 +289,7 @@ export function DistrictPincodeFields({ prefix = "" }: Props) {
         options={districts}
         value={district}
         onChange={handleDistrict}
+        disabled={sectionReadOnly}
         placeholder="Select district"
         errorMessage={districtError}
         showError={!!districtShow}
@@ -297,7 +301,7 @@ export function DistrictPincodeFields({ prefix = "" }: Props) {
         options={pincodes}
         value={pincode}
         onChange={handlePincode}
-        disabled={!district || loadingPincodes}
+        disabled={sectionReadOnly || !district || loadingPincodes}
         placeholder={
           !district ? "Select district first" : loadingPincodes ? "Loading…" : "Select pincode"
         }

@@ -20,8 +20,16 @@ const STAGING_SYSTEM_OPTIONS = [
 export function ClinicalTreatment() {
   const readOnly = useForceReadOnly();
   const ctx = useFormStateOptional();
-  const [ecog, setEcog] = useState("Unknown");
-  const [stagingSystem, setStagingSystem] = useState("");
+  // Initialize local state from the form-state capture (seeded values in
+  // Patient Records) so saved values display instead of hardcoded defaults.
+  const [ecog, setEcog] = useState(() => {
+    const cur = ctx?.values.current["29(c). Performance Status (ECOG)"];
+    return cur === "Known" ? "Known" : cur === "Unknown" ? "Unknown" : "Unknown";
+  });
+  const [stagingSystem, setStagingSystem] = useState(() => {
+    const cur = ctx?.values.current["28(a). Staging system"];
+    return typeof cur === "string" ? cur : "";
+  });
   const [selectedModalities, setSelectedModalities] = useState<string[]>([]);
   const [selectedModalities30, setSelectedModalities30] = useState<string[]>([]);
   const isTNM = stagingSystem === "TNM";
@@ -194,6 +202,7 @@ export function ClinicalTreatment() {
         number="28"
         title="28. Treatment Given Prior to Registration at RI / Outside RI"
         requiredChoice
+        modalityStateKey="29. Treatment modalities selected"
         onSelectionChange={(rows) => {
           setSelectedModalities(rows);
           ctx?.set("29. Treatment modalities selected", rows);
@@ -250,6 +259,7 @@ export function ClinicalTreatment() {
       number="29"
         title="29. Treatment at RI"
         requiredChoice
+        modalityStateKey="30. Treatment modalities selected"
         onSelectionChange={(rows) => {
           setSelectedModalities30(rows);
           ctx?.set("30. Treatment modalities selected", rows);

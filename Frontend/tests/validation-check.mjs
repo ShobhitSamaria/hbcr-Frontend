@@ -242,6 +242,19 @@ check("clinical only with date => no error", () => {
   noError(errs, "_diagnostic.microscopicLater");
 });
 
+check("microscopic later = No does NOT require diagnosis date to match reporting date", () => {
+  // Business rule: Date of First Diagnosis (Field 8) may differ from / precede
+  // the Date of Reporting. It must NOT be forced to equal the microscopic
+  // confirmation (reporting) date.
+  const errs = validateStep2({
+    "_diagnostic.methods": ["Microscopic"],
+    "_diagnostic.microscopicLater": "No",
+    "8. Date of first diagnosis": "2024-07-01",
+    "5. Date of reporting": "2024-07-10",
+  });
+  noError(errs, "8. Date of first diagnosis");
+});
+
 check("laterality required", () => {
   const errs = validateStep2({});
   assert(hasError(errs, "25. Laterality"), "Laterality is required");

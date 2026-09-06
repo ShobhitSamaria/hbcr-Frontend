@@ -1,13 +1,10 @@
 import { prisma } from "../db/prisma.ts";
 import { httpErrors } from "../utils/httpError.ts";
-
-async function ensureRegistration(id: number) {
-  const reg = await prisma.registration.findUnique({
-    where: { id },
-    select: { id: true },
-  });
-  if (!reg) throw httpErrors.notFound(`Registration ${id} not found`);
-}
+import {
+  requireDiagnosticMethodInHospital,
+  requireDiagnosticProcedureInHospital,
+  requireRegistrationInHospital,
+} from "./accessGuard.ts";
 
 /**
  * Validate that at least one diagnostic method exists for a registration.
@@ -24,8 +21,8 @@ async function validateDiagnosticMethodsExist(registrationId: number) {
 }
 
 export const diagnosticService = {
-  async listMethods(registrationId: number) {
-    await ensureRegistration(registrationId);
+  async listMethods(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     return prisma.diagnosticMethod.findMany({
       where: { registrationId },
       orderBy: { id: "asc" },
@@ -35,9 +32,10 @@ export const diagnosticService = {
 
   async createMethod(
     registrationId: number,
+    hospitalId: number,
     data: { method: string; clinicalOnlyDate?: Date },
   ) {
-    await ensureRegistration(registrationId);
+    await requireRegistrationInHospital(registrationId, hospitalId);
     return prisma.diagnosticMethod.create({
       data: {
         registrationId,
@@ -47,7 +45,8 @@ export const diagnosticService = {
     });
   },
 
-  async getMethod(methodId: number) {
+  async getMethod(methodId: number, hospitalId: number) {
+    await requireDiagnosticMethodInHospital(methodId, hospitalId);
     const method = await prisma.diagnosticMethod.findUnique({
       where: { id: methodId },
       include: { procedures: { orderBy: { id: "asc" } } },
@@ -58,8 +57,10 @@ export const diagnosticService = {
 
   async updateMethod(
     methodId: number,
+    hospitalId: number,
     data: { clinicalOnlyDate?: Date | null },
   ) {
+    await requireDiagnosticMethodInHospital(methodId, hospitalId);
     const method = await prisma.diagnosticMethod.findUnique({ where: { id: methodId } });
     if (!method) throw httpErrors.notFound(`Diagnostic method ${methodId} not found`);
     return prisma.diagnosticMethod.update({
@@ -68,7 +69,8 @@ export const diagnosticService = {
     });
   },
 
-  async deleteMethod(methodId: number) {
+  async deleteMethod(methodId: number, hospitalId: number) {
+    await requireDiagnosticMethodInHospital(methodId, hospitalId);
     const method = await prisma.diagnosticMethod.findUnique({ where: { id: methodId } });
     if (!method) throw httpErrors.notFound(`Diagnostic method ${methodId} not found`);
     await prisma.diagnosticMethod.delete({ where: { id: methodId } });
@@ -78,15 +80,15 @@ export const diagnosticService = {
    * Validate that at least one diagnostic method exists for a registration.
    * Exposed for external callers (e.g. registration service post-submission check).
    */
-  async validateMethodsExist(registrationId: number) {
+  async validateMethodsExist(registrationId: number, hospitalId: number) {
+    await requireRegistrationInHospital(registrationId, hospitalId);
     await validateDiagnosticMethodsExist(registrationId);
   },
 
   // -------- procedures --------
 
-  async listProcedures(methodId: number) {
-    const method = await prisma.diagnosticMethod.findUnique({ where: { id: methodId } });
-    if (!method) throw httpErrors.notFound(`Diagnostic method ${methodId} not found`);
+  async listProcedures(methodId: number, hospitalId: number) {
+    await requireDiagnosticMethodInHospital(methodId, hospitalId);
     return prisma.diagnosticProcedure.findMany({
       where: { diagnosticMethodId: methodId },
       orderBy: { id: "asc" },
@@ -95,10 +97,10 @@ export const diagnosticService = {
 
   async createProcedure(
     methodId: number,
+    hospitalId: number,
     data: { procedureName: string; isOthers?: boolean; othersSpecify?: string; procedureDate?: Date },
   ) {
-    const method = await prisma.diagnosticMethod.findUnique({ where: { id: methodId } });
-    if (!method) throw httpErrors.notFound(`Diagnostic method ${methodId} not found`);
+    await requireDiagnosticMethodInHospital(methodId, hospitalId);
     return prisma.diagnosticProcedure.create({
       data: {
         diagnosticMethodId: methodId,
@@ -110,13 +112,15 @@ export const diagnosticService = {
     });
   },
 
-  async updateProcedure(procedureId: number, data: Record<string, unknown>) {
+  async updateProcedure(procedureId: number, hospitalId: number, data: Record<string, unknown>) {
+    await requireDiagnosticProcedureInHospital(procedureId, hospitalId);
     const proc = await prisma.diagnosticProcedure.findUnique({ where: { id: procedureId } });
     if (!proc) throw httpErrors.notFound(`Diagnostic procedure ${procedureId} not found`);
     return prisma.diagnosticProcedure.update({ where: { id: procedureId }, data: data as never });
   },
 
-  async deleteProcedure(procedureId: number) {
+  async deleteProcedure(procedureId: number, hospitalId: number) {
+    await requireDiagnosticProcedureInHospital(procedureId, hospitalId);
     const proc = await prisma.diagnosticProcedure.findUnique({ where: { id: procedureId } });
     if (!proc) throw httpErrors.notFound(`Diagnostic procedure ${procedureId} not found`);
     await prisma.diagnosticProcedure.delete({ where: { id: procedureId } });

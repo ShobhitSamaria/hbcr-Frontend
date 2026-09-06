@@ -10,12 +10,14 @@ export const treatmentController = {
       res,
       await treatmentService.listByRegistration(
         parseIdParam(req.params.registrationId),
+        req.hospitalId!,
       ),
     );
   }),
   upsert: asyncHandler(async (req: Request, res: Response) => {
     const result = await treatmentService.upsert(
       parseIdParam(req.params.registrationId),
+      req.hospitalId!,
       req.body,
     );
     return created(res, result, "Treatment saved");
@@ -23,7 +25,7 @@ export const treatmentController = {
   get: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await treatmentService.get(parseIdParam(req.params.treatmentId)),
+      await treatmentService.get(parseIdParam(req.params.treatmentId), req.hospitalId!),
     );
   }),
   update: asyncHandler(async (req: Request, res: Response) => {
@@ -31,13 +33,14 @@ export const treatmentController = {
       res,
       await treatmentService.update(
         parseIdParam(req.params.treatmentId),
+        req.hospitalId!,
         req.body,
       ),
       "Treatment updated",
     );
   }),
   remove: asyncHandler(async (req: Request, res: Response) => {
-    await treatmentService.remove(parseIdParam(req.params.treatmentId));
+    await treatmentService.remove(parseIdParam(req.params.treatmentId), req.hospitalId!);
     return noContent(res);
   }),
 
@@ -45,12 +48,13 @@ export const treatmentController = {
   listModalities: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await treatmentService.listModalities(parseIdParam(req.params.treatmentId)),
+      await treatmentService.listModalities(parseIdParam(req.params.treatmentId), req.hospitalId!),
     );
   }),
   upsertModality: asyncHandler(async (req: Request, res: Response) => {
     const result = await treatmentService.upsertModality(
       parseIdParam(req.params.treatmentId),
+      req.hospitalId!,
       req.body,
     );
     return created(res, result, "Modality saved");
@@ -60,13 +64,14 @@ export const treatmentController = {
       res,
       await treatmentService.updateModality(
         parseIdParam(req.params.modalityId),
+        req.hospitalId!,
         req.body,
       ),
       "Modality updated",
     );
   }),
   deleteModality: asyncHandler(async (req: Request, res: Response) => {
-    await treatmentService.deleteModality(parseIdParam(req.params.modalityId));
+    await treatmentService.deleteModality(parseIdParam(req.params.modalityId), req.hospitalId!);
     return noContent(res);
   }),
 };

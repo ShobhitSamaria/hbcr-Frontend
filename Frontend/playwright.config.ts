@@ -19,7 +19,7 @@ export default defineConfig({
       use: {
         executablePath:
           "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-        headless: false,
+        headless: process.env.HEADLESS === "1",
         viewport: { width: 1440, height: 900 },
         launchOptions: {
           args: [
@@ -33,7 +33,7 @@ export default defineConfig({
     {
       name: "chromium",
       use: {
-        headless: false,
+        headless: process.env.HEADLESS === "1",
         viewport: { width: 1440, height: 900 },
       },
     },

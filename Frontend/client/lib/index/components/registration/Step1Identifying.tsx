@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
+import { useFormStateOptional, useForceReadOnly, useIsFieldReadOnly } from "@/lib/formState";
 import { useValidationOptional } from "@/lib/validationContext";
 import { registrationApi } from "@/lib/api";
 import { Field, SelectField, ToggleDetails } from "../FormFields";
@@ -99,6 +99,11 @@ export function Step1Identifying({
     const cur = ctx?.values.current["Urban / Rural"];
     return typeof cur === "string" ? cur : "";
   });
+  // In Patient Records the whole address section is read-only, so the radio
+  // must be disabled in edit mode too (Field components handle this via
+  // context; the custom radios need the same check).
+  const urbanRuralReadOnly = readOnly || useIsFieldReadOnly("Urban / Rural");
+  const sameAddressReadOnly = readOnly || useIsFieldReadOnly("Residential Address is same as Permanent Address");
   const handleUrbanRural = (v: string) => {
     setUrbanRural(v);
     ctx?.set("Urban / Rural", v);
@@ -489,7 +494,7 @@ export function Step1Identifying({
           </span>
           <label className="flex items-center gap-1.5">
             <input
-              disabled={readOnly}
+              disabled={urbanRuralReadOnly}
               type="radio"
               name="urban-rural"
               checked={urbanRural === "Urban"}
@@ -500,7 +505,7 @@ export function Step1Identifying({
           </label>
           <label className="flex items-center gap-1.5">
             <input
-              disabled={readOnly}
+              disabled={urbanRuralReadOnly}
               type="radio"
               name="urban-rural"
               checked={urbanRural === "Rural"}
@@ -552,6 +557,7 @@ export function Step1Identifying({
             <label className="mt-4 flex items-center gap-2 text-xs text-[#718991]">
               <input
                 type="checkbox"
+                disabled={sameAddressReadOnly}
                 checked={sameAddress}
                 onChange={(e) => setSameAddress(e.target.checked)}
                 className="h-3.5 w-3.5 rounded border-[#c9dce0] accent-[#0b7d87]"
@@ -704,6 +710,9 @@ function FamilialCancerSection({
   setFamilyHistory: (v: string) => void;
 }) {
   const readOnly = useForceReadOnly();
+  // Section 19 is read-only in Patient Records even in edit mode; disable the
+  // custom radios when the section label is in the read-only set.
+  const sectionReadOnly = readOnly || useIsFieldReadOnly("19. Relationship to Cancer / Degree of Relationship");
   const ctx = useFormStateOptional();
 
   // Sub-field state for "Yes" conditional fields
@@ -730,7 +739,7 @@ function FamilialCancerSection({
       <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
         <span className="flex items-center gap-2">
           <input
-            disabled={readOnly}
+            disabled={sectionReadOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "Yes"}
@@ -741,7 +750,7 @@ function FamilialCancerSection({
         </span>
         <span className="flex items-center gap-2">
           <input
-            disabled={readOnly}
+            disabled={sectionReadOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "No"}
@@ -752,7 +761,7 @@ function FamilialCancerSection({
         </span>
         <span className="flex items-center gap-2">
           <input
-            disabled={readOnly}
+            disabled={sectionReadOnly}
             type="radio"
             name="familial-history"
             checked={familyHistory === "Unknown"}
@@ -771,7 +780,7 @@ function FamilialCancerSection({
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
                 <input
-                  disabled={readOnly}
+                  disabled={sectionReadOnly}
                   type="radio"
                   name="relationship-cancer"
                   checked={relationshipCancer === "Same Cancer"}
@@ -782,7 +791,7 @@ function FamilialCancerSection({
               </span>
               <span className="flex items-center gap-2">
                 <input
-                  disabled={readOnly}
+                  disabled={sectionReadOnly}
                   type="radio"
                   name="relationship-cancer"
                   checked={relationshipCancer === "Other Cancer"}
@@ -800,7 +809,7 @@ function FamilialCancerSection({
             <div className="flex flex-wrap gap-5 text-xs text-[#718991]">
               <span className="flex items-center gap-2">
                 <input
-                  disabled={readOnly}
+                  disabled={sectionReadOnly}
                   type="radio"
                   name="degree-relationship"
                   checked={degreeRelationship === "First Degree Relative"}
@@ -811,7 +820,7 @@ function FamilialCancerSection({
               </span>
               <span className="flex items-center gap-2">
                 <input
-                  disabled={readOnly}
+                  disabled={sectionReadOnly}
                   type="radio"
                   name="degree-relationship"
                   checked={degreeRelationship === "Second Degree Relative"}

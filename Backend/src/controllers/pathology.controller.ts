@@ -8,18 +8,19 @@ export const pathologyController = {
   get: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await pathologyService.get(parseIdParam(req.params.registrationId)),
+      await pathologyService.get(parseIdParam(req.params.registrationId), req.hospitalId!),
     );
   }),
   upsert: asyncHandler(async (req: Request, res: Response) => {
     const result = await pathologyService.upsert(
       parseIdParam(req.params.registrationId),
+      req.hospitalId!,
       req.body,
     );
     return created(res, result, "Pathological diagnosis saved");
   }),
   remove: asyncHandler(async (req: Request, res: Response) => {
-    await pathologyService.remove(parseIdParam(req.params.registrationId));
+    await pathologyService.remove(parseIdParam(req.params.registrationId), req.hospitalId!);
     return noContent(res);
   }),
 };

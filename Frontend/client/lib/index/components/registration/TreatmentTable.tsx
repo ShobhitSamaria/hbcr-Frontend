@@ -1,15 +1,26 @@
 import { useState } from "react";
+import { useFormStateOptional } from "@/lib/formState";
 import { treatmentRows } from "../../data";
 
 type TreatmentTableProps = {
   title: string;
   disabled?: boolean;
   requiredChoice?: boolean;
+  /** Form-state key holding the selected modality labels (seeded in Patient
+   *  Records so the checkboxes reflect persisted data). */
+  stateKey?: string;
   onSelectionChange?: (selectedRows: string[]) => void;
 };
 
-export function TreatmentTable({ title, disabled = false, requiredChoice = false, onSelectionChange }: TreatmentTableProps) {
-  const [selected, setSelected] = useState<string[]>([]);
+export function TreatmentTable({ title, disabled = false, requiredChoice = false, stateKey, onSelectionChange }: TreatmentTableProps) {
+  const ctx = useFormStateOptional();
+  // Initialize from the form-state capture when a key is provided (Patient
+  // Records seeds it); the registration flow starts empty as before.
+  const [selected, setSelected] = useState<string[]>(() => {
+    if (!stateKey || !ctx) return [];
+    const v = ctx.values.current[stateKey];
+    return Array.isArray(v) ? (v as string[]) : [];
+  });
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">

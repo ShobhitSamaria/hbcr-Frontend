@@ -5,12 +5,14 @@ type DiagnosticTableProps = {
   title: string;
   rows: string[];
   disabled?: boolean;
+  /** Rows that are already selected (seeded from persisted data). */
+  initialSelected?: string[];
 };
 
-export function DiagnosticTable({ title, rows, disabled: disabledProp }: DiagnosticTableProps) {
+export function DiagnosticTable({ title, rows, disabled: disabledProp, initialSelected }: DiagnosticTableProps) {
   const readOnly = useForceReadOnly();
   const disabled = disabledProp || readOnly;
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(initialSelected ?? []);
   return (
     <div>
       <label className="mb-3 block text-xs font-bold text-[#486b77]">

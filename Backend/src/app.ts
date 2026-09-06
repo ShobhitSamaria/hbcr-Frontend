@@ -4,7 +4,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
 
-import { config } from "./config/index.js";
+import { config, isOriginAllowed } from "./config/index.js";
 import { apiRouter } from "./routes/index.ts";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.ts";
 import { csrfProtection } from "./middleware/csrf.ts";
@@ -70,10 +70,13 @@ export function createApp(): Application {
   // ---------------------------------------------------------------
   app.use(
     cors({
-      origin:
-        config.corsOrigin === "*"
-          ? true
-          : config.corsOrigin.split(",").map((o) => o.trim()),
+      // Never reflect an arbitrary origin with credentials enabled. Requests
+      // without an Origin header (same-origin, curl, health monitors) are
+      // allowed; anything else must exactly match the configured allow-list.
+      origin: (origin, cb) => {
+        if (isOriginAllowed(origin)) return cb(null, true);
+        return cb(null, false);
+      },
       credentials: true,
       // Allow the CSRF custom header and Authorization for cross-origin requests.
       // Without this, the browser's preflight (OPTIONS) response won't include

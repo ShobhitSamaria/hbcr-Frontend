@@ -30,6 +30,13 @@ function valInt(v: Values, key: string): number | null {
   return Number.isFinite(n) && Number.isInteger(n) ? n : null;
 }
 
+/** Convert a stored numeric-string value to a number, or undefined when blank. */
+function numericOrUndefined(x: string | null): number | undefined {
+  if (x === null) return undefined;
+  const n = Number(x);
+  return Number.isFinite(n) ? n : undefined;
+}
+
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -271,6 +278,8 @@ export function extractRegistration(
   referralFacilityRegDate?: string;
   dateOfFirstDiagnosis?: string;
   microscopicConfirmationLater?: boolean;
+  anthropometricHeightCm?: number;
+  anthropometricWeightKg?: number;
   maritalStatus?: string;
   maritalStatusOther?: string;
   education?: string;
@@ -279,6 +288,8 @@ export function extractRegistration(
   remarks?: string;
   contactNumber?: string;
   designation?: string;
+  formCompletedBy?: string;
+  formCompletionDate?: string;
 } {
   // Explicit map: the naive replace(/ /g, "_") would turn
   // "Other Hospital/Health Facility" into "OTHER_HOSPITAL/HEALTH_FACILITY",
@@ -327,6 +338,8 @@ export function extractRegistration(
         : val(v, "_diagnostic.microscopicLater") === "No"
           ? false
           : undefined,
+    anthropometricHeightCm: numericOrUndefined(val(v, "Height (cm)")),
+    anthropometricWeightKg: numericOrUndefined(val(v, "Weight (kg)")),
     maritalStatus: marital ? marital.replace(/ /g, "_").toUpperCase() : undefined,
     maritalStatusOther: val(v, "16(a). Marital status (Other)") ?? undefined,
     education: education ? EDU_ENUM_MAP[education] ?? education.replace(/[^A-Za-z0-9]+/g, "_").replace(/_+$/, "").toUpperCase() : undefined,
@@ -335,6 +348,8 @@ export function extractRegistration(
     remarks: val(v, "Remarks") ?? undefined,
     contactNumber: val(v, "33. Contact Number") ?? undefined,
     designation: val(v, "34. Designation") ?? undefined,
+    formCompletedBy: val(v, "31. Name of person completing form (IN CAPITALS)") ?? undefined,
+    formCompletionDate: val(v, "32. Date of completion of form") ?? undefined,
   };
 }
 
@@ -347,6 +362,32 @@ const GRADE_ENUM: Record<string, string> = {
   "Grade II - Moderately Differentiated": "GRADE_II",
   "Grade III - Poorly Differentiated": "GRADE_III",
   "Grade IV - Undifferentiated": "GRADE_IV",
+};
+
+// UI option text -> backend Laterality / PairedLaterality / Sequence enums.
+// These can't be derived by a naive uppercase/spaces->underscores transform
+// (e.g. "Not a Paired Site" -> NOT_A_PAIRED_SITE, which the backend rejects).
+const LATERALITY_ENUM: Record<string, string> = {
+  "Not a Paired Site": "NOT_PAIRED_SITE",
+  "Paired Site": "PAIRED_SITE",
+  Unknown: "UNKNOWN",
+};
+
+const PAIRED_LATERALITY_ENUM: Record<string, string> = {
+  Right: "RIGHT",
+  Left: "LEFT",
+  "Only One Side Involved (Right/Left Origin Unknown)": "ONLY_ONE_SIDE",
+  "Bilateral Involvement (Laterality Origin Unknown)": "BILATERAL_UNKNOWN",
+  "Paired Site Midline Tumour": "PAIRED_MIDLINE",
+  "Paired Site, Laterality Unknown": "PAIRED_UNKNOWN",
+};
+
+const SEQUENCE_ENUM: Record<string, string> = {
+  "One Primary Only": "ONE_PRIMARY",
+  "First of Two or More Primaries": "FIRST_OF_MULTIPLE",
+  "Second of Two or More Primaries": "SECOND_OF_MULTIPLE",
+  "Third of Three or More Primaries": "THIRD_OF_MULTIPLE",
+  "Unspecified Sequence Number (Unknown)": "UNSPECIFIED_UNKNOWN",
 };
 
 export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
@@ -384,12 +425,13 @@ export function extractPathology(v: Values): Partial<ApiPathologicalDiagnosis> {
   map.icd10Site = text("24. Site of Tumour (ICD-10)");
   map.pathologyDateOfReporting = text("21.3 Date of Reporting");
   const lat = val(v, "25. Laterality");
-  if (lat) map.laterality = lat.toUpperCase().replace(/ /g, "_") as any;
-  // Paired-laterality radios captured via the same "25. Laterality" key.
-  const paired = val(v, "25. Laterality");
-  void paired;
+  if (lat) map.laterality = (LATERALITY_ENUM[lat] ?? lat) as ApiPathologicalDiagnosis["laterality"];
+  const paired = val(v, "25(a). pairedLaterality");
+  if (paired)
+    map.pairedLaterality = (PAIRED_LATERALITY_ENUM[paired] ??
+      paired) as ApiPathologicalDiagnosis["pairedLaterality"];
   const seq = val(v, "26. Sequence");
-  if (seq) map.sequence = seq.toUpperCase().replace(/ /g, "_") as any;
+  if (seq) map.sequence = (SEQUENCE_ENUM[seq] ?? seq) as ApiPathologicalDiagnosis["sequence"];
   return map;
 }
 

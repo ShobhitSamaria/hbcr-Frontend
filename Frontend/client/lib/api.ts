@@ -365,6 +365,7 @@ export type ApiPatientAddress = {
   pinCode: string | null;
   mobileNumber: string | null;
   email: string | null;
+  durationStay?: number | null;
 };
 
 export type ApiPatientHabit = {
@@ -446,6 +447,11 @@ export const sideApi = {
     create: (patientId: number, data: { idType: string; number?: string; idName?: string }) =>
       send<ApiPatientIdentification>(`/patients/${patientId}/side/identifications`, {
         method: "POST",
+        body: JSON.stringify(data),
+      }),
+    update: (patientId: number, id: number, data: { number?: string; idName?: string }) =>
+      send<ApiPatientIdentification>(`/patients/${patientId}/side/identifications/${id}`, {
+        method: "PATCH",
         body: JSON.stringify(data),
       }),
     remove: (patientId: number, id: number) =>
@@ -610,7 +616,18 @@ export const registrationApi = {
       body: JSON.stringify(data),
     }),
   get: (id: number) => send<ApiRegistration>(`/registrations/${id}`),
-  update: (id: number, data: Partial<Pick<ApiRegistration, 'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate' | 'designation' | 'contactNumber'>>) =>
+  update: (
+    id: number,
+    data: Partial<
+      Pick<
+        ApiRegistration,
+        'remarks' | 'status' | 'formCompletedBy' | 'formCompletionDate' | 'designation' | 'contactNumber' | 'occupation'
+      > & {
+        anthropometricHeightCm?: number;
+        anthropometricWeightKg?: number;
+      }
+    >,
+  ) =>
     send<ApiRegistration>(`/registrations/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),

@@ -1,10 +1,17 @@
 import { useState } from "react";
+import { useFormStateOptional } from "@/lib/formState";
 import { Field, SelectField } from "../FormFields";
 import { CodingDetails } from "./CodingDetails";
 import { DiagnosticDetails } from "./DiagnosticDetails";
 
 export function Step2Diagnostic() {
-  const [methods, setMethods] = useState<string[]>([]);
+  const ctx = useFormStateOptional();
+  // Initialize the checked diagnostic methods from the form-state capture
+  // (seeded values in Patient Records / resumed drafts).
+  const [methods, setMethods] = useState<string[]>(() => {
+    const m = ctx?.values.current["_diagnostic.methods"];
+    return Array.isArray(m) ? (m as string[]) : [];
+  });
   const microscopic = methods.includes("Microscopic");
 
   return (

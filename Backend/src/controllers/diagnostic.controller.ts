@@ -8,7 +8,10 @@ export const diagnosticController = {
   listMethods: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await diagnosticService.listMethods(parseIdParam(req.params.registrationId)),
+      await diagnosticService.listMethods(
+        parseIdParam(req.params.registrationId),
+        req.hospitalId!,
+      ),
     );
   }),
 
@@ -17,7 +20,10 @@ export const diagnosticController = {
    * Called by the frontend after all methods have been submitted.
    */
   validateMethods: asyncHandler(async (req: Request, res: Response) => {
-    await diagnosticService.validateMethodsExist(parseIdParam(req.params.registrationId));
+    await diagnosticService.validateMethodsExist(
+      parseIdParam(req.params.registrationId),
+      req.hospitalId!,
+    );
     return ok(res, { valid: true }, "Diagnostic methods validated");
   }),
 
@@ -26,13 +32,17 @@ export const diagnosticController = {
       res,
       await diagnosticService.createMethod(
         parseIdParam(req.params.registrationId),
+        req.hospitalId!,
         req.body,
       ),
     );
   }),
 
   getMethod: asyncHandler(async (req: Request, res: Response) => {
-    return ok(res, await diagnosticService.getMethod(parseIdParam(req.params.methodId)));
+    return ok(
+      res,
+      await diagnosticService.getMethod(parseIdParam(req.params.methodId), req.hospitalId!),
+    );
   }),
 
   updateMethod: asyncHandler(async (req: Request, res: Response) => {
@@ -40,6 +50,7 @@ export const diagnosticController = {
       res,
       await diagnosticService.updateMethod(
         parseIdParam(req.params.methodId),
+        req.hospitalId!,
         req.body as { clinicalOnlyDate?: Date | null },
       ),
       "Diagnostic method updated",
@@ -47,14 +58,14 @@ export const diagnosticController = {
   }),
 
   deleteMethod: asyncHandler(async (req: Request, res: Response) => {
-    await diagnosticService.deleteMethod(parseIdParam(req.params.methodId));
+    await diagnosticService.deleteMethod(parseIdParam(req.params.methodId), req.hospitalId!);
     return noContent(res);
   }),
 
   listProcedures: asyncHandler(async (req: Request, res: Response) => {
     return ok(
       res,
-      await diagnosticService.listProcedures(parseIdParam(req.params.methodId)),
+      await diagnosticService.listProcedures(parseIdParam(req.params.methodId), req.hospitalId!),
     );
   }),
 
@@ -63,6 +74,7 @@ export const diagnosticController = {
       res,
       await diagnosticService.createProcedure(
         parseIdParam(req.params.methodId),
+        req.hospitalId!,
         req.body,
       ),
     );
@@ -73,6 +85,7 @@ export const diagnosticController = {
       res,
       await diagnosticService.updateProcedure(
         parseIdParam(req.params.procedureId),
+        req.hospitalId!,
         req.body,
       ),
       "Procedure updated",
@@ -80,7 +93,7 @@ export const diagnosticController = {
   }),
 
   deleteProcedure: asyncHandler(async (req: Request, res: Response) => {
-    await diagnosticService.deleteProcedure(parseIdParam(req.params.procedureId));
+    await diagnosticService.deleteProcedure(parseIdParam(req.params.procedureId), req.hospitalId!);
     return noContent(res);
   }),
 };

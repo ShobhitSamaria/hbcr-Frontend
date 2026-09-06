@@ -222,7 +222,17 @@ function RegistrationInner({
   };
 
   const goNext = () => {
-    if (!validateCurrentStep()) return;
+    // While resuming/editing a draft, navigation between already-saved
+    // steps must NOT run mandatory validation — drafts are allowed to hold
+    // incomplete data. Only Final Submit (handleSubmit) enforces all rules.
+    if (!draftMeta) {
+      if (!validateCurrentStep()) return;
+    } else {
+      // Drop any stale highlights from a previous validation run so the
+      // user isn't blocked by errors from fields they intentionally left
+      // empty in the draft.
+      validation.clearAll();
+    }
     setStep((s) => s + 1);
   };
 
