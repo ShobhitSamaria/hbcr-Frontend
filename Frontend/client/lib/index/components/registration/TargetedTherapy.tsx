@@ -9,7 +9,7 @@ interface TargetedTherapyProps {
 
 export function TargetedTherapy({ number }: TargetedTherapyProps) {
   const ctx = useFormStateOptional();
-
+}
   
   const [type, setType] = useState(() => {
     const cur = ctx?.values.current[`${number}(b). Types of targeted therapy`];
