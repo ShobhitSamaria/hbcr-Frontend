@@ -426,7 +426,10 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "Last Name": patient.lastName ?? "",
       "10. Date of Birth": toDateStr(patient.dateOfBirth),
       "11. Age": patient.age != null ? String(patient.age) : "",
-      "12. Gender": patient.gender ?? "",
+      // Gender arrives as the Prisma enum ("FEMALE") while the Step-1
+      // select options are title-case ("Female") — map it like every other
+      // enum field so the saved value actually displays.
+      "12. Gender": toDisplay(patient.gender),
       // 13. Identifications — the keys must match the stateKeys the Step-1
       // form reads (Aadhaar/ABHA end in " number"; optional ID numbers use
       // the bare "<label> number" key; Yes/No radios use "id-<label>").
@@ -680,10 +683,26 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
         ...(wKg !== undefined ? { anthropometricWeightKg: wKg } : {}),
       });
 
-      // 5) Family history
+      // 5) Family history — Section 19 is read-only even in edit mode, so
+      // replay the existing record. The backend rejects a YES record that
+      // omits the conditional sub-fields, so include them when YES.
       if (familyHistory) {
         const fhVal = familyHistory === "Yes" ? "YES" : familyHistory === "Unknown" ? "UNKNOWN" : "NO";
-        await familyHistoryApi.upsert(reg.id, { familyHistory: fhVal });
+        const existingFh = reg.familialCancerHistory;
+        await familyHistoryApi.upsert(reg.id, {
+          familyHistory: fhVal,
+          ...(fhVal === "YES" && existingFh
+            ? {
+                relationshipWithCancer: existingFh.relationshipWithCancer ?? undefined,
+                degreeOfRelationship: existingFh.degreeOfRelationship ?? undefined,
+                primarySite: existingFh.primarySite ?? undefined,
+                ageAtDiagnosis: existingFh.ageAtDiagnosis ?? undefined,
+                dateOfDiagnosis: existingFh.dateOfDiagnosis
+                  ? toDateStr(existingFh.dateOfDiagnosis)
+                  : undefined,
+              }
+            : {}),
+        });
       }
 
       // 6) Pathology (Step 2) — upsert whatever diagnostic values the form

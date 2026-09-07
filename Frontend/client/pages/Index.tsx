@@ -24,7 +24,13 @@ export default function Index() {
           ? "drafts"
           : "dashboard";
   const [view, setViewState] = useState(initial);
+  // Bumped every time the user explicitly asks for a NEW registration
+  // (sidebar "New Registration", Dashboard/Records buttons). Combined with
+  // `location.search` in the Registration key below, this forces a fresh
+  // remount so no draft/patient data can leak into a new registration.
+  const [regEpoch, setRegEpoch] = useState(0);
   const setView = (next: string) => {
+    if (next === "register") setRegEpoch((e) => e + 1);
     setViewState(next);
     navigate(next === "dashboard" ? "/" : `/${next}`, { replace: true });
   };
@@ -69,7 +75,14 @@ export default function Index() {
                 {view === "dashboard" ? (
                   <Dashboard setView={setView} />
                 ) : view === "register" ? (
-                  <Registration setView={setView} />
+                  // Key by epoch + draft param so the form always mounts
+                  // fresh: draft resumes load their own data, and switching
+                  // to/away from a draft (or starting a new registration
+                  // while on this view) can never reuse stale form state.
+                  <Registration
+                    key={`${regEpoch}-${location.search}`}
+                    setView={setView}
+                  />
                 ) : view === "records" ? (
                   <Records setView={setView} />
                 ) : view === "drafts" ? (
