@@ -450,6 +450,9 @@ export function Step1Identifying({
       <div>
         <label className="mb-3 block text-xs font-bold text-[#486b77]">
           13. Relative details
+          <span className="ml-3 text-[10px] font-normal">
+          (At least one relative detail must be provided)
+          </span>
         </label>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
           <Field label="Father name" placeholder="Full name" />
