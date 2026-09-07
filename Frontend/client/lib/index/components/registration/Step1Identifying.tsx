@@ -904,11 +904,7 @@ function OtherIdInput({
               : "cursor-not-allowed border-[#dce9eb] bg-[#f1f5f5] text-[#a9b8bc]"
         }`}
       />
-      {hasError && errorMessage && (
-        <span className="mt-0.5 text-[10px] font-medium text-[#d04a4a]">
-          {errorMessage}
-        </span>
-      )}
+      
     </>
   );
 }
