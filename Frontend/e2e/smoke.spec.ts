@@ -48,7 +48,7 @@ test("Full patient registration — single patient end-to-end", async ({
   );
 
   // 7. Type of Referral
-  await selectDropdown(page, "7. Type of referral", "Self");
+  await selectDropdown(page, "6. Type of referral", "Self");
 
   // 8. Date of First Diagnosis
   await page.locator('input[type="date"]').nth(1).fill("2026-08-10");
@@ -62,7 +62,7 @@ test("Full patient registration — single patient end-to-end", async ({
   await page.locator('input[type="date"]').nth(2).fill("1990-05-15");
 
   // 12. Gender
-  await selectDropdown(page, "12. Gender", "Male");
+  await selectDropdown(page, "11. Gender", "Male");
 
   // 13. Aadhaar & ABHA
   console.log("6. Filling ID numbers...");
@@ -96,10 +96,10 @@ test("Full patient registration — single patient end-to-end", async ({
   });
 
   // 16. Marital Status
-  await selectDropdown(page, "16. Marital status", "Married");
+  await selectDropdown(page, "15. Marital status", "Married");
 
   // 17. Education
-  await selectDropdown(page, "17. Education", "Graduate and above");
+  await selectDropdown(page, "16. Education", "Graduate and above");
 
   // Occupation (not required but fill it)
   await fillField(page, "Occupation", "Software Engineer");
@@ -128,7 +128,7 @@ test("Full patient registration — single patient end-to-end", async ({
   // 21. Longest Duration of Symptom
   await fillField(
     page,
-    "21. Longest duration of symptom for cancer (in months)",
+    "20. Longest duration of symptom for cancer (in months)",
     "3"
   );
 
@@ -147,7 +147,7 @@ test("Full patient registration — single patient end-to-end", async ({
   console.log("12. Filling Step 3...");
 
   // 28(c). Composite Stage (required)
-  await selectDropdown(page, "28(c). Composite stage", "I");
+  await selectDropdown(page, "27(b). Composite stage", "I");
 
   // 29. Treatment Prior
   await selectDropdown(
@@ -159,15 +159,15 @@ test("Full patient registration — single patient end-to-end", async ({
   // 31. Name of Person Completing Form (required)
   await fillField(
     page,
-    "31. Name of person completing form (IN CAPITALS)",
+    "30. Name of person completing form (IN CAPITALS)",
     "DR SRINIVASAN"
   );
 
   // 33. Contact Number (required)
-  await fillField(page, "33. Contact Number", "9876543210");
+  await fillField(page, "32. Contact Number", "9876543210");
 
   // 34. Designation (required)
-  await fillField(page, "34. Designation", "Senior Registrar");
+  await fillField(page, "33. Designation", "Senior Registrar");
 
   // ─── SUBMIT ───
   console.log("13. Submitting registration...");

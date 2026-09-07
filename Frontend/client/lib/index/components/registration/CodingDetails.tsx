@@ -105,6 +105,7 @@ const [laterality, setLaterality] = useState(
             />
             <SelectField
               label="Grade"
+              stateKey="23.2 Grade"
               options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>
@@ -150,7 +151,8 @@ const [laterality, setLaterality] = useState(
               placeholder="Enter metastasis morphology code"
             />
             <SelectField
-              label= "Grade"
+              label="Grade"
+              stateKey="23.4 Grade"
               options={["Grade I - Well Differentiated", "Grade II - Moderately Differentiated", "Grade III - Poorly Differentiated", "Grade IV - Undifferentiated"]}
             />
           </div>

@@ -26,12 +26,12 @@ export type Step2Values = {
     clinicalDate?: string;
     microscopicLater?: string;
   };
-  "21. Longest duration of symptom for cancer (in months)"?: string;
-  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR"?: string;
-  "21.2 Pathology Slide No"?: string;
-  "21.3 Date of Reporting"?: string;
-  "21.4 Primary Site of Tumour - Topography"?: string;
-  "21.5 Primary Histology / Morphology"?: string;
+  "20. Longest duration of symptom for cancer (in months)"?: string;
+  "21(a). Anatomical Site of Specimen / Biopsy / SMEAR"?: string;
+  "21(b). Pathology Slide No"?: string;
+  "21(c). Date of Reporting"?: string;
+  "21(d). Primary Site of Tumour - Topography"?: string;
+  "21(e). Primary Histology / Morphology"?: string;
   "23.1 Site"?: string;
   "23.1 Code"?: string;
   "23.2 Morphology"?: string;
@@ -49,20 +49,20 @@ export type Step2Values = {
   // the top-level "Paired Site" is chosen.
   "25. Laterality"?: string;
   "25(a). pairedLaterality"?: string;
-  "26. Sequence"?: string;
+  "25. Sequence"?: string;
 };
 
 const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
-  "21. Longest duration of symptom for cancer (in months)": [
+  "20. Longest duration of symptom for cancer (in months)": [
     required("Longest duration of symptom is required"),
     isInt(),
     range(1, 1200, "Must be between 1 and 1200 months"),
   ],
-  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR": [maxLen(128)],
-  "21.2 Pathology Slide No": [maxLen(64)],
-  "21.3 Date of Reporting": [isDate("Enter a valid date"), notFutureDate("Date cannot be in the future")],
-  "21.4 Primary Site of Tumour - Topography": [maxLen(128)],
-  "21.5 Primary Histology / Morphology": [maxLen(128)],
+  "21(a). Anatomical Site of Specimen / Biopsy / SMEAR": [maxLen(128)],
+  "21(b). Pathology Slide No": [maxLen(64)],
+  "21(c). Date of Reporting": [isDate("Enter a valid date"), notFutureDate("Date cannot be in the future")],
+  "21(d). Primary Site of Tumour - Topography": [maxLen(128)],
+  "21(e). Primary Histology / Morphology": [maxLen(128)],
   "23.1 Site": [maxLen(128)],
   "23.1 Code": [maxLen(64)],
   "23.2 Morphology": [maxLen(128)],
@@ -77,7 +77,7 @@ const step2Rules: RuleSet<Step2Values> = defineRules<Step2Values>({
   "23.4 Grade": [maxLen(64)],
   "24. Site of Tumour (ICD-10)": [maxLen(64)],
   "25. Laterality": [required("Laterality is required")],
-  "26. Sequence": [maxLen(64)],
+  "25. Sequence": [maxLen(64)],
 });
 
 /**
@@ -124,10 +124,10 @@ export function validateStep2(values: Record<string, unknown>): Record<string, s
   // When Microscopic is selected, pathological fields are mandatory.
   if (methods.includes("Microscopic")) {
     const pathFields: [string, string][] = [
-      ["21.1 Anatomical Site of Specimen / Biopsy / SMEAR", "Anatomical Site is required"],
-      ["21.3 Date of Reporting", "Date of Reporting is required"],
-      ["21.4 Primary Site of Tumour - Topography", "Primary Site of Tumour is required"],
-      ["21.5 Primary Histology / Morphology", "Primary Histology / Morphology is required"],
+      ["21(a). Anatomical Site of Specimen / Biopsy / SMEAR", "Anatomical Site is required"],
+      ["21(c). Date of Reporting", "Date of Reporting is required"],
+      ["21(d). Primary Site of Tumour - Topography", "Primary Site of Tumour is required"],
+      ["21(e). Primary Histology / Morphology", "Primary Histology / Morphology is required"],
     ];
     for (const [field, msg] of pathFields) {
       const v = values[field];

@@ -96,7 +96,7 @@ function RegistrationInner({
   // effect. These four pieces are exactly the ones that the original
   // Registration.tsx orchestrator already lifted up out of Step1.
   const [referral, setReferral] = useState(() => {
-    const v = draftMeta?.formData["7. Type of referral"];
+    const v = draftMeta?.formData["6. Type of referral"];
     return typeof v === "string" ? v : "Self";
   });
   const [selectedIds, setSelectedIds] = useState<string[]>(() => {
@@ -117,7 +117,7 @@ function RegistrationInner({
   const validation = useValidation();
 
   // Sync the four orchestrator-owned fields into the form-state context.
-  useEffect(() => { ctx?.set("7. Type of referral", referral); }, [referral, ctx]);
+  useEffect(() => { ctx?.set("6. Type of referral", referral); }, [referral, ctx]);
   useEffect(() => {
     // Persist which unique IDs are selected so we can persist later.
     ctx?.set("_selectedIds", [...selectedIds]);
@@ -140,7 +140,7 @@ function RegistrationInner({
     const snap = { ...(ctx?.values.current ?? {}) };
     // Belt-and-braces: lifted fields are also written via the effect above,
     // but reading from the ref directly avoids races on the first render.
-    snap["7. Type of referral"] = referral || snap["7. Type of referral"];
+    snap["6. Type of referral"] = referral || snap["6. Type of referral"];
     snap["_selectedIds"] = selectedIds;
     snap["_sameAddress"] = sameAddress;
     snap[

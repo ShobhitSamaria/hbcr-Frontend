@@ -12,20 +12,20 @@ test("Step 1 → Step 2 transition", async ({ page }) => {
   await fillField(page, "3(b). Unit number", "Unit 01");
   await page.locator('input[type="date"]').first().fill("2026-08-15");
   await selectDropdown(page, "6. Case Registered Through", "Out Patient");
-  await selectDropdown(page, "7. Type of referral", "Self");
+  await selectDropdown(page, "6. Type of referral", "Self");
   await page.locator('input[type="date"]').nth(1).fill("2026-08-10");
   await fillField(page, "First Name", "Rahul");
   await fillField(page, "Last Name", "Sharma");
   await page.locator('input[type="date"]').nth(2).fill("1990-05-15");
-  await selectDropdown(page, "12. Gender", "Male");
+  await selectDropdown(page, "11. Gender", "Male");
   await fillFieldByPlaceholder(page, "Enter Aadhaar number (12 digits)", "123456789012");
   await fillFieldByPlaceholder(page, "Enter ABHA number (14 digits)", "12345678901234");
   await fillField(page, "Father name", "Suresh Sharma");
   await selectUrbanRural(page, "Urban");
   await page.waitForTimeout(500);
   await fillAddress(page, { houseNo: "12 MG Road", wardNo: "5", street: "MG Road", city: "Jaipur", mobile: "9876543211", durationOfStay: "10" });
-  await selectDropdown(page, "16. Marital status", "Married");
-  await selectDropdown(page, "17. Education", "Graduate and above");
+  await selectDropdown(page, "15. Marital status", "Married");
+  await selectDropdown(page, "16. Education", "Graduate and above");
   await fillField(page, "Height (cm)", "175");
   await fillField(page, "Weight (kg)", "72");
 

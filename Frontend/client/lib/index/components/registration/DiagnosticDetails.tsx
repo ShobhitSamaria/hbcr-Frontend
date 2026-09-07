@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useFormStateOptional, useForceReadOnly } from "@/lib/formState";
 import { DiagnosticTable } from "../DiagnosticTable";
 
-// The Complete Pathological Diagnosis fields (22.1 - 22.5) are only
+// The Complete Pathological Diagnosis fields (21(a) - 21(e)) are only
 // editable when "(2) Microscopic" is selected as a method of diagnosis.
 // The keys mirror the Field labels so they can be cleared from the
 // form-state capture when Microscopic is unchecked.
 const PATHOLOGICAL_DIAGNOSIS_KEYS = [
-  "21.1 Anatomical Site of Specimen / Biopsy / SMEAR",
-  "21.2 Pathology Slide No",
-  "21.3 Date of Reporting",
-  "21.4 Primary Site of Tumour - Topography",
-  "21.5 Primary Histology / Morphology",
+  "21(a). Anatomical Site of Specimen / Biopsy / SMEAR",
+  "21(b). Pathology Slide No",
+  "21(c). Date of Reporting",
+  "21(d). Primary Site of Tumour - Topography",
+  "21(e). Primary Histology / Morphology",
 ];
 
 export function DiagnosticDetails({

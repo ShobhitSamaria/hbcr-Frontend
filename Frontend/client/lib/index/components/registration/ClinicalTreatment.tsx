@@ -27,7 +27,7 @@ export function ClinicalTreatment() {
     return cur === "Known" ? "Known" : cur === "Unknown" ? "Unknown" : "Unknown";
   });
   const [stagingSystem, setStagingSystem] = useState(() => {
-    const cur = ctx?.values.current["28(a). Staging system"];
+    const cur = ctx?.values.current["27(a). Staging system"];
     return typeof cur === "string" ? cur : "";
   });
   const [selectedModalities, setSelectedModalities] = useState<string[]>([]);
@@ -42,7 +42,7 @@ export function ClinicalTreatment() {
 
   return (
     <div className="space-y-7">
-      <style>{`input[name="31. Name of person completing form (IN CAPITALS)"] { text-transform: uppercase; }`}</style>
+      <style>{`input[name="30. Name of person completing form (IN CAPITALS)"] { text-transform: uppercase; }`}</style>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <SelectField
           label="26. Clinical Extent of Disease Before Cancer Directed Treatment"
@@ -158,7 +158,7 @@ export function ClinicalTreatment() {
             <Field
               label=""
               placeholder="Enter staging value"
-              stateKey="28(a). Staging system value"
+              stateKey="27(a). Staging system value"
               required={!isTNM && stagingSystem !== ""}
             />
           </div>

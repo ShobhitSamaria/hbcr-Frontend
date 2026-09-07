@@ -527,7 +527,7 @@ async function fillStep1(page: any, data: Step1Data) {
 
   // 7. Type of Referral
   if (data.typeOfReferral) {
-    await selectDropdown(page, "7. Type of referral", data.typeOfReferral);
+    await selectDropdown(page, "6. Type of referral", data.typeOfReferral);
   }
 
   // 7(a)-7(f). Referral details
@@ -563,7 +563,7 @@ async function fillStep1(page: any, data: Step1Data) {
   await dobInput.fill(data.dateOfBirth);
 
   // 12. Gender
-  await selectDropdown(page, "12. Gender", data.gender);
+  await selectDropdown(page, "11. Gender", data.gender);
 
   // 13. Aadhaar & ABHA (direct input)
   await fillFieldByPlaceholder(page, "Enter Aadhaar number (12 digits)", data.aadhaar);
@@ -645,11 +645,11 @@ async function fillStep1(page: any, data: Step1Data) {
 
   // 16. Marital Status
   if (data.maritalStatus)
-    await selectDropdown(page, "16. Marital status", data.maritalStatus);
+    await selectDropdown(page, "15. Marital status", data.maritalStatus);
 
   // 17. Education
   if (data.education)
-    await selectDropdown(page, "17. Education", data.education);
+    await selectDropdown(page, "16. Education", data.education);
 
   // Occupation
   if (data.occupation)
@@ -672,7 +672,7 @@ async function fillStep2(page: any, data: Step2Data) {
   if (data.longestSymptomDuration) {
     await fillField(
       page,
-      "21. Longest duration of symptom for cancer (in months)",
+      "20. Longest duration of symptom for cancer (in months)",
       data.longestSymptomDuration
     );
   }
@@ -680,13 +680,13 @@ async function fillStep2(page: any, data: Step2Data) {
   // 21.x Pathological fields
   if (data.microscopic) {
     if (data.pathologicalSite)
-      await fillField(page, "21.1 Anatomical Site of Specimen / Biopsy / SMEAR", data.pathologicalSite);
+      await fillField(page, "21(a). Anatomical Site of Specimen / Biopsy / SMEAR", data.pathologicalSite);
     if (data.pathologySlideNo)
-      await fillField(page, "21.2 Pathology Slide No", data.pathologySlideNo);
+      await fillField(page, "21(b). Pathology Slide No", data.pathologySlideNo);
     if (data.primarySiteTopography)
-      await fillField(page, "21.4 Primary Site of Tumour - Topography", data.primarySiteTopography);
+      await fillField(page, "21(d). Primary Site of Tumour - Topography", data.primarySiteTopography);
     if (data.primaryHistology)
-      await fillField(page, "21.5 Primary Histology / Morphology", data.primaryHistology);
+      await fillField(page, "21(e). Primary Histology / Morphology", data.primaryHistology);
     if (data.grade) await selectDropdown(page, "Grade", data.grade);
   }
 
@@ -698,11 +698,11 @@ async function fillStep2(page: any, data: Step2Data) {
 async function fillStep3(page: any, data: Step3Data) {
   // Clinical Extent
   if (data.clinicalExtent)
-    await selectDropdown(page, "Clinical Extent of Disease Before Cancer Directed Treatment", data.clinicalExtent);
+    await selectDropdown(page, "26. Clinical Extent of Disease Before Cancer Directed Treatment", data.clinicalExtent);
 
   // 28(a). Staging System
   if (data.stagingSystem) {
-    await selectDropdown(page, "28(a). Staging system", data.stagingSystem);
+    await selectDropdown(page, "27(a). Staging system", data.stagingSystem);
     await page.waitForTimeout(300);
   }
 
@@ -715,7 +715,7 @@ async function fillStep3(page: any, data: Step3Data) {
 
   // 28(c). Composite Stage
   if (data.compositeStage)
-    await selectDropdown(page, "28(c). Composite stage", data.compositeStage);
+    await selectDropdown(page, "27(b). Composite stage", data.compositeStage);
 
   // Treatment checkboxes
   if (data.surgeryDone) {
@@ -732,13 +732,13 @@ async function fillStep3(page: any, data: Step3Data) {
   }
 
   // 31. Name of Person Completing Form
-  await fillField(page, "31. Name of person completing form (IN CAPITALS)", data.nameOfPersonCompletingForm);
+  await fillField(page, "30. Name of person completing form (IN CAPITALS)", data.nameOfPersonCompletingForm);
 
   // 33. Contact Number
   if (data.contactNumber)
-    await fillField(page, "33. Contact Number", data.contactNumber);
+    await fillField(page, "32. Contact Number", data.contactNumber);
 
   // 34. Designation
   if (data.designation)
-    await fillField(page, "34. Designation", data.designation);
+    await fillField(page, "33. Designation", data.designation);
 }

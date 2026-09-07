@@ -114,19 +114,19 @@ export function Step1Identifying({
   // must explicitly choose; validation rejects the "Select" placeholder.
   const [caseThrough, setCaseThrough] = useState<string>(() => {
     if (initialCaseThrough && initialCaseThrough !== "") return initialCaseThrough;
-    const cur = ctx?.values.current["6. Case Registered Through (Patient’s first reporting at RI)"];
+    const cur = ctx?.values.current["5. Case Registered Through (Patient’s first reporting at RI)"];
     return typeof cur === "string" && cur !== "" ? cur : "";
   });
   // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    const newVal = initialCaseThrough && initialCaseThrough !== "" ? initialCaseThrough : (ctx?.values.current["6. Case Registered Through (Patient’s first reporting at RI)"] as string | undefined);
+    const newVal = initialCaseThrough && initialCaseThrough !== "" ? initialCaseThrough : (ctx?.values.current["5. Case Registered Through (Patient’s first reporting at RI)"] as string | undefined);
     if (typeof newVal === "string" && newVal !== "" && newVal !== caseThrough) {
       setCaseThrough(newVal);
     }
   });
   const handleCaseThrough = (v: string) => {
     setCaseThrough(v);
-    ctx?.set("6. Case Registered Through (Patient’s first reporting at RI)", v);
+    ctx?.set("5. Case Registered Through (Patient’s first reporting at RI)", v);
     if (v !== "Other") ctx?.set("6(a). Case Registered Through (Other)", "");
   };
   const [caseThroughOther, setCaseThroughOther] = useState<string>(() => {
@@ -139,23 +139,23 @@ export function Step1Identifying({
     ctx?.set("6(a). Case Registered Through (Other)", v);
   };
 
-  // 16. Marital Status — when "Other" is selected, show a text input.
+  // 15. Marital Status — when "Other" is selected, show a text input.
   const [maritalStatus, setMaritalStatus] = useState<string>(() => {
     if (initialMaritalStatus && initialMaritalStatus !== "") return initialMaritalStatus;
-    const cur = ctx?.values.current["16. Marital status"];
+    const cur = ctx?.values.current["15. Marital status"];
     return typeof cur === "string" ? cur : "";
   });
   // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    const newVal = initialMaritalStatus && initialMaritalStatus !== "" ? initialMaritalStatus : (ctx?.values.current["16. Marital status"] as string | undefined);
+    const newVal = initialMaritalStatus && initialMaritalStatus !== "" ? initialMaritalStatus : (ctx?.values.current["15. Marital status"] as string | undefined);
     if (typeof newVal === "string" && newVal !== "" && newVal !== maritalStatus) {
       setMaritalStatus(newVal);
     }
   });
   const handleMaritalStatus = (v: string) => {
     setMaritalStatus(v);
-    ctx?.set("16. Marital status", v);
-    if (v !== "Other") ctx?.set("16(a). Marital status (Other)", "");
+    ctx?.set("15. Marital status", v);
+    if (v !== "Other") ctx?.set("15(a). Marital status (Other)", "");
   };
   const [maritalOther, setMaritalOther] = useState<string>(() => {
     const cur = ctx?.values.current["16(a). Marital status (Other)"];
@@ -166,23 +166,23 @@ export function Step1Identifying({
     ctx?.set("16(a). Marital status (Other)", v);
   };
 
-  // 17. Education — when "Others (specify)" is selected, show a text input.
+  // 16. Education — when "Others (specify)" is selected, show a text input.
   const [education, setEducation] = useState<string>(() => {
     if (initialEducation && initialEducation !== "") return initialEducation;
-    const cur = ctx?.values.current["17. Education"];
+    const cur = ctx?.values.current["16. Education"];
     return typeof cur === "string" ? cur : "";
   });
   // Sync from context/prop when values change (e.g., when loading patient record for edit)
   useEffect(() => {
-    const newVal = initialEducation && initialEducation !== "" ? initialEducation : (ctx?.values.current["17. Education"] as string | undefined);
+    const newVal = initialEducation && initialEducation !== "" ? initialEducation : (ctx?.values.current["16. Education"] as string | undefined);
     if (typeof newVal === "string" && newVal !== "" && newVal !== education) {
       setEducation(newVal);
     }
   });
   const handleEducation = (v: string) => {
     setEducation(v);
-    ctx?.set("17. Education", v);
-    if (v !== "Others (specify)") ctx?.set("17(a). Education (Other)", "");
+    ctx?.set("16. Education", v);
+    if (v !== "Others (specify)") ctx?.set("16(a). Education (Other)", "");
   };
   const [educationOther, setEducationOther] = useState<string>(() => {
     const cur = ctx?.values.current["17(a). Education (Other)"];
@@ -193,9 +193,9 @@ export function Step1Identifying({
     ctx?.set("17(a). Education (Other)", v);
   };
 
-  // 10. Date of Birth → 11. Age — age is derived from the DOB and read-only.
+  // 9. Date of Birth → 10. Age — age is derived from the DOB and read-only.
   const [dob, setDob] = useState<string>(() => {
-    const cur = ctx?.values.current["10. Date of Birth"];
+    const cur = ctx?.values.current["9. Date of Birth"];
     return typeof cur === "string" ? cur : "";
   });
   const ageFromDob = (dobStr: string): string => {
@@ -215,9 +215,9 @@ export function Step1Identifying({
   };
   const handleDobChange = (v: string) => {
     setDob(v);
-    // Field already writes ctx["10. Date of Birth"]; push the recalculated
+    // Field already writes ctx["9. Date of Birth"]; push the recalculated
     // age into the form-state so the submit snapshot sees it.
-    ctx?.set("11. Age", ageFromDob(v));
+    ctx?.set("10. Age", ageFromDob(v));
   };
 
   return (
@@ -299,11 +299,10 @@ export function Step1Identifying({
               stateKey="6(b). Hospital / LAB / N.H."
               placeholder="Enter Hospital / LAB / N.H."
               required
-            />
-            <Field label="6(c). City" stateKey="7(c). City" placeholder="City" required />
-            <Field label="6(d). District" stateKey="7(d). District" placeholder="District" required />
+            />            <Field label="6(c). City" stateKey="6(c). City" placeholder="City" required />
+            <Field label="6(d). District" stateKey="6(d). District" placeholder="District" required />
             <Field label="6(e). Pincode" placeholder="Pincode" />
-            <Field label="6(f). Date of Registration" stateKey="7(f). Date of Registration" type="date" required />
+            <Field label="6(f). Date of Registration" stateKey="6(f). Date of Registration" type="date" required />
           </>
         )}
         <Field label="7. Date of first diagnosis" type="date" required />

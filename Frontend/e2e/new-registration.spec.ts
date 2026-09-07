@@ -82,13 +82,13 @@ async function fillStep1Valid(
 
   await fillField(page, "3(a). Department name", text("3(a). Department name", "Oncology"));
   await fillField(page, "3(b). Unit number", text("3(b). Unit number", "Unit 01"));
-  await fillField(page, "5. Date of reporting", text("5. Date of reporting", PAST));
+  await fillField(page, "4. Date of reporting", text("4. Date of reporting", PAST));
   await selectContains(page, "Case Registered Through", of("caseThrough") ?? "Out Patient");
-  await fillField(page, "8. Date of first diagnosis", text("8. Date of first diagnosis", DIAG));
+  await fillField(page, "7. Date of first diagnosis", text("7. Date of first diagnosis", DIAG));
   await fillField(page, "First Name", text("First Name", "RAMESH"));
   await fillField(page, "Middle Name", text("Middle Name", "KUMAR"));
   await fillField(page, "Last Name", text("Last Name", "SHARMA"));
-  await fillField(page, "10. Date of Birth", text("10. Date of Birth", DOB));
+  await fillField(page, "9. Date of Birth", text("9. Date of Birth", DOB));
   await selectContains(page, "Gender", of("gender") ?? "Male");
   await page
     .getByPlaceholder("Enter Aadhaar number (12 digits)")
@@ -109,8 +109,8 @@ async function fillStep1Valid(
   await fillField(page, "Mobile number", "9876543210");
   await fillField(
     page,
-    "Duration of Stay at the above address (in years)",
-    text("Duration of Stay at the above address (in years)", "10")
+    "14(b).Duration of Stay at the above address (in years)",
+    text("14(b).Duration of Stay at the above address (in years)", "10")
   );
   await selectContains(page, "Marital status", of("marital") ?? "Married");
   await selectContains(page, "Education", of("education") ?? "Graduate and above");
@@ -188,11 +188,11 @@ test.describe("New Registration — Page 1", () => {
     await login(page);
     await goToNewRegistration(page);
 
-    await fillStep1Valid(page, { "8. Date of first diagnosis": { fill: "2099-01-01" } });
+    await fillStep1Valid(page, { "7. Date of first diagnosis": { fill: "2099-01-01" } });
     await page.getByRole("button", { name: "Save & continue" }).click();
     await expectSingleError(page, /future/i);
 
-    await fillField(page, "8. Date of first diagnosis", DIAG);
+    await fillField(page, "7. Date of first diagnosis", DIAG);
     await advanceTo(page, /Diagnostic details/);
     await expectNoAlert(page);
   });
@@ -265,7 +265,7 @@ test.describe("New Registration — Page 1", () => {
     await goToNewRegistration(page);
 
     await fillStep1Valid(page, {
-      "Duration of Stay at the above address (in years)": { fill: "-5" },
+      "14(b).Duration of Stay at the above address (in years)": { fill: "-5" },
       "Height (cm)": { fill: "0" },
     });
     await page.getByRole("button", { name: "Save & continue" }).click();
@@ -273,7 +273,7 @@ test.describe("New Registration — Page 1", () => {
     await expect(page.getByText(/Duration must be between 0 and 150 years/)).toBeVisible();
     await expect(page.getByText(/Height must be between 1 and 300 cm/)).toBeVisible();
 
-    await fillField(page, "Duration of Stay at the above address (in years)", "10");
+    await fillField(page, "14(b).Duration of Stay at the above address (in years)", "10");
     await fillField(page, "Height (cm)", "175");
     await fillField(page, "Weight (kg)", "-1");
     await page.getByRole("button", { name: "Save & continue" }).click();
@@ -317,13 +317,13 @@ test.describe("New Registration — Page 2", () => {
     await expect(page.getByText(/Anatomical Site is required/i)).toBeVisible();
 
     // Fill everything Step-2 requires
-    await fillField(page, "21. Longest duration of symptom for cancer (in months)", "6");
-    await fillField(page, "21.1 Anatomical Site of Specimen / Biopsy / SMEAR", "UPPER OUTER QUADRANT");
-    await fillField(page, "21.2 Pathology Slide No", "SL-8821");
+    await fillField(page, "20. Longest duration of symptom for cancer (in months)", "6");
+    await fillField(page, "21(a). Anatomical Site of Specimen / Biopsy / SMEAR", "UPPER OUTER QUADRANT");
+    await fillField(page, "21(b). Pathology Slide No", "SL-8821");
     // 21.3 differs from first diagnosis (2026-08-12 vs 2026-08-15) → must stay VALID
-    await fillField(page, "21.3 Date of Reporting", PATH_DATE);
-    await fillField(page, "21.4 Primary Site of Tumour - Topography", "BREAST");
-    await fillField(page, "21.5 Primary Histology / Morphology", "INFILTRATING DUCTAL CARCINOMA NST");
+    await fillField(page, "21(c). Date of Reporting", PATH_DATE);
+    await fillField(page, "21(d). Primary Site of Tumour - Topography", "BREAST");
+    await fillField(page, "21(e). Primary Histology / Morphology", "INFILTRATING DUCTAL CARCINOMA NST");
     await clickRadio(page, "microscopic-later", 1); // No
     await clickRadio(page, "laterality", 0); // Not a Paired Site
 
@@ -364,12 +364,12 @@ test.describe("New Registration — Page 3 & E2E submission", () => {
       .filter({ hasText: /^Microscopic$/ })
       .locator('input[type="checkbox"]')
       .click({ force: true });
-    await fillField(page, "21. Longest duration of symptom for cancer (in months)", "6");
-    await fillField(page, "21.1 Anatomical Site of Specimen / Biopsy / SMEAR", "UPPER OUTER QUADRANT");
-    await fillField(page, "21.2 Pathology Slide No", "SL-8821");
-    await fillField(page, "21.3 Date of Reporting", PATH_DATE);
-    await fillField(page, "21.4 Primary Site of Tumour - Topography", "BREAST");
-    await fillField(page, "21.5 Primary Histology / Morphology", "INFILTRATING DUCTAL CARCINOMA NST");
+    await fillField(page, "20. Longest duration of symptom for cancer (in months)", "6");
+    await fillField(page, "21(a). Anatomical Site of Specimen / Biopsy / SMEAR", "UPPER OUTER QUADRANT");
+    await fillField(page, "21(b). Pathology Slide No", "SL-8821");
+    await fillField(page, "21(c). Date of Reporting", PATH_DATE);
+    await fillField(page, "21(d). Primary Site of Tumour - Topography", "BREAST");
+    await fillField(page, "21(e). Primary Histology / Morphology", "INFILTRATING DUCTAL CARCINOMA NST");
     await clickRadio(page, "microscopic-later", 1);
     await clickRadio(page, "laterality", 0);
     await advanceTo(page, /Clinical stage & treatment/);
@@ -406,18 +406,18 @@ test.describe("New Registration — Page 3 & E2E submission", () => {
     await selectContains(page, "Composite stage", "IA");
 
     // 29. Treatment prior → Yes (default); type + ≥1 modality required
-    await clickRadio(page, "29. Treatment Given Prior to Registration at RI / Outside RItype", 0); // Allopathic
+    await clickRadio(page, "28. Treatment Given Prior to Registration at RI / Outside RItype", 0); // Allopathic
     const surgery = page.locator('label:has-text("Surgery") input[type="checkbox"]');
     await surgery.nth(0).click({ force: true }); // 29 modalities
 
     // 30. Treatment at RI → mandatory type + ≥1 modality
-    await clickRadio(page, "30. Treatment at RItype", 0); // Allopathic
+    await clickRadio(page, "29. Treatment at RItype", 0); // Allopathic
     await surgery.nth(1).click({ force: true }); // 30 modalities
 
-    await fillField(page, "31. Name of person completing form (IN CAPITALS)", "DR R K SHARMA");
-    await fillField(page, "32. Date of completion of form", PAST);
-    await fillField(page, "33. Contact Number", "9876543210");
-    await fillField(page, "34. Designation", "REGISTRAR");
+    await fillField(page, "30. Name of person completing form (IN CAPITALS)", "DR R K SHARMA");
+    await fillField(page, "31. Date of completion of form", PAST);
+    await fillField(page, "32. Contact Number", "9876543210");
+    await fillField(page, "33. Designation", "REGISTRAR");
 
     // No field-level highlights remain after filling everything.
     await expect(page.locator('[data-error="true"]')).toHaveCount(0, { timeout: 5000 });

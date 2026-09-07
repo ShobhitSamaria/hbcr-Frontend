@@ -54,34 +54,35 @@ const ID_FORMAT: Record<string, RegExp> = {
 const READONLY_FIELDS = new Set([
   // 1. Name of Reporting Institution (auto-filled)
   "1. Name of the Reporting Institution (RI)",
+  "1(a). Centre code",
   "Centre code",
-  "Reference Number",
-  "Registration Number",
+  "1(b).Reference Number",
+  "2.Registration Number",
   // 3(a-b). Department & Unit
   "3(a). Department name",
   "3(b). Unit number",
-  // 5. Date of reporting
-  "5. Date of reporting",
-  // 6. Case Registered Through
-  "6. Case Registered Through (Patient's first reporting at RI)",
+  // 4. Date of reporting
+  "4. Date of reporting",
+  // 5. Case Registered Through
+  "5. Case Registered Through (Patient’s first reporting at RI)",
   "6(a). Case Registered Through (Other)",
-  // 7. Type of referral
-  "7. Type of referral",
-  // 8. Date of first diagnosis
-  "8. Date of first diagnosis",
-  // 9. Patient Full Name
+  // 6. Type of referral
+  "6. Type of referral",
+  // 7. Date of first diagnosis
+  "7. Date of first diagnosis",
+  // 8. Patient Full Name
   "First Name",
   "Middle Name",
   "Last Name",
-  // 10. Date of Birth
-  "10. Date of Birth",
-  // 11. Age
-  "11. Age",
-  // 12. Gender
-  "12. Gender",
-  // 15. Address (residential + permanent)
+  // 9. Date of Birth
+  "9. Date of Birth",
+  // 10. Age
+  "10. Age",
+  // 11. Gender
+  "11. Gender",
+  // 14. Address (residential + permanent)
   "Urban / Rural",
-  "15. Address",
+  "14. Address",
   "Flat / House No.",
   "Ward No.",
   "Street / Road",
@@ -91,7 +92,7 @@ const READONLY_FIELDS = new Set([
   "PIN Code",
   "Mobile number",
   "Email address",
-  "Duration of Stay at the above address (in years)",
+  "14(b).Duration of Stay at the above address (in years)",
   "Residential Address is same as Permanent Address",
   "Permanent Flat / House No.",
   "Permanent Street / Road",
@@ -99,7 +100,7 @@ const READONLY_FIELDS = new Set([
   "Permanent District",
   "Permanent State",
   "Permanent PIN Code",
-  // 19. Family Cancer History (top-level + conditional sub-fields)
+  // 18. Family Cancer History (top-level + conditional sub-fields)
   "19. Relationship to Cancer / Degree of Relationship",
   "Relationship with Cancer",
   "Degree of Relationship",
@@ -405,31 +406,31 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       // Step 1 — read-only fields
       "1. Name of the Reporting Institution (RI)": "",
       "Centre code": "",
-      "Reference Number": reg.referenceNo ?? "",
-      "Registration Number": reg.hbcrRegistrationNo ?? "",
+      "1(b).Reference Number": reg.referenceNo ?? "",
+      "2.Registration Number": reg.hbcrRegistrationNo ?? "",
       "3(a). Department name": reg.departmentName ?? "",
       "3(b). Unit number": reg.unitNumber ?? "",
-      "5. Date of reporting": toDateStr(reg.dateOfReporting),
-      "6. Case Registered Through (Patient's first reporting at RI)": toDisplay(reg.caseRegisteredThrough),
+      "4. Date of reporting": toDateStr(reg.dateOfReporting),
+      "5. Case Registered Through (Patient’s first reporting at RI)": toDisplay(reg.caseRegisteredThrough),
       "6(a). Case Registered Through (Other)": reg.caseRegisteredThroughOther ?? "",
-      "7. Type of referral": toDisplay(reg.referralType) || "Self",
-      "7(a). Referral facility name": reg.referralFacilityName ?? "",
-      "7(b). Referral facility city": reg.referralFacilityCity ?? "",
-      "7(c). Referral facility district": reg.referralFacilityDistrict ?? "",
-      "7(d). Referral facility pincode": reg.referralFacilityPincode ?? "",
-      "7(e). Referral facility hospital/lab/NH": reg.referralFacilityHospitalLabNh ?? "",
-      "7(f). Referral facility reg date": reg.referralFacilityRegDate ?? "",
-      "8. Date of first diagnosis": toDateStr(reg.dateOfFirstDiagnosis),
+      "6. Type of referral": toDisplay(reg.referralType) || "Self",
+      "6(a). Name of Facility.": reg.referralFacilityName ?? "",
+      "6(b). Hospital / LAB / N.H.": reg.referralFacilityHospitalLabNh ?? "",
+      "6(c). City": reg.referralFacilityCity ?? "",
+      "6(d). District": reg.referralFacilityDistrict ?? "",
+      "6(e). Pincode": reg.referralFacilityPincode ?? "",
+      "6(f). Date of Registration": toDateStr(reg.referralFacilityRegDate),
+      "7. Date of first diagnosis": toDateStr(reg.dateOfFirstDiagnosis),
       // Step 1 — editable fields
       "First Name": patient.firstName ?? "",
       "Middle Name": patient.middleName ?? "",
       "Last Name": patient.lastName ?? "",
-      "10. Date of Birth": toDateStr(patient.dateOfBirth),
-      "11. Age": patient.age != null ? String(patient.age) : "",
+      "9. Date of Birth": toDateStr(patient.dateOfBirth),
+      "10. Age": patient.age != null ? String(patient.age) : "",
       // Gender arrives as the Prisma enum ("FEMALE") while the Step-1
       // select options are title-case ("Female") — map it like every other
       // enum field so the saved value actually displays.
-      "12. Gender": toDisplay(patient.gender),
+      "11. Gender": toDisplay(patient.gender),
       // 13. Identifications — the keys must match the stateKeys the Step-1
       // form reads (Aadhaar/ABHA end in " number"; optional ID numbers use
       // the bare "<label> number" key; Yes/No radios use "id-<label>").
@@ -476,26 +477,26 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "PIN Code": res?.pinCode ?? "",
       "Mobile number": res?.mobileNumber ?? "",
       "Email address": res?.email ?? "",
-      "Duration of Stay at the above address (in years)": res?.durationStay != null ? String(res.durationStay) : "",
+      "14(b).Duration of Stay at the above address (in years)": res?.durationStay != null ? String(res.durationStay) : "",
       "Residential Address is same as Permanent Address": sameAddress,
-      // 16. Marital Status
-      "16. Marital status": toDisplay(reg.maritalStatus),
-      "16(a). Marital status (Other)": reg.maritalStatusOther ?? "",
-      // 17. Education
-      "17. Education": toDisplay(reg.education),
-      "17(a). Education (Other)": reg.educationOther ?? "",
+      // 15. Marital Status
+      "15. Marital status": toDisplay(reg.maritalStatus),
+      "15(a). Marital status (Other)": reg.maritalStatusOther ?? "",
+      // 16. Education
+      "16. Education": toDisplay(reg.education),
+      "16(a). Education (Other)": reg.educationOther ?? "",
       // 18(c). Anthropometric — Step-1 form keys are "Height (cm)"/"Weight (kg)"
       "Height (cm)": reg.anthropometricHeightCm != null ? String(reg.anthropometricHeightCm) : "",
       "Weight (kg)": reg.anthropometricWeightKg != null ? String(reg.anthropometricWeightKg) : "",
       // Occupation
       "Occupation": reg.occupation ?? "",
       // Step-3 completion block (keys must match the ClinicalTreatment labels)
-      "31. Name of person completing form (IN CAPITALS)": reg.formCompletedBy ?? "",
-      "32. Date of completion of form": toDateStr(reg.formCompletionDate),
-      "33. Contact Number": reg.contactNumber ?? "",
-      "34. Designation": reg.designation ?? "",
+      "30. Name of person completing form (IN CAPITALS)": reg.formCompletedBy ?? "",
+      "31. Date of completion of form": toDateStr(reg.formCompletionDate),
+      "32. Contact Number": reg.contactNumber ?? "",
+      "33. Designation": reg.designation ?? "",
       "Remarks": reg.remarks ?? "",
-      // 18. Habits / Comorbidities — managed via ToggleDetails
+      // 17. Habits / Comorbidities — managed via ToggleDetails
       // 19. Family History — read-only; seed the conditional sub-fields too.
       "19. Relationship to Cancer / Degree of Relationship": fh?.familyHistory === "YES" ? "Yes" : fh?.familyHistory === "UNKNOWN" ? "Unknown" : "No",
       "Relationship with Cancer": fh?.relationshipWithCancer === "SAME_CANCER" ? "Same Cancer" : fh?.relationshipWithCancer === "OTHER_CANCER" ? "Other Cancer" : "",
@@ -524,13 +525,13 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "_diagnostic.procedures.Microscopic": proceduresFor("MICROSCOPIC"),
       "_diagnostic.procedures.Imaging": proceduresFor("IMAGING"),
       "_diagnostic.procedures.Other": proceduresFor("OTHER"),
-      "21. Longest duration of symptom for cancer (in months)":
+      "20. Longest duration of symptom for cancer (in months)":
         pd?.longestSymptomDurationMonths != null ? String(pd.longestSymptomDurationMonths) : "",
-      "21.1 Anatomical Site of Specimen / Biopsy / SMEAR": pd?.anatomicalSite ?? "",
-      "21.2 Pathology Slide No": pd?.pathologySlideNo ?? "",
-      "21.3 Date of Reporting": date(pd?.pathologyDateOfReporting),
-      "21.4 Primary Site of Tumour - Topography": pd?.primaryTumorSite ?? "",
-      "21.5 Primary Histology / Morphology": pd?.morphology ?? "",
+      "21(a). Anatomical Site of Specimen / Biopsy / SMEAR": pd?.anatomicalSite ?? "",
+      "21(b). Pathology Slide No": pd?.pathologySlideNo ?? "",
+      "21(c). Date of Reporting": date(pd?.pathologyDateOfReporting),
+      "21(d). Primary Site of Tumour - Topography": pd?.primaryTumorSite ?? "",
+      "21(e). Primary Histology / Morphology": pd?.morphology ?? "",
       // 23. ICD-O-3 coding
       "23.1 Code": pd?.icdoTopography ?? "",
       "23.1 Site": pd?.topographySite ?? "",
@@ -546,27 +547,28 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       "24. Site of Tumour (ICD-10)": pd?.icd10Site ?? "",
       "25. Laterality": label(LATERALITY_LABEL, pd?.laterality),
       "25(a). pairedLaterality": label(PAIRED_LATERALITY_LABEL, pd?.pairedLaterality),
-      "26. Sequence": label(SEQUENCE_LABEL, pd?.sequence),
-      // ===== Step 3 — Clinical Stage & Treatment (Fields 27–30) =====
-      "Clinical Extent of Disease Before Cancer Directed Treatment": label(CLINICAL_EXTENT_LABEL, prior?.clinicalExtentOfDisease ?? atRi?.clinicalExtentOfDisease),
-      "28(a). Staging system": label(STAGING_SYSTEM_LABEL, prior?.stagingSystem ?? atRi?.stagingSystem),
+      "25. Sequence": label(SEQUENCE_LABEL, pd?.sequence),
+      // ===== Step 3 — Clinical Stage & Treatment (Fields 26–33) =====
+      "26. Clinical Extent of Disease Before Cancer Directed Treatment": label(CLINICAL_EXTENT_LABEL, prior?.clinicalExtentOfDisease ?? atRi?.clinicalExtentOfDisease),
+      "27(a). Staging system": label(STAGING_SYSTEM_LABEL, prior?.stagingSystem ?? atRi?.stagingSystem),
       "T": prior?.tnmT ?? "",
       "N": prior?.tnmN ?? "",
       "M": prior?.tnmM ?? "",
-      "28(a). Staging system value": prior?.stagingSystemValue ?? "",
-      "28(c). Composite stage": prior?.compositeStage ?? atRi?.compositeStage ?? "",
-      "29. Treatment Given Prior to Registration at RI / Outside RI":
+      "27(a). Staging system value": prior?.stagingSystemValue ?? "",
+      "27(b). Composite stage": prior?.compositeStage ?? atRi?.compositeStage ?? "",
+      "28. Treatment Given Prior to Registration at RI / Outside RI":
         prior?.treatmentGivenChoice === "YES" ? "Yes" : prior?.treatmentGivenChoice === "UNKNOWN" ? "Unknown" : "No",
-      "29. Treatment Given Prior to Registration at RI / Outside RI type": label(TREATMENT_TYPE_LABEL, prior?.treatmentType),
+      "28. Treatment Given Prior to Registration at RI / Outside RI type": label(TREATMENT_TYPE_LABEL, prior?.treatmentType),
       "29. Treatment modalities selected": selectedModalities(prior),
-      "30. Treatment at RI":
+      "29. Treatment at RI":
         atRi?.treatmentGivenChoice === "YES" ? "Yes" : atRi?.treatmentGivenChoice === "UNKNOWN" ? "Unknown" : "No",
-      "30. Treatment at RI type": label(TREATMENT_TYPE_LABEL, atRi?.treatmentType),
+      "29. Treatment at RI type": label(TREATMENT_TYPE_LABEL, atRi?.treatmentType),
       "30. Treatment modalities selected": selectedModalities(atRi),
       "29(c). Performance Status (ECOG)":
         (prior?.ecogStatus ?? atRi?.ecogStatus) === "KNOWN" ? "Known" : (prior?.ecogStatus ?? atRi?.ecogStatus) === "UNKNOWN" ? "Unknown" : "",
       "If known": label(ECOG_GRADE_LABEL, prior?.ecogGrade ?? atRi?.ecogGrade),
-      "30(b). Types of targeted therapy": label(TARGETED_THERAPY_LABEL, prior?.targetedTherapyType ?? atRi?.targetedTherapyType),
+      "28(b). Types of targeted therapy": label(TARGETED_THERAPY_LABEL, prior?.targetedTherapyType),
+      "29(b). Types of targeted therapy": label(TARGETED_THERAPY_LABEL, atRi?.targetedTherapyType),
       "Specify targeted therapy": prior?.targetedTherapyOtherSpecify ?? atRi?.targetedTherapyOtherSpecify ?? "",
     };
     return vals;
@@ -674,10 +676,10 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       const wKg = numOrUndef(weight);
       await registrationApi.update(reg.id, {
         remarks: str("Remarks") || undefined,
-        designation: str("34. Designation") || undefined,
-        contactNumber: str("33. Contact Number") || undefined,
-        formCompletedBy: str("31. Name of person completing form (IN CAPITALS)") || undefined,
-        formCompletionDate: str("32. Date of completion of form") || undefined,
+        designation: str("33. Designation") || undefined,
+        contactNumber: str("32. Contact Number") || undefined,
+        formCompletedBy: str("30. Name of person completing form (IN CAPITALS)") || undefined,
+        formCompletionDate: str("31. Date of completion of form") || undefined,
         occupation: str("Occupation") || undefined,
         ...(hCm !== undefined ? { anthropometricHeightCm: hCm } : {}),
         ...(wKg !== undefined ? { anthropometricWeightKg: wKg } : {}),
@@ -717,18 +719,18 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
       // conditionals), so we only persist when the block is internally
       // consistent. Each stage is gated separately and the whole Step-3
       // persistence is best-effort: it can never fail the rest of the edit.
-      const compositeStage = str("28(c). Composite stage");
-      const stagingSystem = str("28(a). Staging system");
-      const stagingValue = str("28(a). Staging system value");
+      const compositeStage = str("27(b). Composite stage");
+      const stagingSystem = str("27(a). Staging system");
+      const stagingValue = str("27(a). Staging system value");
       const tnmT = str("T");
       const tnmN = str("N");
       const tnmM = str("M");
       const ecogStatus = str("29(c). Performance Status (ECOG)");
       const ecogGrade = str("If known");
-      const given29 = str("29. Treatment Given Prior to Registration at RI / Outside RI");
-      const type29 = str("29. Treatment Given Prior to Registration at RI / Outside RI type");
-      const given30 = str("30. Treatment at RI");
-      const type30 = str("30. Treatment at RI type");
+      const given29 = str("28. Treatment Given Prior to Registration at RI / Outside RI");
+      const type29 = str("28. Treatment Given Prior to Registration at RI / Outside RI type");
+      const given30 = str("29. Treatment at RI");
+      const type30 = str("29. Treatment at RI type");
       const stagingOk =
         stagingSystem === "TNM"
           ? Boolean(tnmT && tnmN && tnmM)
@@ -759,7 +761,7 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
               treatmentGivenChoice:
                 given === "Yes" ? "YES" : given === "Unknown" ? "UNKNOWN" : "NO",
               treatmentType: enumVal("treatmentType", type),
-              clinicalExtentOfDisease: enumVal("clinicalExtent", str("Clinical Extent of Disease Before Cancer Directed Treatment")),
+              clinicalExtentOfDisease: enumVal("clinicalExtent", str("26. Clinical Extent of Disease Before Cancer Directed Treatment")),
               stagingSystem: enumVal("stagingSystem", stagingSystem),
               stagingSystemValue: stagingSystem !== "TNM" ? stagingValue || undefined : undefined,
               tnmT: stagingSystem === "TNM" ? tnmT || undefined : undefined,
@@ -768,7 +770,7 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
               compositeStage,
               ecogStatus: ecogStatus === "Known" ? "KNOWN" : "UNKNOWN",
               ecogGrade: ecogStatus === "Known" ? enumVal("ecogGrade", ecogGrade) : undefined,
-              targetedTherapyType: enumVal("targetedTherapy", str("30(b). Types of targeted therapy")),
+              targetedTherapyType: enumVal("targetedTherapy", str("28(b). Types of targeted therapy")),
               targetedTherapyOtherSpecify: str("Specify targeted therapy") || undefined,
             });
             // Sync the selected-modality checkboxes with the table state.
@@ -904,10 +906,10 @@ export function PatientRecordForm({ patientId, onBack }: PatientRecordFormProps)
                 setSameAddress={setSameAddress}
                 familyHistory={familyHistory}
                 setFamilyHistory={setFamilyHistory}
-                initialCaseThrough={initialValues["6. Case Registered Through (Patient's first reporting at RI)"] as string || ""}
+                initialCaseThrough={initialValues["5. Case Registered Through (Patient’s first reporting at RI)"] as string || ""}
                 initialCaseThroughOther={initialValues["6(a). Case Registered Through (Other)"] as string || ""}
-                initialMaritalStatus={initialValues["16. Marital status"] as string || ""}
-                initialEducation={initialValues["17. Education"] as string || ""}
+                initialMaritalStatus={initialValues["15. Marital status"] as string || ""}
+                initialEducation={initialValues["16. Education"] as string || ""}
               />
             </ValidationProvider>
           </FormStateProvider>

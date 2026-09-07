@@ -29,29 +29,29 @@ const NAME_RE = /^[A-Za-z][A-Za-z .'-]*$/;
 export type Step1Values = {
   "1. Name of the Reporting Institution (RI)"?: string;
   "Centre code"?: string;
-  "Reference Number"?: string;
-  "Registration Number"?: string;
+  "1(b).Reference Number"?: string;
+  "2.Registration Number"?: string;
   "3(a). Department name"?: string;
   "3(b). Unit number"?: string;
-  "5. Date of reporting"?: string;
-  "6. Case Registered Through (Patient’s first reporting at RI)"?: string;
-  "7. Type of referral"?: string;
-  "7(a). Name of Facility."?: string;
-  "7(b). Hospital / LAB / N.H."?: string;
-  "7(c). City"?: string;
-  "7(d). District"?: string;
-  "7(e). Pincode"?: string;
-  "7(f). Date of Registration"?: string;
-  "8. Date of first diagnosis"?: string;
+  "4. Date of reporting"?: string;
+  "5. Case Registered Through (Patient’s first reporting at RI)"?: string;
+  "6. Type of referral"?: string;
+  "6(a). Name of Facility."?: string;
+  "6(b). Hospital / LAB / N.H."?: string;
+  "6(c). City"?: string;
+  "6(d). District"?: string;
+  "6(e). Pincode"?: string;
+  "6(f). Date of Registration"?: string;
+  "7. Date of first diagnosis"?: string;
   "First Name"?: string;
   "Middle Name"?: string;
   "Last Name"?: string;
-  "10. Date of Birth"?: string;
-  "11. Age"?: string;
-  "12. Gender"?: string;
-  "16. Marital status"?: string;
-  "17. Education"?: string;
-  "17(a). Education (Other)"?: string;
+  "9. Date of Birth"?: string;
+  "10. Age"?: string;
+  "11. Gender"?: string;
+  "15. Marital status"?: string;
+  "16. Education"?: string;
+  "16(a). Education (Other)"?: string;
   Occupation?: string;
   "Height (cm)"?: string;
   "Weight (kg)"?: string;
@@ -79,8 +79,8 @@ export type Step1Values = {
   "Daughter mobile number"?: string;
   "Other name"?: string;
   "Other mobile number"?: string;
-  "16(a). Marital status (Other)"?: string;
-  "Duration of Stay at the above address (in years)"?: string;
+  "15(a). Marital status (Other)"?: string;
+  "14(b).Duration of Stay at the above address (in years)"?: string;
   "19. Relationship to Cancer / Degree of Relationship"?: string;
   "Relationship with Cancer"?: string;
   "Degree of Relationship"?: string;
@@ -107,27 +107,27 @@ export type Step1Values = {
 
 const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
   "1. Name of the Reporting Institution (RI)": [required(), minLen(2), maxLen(255)],
-  "Reference Number": [],
-  "Registration Number": [],
+  "1(b).Reference Number": [],
+  "2.Registration Number": [],
   "3(a). Department name": [required("Department name is required"), maxLen(128)],
   "3(b). Unit number": [required("Unit number is required"), maxLen(32)],
-  "5. Date of reporting": [required(), isDate(), notFutureDate()],
-  "6. Case Registered Through (Patient’s first reporting at RI)": [
+  "4. Date of reporting": [required(), isDate(), notFutureDate()],
+  "5. Case Registered Through (Patient’s first reporting at RI)": [
     // The select starts with no option selected (placeholder "Select").
     // The user must explicitly pick one; reject the placeholder so an
     // untouched field is flagged.
     required("Please choose a case-through type"),
   ],
-  "7. Type of referral": [
+  "6. Type of referral": [
     required("Please choose a referral type"),
   ],
-  "7(a). Name of Facility.": [maxLen(255)],
-  "7(b). Hospital / LAB / N.H.": [maxLen(255)],
-  "7(c). City": [maxLen(64)],
-  "7(d). District": [maxLen(64)],
-  "7(e). Pincode": [pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
-  "7(f). Date of Registration": [isDate(), notFutureDate()],
-  "8. Date of first diagnosis": [required(), isDate(), notFutureDate()],
+  "6(a). Name of Facility.": [maxLen(255)],
+  "6(b). Hospital / LAB / N.H.": [maxLen(255)],
+  "6(c). City": [maxLen(64)],
+  "6(d). District": [maxLen(64)],
+  "6(e). Pincode": [pattern(PIN_RE, "Enter a valid 6-digit Indian PIN code")],
+  "6(f). Date of Registration": [isDate(), notFutureDate()],
+  "7. Date of first diagnosis": [required(), isDate(), notFutureDate()],
   "First Name": [
     required("Please enter the patient's first name"),
     minLen(2),
@@ -142,13 +142,13 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
     maxLen(100),
     pattern(NAME_RE, "Name must contain only letters, spaces, hyphens, or apostrophes"),
   ],
-  "10. Date of Birth": [required("Date of birth is required"), isDate(), notFutureDate()],
-  "11. Age": [required("Age is required"), maxLen(32)],
-  "12. Gender": [required("Please select a gender")],
-  "16. Marital status": [required("Please select a marital status")],
-  "17. Education": [required("Please select an education level")],
+  "9. Date of Birth": [required("Date of birth is required"), isDate(), notFutureDate()],
+  "10. Age": [required("Age is required"), maxLen(32)],
+  "11. Gender": [required("Please select a gender")],
+  "15. Marital status": [required("Please select a marital status")],
+  "16. Education": [required("Please select an education level")],
   Occupation: [maxLen(128)],
-  "Duration of Stay at the above address (in years)": [
+  "14(b).Duration of Stay at the above address (in years)": [
     required("Duration of stay is required"),
     isInt(),
     range(0, 150, "Duration must be between 0 and 150 years"),
@@ -209,39 +209,39 @@ const step1Rules: RuleSet<Step1Values> = defineRules<Step1Values>({
 export function validateStep1(values: Record<string, unknown>): Record<string, string> {
   const out = validateRecord(step1Rules, values);
 
-  // 6. Case Registered Through — if Other, the text field is mandatory
-  if (values["6. Case Registered Through (Patient’s first reporting at RI)"] === "Other") {
+  // 5. Case Registered Through — if Other, the text field is mandatory
+  if (values["5. Case Registered Through (Patient’s first reporting at RI)"] === "Other") {
     const other = values["6(a). Case Registered Through (Other)"];
     if (other === undefined || other === null || String(other).trim() === "") {
       out["6(a). Case Registered Through (Other)"] = "Please specify the case registered through (Other)";
     }
   }
 
-  // 7. Referral conditional sub-fields
-  if (values["7. Type of referral"] === "Other Hospital/Health Facility") {
+  // 6. Referral conditional sub-fields
+  if (values["6. Type of referral"] === "Other Hospital/Health Facility") {
     const requiredIf = (label: string, msg: string) => {
       const v = values[label];
       if (v === undefined || v === null || String(v).trim() === "") {
         out[label] = msg;
       }
     };
-    requiredIf("7(a). Name of Facility.", "Facility name is required");
-    requiredIf("7(b). Hospital / LAB / N.H.", "Facility hospital/lab is required");
-    requiredIf("7(c). City", "Facility city is required");
-    requiredIf("7(d). District", "Facility district is required");
-    const regDate = values["7(f). Date of Registration"];
+    requiredIf("6(a). Name of Facility.", "Facility name is required");
+    requiredIf("6(b). Hospital / LAB / N.H.", "Facility hospital/lab is required");
+    requiredIf("6(c). City", "Facility city is required");
+    requiredIf("6(d). District", "Facility district is required");
+    const regDate = values["6(f). Date of Registration"];
     if (!regDate || String(regDate).trim() === "") {
-      out["7(f). Date of Registration"] = "Facility registration date is required";
+      out["6(f). Date of Registration"] = "Facility registration date is required";
     }
   }
 
-  // Cross-field: 7(f). Date of Registration on or after 5. Date of reporting
-  if (values["7. Type of referral"] === "Other Hospital/Health Facility") {
+  // Cross-field: 6(f). Date of Registration on or after 4. Date of reporting
+  if (values["6. Type of referral"] === "Other Hospital/Health Facility") {
     const afterMsg = after(
-      "5. Date of reporting",
+      "4. Date of reporting",
       "Registration date must be on or after the reporting date",
-    )(values["7(f). Date of Registration"], values);
-    if (afterMsg) out["7(f). Date of Registration"] = afterMsg;
+    )(values["6(f). Date of Registration"], values);
+    if (afterMsg) out["6(f). Date of Registration"] = afterMsg;
   }
 
   // 13. Unique Identification
@@ -308,19 +308,19 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     }
   }
 
-  // 17. Education — if "Others (specify)" is selected, the Other text must be filled
-  if (values["17. Education"] === "Others (specify)") {
-    const other = values["17(a). Education (Other)"];
+  // 16. Education — if "Others (specify)" is selected, the Other text must be filled
+  if (values["16. Education"] === "Others (specify)") {
+    const other = values["16(a). Education (Other)"];
     if (!other || String(other).trim() === "") {
-      out["17(a). Education (Other)"] = "Please specify the education level";
+      out["16(a). Education (Other)"] = "Please specify the education level";
     }
   }
 
   // 18(a/b). Habits & Co-Morbidities — if Yes, Duration is required
   const habitItems = ["Smoking", "Smokeless", "Betel Nut with Tobacco", "Betel Nut without Tobacco", "Alcohol"];
   const comorbidityItems = ["Tuberculosis", "Hypertension", "Diabetes", "Ischemic Heart Disease", "COPD / Asthma", "Stroke", "Depression", "Hepatitis B", "Hepatitis C", "NAFLD", "Chronic Kidney Disease", "HIV/AIDS", "Hypothyroidism", "Others"];
-  for (const section of ["18(a). Habits", "18(b). Co-Morbidities"]) {
-    const items = section === "18(a). Habits" ? habitItems : comorbidityItems;
+  for (const section of ["17(a). Habits", "17(b). Co-Morbidities"]) {
+    const items = section === "17(a). Habits" ? habitItems : comorbidityItems;
     for (const item of items) {
       const answerKey = `${section}::${item}::answer`;
       const durationKey = `${section}::${item}::duration`;
@@ -372,11 +372,11 @@ export function validateStep1(values: Record<string, unknown>): Record<string, s
     out["Father name"] = "At least one relative detail must be provided";
   }
 
-  // 16. Marital Status — if Other, 16(a) is mandatory
-  if (values["16. Marital status"] === "Other") {
-    const other = values["16(a). Marital status (Other)"];
+  // 15. Marital Status — if Other, 15(a) is mandatory
+  if (values["15. Marital status"] === "Other") {
+    const other = values["15(a). Marital status (Other)"];
     if (other === undefined || other === null || String(other).trim() === "") {
-      out["16(a). Marital status (Other)"] = "Please specify the marital status (Other)";
+      out["15(a). Marital status (Other)"] = "Please specify the marital status (Other)";
     }
   }
 

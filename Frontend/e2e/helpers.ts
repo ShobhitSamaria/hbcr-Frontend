@@ -159,7 +159,7 @@ export async function fillAddress(
   if (data.durationOfStay) {
     await fillField(
       page,
-      "Duration of Stay at the above address (in years)",
+      "14(b).Duration of Stay at the above address (in years)",
       data.durationOfStay
     );
   }
